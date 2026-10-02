@@ -48,3 +48,6 @@ npm-debug.log*
 CLAUDE.md
 CLAUDE.local.md
 .claude/
+
+# browser automation output
+.playwright-mcp/

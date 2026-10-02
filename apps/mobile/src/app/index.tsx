@@ -1,11 +1,17 @@
 import { hello } from '@oathly/core';
-import { StyleSheet, Text } from 'react-native';
+import { spacing, themeFor } from '@oathly/tokens';
+import { StyleSheet, Text, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const theme = themeFor(useColorScheme());
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text accessibilityRole="header" style={styles.title}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
+      <Text
+        accessibilityRole="header"
+        style={[theme.text['2xl'], styles.title, { color: theme.colors.fg }]}
+      >
         {hello()}
       </Text>
     </SafeAreaView>
@@ -17,10 +23,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 24,
+    padding: spacing[6],
   },
   title: {
-    fontSize: 24,
     fontWeight: '600',
   },
 });

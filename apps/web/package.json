@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@oathly/core": "workspace:*",
+    "@oathly/tokens": "workspace:*",
     "next": "16.3.8",
     "react": "catalog:",
     "react-dom": "catalog:"
