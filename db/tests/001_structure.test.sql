@@ -40,19 +40,19 @@ select is_empty(
   $$
     select table_name, privilege_type
     from information_schema.role_table_grants
-    where table_schema = 'public' and grantee = 'anon' and privilege_type <> 'SELECT'
+    where table_schema = 'public' and grantee = 'anonymous' and privilege_type <> 'SELECT'
   $$,
-  'anon has no privilege beyond SELECT on any table'
+  'anonymous has no privilege beyond SELECT on any table'
 );
 
 select set_eq(
   $$
     select table_name::text
     from information_schema.role_table_grants
-    where table_schema = 'public' and grantee = 'anon'
+    where table_schema = 'public' and grantee = 'anonymous'
   $$,
   array['countries', 'exam_formats', 'topics', 'questions', 'question_translations'],
-  'anon can select only the public content tables'
+  'anonymous can select only the public content tables'
 );
 
 select is_empty(

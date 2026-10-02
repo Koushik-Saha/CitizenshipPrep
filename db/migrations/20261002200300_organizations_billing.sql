@@ -1,3 +1,5 @@
+-- migrate:up
+
 -- Organizations (B2B) and subscriptions.
 
 create type public.org_role as enum ('owner', 'admin', 'member');
@@ -17,7 +19,7 @@ create table public.organizations (
   name text not null check (char_length(name) between 1 and 120),
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   seat_limit integer check (seat_limit > 0),
-  created_by uuid default auth.uid() references public.profiles (id) on delete set null,
+  created_by text default private.current_user_id() references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -33,9 +35,9 @@ for each row execute function private.set_updated_at();
 -- ---------------------------------------------------------------------------
 create table public.org_members (
   organization_id uuid not null references public.organizations (id) on delete cascade,
-  user_id uuid not null references public.profiles (id) on delete cascade,
+  user_id text not null references public.profiles (id) on delete cascade,
   role public.org_role not null default 'member',
-  invited_by uuid references public.profiles (id) on delete set null,
+  invited_by text references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   primary key (organization_id, user_id)
 );
@@ -55,11 +57,11 @@ as $$
   select role
   from public.org_members
   where organization_id = org_id
-    and user_id = (select auth.uid());
+    and user_id = (select private.current_user_id());
 $$;
 
 revoke all on function private.org_role_of(uuid) from public;
-grant execute on function private.org_role_of(uuid) to authenticated, service_role;
+grant execute on function private.org_role_of(uuid) to authenticated;
 
 -- Whoever creates an organization becomes its owner.
 create function private.handle_new_organization()
@@ -83,11 +85,12 @@ for each row execute function private.handle_new_organization();
 
 -- ---------------------------------------------------------------------------
 -- subscriptions: belongs to one user or one organization. Written only by the
--- server (payment-provider webhooks, service role); clients can read.
+-- server (payment-provider webhooks, connecting as the database owner); clients
+-- can read.
 -- ---------------------------------------------------------------------------
 create table public.subscriptions (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references public.profiles (id) on delete cascade,
+  user_id text references public.profiles (id) on delete cascade,
   organization_id uuid references public.organizations (id) on delete cascade,
   plan text not null check (char_length(plan) between 1 and 60),
   status public.subscription_status not null,
@@ -114,7 +117,7 @@ for each row execute function private.set_updated_at();
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 alter table public.organizations enable row level security;
-revoke all on table public.organizations from anon, authenticated;
+revoke all on table public.organizations from anonymous, authenticated;
 grant select, insert (name, slug, created_by), update (name, slug), delete
   on table public.organizations to authenticated;
 
@@ -124,14 +127,14 @@ create policy "Members can read their organizations"
 on public.organizations for select
 to authenticated
 using (
-  created_by = (select auth.uid())
+  created_by = (select private.current_user_id())
   or (select private.org_role_of(id)) is not null
 );
 
 create policy "Signed-in users can create organizations"
 on public.organizations for insert
 to authenticated
-with check (created_by = (select auth.uid()));
+with check (created_by = (select private.current_user_id()));
 
 create policy "Organization admins can update their organization"
 on public.organizations for update
@@ -145,14 +148,14 @@ to authenticated
 using ((select private.org_role_of(id)) = 'owner');
 
 alter table public.org_members enable row level security;
-revoke all on table public.org_members from anon, authenticated;
+revoke all on table public.org_members from anonymous, authenticated;
 grant select, insert, update (role), delete on table public.org_members to authenticated;
 
 create policy "Members can read their organization's members"
 on public.org_members for select
 to authenticated
 using (
-  user_id = (select auth.uid())
+  user_id = (select private.current_user_id())
   or (select private.org_role_of(organization_id)) is not null
 );
 
@@ -188,16 +191,16 @@ using (
 create policy "Members can leave an organization"
 on public.org_members for delete
 to authenticated
-using (user_id = (select auth.uid()) and role <> 'owner');
+using (user_id = (select private.current_user_id()) and role <> 'owner');
 
 alter table public.subscriptions enable row level security;
-revoke all on table public.subscriptions from anon, authenticated;
+revoke all on table public.subscriptions from anonymous, authenticated;
 grant select on table public.subscriptions to authenticated;
 
 create policy "Users can read their own subscription"
 on public.subscriptions for select
 to authenticated
-using (user_id = (select auth.uid()));
+using (user_id = (select private.current_user_id()));
 
 create policy "Organization admins can read their organization's subscription"
 on public.subscriptions for select
@@ -206,3 +209,13 @@ using (
   organization_id is not null
   and (select private.org_role_of(organization_id)) in ('owner', 'admin')
 );
+
+-- migrate:down
+
+drop table public.subscriptions;
+drop table public.org_members;
+drop table public.organizations;
+drop function private.handle_new_organization();
+drop function private.org_role_of(uuid);
+drop type public.subscription_status;
+drop type public.org_role;

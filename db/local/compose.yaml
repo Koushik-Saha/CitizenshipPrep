@@ -1,0 +1,21 @@
+name: oathly
+
+services:
+  db:
+    build: .
+    ports:
+      - '127.0.0.1:54329:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: oathly
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ../tests:/db/tests:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d oathly']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  data:

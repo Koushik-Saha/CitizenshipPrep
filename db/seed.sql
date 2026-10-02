@@ -1,4 +1,4 @@
--- Local development seed. Runs after the migrations on `supabase db reset`.
+-- Local development seed. `pnpm db:reset` runs it after the migrations.
 --
 -- Everything here is SAMPLE content. The questions are seeded as `in_review`
 -- with no verification stamps, because nobody has checked them against their

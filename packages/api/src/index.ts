@@ -1,4 +1,4 @@
-// Typed data access: Supabase queries and Claude API calls.
+// Typed data access: Neon queries and Claude API calls.
 
 // database.types.ts is generated from the local database: `pnpm db:types`.
 export { Constants } from './database.types';

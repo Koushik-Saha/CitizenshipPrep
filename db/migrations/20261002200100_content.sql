@@ -1,3 +1,5 @@
+-- migrate:up
+
 -- Content: countries, exam formats, topics, questions and their translations.
 -- Reference data and published questions are public; everything else is staff-only.
 
@@ -102,11 +104,11 @@ create table public.questions (
   correct_answer jsonb not null check (jsonb_typeof(correct_answer -> 'keys') = 'array'),
   source_url text not null check (source_url ~ '^https://'),
   last_verified_at timestamptz,
-  verified_by uuid references public.profiles (id) on delete restrict,
+  verified_by text references public.profiles (id) on delete restrict,
   status public.question_status not null default 'draft',
   version integer not null default 1 check (version > 0),
   published_at timestamptz,
-  created_by uuid default auth.uid() references public.profiles (id) on delete set null,
+  created_by text default private.current_user_id() references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   foreign key (topic_id, country_code) references public.topics (id, country_code)
@@ -150,8 +152,8 @@ begin
   -- writes (no signed-in user) must supply the stamps themselves, and the
   -- check constraint rejects them if they do not.
   if is_being_published then
-    if (select auth.uid()) is not null then
-      new.verified_by := (select auth.uid());
+    if (select private.current_user_id()) is not null then
+      new.verified_by := (select private.current_user_id());
       new.last_verified_at := now();
     end if;
     new.published_at := now();
@@ -192,13 +194,13 @@ for each row execute function private.set_updated_at();
 
 -- countries, exam_formats: public reference data, maintained by admins.
 alter table public.countries enable row level security;
-revoke all on table public.countries from anon, authenticated;
-grant select on table public.countries to anon, authenticated;
+revoke all on table public.countries from anonymous, authenticated;
+grant select on table public.countries to anonymous, authenticated;
 grant insert, update, delete on table public.countries to authenticated;
 
 create policy "Anyone can read countries"
 on public.countries for select
-to anon, authenticated
+to anonymous, authenticated
 using (true);
 
 create policy "Admins can add countries"
@@ -218,13 +220,13 @@ to authenticated
 using ((select private.is_admin()));
 
 alter table public.exam_formats enable row level security;
-revoke all on table public.exam_formats from anon, authenticated;
-grant select on table public.exam_formats to anon, authenticated;
+revoke all on table public.exam_formats from anonymous, authenticated;
+grant select on table public.exam_formats to anonymous, authenticated;
 grant insert, update, delete on table public.exam_formats to authenticated;
 
 create policy "Anyone can read exam formats"
 on public.exam_formats for select
-to anon, authenticated
+to anonymous, authenticated
 using (true);
 
 create policy "Admins can add exam formats"
@@ -245,13 +247,13 @@ using ((select private.is_admin()));
 
 -- topics: public to read, maintained by reviewers and admins.
 alter table public.topics enable row level security;
-revoke all on table public.topics from anon, authenticated;
-grant select on table public.topics to anon, authenticated;
+revoke all on table public.topics from anonymous, authenticated;
+grant select on table public.topics to anonymous, authenticated;
 grant insert, update, delete on table public.topics to authenticated;
 
 create policy "Anyone can read topics"
 on public.topics for select
-to anon, authenticated
+to anonymous, authenticated
 using (true);
 
 create policy "Staff can add topics"
@@ -272,13 +274,13 @@ using ((select private.is_admin()));
 
 -- questions: only published rows are public.
 alter table public.questions enable row level security;
-revoke all on table public.questions from anon, authenticated;
-grant select on table public.questions to anon, authenticated;
+revoke all on table public.questions from anonymous, authenticated;
+grant select on table public.questions to anonymous, authenticated;
 grant insert, update, delete on table public.questions to authenticated;
 
 create policy "Anyone can read published questions"
 on public.questions for select
-to anon, authenticated
+to anonymous, authenticated
 using (status = 'published');
 
 create policy "Staff can read every question"
@@ -304,13 +306,13 @@ using ((select private.is_admin()));
 
 -- question_translations: visible exactly when the parent question is.
 alter table public.question_translations enable row level security;
-revoke all on table public.question_translations from anon, authenticated;
-grant select on table public.question_translations to anon, authenticated;
+revoke all on table public.question_translations from anonymous, authenticated;
+grant select on table public.question_translations to anonymous, authenticated;
 grant insert, update, delete on table public.question_translations to authenticated;
 
 create policy "Anyone can read translations of published questions"
 on public.question_translations for select
-to anon, authenticated
+to anonymous, authenticated
 using (
   exists (
     select 1
@@ -340,3 +342,15 @@ create policy "Staff can delete translations"
 on public.question_translations for delete
 to authenticated
 using ((select private.is_staff()));
+
+-- migrate:down
+
+drop table public.question_translations;
+drop table public.questions;
+drop function private.questions_before_write();
+drop table public.topics;
+drop table public.exam_formats;
+drop table public.countries;
+drop type public.question_status;
+drop type public.question_type;
+drop type public.exam_format_type;

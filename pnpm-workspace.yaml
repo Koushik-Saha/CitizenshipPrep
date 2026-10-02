@@ -18,8 +18,8 @@ catalog:
   vitest: ^5.0.3
 
 allowBuilds:
+  core-js: false
   sharp: false
-  supabase: true
   unrs-resolver: false
 
 # Optional peer of react-native's CLI plugin; without this pnpm auto-installs

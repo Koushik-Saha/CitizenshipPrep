@@ -9,8 +9,6 @@ expo-env.d.ts
 apps/mobile/ios
 apps/mobile/android
 apps/mobile/assets
-supabase/.branches
-supabase/.temp
 AGENTS.md
 apps/web/CLAUDE.md
 packages/tokens/theme.css

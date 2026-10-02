@@ -1,7 +1,7 @@
 -- Profiles, subscriptions, organizations, content flags and the community.
 
 begin;
-select plan(41);
+select plan(44);
 
 -- Arrange --------------------------------------------------------------------------
 select tests.create_user('a0000000-0000-0000-0000-00000000000a', 'alice@example.test');
@@ -39,11 +39,25 @@ values ('50000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-0000000
         'How long did you study?', 'I have six weeks until my test.');
 
 -- Profiles ---------------------------------------------------------------------------
-select results_eq(
-  $$ select display_name from public.profiles
-     where id = 'a0000000-0000-0000-0000-00000000000a' $$,
-  array['alice'],
-  'signing up creates a profile'
+select tests.authenticate_as('e0000000-0000-0000-0000-00000000000e');
+
+select lives_ok(
+  $$ insert into public.profiles (display_name) values ('Erin') $$,
+  'a newly signed-in user can create their own profile (the id defaults to them)'
+);
+select throws_ok(
+  $$ insert into public.profiles (id, display_name)
+     values ('f0000000-0000-0000-0000-00000000000f', 'Somebody else') $$,
+  '42501', null,
+  'but cannot create a profile for another user id'
+);
+select is_empty(
+  $$ delete from public.profiles where display_name <> 'Erin' returning id $$,
+  'a user cannot delete other people''s profiles'
+);
+select lives_ok(
+  $$ delete from public.profiles where id = 'e0000000-0000-0000-0000-00000000000e' $$,
+  'a user can delete their own profile (account deletion)'
 );
 
 select tests.authenticate_as('a0000000-0000-0000-0000-00000000000a');
@@ -190,7 +204,7 @@ select lives_ok(
 );
 select results_eq(
   'select resolved_by, resolved_at is not null from public.content_flags',
-  $$ values ('c0000000-0000-0000-0000-00000000000c'::uuid, true) $$,
+  $$ values ('c0000000-0000-0000-0000-00000000000c', true) $$,
   'resolving records who did it and when'
 );
 
@@ -257,7 +271,7 @@ select is_empty(
   'the author cannot unhide it'
 );
 
-select tests.authenticate_as_anon();
+select tests.authenticate_as_anonymous();
 select throws_ok(
   'select 1 from public.community_posts',
   '42501', null,

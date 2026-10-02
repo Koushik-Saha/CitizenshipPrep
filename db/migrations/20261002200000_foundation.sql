@@ -1,18 +1,56 @@
+-- migrate:up
+
 -- Foundation: helper schema, profiles, staff roles.
+--
+-- Target: Neon Postgres, reached by the apps through the Neon Data API.
+-- The Data API provides two roles, `authenticated` (a request with a valid
+-- JWT) and `anonymous` (no JWT), and auth.user_id(), which returns the JWT's
+-- "sub" claim. Enable the Data API on the branch before migrating it.
 --
 -- Conventions used by every migration:
 --   * Row Level Security is enabled in the same migration that creates a table.
---   * Privileges are granted explicitly. Each table starts with a REVOKE so the
---     result does not depend on the project's "auto expose new tables" setting.
---   * Policies call auth.uid() and the private.* helpers through a scalar
---     subquery, `(select ...)`, so Postgres evaluates them once per statement
---     rather than once per row.
+--   * Privileges are granted explicitly, table by table. Each table starts
+--     with a REVOKE so the result does not depend on any default privileges.
+--   * Policies call the private.* helpers through a scalar subquery,
+--     `(select ...)`, so Postgres evaluates them once per statement rather
+--     than once per row.
+--   * User ids are text: whatever the auth provider puts in "sub".
+--   * Server-side code connects as the database owner, which is not subject
+--     to these policies.
 
--- Helpers live outside the API-exposed schemas so they cannot be called over
+do $$
+begin
+  if to_regrole('authenticated') is null or to_regrole('anonymous') is null then
+    raise exception 'Roles "authenticated" and "anonymous" are missing.'
+      using hint = 'On Neon, enable the Data API for this branch. Locally, run `pnpm db:reset`.';
+  end if;
+  if to_regprocedure('auth.user_id()') is null then
+    raise exception 'auth.user_id() is missing.'
+      using hint = 'On Neon, enable the Data API for this branch. Locally, run `pnpm db:reset`.';
+  end if;
+end;
+$$;
+
+-- Helpers live outside the API-exposed schema so they cannot be called over
 -- the Data API.
 create schema if not exists private;
 revoke all on schema private from public;
-grant usage on schema private to authenticated, service_role;
+grant usage on schema private to authenticated;
+
+grant usage on schema public to anonymous, authenticated;
+
+-- The signed-in user's id, or null. The one place that knows where it comes from.
+create function private.current_user_id()
+returns text
+language sql
+stable
+set search_path = ''
+as $$
+  select auth.user_id();
+$$;
+
+revoke all on function private.current_user_id() from public;
+grant execute on function private.current_user_id() to authenticated;
 
 create function private.set_updated_at()
 returns trigger
@@ -30,7 +68,7 @@ $$;
 -- Anything private about a user belongs in another table.
 -- ---------------------------------------------------------------------------
 create table public.profiles (
-  id uuid primary key references auth.users (id) on delete cascade,
+  id text primary key default private.current_user_id() check (char_length(id) between 1 and 128),
   display_name text check (char_length(display_name) between 1 and 60),
   avatar_url text check (avatar_url ~ '^https://'),
   created_at timestamptz not null default now(),
@@ -38,28 +76,12 @@ create table public.profiles (
 );
 
 comment on table public.profiles is
-  'Public-facing account details. One row per auth user, created by trigger.';
+  'Public-facing account details. The app creates the row on first sign-in; every other user-owned row hangs off it, so deleting a profile deletes that user''s data.';
+comment on column public.profiles.id is 'The auth provider''s user id (the JWT "sub" claim).';
 
 create trigger profiles_set_updated_at
 before update on public.profiles
 for each row execute function private.set_updated_at();
-
-create function private.handle_new_user()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
-begin
-  insert into public.profiles (id, display_name)
-  values (new.id, nullif(left(trim(new.raw_user_meta_data ->> 'display_name'), 60), ''));
-  return new;
-end;
-$$;
-
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute function private.handle_new_user();
 
 -- ---------------------------------------------------------------------------
 -- user_roles: who is staff. Kept apart from profiles so that no policy on a
@@ -68,9 +90,9 @@ for each row execute function private.handle_new_user();
 create type public.app_role as enum ('reviewer', 'admin');
 
 create table public.user_roles (
-  user_id uuid primary key references public.profiles (id) on delete cascade,
+  user_id text primary key references public.profiles (id) on delete cascade,
   role public.app_role not null,
-  granted_by uuid references public.profiles (id) on delete set null,
+  granted_by text references public.profiles (id) on delete set null,
   granted_at timestamptz not null default now()
 );
 
@@ -91,7 +113,7 @@ as $$
   select exists (
     select 1
     from public.user_roles
-    where user_id = (select auth.uid())
+    where user_id = private.current_user_id()
       and (role = required or role = 'admin')
   );
 $$;
@@ -117,36 +139,52 @@ $$;
 revoke all on function private.has_role(public.app_role) from public;
 revoke all on function private.is_staff() from public;
 revoke all on function private.is_admin() from public;
-grant execute on function private.has_role(public.app_role) to authenticated, service_role;
-grant execute on function private.is_staff() to authenticated, service_role;
-grant execute on function private.is_admin() to authenticated, service_role;
+grant execute on function private.has_role(public.app_role) to authenticated;
+grant execute on function private.is_staff() to authenticated;
+grant execute on function private.is_admin() to authenticated;
 
 -- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 alter table public.profiles enable row level security;
-revoke all on table public.profiles from anon, authenticated;
-grant select, update (display_name, avatar_url) on table public.profiles to authenticated;
+revoke all on table public.profiles from anonymous, authenticated;
+grant
+  select,
+  insert (id, display_name, avatar_url),
+  update (display_name, avatar_url),
+  delete
+  on table public.profiles to authenticated;
 
 create policy "Signed-in users can read profiles"
 on public.profiles for select
 to authenticated
 using (true);
 
+create policy "Users can create their own profile"
+on public.profiles for insert
+to authenticated
+with check (id = (select private.current_user_id()));
+
 create policy "Users can update their own profile"
 on public.profiles for update
 to authenticated
-using (id = (select auth.uid()))
-with check (id = (select auth.uid()));
+using (id = (select private.current_user_id()))
+with check (id = (select private.current_user_id()));
+
+-- Account deletion: removing the profile cascades to everything the user owns.
+create policy "Users can delete their own profile"
+on public.profiles for delete
+to authenticated
+using (id = (select private.current_user_id()));
 
 alter table public.user_roles enable row level security;
-revoke all on table public.user_roles from anon, authenticated;
+revoke all on table public.user_roles from anonymous, authenticated;
 grant select, insert, update, delete on table public.user_roles to authenticated;
 
 create policy "Users can read their own role"
 on public.user_roles for select
 to authenticated
-using (user_id = (select auth.uid()));
+using (user_id = (select private.current_user_id()));
 
 create policy "Admins can read all roles"
 on public.user_roles for select
@@ -168,3 +206,15 @@ create policy "Admins can revoke roles"
 on public.user_roles for delete
 to authenticated
 using ((select private.is_admin()));
+
+-- migrate:down
+
+drop table public.user_roles;
+drop table public.profiles;
+drop function private.is_admin();
+drop function private.is_staff();
+drop function private.has_role(public.app_role);
+drop type public.app_role;
+drop function private.set_updated_at();
+drop function private.current_user_id();
+revoke usage on schema public from anonymous, authenticated;

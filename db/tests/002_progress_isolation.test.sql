@@ -195,7 +195,7 @@ select is_empty('select 1 from public.attempts', 'an admin cannot read users'' a
 select is_empty('select 1 from public.mastery', 'an admin cannot read users'' mastery');
 
 -- Signed-out requests ------------------------------------------------------------------
-select tests.authenticate_as_anon();
+select tests.authenticate_as_anonymous();
 select throws_ok(
   'select 1 from public.attempts',
   '42501', null,

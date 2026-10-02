@@ -48,7 +48,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Applies every migration and the seed to a fresh database.
+      # Builds the local Postgres image, then applies every migration and the
+      # seed to a fresh database.
       - run: pnpm db:start
 
       - run: pnpm db:test

@@ -1,3 +1,5 @@
+-- migrate:up
+
 -- Community: content flags (users reporting outdated or wrong questions),
 -- posts and comments.
 
@@ -10,13 +12,13 @@ create type public.flag_status as enum ('open', 'resolved', 'dismissed');
 create table public.content_flags (
   id uuid primary key default gen_random_uuid(),
   question_id uuid not null references public.questions (id) on delete cascade,
-  user_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
+  user_id text not null default private.current_user_id() references public.profiles (id) on delete cascade,
   -- The translation the user was looking at, if the problem is with the wording.
   locale text check (locale ~ '^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$'),
   reason public.flag_reason not null,
   details text check (char_length(details) <= 2000),
   status public.flag_status not null default 'open',
-  resolved_by uuid references public.profiles (id) on delete set null,
+  resolved_by text references public.profiles (id) on delete set null,
   resolved_at timestamptz,
   resolution_note text check (char_length(resolution_note) <= 2000),
   created_at timestamptz not null default now(),
@@ -42,7 +44,7 @@ begin
       new.resolved_by := null;
     else
       new.resolved_at := now();
-      new.resolved_by := coalesce((select auth.uid()), new.resolved_by);
+      new.resolved_by := coalesce((select private.current_user_id()), new.resolved_by);
     end if;
   end if;
   return new;
@@ -58,7 +60,7 @@ for each row execute function private.content_flags_before_update();
 -- ---------------------------------------------------------------------------
 create table public.community_posts (
   id uuid primary key default gen_random_uuid(),
-  author_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
+  author_id text not null default private.current_user_id() references public.profiles (id) on delete cascade,
   -- Null for posts that are not about one country's exam.
   country_code text references public.countries (iso_code) on delete set null,
   title text not null check (char_length(title) between 1 and 200),
@@ -83,7 +85,7 @@ create table public.community_comments (
   id uuid primary key default gen_random_uuid(),
   post_id uuid not null references public.community_posts (id) on delete cascade,
   parent_comment_id uuid,
-  author_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
+  author_id text not null default private.current_user_id() references public.profiles (id) on delete cascade,
   body text not null check (char_length(body) between 1 and 5000),
   is_hidden boolean not null default false,
   created_at timestamptz not null default now(),
@@ -110,7 +112,7 @@ for each row execute function private.set_updated_at();
 -- content_flags: reporters see their own; staff see and resolve all.
 -- Column grants keep reporters from setting the resolution fields.
 alter table public.content_flags enable row level security;
-revoke all on table public.content_flags from anon, authenticated;
+revoke all on table public.content_flags from anonymous, authenticated;
 grant
   select,
   insert (question_id, user_id, locale, reason, details),
@@ -121,7 +123,7 @@ grant
 create policy "Users can read their own flags"
 on public.content_flags for select
 to authenticated
-using (user_id = (select auth.uid()));
+using (user_id = (select private.current_user_id()));
 
 create policy "Staff can read every flag"
 on public.content_flags for select
@@ -134,7 +136,7 @@ create policy "Users can flag questions they can see"
 on public.content_flags for insert
 to authenticated
 with check (
-  user_id = (select auth.uid())
+  user_id = (select private.current_user_id())
   and exists (select 1 from public.questions where questions.id = content_flags.question_id)
 );
 
@@ -151,7 +153,7 @@ using ((select private.is_admin()));
 
 -- community_posts: signed-in users read what is not hidden, write their own.
 alter table public.community_posts enable row level security;
-revoke all on table public.community_posts from anon, authenticated;
+revoke all on table public.community_posts from anonymous, authenticated;
 grant
   select,
   insert (author_id, country_code, title, body),
@@ -162,7 +164,7 @@ grant
 create policy "Signed-in users can read visible posts"
 on public.community_posts for select
 to authenticated
-using (not is_hidden or author_id = (select auth.uid()));
+using (not is_hidden or author_id = (select private.current_user_id()));
 
 create policy "Staff can read every post"
 on public.community_posts for select
@@ -172,15 +174,15 @@ using ((select private.is_staff()));
 create policy "Users can write their own posts"
 on public.community_posts for insert
 to authenticated
-with check (author_id = (select auth.uid()));
+with check (author_id = (select private.current_user_id()));
 
 -- An author can edit a post only while it is visible, and cannot hide or
 -- unhide it: is_hidden must be false before and after.
 create policy "Authors can edit their own visible posts"
 on public.community_posts for update
 to authenticated
-using (author_id = (select auth.uid()) and not is_hidden)
-with check (author_id = (select auth.uid()) and not is_hidden);
+using (author_id = (select private.current_user_id()) and not is_hidden)
+with check (author_id = (select private.current_user_id()) and not is_hidden);
 
 create policy "Staff can moderate posts"
 on public.community_posts for update
@@ -191,7 +193,7 @@ with check ((select private.is_staff()));
 create policy "Authors can delete their own posts"
 on public.community_posts for delete
 to authenticated
-using (author_id = (select auth.uid()));
+using (author_id = (select private.current_user_id()));
 
 create policy "Staff can delete posts"
 on public.community_posts for delete
@@ -201,7 +203,7 @@ using ((select private.is_staff()));
 -- community_comments: same rules, and a comment is only visible while its
 -- post is (the EXISTS runs under the reader's access to community_posts).
 alter table public.community_comments enable row level security;
-revoke all on table public.community_comments from anon, authenticated;
+revoke all on table public.community_comments from anonymous, authenticated;
 grant
   select,
   insert (post_id, parent_comment_id, author_id, body),
@@ -213,7 +215,7 @@ create policy "Signed-in users can read visible comments"
 on public.community_comments for select
 to authenticated
 using (
-  (not is_hidden or author_id = (select auth.uid()))
+  (not is_hidden or author_id = (select private.current_user_id()))
   and exists (
     select 1 from public.community_posts where community_posts.id = community_comments.post_id
   )
@@ -228,7 +230,7 @@ create policy "Users can comment on posts they can see"
 on public.community_comments for insert
 to authenticated
 with check (
-  author_id = (select auth.uid())
+  author_id = (select private.current_user_id())
   and exists (
     select 1 from public.community_posts where community_posts.id = community_comments.post_id
   )
@@ -237,8 +239,8 @@ with check (
 create policy "Authors can edit their own visible comments"
 on public.community_comments for update
 to authenticated
-using (author_id = (select auth.uid()) and not is_hidden)
-with check (author_id = (select auth.uid()) and not is_hidden);
+using (author_id = (select private.current_user_id()) and not is_hidden)
+with check (author_id = (select private.current_user_id()) and not is_hidden);
 
 create policy "Staff can moderate comments"
 on public.community_comments for update
@@ -249,9 +251,18 @@ with check ((select private.is_staff()));
 create policy "Authors can delete their own comments"
 on public.community_comments for delete
 to authenticated
-using (author_id = (select auth.uid()));
+using (author_id = (select private.current_user_id()));
 
 create policy "Staff can delete comments"
 on public.community_comments for delete
 to authenticated
 using ((select private.is_staff()));
+
+-- migrate:down
+
+drop table public.community_comments;
+drop table public.community_posts;
+drop table public.content_flags;
+drop function private.content_flags_before_update();
+drop type public.flag_status;
+drop type public.flag_reason;

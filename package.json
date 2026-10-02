@@ -14,18 +14,21 @@
     "test": "turbo run test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:start": "supabase db start",
-    "db:stop": "supabase stop",
-    "db:reset": "supabase db reset",
-    "db:test": "supabase test db",
-    "db:types": "supabase gen types typescript --local --schema public > packages/api/src/database.types.ts && prettier --write packages/api/src/database.types.ts"
+    "db:start": "db/local.sh start",
+    "db:stop": "db/local.sh stop",
+    "db:reset": "db/local.sh reset",
+    "db:migrate": "db/local.sh migrate",
+    "db:test": "db/local.sh test",
+    "db:types": "db/local.sh types",
+    "db:deploy": "dbmate --url \"${DATABASE_URL:?Set DATABASE_URL to the Neon connection string}\" --migrations-dir db/migrations --migrations-table private.schema_migrations --no-dump-schema up"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
+    "@neondatabase/neon-js": "0.7.0-beta",
+    "dbmate": "^2.36.0",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "prettier": "^3.9.9",
-    "supabase": "^2.119.0",
     "turbo": "^2.11.5",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:"

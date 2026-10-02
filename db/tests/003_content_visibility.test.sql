@@ -76,7 +76,7 @@ select throws_ok(
 );
 
 -- Signed-out visitors ------------------------------------------------------------------
-select tests.authenticate_as_anon();
+select tests.authenticate_as_anonymous();
 
 select results_eq(
   $$ select id from public.questions where country_code = 'ZZ' $$,
@@ -169,7 +169,7 @@ select lives_ok(
 select results_eq(
   $$ select verified_by, last_verified_at is not null, published_at is not null
      from public.questions where id = '10000000-0000-0000-0000-000000000003' $$,
-  $$ values ('c0000000-0000-0000-0000-00000000000c'::uuid, true, true) $$,
+  $$ values ('c0000000-0000-0000-0000-00000000000c', true, true) $$,
   'publishing stamps the reviewer as verifier, with the time'
 );
 select lives_ok(
@@ -221,7 +221,7 @@ select is_empty(
 );
 
 -- The newly published question is now public --------------------------------------------------
-select tests.authenticate_as_anon();
+select tests.authenticate_as_anonymous();
 select results_eq(
   $$ select count(*)::int from public.questions where country_code = 'ZZ' $$,
   array[2],
