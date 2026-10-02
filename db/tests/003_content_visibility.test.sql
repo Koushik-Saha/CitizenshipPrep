@@ -2,7 +2,7 @@
 -- cannot be self-granted.
 
 begin;
-select plan(31);
+select plan(32);
 
 -- Arrange --------------------------------------------------------------------------
 select tests.create_user('a0000000-0000-0000-0000-00000000000a', 'alice@example.test');
@@ -36,10 +36,18 @@ values
    'multiple_choice', '{"keys": ["a"]}', 'https://example.test/source', 'retired',
    'c0000000-0000-0000-0000-00000000000c', now());
 
-insert into public.question_translations (question_id, locale, text, options)
-select id, 'en', 'Question ' || right(id::text, 1), '[{"key": "a", "text": "A"}]'
+-- Every question has approved wording in English. The published one also has a
+-- Spanish translation that has not been reviewed yet.
+insert into public.question_translations
+  (question_id, locale, text, options, status, reviewed_by, reviewed_at)
+select id, 'en', 'Question ' || right(id::text, 1), '[{"key": "a", "text": "A"}]', 'approved',
+       'c0000000-0000-0000-0000-00000000000c', now()
 from public.questions
 where country_code = 'ZZ';
+
+insert into public.question_translations (question_id, locale, text, options, translated_from)
+values ('10000000-0000-0000-0000-000000000001', 'es', 'Pregunta 1',
+        '[{"key": "a", "text": "A"}]', 'en');
 
 -- Integrity rules (checked as the superuser, so RLS is not what stops them) -----------
 select throws_ok(
@@ -91,7 +99,11 @@ select results_eq(
   $$ select t.text from public.question_translations t
      join public.questions q on q.id = t.question_id where q.country_code = 'ZZ' $$,
   array['Question 1'],
-  'a signed-out visitor sees translations of published questions only'
+  'a signed-out visitor sees only approved wording of published questions'
+);
+select is_empty(
+  $$ select 1 from public.question_translations where locale = 'es' $$,
+  'an unreviewed translation is hidden even though its question is published'
 );
 select is_empty(
   $$ select 1 from public.question_translations
@@ -158,8 +170,8 @@ select results_eq(
 select results_eq(
   $$ select count(*)::int from public.question_translations t
      join public.questions q on q.id = t.question_id where q.country_code = 'ZZ' $$,
-  array[4],
-  'a reviewer sees every translation'
+  array[5],
+  'a reviewer sees every translation, reviewed or not'
 );
 select lives_ok(
   $$ update public.questions set status = 'published'

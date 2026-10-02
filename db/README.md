@@ -28,7 +28,9 @@ After changing the schema: add a migration, run `pnpm db:reset`, `pnpm db:test` 
 1. In the Neon console, enable the **Data API** for the branch. This creates the `authenticated`
    and `anonymous` roles and `auth.user_id()`; the first migration stops with a clear error if they
    are missing.
-2. Run `DATABASE_URL="postgresql://..." pnpm db:deploy` with the owner connection string.
+2. Put the owner connection strings in `.env.local` (see `.env.example`), then run
+   `pnpm db:deploy`. It uses `DATABASE_URL_UNPOOLED`, the direct connection, because migrations
+   should not go through the connection pooler.
 
 `seed.sql` is sample data for local development and is not deployed.
 

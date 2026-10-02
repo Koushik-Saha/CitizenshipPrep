@@ -2,14 +2,15 @@
 -- later: a new table without RLS fails here.
 
 begin;
-select plan(25);
+select plan(28);
 
 select has_table('public', table_name, format('table %s exists', table_name))
 from unnest(array[
   'countries', 'exam_formats', 'topics', 'questions', 'question_translations',
   'profiles', 'user_roles', 'user_countries', 'attempts', 'answer_events', 'mastery',
   'mock_exams', 'subscriptions', 'organizations', 'org_members', 'content_flags',
-  'community_posts', 'community_comments'
+  'community_posts', 'community_comments', 'source_documents', 'source_passages',
+  'question_reviews'
 ]) as table_name;
 
 select is_empty(
@@ -61,10 +62,10 @@ select is_empty(
     from information_schema.role_table_grants
     where table_schema = 'public'
       and grantee = 'authenticated'
-      and table_name in ('subscriptions', 'answer_events')
+      and table_name in ('subscriptions', 'answer_events', 'question_reviews')
       and privilege_type in ('UPDATE', 'DELETE', 'TRUNCATE')
   $$,
-  'clients cannot modify subscriptions or rewrite the answer log'
+  'clients cannot modify subscriptions or rewrite the answer and review logs'
 );
 
 select is_empty(

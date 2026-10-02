@@ -54,6 +54,11 @@ jobs:
 
       - run: pnpm db:test
 
+      - name: Content pipeline against the database
+        run: pnpm --filter @oathly/content test
+        env:
+          TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
+
       - name: Check generated types are up to date
         run: |
           pnpm db:types

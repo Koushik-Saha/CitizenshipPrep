@@ -337,8 +337,9 @@ begin
 
     for locale_key, wording in select key, value from jsonb_each(item -> 't')
     loop
-      insert into public.question_translations (question_id, locale, text, options, explanation)
-      values (
+      insert into public.question_translations
+        (question_id, locale, text, options, explanation, translated_from)
+      select
         new_question_id,
         locale_key,
         wording ->> 'text',
@@ -346,8 +347,12 @@ begin
           select jsonb_agg(jsonb_build_object('key', key, 'text', value) order by key)
           from jsonb_each_text(wording -> 'options')
         ),
-        wording ->> 'explanation'
-      );
+        wording ->> 'explanation',
+        -- Wording in the exam's own language is the original; anything else
+        -- is a translation of it.
+        case when locale_key = any (exam_languages) then null else exam_languages[1] end
+      from public.countries
+      where iso_code = item ->> 'c';
     end loop;
   end loop;
 end;

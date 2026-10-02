@@ -1,0 +1,38 @@
+name: Source check
+
+# Re-fetches every stored study guide, re-hashes it, and flags the questions
+# whose cited passage is no longer there. Flagged questions show up under
+# "Source changed" at /admin/content. The run fails if a source cannot be
+# fetched, so someone looks at it.
+
+on:
+  schedule:
+    - cron: '0 6 1 * *' # 06:00 UTC on the 1st of every month
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Re-hash sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check sources
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::warning::The DATABASE_URL secret is not set, so no sources were checked."
+            exit 0
+          fi
+          pnpm content check-sources | tee -a "$GITHUB_STEP_SUMMARY"

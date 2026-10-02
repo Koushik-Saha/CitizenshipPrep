@@ -3,12 +3,13 @@ import { describe, expect, expectTypeOf, it } from 'vitest';
 import { Constants, type Enums, type Tables, type TablesInsert } from './index';
 
 describe('generated database types', () => {
-  it('lists the question lifecycle in order', () => {
+  it('lists every question status', () => {
     expect(Constants.public.Enums.question_status).toEqual([
       'draft',
       'in_review',
       'published',
       'retired',
+      'rejected',
     ]);
   });
 

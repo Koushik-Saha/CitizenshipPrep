@@ -20,7 +20,8 @@
     "db:migrate": "db/local.sh migrate",
     "db:test": "db/local.sh test",
     "db:types": "db/local.sh types",
-    "db:deploy": "dbmate --url \"${DATABASE_URL:?Set DATABASE_URL to the Neon connection string}\" --migrations-dir db/migrations --migrations-table private.schema_migrations --no-dump-schema up"
+    "db:deploy": "dbmate --env-file .env.local --env DATABASE_URL_UNPOOLED --migrations-dir db/migrations --migrations-table private.schema_migrations --no-dump-schema up",
+    "content": "pnpm --filter @oathly/content run --silent cli"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",

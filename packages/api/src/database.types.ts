@@ -589,32 +589,92 @@ export type Database = {
         };
         Relationships: [];
       };
+      question_reviews: {
+        Row: {
+          action: string;
+          created_at: string;
+          id: number;
+          locale: string | null;
+          note: string | null;
+          question_id: string;
+          reviewer_id: string | null;
+        };
+        Insert: {
+          action: string;
+          created_at?: string;
+          id?: never;
+          locale?: string | null;
+          note?: string | null;
+          question_id: string;
+          reviewer_id?: string | null;
+        };
+        Update: {
+          action?: string;
+          created_at?: string;
+          id?: never;
+          locale?: string | null;
+          note?: string | null;
+          question_id?: string;
+          reviewer_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'question_reviews_question_id_fkey';
+            columns: ['question_id'];
+            isOneToOne: false;
+            referencedRelation: 'questions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'question_reviews_reviewer_id_fkey';
+            columns: ['reviewer_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       question_translations: {
         Row: {
           created_at: string;
+          drafted_by_model: string | null;
           explanation: string | null;
           locale: string;
           options: Json;
           question_id: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          status: Database['public']['Enums']['translation_status'];
           text: string;
+          translated_from: string | null;
           updated_at: string;
         };
         Insert: {
           created_at?: string;
+          drafted_by_model?: string | null;
           explanation?: string | null;
           locale: string;
           options?: Json;
           question_id: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database['public']['Enums']['translation_status'];
           text: string;
+          translated_from?: string | null;
           updated_at?: string;
         };
         Update: {
           created_at?: string;
+          drafted_by_model?: string | null;
           explanation?: string | null;
           locale?: string;
           options?: Json;
           question_id?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database['public']['Enums']['translation_status'];
           text?: string;
+          translated_from?: string | null;
           updated_at?: string;
         };
         Relationships: [
@@ -623,6 +683,13 @@ export type Database = {
             columns: ['question_id'];
             isOneToOne: false;
             referencedRelation: 'questions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'question_translations_reviewed_by_fkey';
+            columns: ['reviewed_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -634,11 +701,16 @@ export type Database = {
           created_at: string;
           created_by: string | null;
           difficulty: number;
+          drafted_by_model: string | null;
+          duplicate_of: string | null;
           exam_format_id: string | null;
           id: string;
           last_verified_at: string | null;
           published_at: string | null;
           region_code: string | null;
+          source_changed_at: string | null;
+          source_passage_id: string | null;
+          source_quote: string | null;
           source_url: string;
           status: Database['public']['Enums']['question_status'];
           topic_id: string;
@@ -653,11 +725,16 @@ export type Database = {
           created_at?: string;
           created_by?: string | null;
           difficulty: number;
+          drafted_by_model?: string | null;
+          duplicate_of?: string | null;
           exam_format_id?: string | null;
           id?: string;
           last_verified_at?: string | null;
           published_at?: string | null;
           region_code?: string | null;
+          source_changed_at?: string | null;
+          source_passage_id?: string | null;
+          source_quote?: string | null;
           source_url: string;
           status?: Database['public']['Enums']['question_status'];
           topic_id: string;
@@ -672,11 +749,16 @@ export type Database = {
           created_at?: string;
           created_by?: string | null;
           difficulty?: number;
+          drafted_by_model?: string | null;
+          duplicate_of?: string | null;
           exam_format_id?: string | null;
           id?: string;
           last_verified_at?: string | null;
           published_at?: string | null;
           region_code?: string | null;
+          source_changed_at?: string | null;
+          source_passage_id?: string | null;
+          source_quote?: string | null;
           source_url?: string;
           status?: Database['public']['Enums']['question_status'];
           topic_id?: string;
@@ -701,10 +783,24 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'questions_duplicate_of_fkey';
+            columns: ['duplicate_of'];
+            isOneToOne: false;
+            referencedRelation: 'questions';
+            referencedColumns: ['id'];
+          },
+          {
             foreignKeyName: 'questions_exam_format_id_fkey';
             columns: ['exam_format_id'];
             isOneToOne: false;
             referencedRelation: 'exam_formats';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'questions_source_passage_id_fkey';
+            columns: ['source_passage_id'];
+            isOneToOne: false;
+            referencedRelation: 'source_passages';
             referencedColumns: ['id'];
           },
           {
@@ -719,6 +815,118 @@ export type Database = {
             columns: ['verified_by'];
             isOneToOne: false;
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      source_documents: {
+        Row: {
+          byte_size: number;
+          changed_at: string | null;
+          content_hash: string;
+          country_code: string;
+          created_at: string;
+          fetched_at: string;
+          id: string;
+          is_refetchable: boolean;
+          last_checked_at: string;
+          license: string;
+          locale: string;
+          media_type: string;
+          publisher: string | null;
+          raw_hash: string;
+          source_url: string;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          byte_size: number;
+          changed_at?: string | null;
+          content_hash: string;
+          country_code: string;
+          created_at?: string;
+          fetched_at?: string;
+          id?: string;
+          is_refetchable?: boolean;
+          last_checked_at?: string;
+          license: string;
+          locale: string;
+          media_type: string;
+          publisher?: string | null;
+          raw_hash: string;
+          source_url: string;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          byte_size?: number;
+          changed_at?: string | null;
+          content_hash?: string;
+          country_code?: string;
+          created_at?: string;
+          fetched_at?: string;
+          id?: string;
+          is_refetchable?: boolean;
+          last_checked_at?: string;
+          license?: string;
+          locale?: string;
+          media_type?: string;
+          publisher?: string | null;
+          raw_hash?: string;
+          source_url?: string;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'source_documents_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
+        ];
+      };
+      source_passages: {
+        Row: {
+          content_hash: string;
+          created_at: string;
+          document_id: string;
+          heading: string | null;
+          id: string;
+          is_current: boolean;
+          ordinal: number;
+          superseded_at: string | null;
+          text: string;
+        };
+        Insert: {
+          content_hash: string;
+          created_at?: string;
+          document_id: string;
+          heading?: string | null;
+          id?: string;
+          is_current?: boolean;
+          ordinal: number;
+          superseded_at?: string | null;
+          text: string;
+        };
+        Update: {
+          content_hash?: string;
+          created_at?: string;
+          document_id?: string;
+          heading?: string | null;
+          id?: string;
+          is_current?: boolean;
+          ordinal?: number;
+          superseded_at?: string | null;
+          text?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'source_passages_document_id_fkey';
+            columns: ['document_id'];
+            isOneToOne: false;
+            referencedRelation: 'source_documents';
             referencedColumns: ['id'];
           },
         ];
@@ -910,9 +1118,10 @@ export type Database = {
       flag_reason: 'outdated' | 'incorrect' | 'unclear' | 'translation' | 'other';
       flag_status: 'open' | 'resolved' | 'dismissed';
       org_role: 'owner' | 'admin' | 'member';
-      question_status: 'draft' | 'in_review' | 'published' | 'retired';
+      question_status: 'draft' | 'in_review' | 'published' | 'retired' | 'rejected';
       question_type: 'multiple_choice' | 'multi_select' | 'true_false' | 'free_response';
       subscription_status: 'trialing' | 'active' | 'past_due' | 'canceled' | 'expired';
+      translation_status: 'draft' | 'approved';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -1040,9 +1249,10 @@ export const Constants = {
       flag_reason: ['outdated', 'incorrect', 'unclear', 'translation', 'other'],
       flag_status: ['open', 'resolved', 'dismissed'],
       org_role: ['owner', 'admin', 'member'],
-      question_status: ['draft', 'in_review', 'published', 'retired'],
+      question_status: ['draft', 'in_review', 'published', 'retired', 'rejected'],
       question_type: ['multiple_choice', 'multi_select', 'true_false', 'free_response'],
       subscription_status: ['trialing', 'active', 'past_due', 'canceled', 'expired'],
+      translation_status: ['draft', 'approved'],
     },
   },
 } as const;

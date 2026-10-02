@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@oathly/content": "workspace:*",
     "@oathly/core": "workspace:*",
     "@oathly/tokens": "workspace:*",
     "next": "16.3.8",
