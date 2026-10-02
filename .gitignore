@@ -1,0 +1,50 @@
+# dependencies
+node_modules/
+
+# turbo
+.turbo/
+
+# build output
+dist/
+coverage/
+*.tsbuildinfo
+
+# next.js
+.next/
+out/
+next-env.d.ts
+.vercel
+
+# expo
+.expo/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# native
+apps/mobile/ios/
+apps/mobile/android/
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# env files
+.env*
+!.env.example
+
+# debug
+npm-debug.log*
+.pnpm-debug.log*
+
+# macOS
+.DS_Store
+
+# claude
+CLAUDE.md
+CLAUDE.local.md
+.claude/

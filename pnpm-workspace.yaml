@@ -1,0 +1,28 @@
+packages:
+  - apps/*
+  - packages/*
+
+# One version of each shared tool across the workspace. React is pinned to the
+# version the Expo SDK ships with: both apps must resolve the same React.
+catalog:
+  '@eslint/js': ^9.39.5
+  '@types/node': ^24.19.0
+  '@types/react': ~19.2.2
+  '@types/react-dom': ~19.2.2
+  eslint: ^9.39.5
+  eslint-config-prettier: ^10.1.8
+  react: 19.2.3
+  react-dom: 19.2.3
+  typescript: ~6.0.3
+  typescript-eslint: ^8.71.0
+  vitest: ^5.0.3
+
+allowBuilds:
+  sharp: false
+  supabase: true
+  unrs-resolver: false
+
+# Optional peer of react-native's CLI plugin; without this pnpm auto-installs
+# the latest release instead of the one matching react-native.
+overrides:
+  '@react-native/metro-config': 0.86.3
