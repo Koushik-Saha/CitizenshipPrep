@@ -31,3 +31,29 @@ jobs:
       - run: pnpm typecheck
 
       - run: pnpm test
+
+  database:
+    name: Migrations, RLS tests, generated types
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Applies every migration and the seed to a fresh database.
+      - run: pnpm db:start
+
+      - run: pnpm db:test
+
+      - name: Check generated types are up to date
+        run: |
+          pnpm db:types
+          git diff --exit-code -- packages/api/src/database.types.ts
