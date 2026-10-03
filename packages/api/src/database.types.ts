@@ -3,6 +3,105 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      ai_explanations: {
+        Row: {
+          created_at: string;
+          locale: string;
+          model: string;
+          question_id: string;
+          question_version: number;
+          text: string;
+        };
+        Insert: {
+          created_at?: string;
+          locale: string;
+          model: string;
+          question_id: string;
+          question_version: number;
+          text: string;
+        };
+        Update: {
+          created_at?: string;
+          locale?: string;
+          model?: string;
+          question_id?: string;
+          question_version?: number;
+          text?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_explanations_question_id_fkey';
+            columns: ['question_id'];
+            isOneToOne: false;
+            referencedRelation: 'questions';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      ai_usage: {
+        Row: {
+          cache_read_tokens: number;
+          cache_write_tokens: number;
+          country_code: string | null;
+          created_at: string;
+          feature: Database['public']['Enums']['ai_feature'];
+          id: number;
+          input_tokens: number;
+          model: string;
+          output_tokens: number;
+          question_id: string | null;
+          user_id: string;
+        };
+        Insert: {
+          cache_read_tokens?: number;
+          cache_write_tokens?: number;
+          country_code?: string | null;
+          created_at?: string;
+          feature: Database['public']['Enums']['ai_feature'];
+          id?: never;
+          input_tokens: number;
+          model: string;
+          output_tokens: number;
+          question_id?: string | null;
+          user_id: string;
+        };
+        Update: {
+          cache_read_tokens?: number;
+          cache_write_tokens?: number;
+          country_code?: string | null;
+          created_at?: string;
+          feature?: Database['public']['Enums']['ai_feature'];
+          id?: never;
+          input_tokens?: number;
+          model?: string;
+          output_tokens?: number;
+          question_id?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'ai_usage_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
+          {
+            foreignKeyName: 'ai_usage_question_id_fkey';
+            columns: ['question_id'];
+            isOneToOne: false;
+            referencedRelation: 'questions';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'ai_usage_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       answer_events: {
         Row: {
           attempt_id: string;
@@ -1159,6 +1258,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
+      ai_feature: 'explanation' | 'tutor';
       app_role: 'reviewer' | 'admin';
       attempt_mode: 'practice' | 'review' | 'mock_exam';
       exam_format_type: 'written' | 'oral' | 'interview' | 'language';
@@ -1290,6 +1390,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ai_feature: ['explanation', 'tutor'],
       app_role: ['reviewer', 'admin'],
       attempt_mode: ['practice', 'review', 'mock_exam'],
       exam_format_type: ['written', 'oral', 'interview', 'language'],

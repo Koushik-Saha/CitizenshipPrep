@@ -23,6 +23,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "@oathly/core": "workspace:*",
     "@oathly/i18n": "workspace:*",
     "jose": "^6.2.12",

@@ -141,6 +141,12 @@ export default async function StudyDashboard() {
                   <h3 className="mb-3 font-medium">Mock exam</h3>
                   <MockExamForm country={country} />
                 </div>
+                <Link
+                  href={`/study/tutor/${country.countryCode.toLowerCase()}`}
+                  className={`${buttonClass.secondary} w-full`}
+                >
+                  Ask the tutor about {country.countryName}
+                </Link>
               </div>
             </div>
           )}

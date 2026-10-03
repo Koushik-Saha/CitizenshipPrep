@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react';
 
 import { buttonClass, focusRing } from '@/components/ui';
 
+import { ExplainMore } from './explain-more';
 import type { GivenAnswer } from './study-session';
 
 export function Results({
@@ -146,6 +147,7 @@ export function Results({
                 {question.explanation && (
                   <p className="text-fg-muted mt-2">{question.explanation}</p>
                 )}
+                {!isFlashcards && <ExplainMore questionId={question.id} />}
                 {question.sourceQuote && (
                   <p className="text-fg-muted mt-2 text-sm">
                     From the official guide: “{question.sourceQuote}”{' '}

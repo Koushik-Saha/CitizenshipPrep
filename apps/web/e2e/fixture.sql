@@ -59,3 +59,35 @@ values ('test:learner', 10, now());
 
 insert into public.user_countries (user_id, country_code, exam_date, study_locale, is_primary)
 values ('test:learner', 'ZZ', current_date + 30, 'en', true);
+
+-- The Testland study guide: one passage per topic, each with some made-up
+-- civic facts and the sums its questions ask about. Questions cite their
+-- topic's passage, which grounds the AI explanations and the tutor.
+insert into public.source_documents
+  (id, country_code, title, publisher, source_url, media_type, locale, license, raw_hash,
+   content_hash, byte_size)
+values
+  ('d0c00000-0000-4000-8000-000000000001', 'ZZ', 'Testland Citizenship Guide',
+   'Testland Office of Citizenship', 'https://example.test/testland/guide', 'text/plain', 'en',
+   'public-domain', repeat('a', 64), repeat('b', 64), 4000);
+
+insert into public.source_passages (id, document_id, ordinal, heading, text, content_hash)
+select ('9a550000-0000-4000-8000-00000000000' || topic)::uuid,
+       'd0c00000-0000-4000-8000-000000000001', topic - 1, heading,
+       intro || ' Sums used in the test: ' ||
+         (select string_agg(format('%s plus %s is %s.', n, n, 2 * n), ' ')
+          from generate_series(topic * 10 - 9, topic * 10) as n),
+       md5(heading) || md5(intro)
+from (values
+  (1, 'Government',
+   'Testland is governed by the Assembly of Testland, which has 40 members elected every four years. The Assembly chooses the First Minister, who leads the government. Every citizen aged 18 or over may vote.'),
+  (2, 'History',
+   'Testland became independent on 3 May 1921. Independence Day is celebrated every year on 3 May. The first First Minister was Ada Lindqvist.'),
+  (3, 'Symbols',
+   'The flag of Testland is green and white with a blue star in the centre. The national flower is the bluebell, and the national anthem is called Morning Over Testland.')
+) as passages (topic, heading, intro);
+
+update public.questions q
+set source_passage_id = ('9a550000-0000-4000-8000-00000000000' || (1 + (n - 1) / 10))::uuid
+from (select id, row_number() over (order by id) as n from public.questions where country_code = 'ZZ') as numbered
+where numbered.id = q.id;

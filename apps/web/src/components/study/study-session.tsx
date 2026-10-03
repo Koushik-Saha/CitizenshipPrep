@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { buttonClass, focusRing } from '@/components/ui';
 import { completeSession, flushAnswers, recordAnswer } from '@/lib/answer-sync';
 
+import { ExplainMore } from './explain-more';
 import { Results } from './results';
 import { useCountdown } from './use-countdown';
 
@@ -378,6 +379,7 @@ export function StudySession({ session }: { session: Session }) {
                     {question.explanation}
                   </p>
                 )}
+                {!lastAnswer.correct && <ExplainMore key={question.id} questionId={question.id} />}
               </div>
             )}
           </div>
