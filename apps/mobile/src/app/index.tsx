@@ -1,31 +1,36 @@
-import { hello } from '@oathly/core';
-import { spacing, themeFor } from '@oathly/tokens';
-import { StyleSheet, Text, useColorScheme } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Redirect } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
-export default function HomeScreen() {
-  const theme = themeFor(useColorScheme());
+import { Body, Button, Screen, useTheme } from '@/components/ui';
+import { useSession } from '@/lib/session';
 
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.canvas }]}>
-      <Text
-        accessibilityRole="header"
-        style={[theme.text['2xl'], styles.title, { color: theme.colors.fg }]}
+// Sends the learner to the right screen for their session.
+export default function Index() {
+  const session = useSession();
+  const theme = useTheme();
+
+  if (session.status === 'loading') {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: theme.colors.canvas,
+        }}
       >
-        {hello()}
-      </Text>
-    </SafeAreaView>
-  );
+        <ActivityIndicator accessibilityLabel="Loading" color={theme.colors.primary} />
+      </View>
+    );
+  }
+  if (session.status === 'error') {
+    return (
+      <Screen>
+        <Body>We could not reach Oathly. Check your connection and try again.</Body>
+        <Button label="Try again" onPress={() => void session.refresh()} />
+      </Screen>
+    );
+  }
+  if (session.status === 'signed-out') return <Redirect href="/sign-in" />;
+  return <Redirect href={session.step === 'study' ? '/study' : '/onboarding'} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing[6],
-  },
-  title: {
-    fontWeight: '600',
-  },
-});

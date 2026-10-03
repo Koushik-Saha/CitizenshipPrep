@@ -54,8 +54,8 @@ jobs:
 
       - run: pnpm db:test
 
-      - name: Content pipeline against the database
-        run: pnpm --filter @oathly/content test
+      - name: Content pipeline and learner data against the database
+        run: pnpm --filter @oathly/content --filter @oathly/api test
         env:
           TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
 

@@ -11,7 +11,13 @@ if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
 
 const nextConfig: NextConfig = {
   // Workspace packages ship TypeScript source; Next compiles them.
-  transpilePackages: ['@oathly/content', '@oathly/core', '@oathly/tokens'],
+  transpilePackages: [
+    '@oathly/api',
+    '@oathly/content',
+    '@oathly/core',
+    '@oathly/i18n',
+    '@oathly/tokens',
+  ],
   serverExternalPackages: ['pg'],
 };
 

@@ -1,22 +1,13 @@
-import { createPool } from '@oathly/content/db';
 import { ensureReviewer, type Reviewer } from '@oathly/content/review';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import { verifyBasicAuth } from './admin-credentials';
+import { getDb } from './db';
 
-type Pool = ReturnType<typeof createPool>;
+export { getDb };
 
-// One pool per server process, surviving hot reloads in development.
-const globalForDb = globalThis as typeof globalThis & {
-  oathlyPool?: Pool;
-  oathlyReviewers?: Set<string>;
-};
-
-export function getDb(): Pool {
-  globalForDb.oathlyPool ??= createPool();
-  return globalForDb.oathlyPool;
-}
+const globalForReviewers = globalThis as typeof globalThis & { oathlyReviewers?: Set<string> };
 
 /**
  * The reviewer making this request. The proxy has already challenged for
@@ -28,10 +19,10 @@ export async function requireReviewer(): Promise<Reviewer> {
   if (!username) notFound();
 
   const reviewer: Reviewer = { id: `admin:${username}`, displayName: username };
-  globalForDb.oathlyReviewers ??= new Set();
-  if (!globalForDb.oathlyReviewers.has(reviewer.id)) {
+  globalForReviewers.oathlyReviewers ??= new Set();
+  if (!globalForReviewers.oathlyReviewers.has(reviewer.id)) {
     await ensureReviewer(getDb(), reviewer, 'admin');
-    globalForDb.oathlyReviewers.add(reviewer.id);
+    globalForReviewers.oathlyReviewers.add(reviewer.id);
   }
   return reviewer;
 }

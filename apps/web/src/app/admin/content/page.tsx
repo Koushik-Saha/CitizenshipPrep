@@ -6,14 +6,7 @@ import {
 } from '@oathly/content/review';
 import Link from 'next/link';
 
-import {
-  Badge,
-  buttonClass,
-  fieldClass,
-  focusRing,
-  Notice,
-  StatusBadge,
-} from '@/components/admin/ui';
+import { Badge, buttonClass, fieldClass, focusRing, Notice, StatusBadge } from '@/components/ui';
 import { getDb, requireReviewer } from '@/lib/admin';
 
 const views = ['questions', 'translations', 'source'] as const;

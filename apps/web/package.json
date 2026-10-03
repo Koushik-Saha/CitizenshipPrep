@@ -10,8 +10,11 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@neondatabase/auth": "0.5.0-beta",
+    "@oathly/api": "workspace:*",
     "@oathly/content": "workspace:*",
     "@oathly/core": "workspace:*",
+    "@oathly/i18n": "workspace:*",
     "@oathly/tokens": "workspace:*",
     "next": "16.3.8",
     "react": "catalog:",

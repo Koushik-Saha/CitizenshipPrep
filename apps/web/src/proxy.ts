@@ -1,9 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { isAdminConfigured, verifyBasicAuth } from './lib/admin-credentials';
+import { getAuth, isAuthConfigured } from './lib/auth/server';
 
-// Guards /admin. Pages and Server Actions check again with requireReviewer().
-export function proxy(request: NextRequest) {
+// /admin: the interim reviewer sign-in. Pages and Server Actions check again
+// with requireReviewer().
+function adminGuard(request: NextRequest) {
   if (!isAdminConfigured()) return new NextResponse('Not found', { status: 404 });
   if (verifyBasicAuth(request.headers.get('authorization'))) return NextResponse.next();
   return new NextResponse('Sign in to review content.', {
@@ -12,4 +14,14 @@ export function proxy(request: NextRequest) {
   });
 }
 
-export const config = { matcher: ['/admin', '/admin/:path*'] };
+// Learner pages: Neon Auth sends signed-out visitors to /sign-in and keeps
+// the session fresh. Pages check the session again with requireMe().
+export async function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/admin')) return adminGuard(request);
+  if (!isAuthConfigured()) return NextResponse.redirect(new URL('/sign-in', request.url));
+  return getAuth().middleware({ loginUrl: '/sign-in' })(request);
+}
+
+export const config = {
+  matcher: ['/admin', '/admin/:path*', '/welcome', '/onboarding', '/study/:path*'],
+};

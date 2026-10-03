@@ -1,4 +1,4 @@
-// Shared pieces of the admin screens. Server Components: no client JavaScript.
+// Shared form and status pieces. Server Components: no client JavaScript.
 
 export const focusRing =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';

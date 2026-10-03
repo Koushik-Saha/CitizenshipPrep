@@ -12,7 +12,7 @@ import {
   labelClass,
   Notice,
   StatusBadge,
-} from '@/components/admin/ui';
+} from '@/components/ui';
 import { getDb, requireReviewer } from '@/lib/admin';
 
 import { approve, reject, retire, reverify, saveQuestion } from '../../actions';

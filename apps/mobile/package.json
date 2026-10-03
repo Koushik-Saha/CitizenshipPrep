@@ -13,12 +13,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@neondatabase/auth": "0.5.0-beta",
+    "@oathly/api": "workspace:*",
     "@oathly/core": "workspace:*",
+    "@oathly/i18n": "workspace:*",
     "@oathly/tokens": "workspace:*",
     "expo": "~57.0.26",
     "expo-constants": "~57.0.20",
     "expo-font": "~57.0.4",
     "expo-linking": "~57.0.11",
+    "expo-localization": "~57.0.2",
     "expo-router": "~57.0.24",
     "expo-splash-screen": "~57.0.9",
     "expo-status-bar": "~57.0.1",

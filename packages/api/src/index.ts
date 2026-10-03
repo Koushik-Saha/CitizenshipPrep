@@ -1,4 +1,5 @@
-// Typed data access: Neon queries and Claude API calls.
+// Typed data access shared by the web and mobile apps. Safe to import anywhere;
+// database access lives in ./server.
 
 // database.types.ts is generated from the local database: `pnpm db:types`.
 export { Constants } from './database.types';
@@ -14,3 +15,8 @@ export interface QuestionOption {
 export interface CorrectAnswer {
   keys: string[];
 }
+
+export * from './client';
+export * from './me';
+export * from './onboarding';
+export * from './session';

@@ -1034,6 +1034,7 @@ export type Database = {
           country_code: string;
           created_at: string;
           exam_date: string | null;
+          is_primary: boolean;
           study_locale: string | null;
           user_id: string;
         };
@@ -1041,6 +1042,7 @@ export type Database = {
           country_code: string;
           created_at?: string;
           exam_date?: string | null;
+          is_primary?: boolean;
           study_locale?: string | null;
           user_id?: string;
         };
@@ -1048,6 +1050,7 @@ export type Database = {
           country_code?: string;
           created_at?: string;
           exam_date?: string | null;
+          is_primary?: boolean;
           study_locale?: string | null;
           user_id?: string;
         };
@@ -1097,6 +1100,38 @@ export type Database = {
           },
           {
             foreignKeyName: 'user_roles_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      user_settings: {
+        Row: {
+          created_at: string;
+          daily_goal_minutes: number;
+          onboarded_at: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          daily_goal_minutes?: number;
+          onboarded_at?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          daily_goal_minutes?: number;
+          onboarded_at?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_settings_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: true;
             referencedRelation: 'profiles';
