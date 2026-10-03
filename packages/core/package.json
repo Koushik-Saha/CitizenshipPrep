@@ -11,11 +11,15 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --coverage"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.3",
     "eslint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }

@@ -1,5 +1,7 @@
 import { parseArgs } from 'node:util';
 
+import { ExamFormatError, parseBlueprint } from '@oathly/core';
+
 import { createClaudeModel } from './claude';
 import { createPool } from './db';
 import { loadEnv } from './env';
@@ -21,7 +23,9 @@ Usage: pnpm content <command> [options]
   exam-format    Add or update an exam format for a country
                  --country US --slug civics --name "Civics test" --type written|oral|interview|language
                  --source-url https://... [--questions 20] [--pass 12] [--minutes 45] [--pool 128]
-                 [--notes "..."]
+                 [--notes "..."] [--blueprint '{"sections": [...], "stopEarly": false}']
+                 (the blueprint describes sections and special pass rules; see
+                 parseBlueprint in packages/core)
 
   ingest         Store an official study guide and split it into passages
                  --country US --title "..." --license public-domain
@@ -106,6 +110,7 @@ async function main(): Promise<void> {
       minutes: { type: 'string' },
       pool: { type: 'string' },
       notes: { type: 'string' },
+      blueprint: { type: 'string' },
       title: { type: 'string' },
       publisher: { type: 'string' },
       license: { type: 'string' },
@@ -146,6 +151,18 @@ async function main(): Promise<void> {
         }
         const country = countryCode(values, 'country');
         const slug = required(values, 'slug');
+        const blueprintJson = optional(values, 'blueprint');
+        let blueprint: Record<string, unknown> | null = null;
+        if (blueprintJson) {
+          try {
+            blueprint = JSON.parse(blueprintJson) as Record<string, unknown>;
+            parseBlueprint(blueprint);
+          } catch (error) {
+            throw new UsageError(
+              error instanceof ExamFormatError ? error.message : '--blueprint must be valid JSON.',
+            );
+          }
+        }
         await upsertExamFormat(pool, {
           countryCode: country,
           slug,
@@ -157,6 +174,7 @@ async function main(): Promise<void> {
           questionPoolSize: wholeNumber(values, 'pool'),
           notes: optional(values, 'notes'),
           sourceUrl: httpsUrl(values, 'source-url'),
+          blueprint,
         });
         console.log(`Saved exam format ${country}/${slug}. It is not marked as verified.`);
         break;

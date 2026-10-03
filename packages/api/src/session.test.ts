@@ -18,6 +18,7 @@ const api = (result: Me | Error): OathlyApi => ({
   },
   countries: async () => [],
   saveOnboarding: async () => me,
+  sendAnswers: async () => ({ accepted: [], rejected: [] }),
 });
 
 describe('loadSession', () => {

@@ -38,6 +38,28 @@ values
    'https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html',
    '30 general questions and 3 about the federal state where the applicant lives. The pool is 300 general questions plus 10 per state.');
 
+-- The structure each exam has beyond its counts (see packages/core parseBlueprint).
+update public.exam_formats set blueprint = '{"stopEarly": true}'
+where country_code = 'US' and slug in ('civics-2025', 'civics-2008');
+
+update public.exam_formats set blueprint = '{
+  "sections": [
+    {"id": "values", "label": "Australian values", "count": 5,
+     "source": {"topics": ["australian-values"]}, "mustAllBeCorrect": true},
+    {"id": "general", "label": "General knowledge", "count": 15,
+     "source": {"excludeTopics": ["australian-values"]}}
+  ]
+}'
+where country_code = 'AU' and slug = 'citizenship-test';
+
+update public.exam_formats set blueprint = '{
+  "sections": [
+    {"id": "general", "label": "Allgemeine Fragen", "count": 30},
+    {"id": "state", "label": "Fragen zum Bundesland", "count": 3, "source": {"regional": true}}
+  ]
+}'
+where country_code = 'DE' and slug = 'einbuergerungstest';
+
 insert into public.topics (country_code, slug, name, sort_order) values
   ('US', 'american-government', 'American Government', 1),
   ('US', 'american-history', 'American History', 2),

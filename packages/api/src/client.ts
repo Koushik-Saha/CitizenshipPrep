@@ -1,3 +1,4 @@
+import type { QueuedAnswer, SyncOutcome } from '@oathly/core';
 import { z } from 'zod';
 
 import { examCountrySchema, meSchema, type ExamCountry, type Me } from './me';
@@ -25,6 +26,13 @@ export interface OathlyApiOptions {
 }
 
 const errorBodySchema = z.object({ error: z.string() });
+
+const syncOutcomeSchema = z.object({
+  accepted: z.array(z.string()),
+  rejected: z.array(
+    z.object({ clientEventId: z.string(), reason: z.string(), permanent: z.boolean() }),
+  ),
+});
 
 export function createOathlyApi(options: OathlyApiOptions) {
   const doFetch = options.fetch ?? fetch;
@@ -60,6 +68,12 @@ export function createOathlyApi(options: OathlyApiOptions) {
     countries: (): Promise<ExamCountry[]> => request('/api/countries', z.array(examCountrySchema)),
     saveOnboarding: (input: OnboardingInput): Promise<Me> =>
       request('/api/me/onboarding', meSchema, { method: 'POST', body: JSON.stringify(input) }),
+    /** For the offline queue: pass as the `send` argument of syncQueue(). */
+    sendAnswers: (answers: QueuedAnswer[]): Promise<SyncOutcome> =>
+      request('/api/answers', syncOutcomeSchema, {
+        method: 'POST',
+        body: JSON.stringify({ answers }),
+      }),
   };
 }
 

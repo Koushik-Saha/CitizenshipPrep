@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
+    "@oathly/core": "workspace:*",
     "html-to-text": "^10.0.1",
     "pg": "^8.23.1",
     "unpdf": "^1.8.1",

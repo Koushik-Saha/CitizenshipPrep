@@ -6,6 +6,7 @@ export type Database = {
       answer_events: {
         Row: {
           attempt_id: string;
+          client_event_id: string | null;
           correct: boolean;
           created_at: string;
           id: number;
@@ -17,6 +18,7 @@ export type Database = {
         };
         Insert: {
           attempt_id: string;
+          client_event_id?: string | null;
           correct: boolean;
           created_at?: string;
           id?: never;
@@ -28,6 +30,7 @@ export type Database = {
         };
         Update: {
           attempt_id?: string;
+          client_event_id?: string | null;
           correct?: boolean;
           created_at?: string;
           id?: never;
@@ -325,6 +328,7 @@ export type Database = {
       };
       exam_formats: {
         Row: {
+          blueprint: Json | null;
           country_code: string;
           created_at: string;
           format_type: Database['public']['Enums']['exam_format_type'];
@@ -342,6 +346,7 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
+          blueprint?: Json | null;
           country_code: string;
           created_at?: string;
           format_type: Database['public']['Enums']['exam_format_type'];
@@ -359,6 +364,7 @@ export type Database = {
           updated_at?: string;
         };
         Update: {
+          blueprint?: Json | null;
           country_code?: string;
           created_at?: string;
           format_type?: Database['public']['Enums']['exam_format_type'];

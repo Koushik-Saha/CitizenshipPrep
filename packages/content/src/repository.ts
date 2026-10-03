@@ -48,6 +48,8 @@ export interface ExamFormatInput {
   questionPoolSize: number | null;
   notes: string | null;
   sourceUrl: string;
+  /** Validated with parseBlueprint() from @oathly/core before it gets here. */
+  blueprint: Record<string, unknown> | null;
 }
 
 export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise<void> {
@@ -55,8 +57,8 @@ export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise
   await db.query(
     `insert into public.exam_formats
        (country_code, slug, name, format_type, question_count, pass_mark, time_limit_minutes,
-        question_pool_size, notes, source_url)
-     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        question_pool_size, notes, source_url, blueprint)
+     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
      on conflict (country_code, slug) do update
        set name = excluded.name,
            format_type = excluded.format_type,
@@ -66,6 +68,7 @@ export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise
            question_pool_size = excluded.question_pool_size,
            notes = excluded.notes,
            source_url = excluded.source_url,
+           blueprint = excluded.blueprint,
            last_verified_at = null`,
     [
       format.countryCode,
@@ -78,6 +81,7 @@ export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise
       format.questionPoolSize,
       format.notes,
       format.sourceUrl,
+      format.blueprint ? JSON.stringify(format.blueprint) : null,
     ],
   );
 }

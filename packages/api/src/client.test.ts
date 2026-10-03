@@ -51,6 +51,32 @@ describe('createOathlyApi', () => {
     expect(await seen[0]!.json()).toMatchObject({ countryCode: 'US', dailyGoalMinutes: 10 });
   });
 
+  it('sends queued answers and returns what the server stored', async () => {
+    const seen: Request[] = [];
+    const outcome = { accepted: ['e1'], rejected: [] };
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: fakeFetch(200, outcome, seen),
+    });
+    await expect(
+      api.sendAnswers([
+        {
+          clientEventId: 'e1',
+          attemptId: 'a1',
+          questionId: 'q1',
+          questionVersion: 1,
+          selectedKeys: ['a'],
+          correct: true,
+          timeMs: 3_000,
+          answeredAt: '2026-10-03T10:00:00.000Z',
+        },
+      ]),
+    ).resolves.toEqual(outcome);
+    expect(seen[0]!.url).toBe('https://oathly.test/api/answers');
+    expect((await seen[0]!.json()).answers).toHaveLength(1);
+  });
+
   it('surfaces the server’s error message', async () => {
     const api = createOathlyApi({
       baseUrl: 'https://oathly.test',
