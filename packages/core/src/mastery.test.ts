@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   answerQuality,
+  CONFIDENCE_DAYS,
   isDue,
   nextReview,
   questionStrength,
@@ -107,16 +108,38 @@ describe('isDue and questionStrength', () => {
     expect(isDue(learned, learned.dueAt)).toBe(true);
   });
 
-  it('is 0 for unseen or forgotten questions, 1 for learned and fresh, and fades when overdue', () => {
+  it('is 0 for unseen or forgotten questions, grows with the interval earned, and fades when overdue', () => {
     expect(questionStrength(undefined, start)).toBe(0);
     expect(questionStrength(nextReview(undefined, 'q', 1, start), start)).toBe(0);
-    expect(questionStrength(nextReview(undefined, 'q', 5, start), start)).toBeCloseTo(1 / 3, 10);
-    expect(questionStrength(learned, days(8))).toBe(1);
+    expect(questionStrength(nextReview(undefined, 'q', 5, start), start)).toBeCloseTo(
+      1 - Math.exp(-1 / CONFIDENCE_DAYS),
+      10,
+    );
+    expect(learned.intervalDays).toBe(16);
+    expect(questionStrength(learned, days(8))).toBeCloseTo(1 - Math.exp(-16 / CONFIDENCE_DAYS), 10);
     const overdue = questionStrength(
       learned,
       new Date(learned.dueAt.getTime() + learned.intervalDays * DAY),
     );
-    expect(overdue).toBeCloseTo(Math.exp(-1), 10);
+    expect(overdue).toBeCloseTo((1 - Math.exp(-16 / CONFIDENCE_DAYS)) * Math.exp(-1), 10);
+  });
+});
+
+describe('early answers', () => {
+  const first = nextReview(undefined, 'q', 5, start);
+
+  it('do not lengthen the schedule when right, but still record the review', () => {
+    const early = nextReview(first, 'q', 5, new Date(start.getTime() + 60_000));
+    expect(early).toEqual({ ...first, lastReviewedAt: new Date(start.getTime() + 60_000) });
+  });
+
+  it('still count as forgetting when wrong', () => {
+    const second = nextReview(first, 'q', 5, days(1));
+    expect(nextReview(second, 'q', 1, days(2))).toMatchObject({
+      repetitions: 0,
+      intervalDays: 1,
+      lapses: 1,
+    });
   });
 });
 
@@ -133,7 +156,7 @@ describe('topicMastery', () => {
     const mastery = topicMastery(pool, events, days(8));
     expect(mastery.get('topic-government')).toEqual({
       topicId: 'topic-government',
-      score: 0.5,
+      score: Math.round(((1 - Math.exp(-16 / CONFIDENCE_DAYS)) / 2) * 10_000) / 10_000,
       questions: 2,
       answered: 3,
       correct: 3,

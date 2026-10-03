@@ -1,27 +1,7 @@
-import { questionStrength, reviewsFromEvents } from './mastery';
-import type { AnswerEvent, QuizQuestion } from './types';
+import type { AnswerEvent } from './types';
 
-// Dashboard numbers: readiness for an exam, the study streak and today's
-// minutes. Days are counted in the learner's own time zone.
-
-/**
- * How ready the learner is for an exam, 0 to 100: the average strength of
- * every question in the pool, so it reaches 100 only when all of it is
- * learned and fresh. Null when there are no questions to be ready for.
- */
-export function readiness(
-  pool: readonly QuizQuestion[],
-  events: readonly AnswerEvent[],
-  now: Date,
-): number | null {
-  if (pool.length === 0) return null;
-  const reviews = reviewsFromEvents(events);
-  const total = pool.reduce(
-    (sum, question) => sum + questionStrength(reviews.get(question.id), now),
-    0,
-  );
-  return Math.round((total / pool.length) * 100);
-}
+// Dashboard numbers: the study streak and today's minutes. Days are counted
+// in the learner's own time zone.
 
 /** The calendar day of `date` in `timeZone`, as YYYY-MM-DD. */
 export function dayKey(date: Date, timeZone: string): string {

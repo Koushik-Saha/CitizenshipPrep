@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { dayKey, isValidTimeZone, minutesStudiedToday, readiness, studyStreak } from './progress';
-import { at, questions } from './test-fixtures';
+import { dayKey, isValidTimeZone, minutesStudiedToday, studyStreak } from './progress';
+import { at } from './test-fixtures';
 import type { AnswerEvent } from './types';
 
 const event = (questionId: string, when: string, timeMs = 60_000, correct = true): AnswerEvent => ({
@@ -9,25 +9,6 @@ const event = (questionId: string, when: string, timeMs = 60_000, correct = true
   correct,
   timeMs,
   answeredAt: at(when),
-});
-
-describe('readiness', () => {
-  const pool = questions('q', 4);
-
-  it('is null with nothing to study, and 0 before any answers', () => {
-    expect(readiness([], [], at('2026-10-03T10:00:00Z'))).toBeNull();
-    expect(readiness(pool, [], at('2026-10-03T10:00:00Z'))).toBe(0);
-  });
-
-  it('reaches 100 only when every question is learned and fresh', () => {
-    const learned = pool.flatMap((q) => [
-      event(q.id, '2026-09-01T10:00:00Z', 4_000),
-      event(q.id, '2026-09-02T10:00:00Z', 4_000),
-      event(q.id, '2026-09-08T10:00:00Z', 4_000),
-    ]);
-    expect(readiness(pool, learned, at('2026-09-09T10:00:00Z'))).toBe(100);
-    expect(readiness(pool, learned.slice(0, 6), at('2026-09-09T10:00:00Z'))).toBe(50);
-  });
 });
 
 describe('dayKey', () => {

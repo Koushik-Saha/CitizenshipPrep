@@ -134,7 +134,7 @@ describe.skipIf(!url)('study sessions against the database', () => {
     const attemptId = await startPractice(
       pool,
       USER,
-      { countryCode: COUNTRY, mode: 'weak', size: 3 },
+      { countryCode: COUNTRY, mode: 'adaptive', size: 3 },
       'flashcards',
     );
     expect((await loadStudySession(pool, USER, attemptId))!.mode).toBe('flashcards');
@@ -226,9 +226,26 @@ describe.skipIf(!url)('study sessions against the database', () => {
     const dashboard = (await getDashboard(pool, USER, now))!;
     expect(dashboard).toMatchObject({ streakDays: 1, minutesToday: 6, dailyGoalMinutes: 10 });
     const country = dashboard.countries[0]!;
-    expect(country).toMatchObject({ countryCode: COUNTRY, publishedQuestions: 8, readiness: 17 });
+    expect(country).toMatchObject({
+      countryCode: COUNTRY,
+      publishedQuestions: 8,
+      readiness: {
+        // Four of eight questions is already a third of this small pool.
+        isEarlyEstimate: false,
+        questionsSeen: 4,
+        // The exam last sat as a mock, not just the first one listed.
+        examName: 'Examland test',
+        // The completed mock exam (5 of 6) counts; four questions answered once, only
+        // just now, count for little (7% mastery) until they are reviewed on schedule.
+        mockAverage: 83,
+      },
+    });
+    expect(country.readiness!.score).toBeGreaterThan(20);
+    expect(country.readiness!.topics).toEqual([
+      { topicId: expect.any(String), name: 'Civics', share: 100, mastery: 7 },
+    ]);
     expect(country.topics).toEqual([
-      { topicId: expect.any(String), name: 'Civics', questions: 8, mastery: 17 },
+      { topicId: expect.any(String), name: 'Civics', questions: 8, mastery: 7 },
     ]);
     expect(country.exams.map((exam) => [exam.name, exam.unavailableReason])).toEqual([
       ['Examland long test', 'Needs 50 published questions; 8 are ready.'],

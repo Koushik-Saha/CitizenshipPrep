@@ -7,7 +7,7 @@ import {
   isDue,
   isValidTimeZone,
   minutesStudiedToday,
-  readiness,
+  readinessScore,
   reviewsFromEvents,
   studyStreak,
   topicMastery,
@@ -19,6 +19,7 @@ import type pg from 'pg';
 import type {
   CountryDashboard,
   Dashboard,
+  ReadinessView,
   SessionQuestion,
   StudyMode,
   StudySession,
@@ -126,13 +127,81 @@ export async function getDashboard(
       [country.country_code],
     );
     const formats = await loadExamFormats(db, country.country_code);
+    const names = new Map(topicNames.rows.map((topic) => [topic.id, topic.name]));
+    const mocks = await db.query<{
+      exam_format_id: string;
+      submitted_at: Date;
+      correct_count: number;
+      total: number;
+    }>(
+      `select m.exam_format_id, m.submitted_at, m.correct_count, cardinality(m.question_ids) as total
+       from public.mock_exams m
+       join public.exam_formats f on f.id = m.exam_format_id
+       where m.user_id = $1 and f.country_code = $2
+         and m.submitted_at is not null and m.correct_count is not null
+       order by m.submitted_at desc`,
+      [userId, country.country_code],
+    );
+    // Measure against the exam the learner last sat as a mock, or else the
+    // first current one that can be practised.
+    const practisable = formats.filter((candidate) => candidate.questionCount !== null);
+    const format =
+      practisable.find((candidate) => candidate.id === mocks.rows[0]?.exam_format_id) ??
+      practisable.find((candidate) => candidate.isCurrent) ??
+      practisable[0] ??
+      null;
+    let readinessView: ReadinessView | null = null;
+    if (pool.length > 0) {
+      const estimate = readinessScore({
+        pool,
+        history,
+        format,
+        mocks: mocks.rows.map((row) => ({
+          submittedAt: row.submitted_at,
+          correct: row.correct_count,
+          total: row.total,
+        })),
+        now,
+      });
+      const percent = (value: number) => Math.round(value * 100);
+      readinessView = {
+        score: estimate.score,
+        isEarlyEstimate: estimate.isEarlyEstimate,
+        knowledge: percent(estimate.knowledge),
+        mockAverage: estimate.mockAverage === null ? null : percent(estimate.mockAverage),
+        questionsSeen: estimate.questionsSeen,
+        examName: format?.name ?? null,
+        topics: estimate.topics.map((topic) => ({
+          topicId: topic.topicId,
+          name: names.get(topic.topicId) ?? 'Topic',
+          share: percent(topic.share),
+          mastery: percent(topic.mastery),
+        })),
+        suggestions: estimate.suggestions.map((suggestion) => {
+          switch (suggestion.kind) {
+            case 'topic':
+              return {
+                kind: 'topic',
+                topicId: suggestion.topicId,
+                name: names.get(suggestion.topicId) ?? 'Topic',
+                share: percent(suggestion.share),
+                mastery: percent(suggestion.mastery),
+              };
+            case 'mock':
+              return { kind: 'mock', examFormatId: format!.id, examName: format!.name };
+            default:
+              return suggestion;
+          }
+        }),
+      };
+    }
 
     countries.push({
       countryCode: country.country_code,
       countryName: country.name,
       isPrimary: country.is_primary,
       examDate: country.exam_date,
-      readiness: readiness(pool, history, now),
+      readiness: readinessView,
       publishedQuestions: pool.length,
       topics: topicNames.rows
         .filter((topic) => mastery.has(topic.id))

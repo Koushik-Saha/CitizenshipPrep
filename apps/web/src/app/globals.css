@@ -1,2 +1,20 @@
 @import 'tailwindcss';
 @import '@oathly/tokens/theme.css';
+
+/* Readiness gauge: sweeps up from empty when the dashboard loads. */
+@keyframes gauge-fill {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+
+.gauge-fill {
+  animation: gauge-fill var(--transition-duration-spring-gentle, 650ms)
+    var(--ease-spring-gentle, ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gauge-fill {
+    animation: none;
+  }
+}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
+import { ReadinessPanel } from '@/components/study/readiness-gauge';
 import { MockExamForm, PracticeForm } from '@/components/study/start-forms';
 import { TimeZoneSync } from '@/components/study/time-zone-sync';
 import { Badge, buttonClass, focusRing } from '@/components/ui';
@@ -105,33 +106,7 @@ export default async function StudyDashboard() {
             </p>
           ) : (
             <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-              <div className="bg-surface border-border rounded-lg border p-5">
-                <h3 className="font-medium">Readiness</h3>
-                <p className="mt-1">
-                  <span className="font-display text-4xl font-semibold">
-                    {country.readiness ?? 0}%
-                  </span>
-                </p>
-                <p className="text-fg-muted text-sm">
-                  How much of the question pool you know well right now.
-                </p>
-                <ul className="mt-4 space-y-3">
-                  {country.topics.map((topic) => (
-                    <li key={topic.topicId}>
-                      <div className="flex justify-between gap-3 text-sm">
-                        <span>{topic.name}</span>
-                        <span className="text-fg-muted">{topic.mastery}%</span>
-                      </div>
-                      <div
-                        className="bg-surface-sunken mt-1 h-1.5 overflow-hidden rounded-full"
-                        aria-hidden="true"
-                      >
-                        <div className="bg-primary h-full" style={{ width: `${topic.mastery}%` }} />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ReadinessPanel countryCode={country.countryCode} readiness={country.readiness!} />
               <div className="space-y-6">
                 <div className="bg-surface border-border rounded-lg border p-5">
                   <h3 className="mb-3 font-medium">Practise</h3>

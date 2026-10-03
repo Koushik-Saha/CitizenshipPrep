@@ -61,14 +61,38 @@ export interface ExamOption {
   unavailableReason: string | null;
 }
 
+export type StudySuggestionView =
+  | { kind: 'start' }
+  | { kind: 'review'; count: number }
+  | { kind: 'topic'; topicId: string; name: string; share: number; mastery: number }
+  | { kind: 'mock'; examFormatId: string; examName: string };
+
+export interface ReadinessView {
+  /** 0 to 100: an estimate, never a promise. */
+  score: number;
+  /** Too little practice yet for the score to mean much. */
+  isEarlyEstimate: boolean;
+  /** Topic mastery weighted by each topic's share of the exam, 0 to 100. */
+  knowledge: number;
+  /** Recent mock exams, recency-weighted, 0 to 100; null without any. */
+  mockAverage: number | null;
+  questionsSeen: number;
+  /** The exam the score is measured against. */
+  examName: string | null;
+  /** Largest gap first. Share and mastery are 0 to 100. */
+  topics: { topicId: string; name: string; share: number; mastery: number }[];
+  suggestions: StudySuggestionView[];
+}
+
 export interface CountryDashboard {
   countryCode: string;
   countryName: string;
   isPrimary: boolean;
   examDate: string | null;
-  /** 0 to 100, or null when no questions are published yet. */
-  readiness: number | null;
+  /** Null when no questions are published yet. */
+  readiness: ReadinessView | null;
   publishedQuestions: number;
+  /** For choosing a topic to practise. */
   topics: TopicReadiness[];
   exams: ExamOption[];
   dueForReview: number;

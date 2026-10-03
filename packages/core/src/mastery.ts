@@ -39,6 +39,12 @@ export function nextReview(
   if (!Number.isInteger(quality) || quality < 0 || quality > 5) {
     throw new RangeError(`Quality must be a whole number from 0 to 5, got ${quality}.`);
   }
+  // A correct answer before the question is due proves little: the learner saw
+  // it recently. It keeps the schedule as it is, so cramming cannot inflate
+  // mastery. A wrong answer still counts at any time: it shows forgetting.
+  if (previous && quality >= 3 && at.getTime() < previous.dueAt.getTime()) {
+    return { ...previous, lastReviewedAt: at };
+  }
   const easiness = previous?.easiness ?? INITIAL_EASINESS;
   const repetitions = previous?.repetitions ?? 0;
 
@@ -91,14 +97,18 @@ export function isDue(review: ReviewState, now: Date): boolean {
   return review.dueAt.getTime() <= now.getTime();
 }
 
+/** The interval (days) at which a question counts as about two-thirds learned. */
+export const CONFIDENCE_DAYS = 7;
+
 /**
- * How well a question is known right now, 0 to 1. It grows with correct
- * recalls in a row (three make it fully learned) and fades once the review is
- * overdue, faster for questions with short intervals.
+ * How well a question is known right now, 0 to 1. It grows with the spacing
+ * the learner has earned (a question remembered across a long interval is
+ * known better than one answered right twice in a day) and fades once the
+ * review is overdue, faster for questions with short intervals.
  */
 export function questionStrength(review: ReviewState | undefined, now: Date): number {
   if (!review || review.repetitions === 0) return 0;
-  const learned = Math.min(1, review.repetitions / 3);
+  const learned = 1 - Math.exp(-review.intervalDays / CONFIDENCE_DAYS);
   const overdueDays = Math.max(0, (now.getTime() - review.dueAt.getTime()) / DAY_MS);
   const retention = Math.exp(-overdueDays / review.intervalDays);
   return learned * retention;

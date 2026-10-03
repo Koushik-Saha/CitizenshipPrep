@@ -24,17 +24,12 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
           <label htmlFor={`focus-${id}`} className={labelClass}>
             Questions from
           </label>
-          <select
-            id={`focus-${id}`}
-            name="focus"
-            defaultValue={country.dueForReview > 0 ? 'weak' : 'random'}
-            className={fieldClass}
-          >
-            <option value="weak">
-              My weak areas
-              {country.dueForReview > 0 ? ` (${country.dueForReview} due for review)` : ''}
+          <select id={`focus-${id}`} name="focus" defaultValue="adaptive" className={fieldClass}>
+            <option value="adaptive">
+              Made for me: weak topics, reviews and new
+              {country.dueForReview > 0 ? ` (${country.dueForReview} due)` : ''}
             </option>
-            <option value="random">All topics, mixed</option>
+            <option value="random">All topics, at random</option>
             {country.topics.map((topic) => (
               <option key={topic.topicId} value={`topic:${topic.topicId}`}>
                 {topic.name}
@@ -120,6 +115,43 @@ export function MockExamForm({ country }: { country: CountryDashboard }) {
           </li>
         ))}
       </ul>
+    </form>
+  );
+}
+
+/** One-click start for a "what to study next" suggestion. */
+export function QuickStart({
+  countryCode,
+  label,
+  focus,
+  examFormatId,
+}: {
+  countryCode: string;
+  label: string;
+  /** Practice focus: 'adaptive', 'random' or 'topic:<id>'. Leave out for a mock exam. */
+  focus?: string;
+  examFormatId?: string;
+}) {
+  const [state, action, pending] = useActionState(
+    examFormatId ? startMockExamSession : startPracticeSession,
+    initial,
+  );
+  return (
+    <form action={action} className="shrink-0">
+      <input type="hidden" name="countryCode" value={countryCode} />
+      {focus && <input type="hidden" name="focus" value={focus} />}
+      {focus && <input type="hidden" name="size" value="10" />}
+      {examFormatId && <input type="hidden" name="examFormatId" value={examFormatId} />}
+      <button
+        type="submit"
+        name="kind"
+        value="practice"
+        disabled={pending}
+        className={buttonClass.secondary}
+      >
+        {label}
+      </button>
+      {state.error && <p className="text-error-fg mt-1 text-sm">{state.error}</p>}
     </form>
   );
 }

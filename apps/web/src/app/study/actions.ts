@@ -28,13 +28,13 @@ async function start(work: (userId: string) => Promise<string>): Promise<StartSt
   redirect(`/study/session/${attemptId}`);
 }
 
-const modes: readonly PracticeMode[] = ['random', 'weak', 'topic'];
+const modes: readonly PracticeMode[] = ['random', 'adaptive', 'topic'];
 
 export async function startPracticeSession(
   _previous: StartState,
   form: FormData,
 ): Promise<StartState> {
-  const focus = String(form.get('focus') ?? 'random');
+  const focus = String(form.get('focus') ?? 'adaptive');
   const mode = (modes.includes(focus as PracticeMode) ? focus : 'topic') as PracticeMode;
   return start((userId) =>
     startPractice(

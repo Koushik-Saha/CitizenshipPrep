@@ -119,18 +119,18 @@ describe.skipIf(!url)('learner data against the database', () => {
       }),
     ).rejects.toThrow(OnboardingError);
     await pool.query(
-      `insert into public.countries (iso_code, name, has_exam) values ('ZW', 'No-exam land', false)
+      `insert into public.countries (iso_code, name, has_exam) values ('ZV', 'No-exam land', false)
        on conflict do nothing`,
     );
     await expect(
       saveOnboarding(pool, USER, {
-        countryCode: 'ZW',
+        countryCode: 'ZV',
         examDate: null,
         studyLocale: 'en',
         dailyGoalMinutes: 20,
       }),
     ).rejects.toThrow('Oathly does not cover that country yet.');
-    await pool.query(`delete from public.countries where iso_code = 'ZW'`);
+    await pool.query(`delete from public.countries where iso_code = 'ZV'`);
   });
 
   it('keeps each learner’s data separate', async () => {
