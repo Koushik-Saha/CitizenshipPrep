@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { isAdminConfigured, verifyBasicAuth } from './lib/admin-credentials';
 import { getAuth, isAuthConfigured } from './lib/auth/server';
+import { TEST_SESSION_COOKIE, verifyTestSession } from './lib/test-sign-in';
 
 // /admin: the interim reviewer sign-in. Pages and Server Actions check again
 // with requireReviewer().
@@ -18,6 +19,8 @@ function adminGuard(request: NextRequest) {
 // the session fresh. Pages check the session again with requireMe().
 export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin')) return adminGuard(request);
+  if (verifyTestSession(request.cookies.get(TEST_SESSION_COOKIE)?.value))
+    return NextResponse.next();
   if (!isAuthConfigured()) return NextResponse.redirect(new URL('/sign-in', request.url));
   return getAuth().middleware({ loginUrl: '/sign-in' })(request);
 }

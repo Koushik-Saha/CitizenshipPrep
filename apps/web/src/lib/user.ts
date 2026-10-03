@@ -1,10 +1,12 @@
 import { ensureProfile, getMe } from '@oathly/api/server';
 import type { Me } from '@oathly/api';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
 
 import { getAuth, isAuthConfigured } from './auth/server';
 import { getDb } from './db';
+import { TEST_SESSION_COOKIE, verifyTestSession } from './test-sign-in';
 
 export interface SignedInUser {
   userId: string;
@@ -16,6 +18,11 @@ export async function currentUser(): Promise<SignedInUser | null> {
   // Per-request, always: never let a page that depends on the session be
   // prerendered at build time.
   await connection();
+  const testUser = verifyTestSession((await cookies()).get(TEST_SESSION_COOKIE)?.value);
+  if (testUser) {
+    await ensureProfile(getDb(), testUser, null);
+    return { userId: testUser, email: null };
+  }
   if (!isAuthConfigured()) return null;
   const { data } = await getAuth().getSession();
   const user = data?.user;

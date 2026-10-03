@@ -7,6 +7,7 @@ export * from './mastery';
 export * from './mock-exam';
 export * from './offline-queue';
 export * from './practice';
+export * from './progress';
 export * from './random';
 export * from './scoring';
 export * from './types';

@@ -20,3 +20,4 @@ export * from './client';
 export * from './me';
 export * from './onboarding';
 export * from './session';
+export * from './study';

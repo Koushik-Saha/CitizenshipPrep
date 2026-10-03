@@ -73,6 +73,7 @@ export type Database = {
           mock_exam_id: string | null;
           mode: Database['public']['Enums']['attempt_mode'];
           question_count: number;
+          question_ids: string[];
           started_at: string;
           topic_id: string | null;
           user_id: string;
@@ -85,6 +86,7 @@ export type Database = {
           mock_exam_id?: string | null;
           mode?: Database['public']['Enums']['attempt_mode'];
           question_count?: number;
+          question_ids?: string[];
           started_at?: string;
           topic_id?: string | null;
           user_id?: string;
@@ -97,6 +99,7 @@ export type Database = {
           mock_exam_id?: string | null;
           mode?: Database['public']['Enums']['attempt_mode'];
           question_count?: number;
+          question_ids?: string[];
           started_at?: string;
           topic_id?: string | null;
           user_id?: string;
@@ -1118,6 +1121,7 @@ export type Database = {
           created_at: string;
           daily_goal_minutes: number;
           onboarded_at: string | null;
+          time_zone: string;
           updated_at: string;
           user_id: string;
         };
@@ -1125,6 +1129,7 @@ export type Database = {
           created_at?: string;
           daily_goal_minutes?: number;
           onboarded_at?: string | null;
+          time_zone?: string;
           updated_at?: string;
           user_id?: string;
         };
@@ -1132,6 +1137,7 @@ export type Database = {
           created_at?: string;
           daily_goal_minutes?: number;
           onboarded_at?: string | null;
+          time_zone?: string;
           updated_at?: string;
           user_id?: string;
         };

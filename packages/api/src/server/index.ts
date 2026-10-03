@@ -3,3 +3,4 @@
 export * from './me';
 export * from './tokens';
 export * from './quiz';
+export * from './study';
