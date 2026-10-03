@@ -3,8 +3,12 @@
 import type { StudySession } from '@oathly/api';
 import { scoreAttempt, type MockExam, type QuizQuestion } from '@oathly/core';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
+import { HERO_VIEW } from '@/components/globe/config';
+import { GlobePoster } from '@/components/globe/globe-poster';
+import { GlobeSlot } from '@/components/globe/globe-slot';
+import type { GlobeMarker } from '@/components/globe/scene-store';
 import { buttonClass, focusRing } from '@/components/ui';
 
 import { ExplainMore } from './explain-more';
@@ -41,9 +45,39 @@ export function Results({
   const topicNames = new Map(
     session.questions.map((question) => [question.topicId, question.topicName]),
   );
+  const passed = score?.exam?.passed ?? false;
+  const location = session.countryLocation;
+  const celebration = useMemo<GlobeMarker[]>(
+    () =>
+      location
+        ? [{ code: session.countryCode, name: session.countryName, ...location, facts: [] }]
+        : [],
+    [location, session.countryCode, session.countryName],
+  );
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
+      {passed && celebration.length > 0 && (
+        // The pass celebration: the globe turns to the country and sends out rings.
+        <div
+          data-theme="dark"
+          className="bg-canvas float-right ml-4 w-32 rounded-full sm:-mt-4 sm:w-44"
+        >
+          <GlobeSlot
+            scene="celebration"
+            view={HERO_VIEW}
+            markers={celebration}
+            focus={session.countryCode}
+          >
+            <GlobePoster
+              view={HERO_VIEW}
+              markers={celebration}
+              focus={session.countryCode}
+              sizes="11rem"
+            />
+          </GlobeSlot>
+        </div>
+      )}
       <p className="text-fg-muted text-sm">
         {mockExam ? session.exam?.name : isFlashcards ? 'Flashcards' : 'Practice'},{' '}
         {session.countryName}

@@ -5,12 +5,12 @@
 -- sources yet. They become visible to learners only when a reviewer publishes
 -- them, which records who verified them and when.
 
-insert into public.countries (iso_code, name, has_exam, exam_languages) values
-  ('US', 'United States', true, '{en}'),
-  ('CA', 'Canada', true, '{en,fr}'),
-  ('GB', 'United Kingdom', true, '{en}'),
-  ('AU', 'Australia', true, '{en}'),
-  ('DE', 'Germany', true, '{de}');
+insert into public.countries (iso_code, name, has_exam, exam_languages, latitude, longitude) values
+  ('US', 'United States', true, '{en}', 39.8, -98.6),
+  ('CA', 'Canada', true, '{en,fr}', 56.1, -106.3),
+  ('GB', 'United Kingdom', true, '{en}', 54.0, -2.0),
+  ('AU', 'Australia', true, '{en}', -25.3, 133.8),
+  ('DE', 'Germany', true, '{de}', 51.2, 10.4);
 
 insert into public.exam_formats
   (country_code, slug, name, format_type, question_count, pass_mark, time_limit_minutes,

@@ -1,9 +1,11 @@
 import { isStudyLocale } from '@oathly/i18n';
-import { listExamCountries } from '@oathly/api/server';
+import { parseCountryCode } from '@oathly/api/countries';
+import { listCountryFacts } from '@oathly/api/server';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 
+import { toMarkers } from '@/components/globe/markers';
 import { focusRing } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { requireMe } from '@/lib/user';
@@ -26,11 +28,14 @@ async function preferredLocale(): Promise<string | null> {
 
 export default async function Onboarding({ searchParams }: PageProps<'/onboarding'>) {
   const { me } = await requireMe();
-  const adding = (await searchParams).add === '1' && me.studyCountries.length > 0;
+  const params = await searchParams;
+  const adding = params.add === '1' && me.studyCountries.length > 0;
   const studying = new Set(me.studyCountries.map((country) => country.countryCode));
-  const countries = (await listExamCountries(getDb())).filter(
+  const countries = (await listCountryFacts(getDb())).filter(
     (country) => !studying.has(country.isoCode),
   );
+  const requested = parseCountryCode(params.country);
+  const preselected = countries.some((country) => country.isoCode === requested) ? requested : null;
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
@@ -55,6 +60,8 @@ export default async function Onboarding({ searchParams }: PageProps<'/onboardin
         ) : (
           <OnboardingForm
             countries={countries}
+            preselected={preselected}
+            markers={toMarkers(countries)}
             adding={adding}
             defaultLocale={me.studyCountries[0]?.studyLocale ?? (await preferredLocale()) ?? 'en'}
             defaultDailyGoal={me.settings?.dailyGoalMinutes ?? 15}

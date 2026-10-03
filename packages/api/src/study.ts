@@ -35,6 +35,8 @@ export interface StudySession {
   attemptId: string;
   countryCode: string;
   countryName: string;
+  /** Where the country sits on the globe, if set. */
+  countryLocation: { latitude: number; longitude: number } | null;
   mode: StudyMode;
   startedAt: string;
   completedAt: string | null;

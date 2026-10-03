@@ -18,3 +18,35 @@
     animation: none;
   }
 }
+
+/* Page transitions (React <ViewTransition default="page"> in the root layout):
+   the old page fades out quickly, the new one rises in. */
+::view-transition-old(.page) {
+  animation: page-out var(--transition-duration-fast, 120ms) var(--ease-exit, ease-in) both;
+}
+
+::view-transition-new(.page) {
+  animation: page-in var(--transition-duration-base, 200ms) var(--ease-enter, ease-out)
+    var(--transition-duration-fast, 120ms) both;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

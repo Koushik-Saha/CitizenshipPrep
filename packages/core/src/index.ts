@@ -3,6 +3,7 @@
 // answers mean.
 export * from './ai-limits';
 export * from './exam-format';
+export * from './globe';
 export { hello } from './hello';
 export * from './mastery';
 export * from './mock-exam';

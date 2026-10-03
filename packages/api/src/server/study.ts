@@ -360,6 +360,8 @@ export async function loadStudySession(
     id: string;
     country_code: string;
     country_name: string;
+    latitude: string | null;
+    longitude: string | null;
     mode: keyof typeof modeFromColumn;
     started_at: Date;
     completed_at: Date | null;
@@ -367,7 +369,8 @@ export async function loadStudySession(
     exam_format_id: string | null;
     study_locale: string | null;
   }>(
-    `select a.id, a.country_code, c.name as country_name, a.mode, a.started_at, a.completed_at,
+    `select a.id, a.country_code, c.name as country_name, c.latitude, c.longitude,
+            a.mode, a.started_at, a.completed_at,
             a.question_ids, m.exam_format_id, uc.study_locale
      from public.attempts a
      join public.countries c on c.iso_code = a.country_code
@@ -472,6 +475,10 @@ export async function loadStudySession(
     attemptId: row.id,
     countryCode: row.country_code,
     countryName: row.country_name,
+    countryLocation:
+      row.latitude === null || row.longitude === null
+        ? null
+        : { latitude: Number(row.latitude), longitude: Number(row.longitude) },
     mode: modeFromColumn[row.mode],
     startedAt: row.started_at.toISOString(),
     completedAt: row.completed_at?.toISOString() ?? null,

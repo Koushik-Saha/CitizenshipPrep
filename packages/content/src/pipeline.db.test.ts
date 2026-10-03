@@ -116,6 +116,8 @@ describe.skipIf(!url)('content pipeline against the database', () => {
       name: 'Testland',
       hasExam: true,
       examLanguages: ['en'],
+      latitude: -35,
+      longitude: -120,
     });
     await ensureReviewer(pool, REVIEWER, 'reviewer');
   });
@@ -123,6 +125,20 @@ describe.skipIf(!url)('content pipeline against the database', () => {
   afterAll(async () => {
     await cleanUp();
     await pool.end();
+  });
+
+  it('keeps a country’s coordinates when it is saved again without them', async () => {
+    await upsertCountry(pool, {
+      isoCode: COUNTRY,
+      name: 'Testland',
+      hasExam: true,
+      examLanguages: ['en'],
+    });
+    const { rows } = await pool.query<{ latitude: string; longitude: string }>(
+      'select latitude, longitude from public.countries where iso_code = $1',
+      [COUNTRY],
+    );
+    expect(rows[0]).toEqual({ latitude: '-35.0000', longitude: '-120.0000' });
   });
 
   it('stores a guide as passages, and recognises it when ingested again', async () => {

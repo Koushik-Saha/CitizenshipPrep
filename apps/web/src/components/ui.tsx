@@ -1,7 +1,8 @@
 // Shared form and status pieces. Server Components: no client JavaScript.
 
-export const focusRing =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring';
+import { focusRing } from './focus-ring';
+
+export { focusRing };
 
 export const fieldClass = `bg-surface border-border-strong text-fg w-full rounded-sm border px-3 py-2 ${focusRing}`;
 

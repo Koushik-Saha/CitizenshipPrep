@@ -1,3 +1,4 @@
+import { parseCountryCode } from '@oathly/api/countries';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -8,8 +9,11 @@ import { currentUser } from '@/lib/user';
 
 export const metadata: Metadata = { title: 'Sign in | Oathly' };
 
-export default async function SignInPage() {
-  if (await currentUser()) redirect('/welcome');
+export default async function SignInPage({ searchParams }: PageProps<'/sign-in'>) {
+  // Picked on the landing page; carried through sign-in to onboarding.
+  const country = parseCountryCode((await searchParams).country);
+  const callbackUrl = country ? `/welcome?country=${country}` : '/welcome';
+  if (await currentUser()) redirect(callbackUrl);
 
   return (
     <main className="mx-auto max-w-md px-4 py-16 sm:py-24">
@@ -20,7 +24,7 @@ export default async function SignInPage() {
       </p>
       <div className="mt-8">
         {isAuthConfigured() ? (
-          <SignInForm />
+          <SignInForm callbackUrl={callbackUrl} />
         ) : (
           <Notice tone="warning">Sign-in is not set up on this server yet.</Notice>
         )}

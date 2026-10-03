@@ -19,6 +19,7 @@ Usage: pnpm content <command> [options]
 
   country        Add or update a country
                  --iso US --name "United States" --languages en[,fr] [--no-exam]
+                 [--lat 39.8 --lng -98.6]   (a point inside the country, for the globe)
 
   exam-format    Add or update an exam format for a country
                  --country US --slug civics --name "Civics test" --type written|oral|interview|language
@@ -80,6 +81,21 @@ function countryCode(values: Record<string, unknown>, name: string): string {
   return code;
 }
 
+function coordinates(values: Record<string, unknown>): { latitude?: number; longitude?: number } {
+  const lat = optional(values, 'lat');
+  const lng = optional(values, 'lng');
+  if (lat == null && lng == null) return {};
+  const latitude = Number(lat);
+  const longitude = Number(lng);
+  if (lat == null || lng == null || !Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    throw new UsageError('Give both --lat and --lng, in degrees.');
+  }
+  if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+    throw new UsageError('--lat must be within ±90 and --lng within ±180.');
+  }
+  return { latitude, longitude };
+}
+
 function httpsUrl(values: Record<string, unknown>, name: string): string {
   const url = required(values, name);
   if (!url.startsWith('https://')) throw new UsageError(`--${name} must be an https:// URL.`);
@@ -101,6 +117,8 @@ async function main(): Promise<void> {
       name: { type: 'string' },
       languages: { type: 'string' },
       'no-exam': { type: 'boolean' },
+      lat: { type: 'string' },
+      lng: { type: 'string' },
       country: { type: 'string' },
       slug: { type: 'string' },
       type: { type: 'string' },
@@ -139,6 +157,7 @@ async function main(): Promise<void> {
             .split(',')
             .map((language) => language.trim())
             .filter(Boolean),
+          ...coordinates(values),
         });
         console.log(`Saved country ${isoCode}.`);
         break;

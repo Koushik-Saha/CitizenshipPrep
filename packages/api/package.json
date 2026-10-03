@@ -7,6 +7,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./countries": "./src/countries.ts",
+    "./country-search": "./src/country-search.ts",
     "./server": "./src/server/index.ts"
   },
   "scripts": {

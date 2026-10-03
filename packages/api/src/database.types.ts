@@ -407,6 +407,8 @@ export type Database = {
           exam_languages: string[];
           has_exam: boolean;
           iso_code: string;
+          latitude: number | null;
+          longitude: number | null;
           name: string;
           updated_at: string;
         };
@@ -415,6 +417,8 @@ export type Database = {
           exam_languages?: string[];
           has_exam?: boolean;
           iso_code: string;
+          latitude?: number | null;
+          longitude?: number | null;
           name: string;
           updated_at?: string;
         };
@@ -423,6 +427,8 @@ export type Database = {
           exam_languages?: string[];
           has_exam?: boolean;
           iso_code?: string;
+          latitude?: number | null;
+          longitude?: number | null;
           name?: string;
           updated_at?: string;
         };

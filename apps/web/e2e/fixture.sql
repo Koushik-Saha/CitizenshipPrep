@@ -8,8 +8,9 @@ insert into public.profiles (id, display_name) values
 
 insert into public.user_roles (user_id, role) values ('test:reviewer', 'reviewer');
 
-insert into public.countries (iso_code, name, has_exam, exam_languages)
-values ('ZZ', 'Testland', true, '{en}');
+-- Testland sits in the South Pacific, where no real country is.
+insert into public.countries (iso_code, name, has_exam, exam_languages, latitude, longitude)
+values ('ZZ', 'Testland', true, '{en}', -35.0, -120.0);
 
 insert into public.exam_formats
   (country_code, slug, name, format_type, question_count, pass_mark, time_limit_minutes,

@@ -17,6 +17,7 @@ export interface CorrectAnswer {
 }
 
 export * from './client';
+export * from './countries';
 export * from './me';
 export * from './onboarding';
 export * from './session';

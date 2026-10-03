@@ -11,15 +11,14 @@ type State =
   | { step: 'sent'; email: string }
   | { step: 'error'; message: string };
 
-const CALLBACK = '/welcome';
-
-export function SignInForm() {
+/** `callbackUrl`: where to land after signing in, /welcome unless the visitor picked a country first. */
+export function SignInForm({ callbackUrl = '/welcome' }: { callbackUrl?: string }) {
   const [state, setState] = useState<State>({ step: 'ready' });
 
   async function sendLink(form: FormData) {
     const email = String(form.get('email') ?? '').trim();
     setState({ step: 'sending' });
-    const { error } = await authClient.signIn.magicLink({ email, callbackURL: CALLBACK });
+    const { error } = await authClient.signIn.magicLink({ email, callbackURL: callbackUrl });
     setState(
       error
         ? { step: 'error', message: error.message ?? 'We could not send the link. Try again.' }
@@ -29,7 +28,10 @@ export function SignInForm() {
 
   async function continueWithGoogle() {
     setState({ step: 'sending' });
-    const { error } = await authClient.signIn.social({ provider: 'google', callbackURL: CALLBACK });
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: callbackUrl,
+    });
     if (error)
       setState({ step: 'error', message: error.message ?? 'Google sign-in failed. Try again.' });
   }

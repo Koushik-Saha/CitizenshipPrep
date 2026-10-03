@@ -22,18 +22,31 @@ export async function getCountry(db: Db, isoCode: string): Promise<Country | nul
   return row ? { isoCode: row.iso_code, name: row.name, examLanguages: row.exam_languages } : null;
 }
 
+/**
+ * Adds or updates a country. Coordinates place it on the landing page globe;
+ * leaving them out keeps whatever is stored.
+ */
 export async function upsertCountry(
   db: Db,
-  country: Country & { hasExam: boolean },
+  country: Country & { hasExam: boolean; latitude?: number; longitude?: number },
 ): Promise<void> {
   await db.query(
-    `insert into public.countries (iso_code, name, has_exam, exam_languages)
-     values ($1, $2, $3, $4)
+    `insert into public.countries (iso_code, name, has_exam, exam_languages, latitude, longitude)
+     values ($1, $2, $3, $4, $5, $6)
      on conflict (iso_code) do update
        set name = excluded.name,
            has_exam = excluded.has_exam,
-           exam_languages = excluded.exam_languages`,
-    [country.isoCode, country.name, country.hasExam, country.examLanguages],
+           exam_languages = excluded.exam_languages,
+           latitude = coalesce(excluded.latitude, countries.latitude),
+           longitude = coalesce(excluded.longitude, countries.longitude)`,
+    [
+      country.isoCode,
+      country.name,
+      country.hasExam,
+      country.examLanguages,
+      country.latitude ?? null,
+      country.longitude ?? null,
+    ],
   );
 }
 
