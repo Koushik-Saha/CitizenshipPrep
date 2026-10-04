@@ -1,6 +1,12 @@
 // The landing page below the hero. Server Components: no client JavaScript.
 
-import { describeExam, examLanguageList, type CountryFacts } from '@oathly/api/countries';
+import {
+  countrySlug,
+  describeExam,
+  examLanguageList,
+  type CountryFacts,
+  type ExamFacts,
+} from '@oathly/api/countries';
 import { aiLimits } from '@oathly/core';
 import { studyLocales } from '@oathly/i18n';
 import Link from 'next/link';
@@ -74,6 +80,82 @@ export function HowItWorks() {
 
 const dateFormat = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' });
 
+/** One exam's numbers, its official source and whether they have been checked. */
+export function ExamFactsList({ exams }: { exams: ExamFacts[] }) {
+  return (
+    <ul className="space-y-3">
+      {exams.map((exam) => (
+        <li key={exam.name}>
+          <p className="font-medium">{exam.name}</p>
+          {describeExam(exam) && <p className="text-fg-muted">{describeExam(exam)}</p>}
+          <p className="text-fg-subtle text-sm">
+            <a
+              href={exam.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${focusRing} rounded-xs underline underline-offset-2`}
+            >
+              Official source
+            </a>
+            {exam.lastVerifiedAt
+              ? `, checked ${dateFormat.format(new Date(exam.lastVerifiedAt))}`
+              : ', details being checked'}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** The covered countries as a grid; each name links to the country's page. */
+export function CountryCards({
+  countries,
+  headingLevel: Heading = 'h3',
+}: {
+  countries: CountryFacts[];
+  headingLevel?: 'h2' | 'h3';
+}) {
+  if (countries.length === 0) {
+    return <p className="text-fg-muted">The country list is being updated. Check back shortly.</p>;
+  }
+  return (
+    <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {countries.map((country) => (
+        <li key={country.isoCode} className="border-border border-t pt-5">
+          <Heading className="font-display flex items-center gap-2.5 text-xl font-medium">
+            <span className="bg-accent size-2.5 shrink-0 rounded-full" aria-hidden="true" />
+            <Link
+              href={`/countries/${countrySlug(country.isoCode)}`}
+              className={`${focusRing} rounded-xs underline-offset-4 hover:underline`}
+            >
+              {country.name}
+            </Link>
+          </Heading>
+          <p className="text-fg-muted mt-1 text-sm">
+            Taken in {examLanguageList(country.examLanguages)}
+          </p>
+          <div className="mt-4">
+            <ExamFactsList exams={country.exams} />
+          </div>
+          <p className="mt-4 text-sm">
+            {country.publishedQuestions > 0 ? (
+              `${country.publishedQuestions} checked practice questions`
+            ) : (
+              <span className="text-fg-muted">Practice questions are being checked</span>
+            )}
+          </p>
+          <Link
+            href={`/sign-in?country=${country.isoCode}`}
+            className={`${focusRing} text-primary-fg mt-3 inline-block rounded-xs font-medium underline underline-offset-4`}
+          >
+            Study for {country.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function CountryList({ countries }: { countries: CountryFacts[] }) {
   return (
     <Section
@@ -82,57 +164,7 @@ export function CountryList({ countries }: { countries: CountryFacts[] }) {
       intro="We add a country once its exam format and study material have been checked against official sources. More are on the way."
       className="bg-surface border-border border-y"
     >
-      {countries.length === 0 ? (
-        <p className="text-fg-muted">The country list is being updated. Check back shortly.</p>
-      ) : (
-        <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {countries.map((country) => (
-            <li key={country.isoCode} className="border-border border-t pt-5">
-              <h3 className="font-display flex items-center gap-2.5 text-xl font-medium">
-                <span className="bg-accent size-2.5 shrink-0 rounded-full" aria-hidden="true" />
-                {country.name}
-              </h3>
-              <p className="text-fg-muted mt-1 text-sm">
-                Taken in {examLanguageList(country.examLanguages)}
-              </p>
-              <ul className="mt-4 space-y-3">
-                {country.exams.map((exam) => (
-                  <li key={exam.name}>
-                    <p className="font-medium">{exam.name}</p>
-                    {describeExam(exam) && <p className="text-fg-muted">{describeExam(exam)}</p>}
-                    <p className="text-fg-subtle text-sm">
-                      <a
-                        href={exam.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${focusRing} rounded-xs underline underline-offset-2`}
-                      >
-                        Official source
-                      </a>
-                      {exam.lastVerifiedAt
-                        ? `, checked ${dateFormat.format(new Date(exam.lastVerifiedAt))}`
-                        : ', details being checked'}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-sm">
-                {country.publishedQuestions > 0 ? (
-                  `${country.publishedQuestions} checked practice questions`
-                ) : (
-                  <span className="text-fg-muted">Practice questions are being checked</span>
-                )}
-              </p>
-              <Link
-                href={`/sign-in?country=${country.isoCode}`}
-                className={`${focusRing} text-primary-fg mt-3 inline-block rounded-xs font-medium underline underline-offset-4`}
-              >
-                Study for {country.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <CountryCards countries={countries} />
     </Section>
   );
 }

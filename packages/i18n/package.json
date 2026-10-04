@@ -17,5 +17,6 @@
     "eslint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
-  }
+  },
+  "sideEffects": false
 }

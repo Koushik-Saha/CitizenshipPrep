@@ -1,4 +1,6 @@
-import { z } from 'zod';
+// zod/mini: this module runs in the browser, so it uses the smaller,
+// tree-shakable API.
+import * as z from 'zod/mini';
 
 // A queue of answers recorded while offline (or before the server confirmed
 // them), synced later. Pure state transitions: the app persists the state with
@@ -160,20 +162,23 @@ export async function syncQueue(
 
 const STORAGE_VERSION = 1;
 
+const text = z.string().check(z.minLength(1));
+const count = z.int().check(z.nonnegative());
+
 const entrySchema = z.object({
   answer: z.object({
-    clientEventId: z.string().min(1),
-    attemptId: z.string().min(1),
-    questionId: z.string().min(1),
-    questionVersion: z.number().int().positive(),
+    clientEventId: text,
+    attemptId: text,
+    questionId: text,
+    questionVersion: z.int().check(z.positive()),
     selectedKeys: z.array(z.string()),
     correct: z.boolean(),
-    timeMs: z.number().nonnegative(),
-    answeredAt: z.string().min(1),
+    timeMs: z.number().check(z.nonnegative()),
+    answeredAt: text,
   }),
-  attempts: z.number().int().nonnegative(),
+  attempts: count,
   nextAttemptAt: z.number(),
-  lastError: z.string().nullable(),
+  lastError: z.nullable(z.string()),
 });
 
 const storedQueueSchema = z.object({

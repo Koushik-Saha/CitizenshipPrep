@@ -201,7 +201,7 @@ export function Results({
         </ol>
       </section>
 
-      <Link href="/study" className={`${buttonClass.primary} mt-10`}>
+      <Link href="/study" prefetch className={`${buttonClass.primary} mt-10`}>
         Back to study
       </Link>
     </main>

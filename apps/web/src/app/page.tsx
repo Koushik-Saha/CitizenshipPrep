@@ -1,4 +1,3 @@
-import type { CountryFacts } from '@oathly/api/countries';
 import { describeExam } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
 import type { Metadata } from 'next';
@@ -18,8 +17,9 @@ import {
   Pricing,
   Testimonials,
 } from '@/components/landing/sections';
+import { SiteFooter } from '@/components/site-chrome';
 import { focusRing } from '@/components/ui';
-import { getDb } from '@/lib/db';
+import { loadPublic } from '@/lib/public-content';
 
 export const metadata: Metadata = {
   title: 'Oathly: citizenship test practice for every country',
@@ -30,21 +30,10 @@ export const metadata: Metadata = {
 // Built once, then rebuilt at most hourly so new countries appear without a deploy.
 export const revalidate = 3600;
 
-async function loadCountries(): Promise<CountryFacts[]> {
-  try {
-    return await listCountryFacts(getDb());
-  } catch (error) {
-    // A build without a database still produces a page; the next
-    // revalidation fills it in.
-    console.warn('Landing page: could not load countries.', error);
-    return [];
-  }
-}
-
 const navLink = `${focusRing} rounded-xs text-fg-muted hover:text-fg`;
 
 export default async function Landing() {
-  const countries = await loadCountries();
+  const countries = await loadPublic((db) => listCountryFacts(db), []);
   const markers = toMarkers(countries);
   const searchable = countries.map((country) => {
     const exam = country.exams[0];
@@ -146,15 +135,7 @@ export default async function Landing() {
         <Faq />
       </main>
 
-      <footer className="border-border border-t">
-        <div className="text-fg-muted mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 text-sm sm:flex-row sm:justify-between sm:px-6">
-          <p>
-            Oathly is an independent study app. It is not affiliated with, or endorsed by, any
-            government.
-          </p>
-          <p>Questions link to the official source they come from.</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

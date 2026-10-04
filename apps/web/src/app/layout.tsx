@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next, Lexend } from 'next/font/google';
-import { ViewTransition } from 'react';
 
 import { SceneHost } from '@/components/globe/scene-host';
 import { RouteFade } from '@/components/route-fade';
@@ -43,11 +42,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body className="bg-canvas text-fg font-sans antialiased">
-        {/* Page changes cross-fade with the View Transitions API; RouteFade
-            does it with Motion in browsers without it. */}
-        <ViewTransition default="page">
-          <RouteFade>{children}</RouteFade>
-        </ViewTransition>
+        {/* Page changes cross-fade: View Transitions API, or Motion without it. */}
+        <RouteFade>{children}</RouteFade>
         {/* The app's one WebGL canvas, shared by every page that shows the globe. */}
         <SceneHost />
       </body>

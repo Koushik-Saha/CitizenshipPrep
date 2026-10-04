@@ -16,11 +16,13 @@ import {
 } from '@oathly/core';
 import type pg from 'pg';
 
+import type { CountryPack, OfflineAttempt, PackQuestion } from '../pack';
 import type {
   CountryDashboard,
   Dashboard,
   ReadinessView,
   SessionQuestion,
+  StartSessionRequest,
   StudyMode,
   StudySession,
 } from '../study';
@@ -526,5 +528,237 @@ export async function completeAttempt(
     throw error;
   } finally {
     client.release();
+  }
+}
+
+/** Starts whichever kind of session the client asked for; returns the attempt id. */
+export async function startSession(
+  pool: pg.Pool,
+  userId: string,
+  request: StartSessionRequest,
+): Promise<string> {
+  if (request.kind === 'mock_exam') {
+    return startMockExam(pool, userId, {
+      countryCode: request.countryCode,
+      examFormatId: request.examFormatId,
+    });
+  }
+  const topicId = typeof request.focus === 'object' ? request.focus.topicId : undefined;
+  return startPractice(
+    pool,
+    userId,
+    {
+      countryCode: request.countryCode,
+      mode: topicId ? 'topic' : request.focus === 'random' ? 'random' : 'adaptive',
+      topicId,
+      size: request.size,
+    },
+    request.kind,
+  );
+}
+
+/**
+ * Everything a phone needs to study one country with no connection: the
+ * published questions (in the learner's study language where a checked
+ * translation exists), the exam formats, and the learner's answers so far.
+ */
+export async function getCountryPack(
+  db: Db,
+  userId: string,
+  countryCode: string,
+): Promise<CountryPack> {
+  const code = countryCode.toUpperCase();
+  const country = await db.query<{
+    name: string;
+    latitude: string | null;
+    longitude: string | null;
+    study_locale: string | null;
+  }>(
+    `select c.name, c.latitude, c.longitude, uc.study_locale
+     from public.user_countries uc
+     join public.countries c on c.iso_code = uc.country_code
+     where uc.user_id = $1 and uc.country_code = $2`,
+    [userId, code],
+  );
+  const row = country.rows[0];
+  if (!row) throw new StudyError('Add this country to your study plan first.');
+
+  const content = await db.query<{
+    id: string;
+    version: number;
+    topic_id: string;
+    topic_name: string;
+    topic_slug: string;
+    difficulty: number;
+    region_code: string | null;
+    type: SessionQuestion['type'];
+    correct_answer: { keys: string[] };
+    source_quote: string | null;
+    source_url: string;
+    locale: string;
+    text: string;
+    options: { key: string; text: string }[];
+    explanation: string | null;
+  }>(
+    `select q.id, q.version, q.topic_id, t.name as topic_name, t.slug as topic_slug,
+            q.difficulty, q.region_code, q.type, q.correct_answer, q.source_quote, q.source_url,
+            w.locale, w.text, w.options, w.explanation
+     from public.questions q
+     join public.topics t on t.id = q.topic_id
+     join lateral (
+       select tr.locale, tr.text, tr.options, tr.explanation
+       from public.question_translations tr
+       where tr.question_id = q.id and tr.status = 'approved'
+         and (tr.locale = $2 or tr.translated_from is null)
+       order by (tr.locale = $2) desc, (tr.translated_from is null) desc
+       limit 1
+     ) w on true
+     where q.country_code = $1 and q.status = 'published'
+     order by t.sort_order, q.created_at, q.id`,
+    [code, row.study_locale],
+  );
+  const questions: PackQuestion[] = content.rows.map((question) => ({
+    id: question.id,
+    version: question.version,
+    topicId: question.topic_id,
+    topicName: question.topic_name,
+    topicSlug: question.topic_slug,
+    difficulty: question.difficulty,
+    regionCode: question.region_code,
+    type: question.type,
+    locale: question.locale,
+    text: question.text,
+    options: question.options,
+    correctKeys: question.correct_answer.keys,
+    explanation: question.explanation,
+    sourceQuote: question.source_quote,
+    sourceUrl: question.source_url,
+  }));
+
+  const formats = await loadExamFormats(db, code);
+  const history = await answerHistory(db, userId, code);
+  return {
+    countryCode: code,
+    countryName: row.name,
+    countryLocation:
+      row.latitude === null || row.longitude === null
+        ? null
+        : { latitude: Number(row.latitude), longitude: Number(row.longitude) },
+    generatedAt: new Date().toISOString(),
+    examFormats: formats.map((format) => ({
+      id: format.id,
+      name: format.name,
+      questionCount: format.questionCount,
+      passMark: format.passMark,
+      timeLimitMinutes: format.timeLimitMinutes,
+      isCurrent: format.isCurrent,
+      blueprint: format.blueprint,
+    })),
+    questions,
+    history: history.map((event) => ({
+      questionId: event.questionId,
+      correct: event.correct,
+      timeMs: event.timeMs,
+      answeredAt: event.answeredAt.toISOString(),
+    })),
+  };
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const sameSet = (a: readonly string[], b: readonly string[]) =>
+  a.length === b.length && new Set([...a, ...b]).size === a.length;
+
+/**
+ * Records sessions that were started on a phone with no connection, keeping
+ * the ids the phone chose so its queued answers attach to them. Safe to
+ * repeat: an attempt already recorded is left alone (and finished, if the
+ * phone now reports a result). Anything that does not check out is refused.
+ */
+export async function registerOfflineAttempts(
+  pool: pg.Pool,
+  userId: string,
+  attempts: readonly OfflineAttempt[],
+): Promise<void> {
+  for (const attempt of attempts) {
+    if (!UUID.test(attempt.attemptId)) throw new StudyError('Invalid attempt id.');
+    if (!(attempt.mode in modeColumn)) throw new StudyError('Invalid session mode.');
+    if (
+      attempt.questionIds.length === 0 ||
+      attempt.questionIds.length > 500 ||
+      !attempt.questionIds.every((id) => UUID.test(id))
+    ) {
+      throw new StudyError('Invalid question list.');
+    }
+    const startedAt = new Date(attempt.startedAt);
+    if (Number.isNaN(startedAt.getTime())) throw new StudyError('Invalid start time.');
+    await assertStudying(pool, userId, attempt.countryCode);
+
+    const known = await pool.query<{ count: string }>(
+      `select count(*) from public.questions
+       where id = any($1::uuid[]) and country_code = $2 and status = 'published'`,
+      [attempt.questionIds, attempt.countryCode],
+    );
+    if (Number(known.rows[0]!.count) !== new Set(attempt.questionIds).size) {
+      throw new StudyError('Some of these questions are not available.');
+    }
+    const isExam = attempt.mode === 'mock_exam';
+    const examIds = attempt.examQuestionIds ?? [];
+    if (isExam) {
+      if (!attempt.examFormatId || !UUID.test(attempt.examFormatId)) {
+        throw new StudyError('That exam is not available.');
+      }
+      const format = await pool.query(
+        'select 1 from public.exam_formats where id = $1 and country_code = $2',
+        [attempt.examFormatId, attempt.countryCode],
+      );
+      if (!format.rowCount || !sameSet(examIds, attempt.questionIds)) {
+        throw new StudyError('That exam is not available.');
+      }
+    }
+
+    const client = await pool.connect();
+    try {
+      await client.query('begin');
+      const existing = await client.query<{ user_id: string }>(
+        'select user_id from public.attempts where id = $1',
+        [attempt.attemptId],
+      );
+      if (existing.rows[0] && existing.rows[0].user_id !== userId) {
+        throw new StudyError('Invalid attempt id.');
+      }
+      if (!existing.rows[0]) {
+        let mockExamId: string | null = null;
+        if (isExam) {
+          const mock = await client.query<{ id: string }>(
+            `insert into public.mock_exams (user_id, exam_format_id, question_ids, started_at)
+             values ($1, $2, $3, least($4::timestamptz, now())) returning id`,
+            [userId, attempt.examFormatId, examIds, startedAt],
+          );
+          mockExamId = mock.rows[0]!.id;
+        }
+        await client.query(
+          `insert into public.attempts
+             (id, user_id, country_code, mode, mock_exam_id, question_ids, question_count, started_at)
+           values ($1, $2, $3, $4, $5, $6, $7, least($8::timestamptz, now()))`,
+          [
+            attempt.attemptId,
+            userId,
+            attempt.countryCode,
+            modeColumn[attempt.mode],
+            mockExamId,
+            attempt.questionIds,
+            attempt.questionIds.length,
+            startedAt,
+          ],
+        );
+      }
+      await client.query('commit');
+    } catch (error) {
+      await client.query('rollback');
+      throw error;
+    } finally {
+      client.release();
+    }
+    if (attempt.result) await completeAttempt(pool, userId, attempt.attemptId, attempt.result);
   }
 }

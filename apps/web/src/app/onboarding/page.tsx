@@ -41,7 +41,11 @@ export default async function Onboarding({ searchParams }: PageProps<'/onboardin
     <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
       {adding && (
         <p className="text-sm">
-          <Link href="/study" className={`${focusRing} text-primary-fg rounded-xs underline`}>
+          <Link
+            href="/study"
+            prefetch
+            className={`${focusRing} text-primary-fg rounded-xs underline`}
+          >
             Back to your study plan
           </Link>
         </p>

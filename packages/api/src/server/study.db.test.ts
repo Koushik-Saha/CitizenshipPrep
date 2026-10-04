@@ -2,13 +2,20 @@ import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { recordAnswers } from './quiz';
+import { createRandom } from '@oathly/core';
+
+import { startOfflineSession } from '../pack';
+import { countryPackSchema } from '../schemas';
 import {
   completeAttempt,
+  getCountryPack,
   getDashboard,
   loadStudySession,
+  registerOfflineAttempts,
   setTimeZone,
   startMockExam,
   startPractice,
+  startSession,
   StudyError,
 } from './study';
 
@@ -252,5 +259,126 @@ describe.skipIf(!url)('study sessions against the database', () => {
       ['Examland test', null],
     ]);
     expect(await getDashboard(pool, 'test:nobody', now)).toBeNull();
+  });
+
+  it('starts whichever session a client asks for', async () => {
+    const practice = await startSession(pool, USER, {
+      kind: 'flashcards',
+      countryCode: COUNTRY,
+      focus: 'random',
+      size: 3,
+    });
+    expect((await loadStudySession(pool, USER, practice))!.mode).toBe('flashcards');
+    const exam = await startSession(pool, USER, {
+      kind: 'mock_exam',
+      countryCode: COUNTRY,
+      examFormatId: formatId,
+    });
+    expect((await loadStudySession(pool, USER, exam))!.exam?.name).toBe('Examland test');
+  });
+
+  it('packs a country for offline study: published questions, formats and history', async () => {
+    const pack = await getCountryPack(pool, USER, COUNTRY.toLowerCase());
+    expect(countryPackSchema.parse(JSON.parse(JSON.stringify(pack)))).toEqual(pack);
+    expect(pack.countryName).toBe('Examland');
+    expect(pack.questions).toHaveLength(8);
+    expect(pack.questions.every((question) => question.topicSlug === 'civics')).toBe(true);
+    expect(pack.examFormats.map((format) => format.name).sort()).toEqual([
+      'Examland long test',
+      'Examland test',
+    ]);
+    expect(pack.history.length).toBeGreaterThan(0);
+    await expect(getCountryPack(pool, 'test:someone-else', COUNTRY)).rejects.toThrow(StudyError);
+  });
+
+  it('records sessions started offline, once, with the phone’s ids', async () => {
+    const pack = await getCountryPack(pool, USER, COUNTRY);
+    const now = new Date();
+    const practice = startOfflineSession(
+      pack,
+      { kind: 'practice', countryCode: COUNTRY, focus: 'random', size: 3 },
+      { attemptId: '0ff11e00-0000-4000-8000-000000000001', now, random: createRandom(3) },
+    );
+    const exam = startOfflineSession(
+      pack,
+      { kind: 'mock_exam', countryCode: COUNTRY, examFormatId: formatId },
+      { attemptId: '0ff11e00-0000-4000-8000-000000000002', now, random: createRandom(4) },
+    );
+    await registerOfflineAttempts(pool, USER, [practice.attempt, exam.attempt]);
+
+    // The server now serves the same sessions the phone built.
+    const stored = (await loadStudySession(pool, USER, exam.attempt.attemptId))!;
+    expect(stored.questions.map((q) => q.id)).toEqual(exam.session.questions.map((q) => q.id));
+    expect(stored.exam?.sections).toEqual(exam.session.exam?.sections);
+    expect(stored.completedAt).toBeNull();
+
+    // Answers queued on the phone attach to it.
+    const question = practice.session.questions[0]!;
+    const outcome = await recordAnswers(pool, USER, [
+      {
+        clientEventId: '0ff11e00-0000-4000-8000-0000000000aa',
+        attemptId: practice.attempt.attemptId,
+        questionId: question.id,
+        questionVersion: question.version,
+        selectedKeys: question.correctKeys,
+        correct: true,
+        timeMs: 2000,
+        answeredAt: now.toISOString(),
+      },
+    ]);
+    expect(outcome.accepted).toHaveLength(1);
+
+    // Sent again with the result, it is finished rather than duplicated.
+    await registerOfflineAttempts(pool, USER, [
+      { ...exam.attempt, result: { correct: 5, total: 6, passed: true } },
+    ]);
+    await registerOfflineAttempts(pool, USER, [
+      { ...exam.attempt, result: { correct: 0, total: 6, passed: false } },
+    ]);
+    const done = await pool.query(
+      `select count(*)::int as attempts, max(a.correct_count) as correct, bool_and(m.passed) as passed
+       from public.attempts a join public.mock_exams m on m.id = a.mock_exam_id
+       where a.id = $1`,
+      [exam.attempt.attemptId],
+    );
+    expect(done.rows[0]).toEqual({ attempts: 1, correct: 5, passed: true });
+  });
+
+  it('refuses offline sessions that do not check out', async () => {
+    const pack = await getCountryPack(pool, USER, COUNTRY);
+    const { attempt } = startOfflineSession(
+      pack,
+      { kind: 'practice', countryCode: COUNTRY, focus: 'random', size: 2 },
+      {
+        attemptId: '0ff11e00-0000-4000-8000-000000000003',
+        now: new Date(),
+        random: createRandom(5),
+      },
+    );
+    const refuse = (change: Partial<typeof attempt>, as = USER) =>
+      expect(registerOfflineAttempts(pool, as, [{ ...attempt, ...change }])).rejects.toThrow(
+        StudyError,
+      );
+    await refuse({ attemptId: 'nope' });
+    await refuse({ questionIds: [] });
+    await refuse({ questionIds: ['00000000-0000-4000-8000-00000000dead'] });
+    await refuse({ startedAt: 'yesterday' });
+    await refuse({ mode: 'mock_exam' });
+    await refuse({ mode: 'mock_exam', examFormatId: formatId, examQuestionIds: [] });
+    await refuse({}, 'test:someone-else');
+    // Another learner cannot take over an id that is already in use.
+    await registerOfflineAttempts(pool, USER, [attempt]);
+    await pool.query(
+      `insert into public.profiles (id) values ('test:study-other') on conflict do nothing`,
+    );
+    await pool.query(
+      `insert into public.user_countries (user_id, country_code) values ('test:study-other', $1)`,
+      [COUNTRY],
+    );
+    try {
+      await refuse({}, 'test:study-other');
+    } finally {
+      await pool.query(`delete from public.profiles where id = 'test:study-other'`);
+    }
   });
 });

@@ -8,6 +8,7 @@ import { loadEnv } from './env';
 import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
 import { ingestSource } from './pipeline/ingest';
+import { describeNotify, notifyContentChanged } from './notify';
 import { translateQuestions } from './pipeline/translate';
 import { listDocuments, upsertCountry, upsertExamFormat } from './repository';
 import { getQueueCounts } from './review';
@@ -46,6 +47,7 @@ Usage: pnpm content <command> [options]
                  [--country US]
 
 Reads DATABASE_URL and ANTHROPIC_API_KEY from .env.local at the repository root.
+With SITE_URL and REVALIDATE_SECRET set, changes refresh the site's public pages at once.
 Review drafts at /admin/content in the web app.`;
 
 class UsageError extends Error {}
@@ -160,6 +162,7 @@ async function main(): Promise<void> {
           ...coordinates(values),
         });
         console.log(`Saved country ${isoCode}.`);
+        console.log(describeNotify(await notifyContentChanged({ countryCode: isoCode })));
         break;
       }
 
@@ -196,6 +199,7 @@ async function main(): Promise<void> {
           blueprint,
         });
         console.log(`Saved exam format ${country}/${slug}. It is not marked as verified.`);
+        console.log(describeNotify(await notifyContentChanged({ countryCode: country })));
         break;
       }
 
@@ -293,6 +297,10 @@ async function main(): Promise<void> {
           }
         }
         if (results.length === 0) console.log('No sources to check.');
+        // Flagged questions leave the public pages until a reviewer checks them.
+        if (results.some((result) => (result.update?.questionsFlagged ?? 0) > 0)) {
+          console.log(describeNotify(await notifyContentChanged({ countryCode: country })));
+        }
         // A source that cannot be fetched needs a person to look at it.
         if (failed) process.exitCode = 1;
         break;

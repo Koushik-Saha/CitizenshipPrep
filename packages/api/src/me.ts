@@ -1,4 +1,5 @@
-import { z } from 'zod';
+// zod/mini: these schemas run in the browser and on phones.
+import * as z from 'zod/mini';
 
 // The shape of "the signed-in learner", shared by the web app, the mobile
 // app and the API between them.
@@ -6,19 +7,19 @@ import { z } from 'zod';
 export const studyCountrySchema = z.object({
   countryCode: z.string(),
   countryName: z.string(),
-  examDate: z.string().nullable(),
-  studyLocale: z.string().nullable(),
+  examDate: z.nullable(z.string()),
+  studyLocale: z.nullable(z.string()),
   isPrimary: z.boolean(),
 });
 
 export const meSchema = z.object({
-  profile: z.object({ id: z.string(), displayName: z.string().nullable() }),
-  settings: z
-    .object({
+  profile: z.object({ id: z.string(), displayName: z.nullable(z.string()) }),
+  settings: z.nullable(
+    z.object({
       dailyGoalMinutes: z.number(),
-      onboardedAt: z.string().nullable(),
-    })
-    .nullable(),
+      onboardedAt: z.nullable(z.string()),
+    }),
+  ),
   studyCountries: z.array(studyCountrySchema),
   progress: z.object({
     attempts: z.number(),

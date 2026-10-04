@@ -1,13 +1,9 @@
 import { isStudyLocale } from '@oathly/i18n';
 import { z } from 'zod';
 
-/** Minutes a day the learner can choose from. */
-export const dailyGoalOptions = [5, 10, 15, 20, 30, 45, 60] as const;
+import { dailyGoalOptions, isoDate } from './onboarding-options';
 
-/** YYYY-MM-DD for a date, in UTC. */
-export function isoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
+export { dailyGoalOptions, isoDate };
 
 function isRealDate(value: string): boolean {
   const parsed = new Date(`${value}T00:00:00Z`);

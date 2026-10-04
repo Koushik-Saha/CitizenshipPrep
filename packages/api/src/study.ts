@@ -1,4 +1,4 @@
-import type { MockExamSection } from '@oathly/core';
+import type { MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
 
 // What a study session looks like on the client: everything needed to run it
 // without another request.
@@ -105,4 +105,53 @@ export interface Dashboard {
   minutesToday: number;
   dailyGoalMinutes: number;
   countries: CountryDashboard[];
+}
+
+/** What a client sends to start a session. */
+export type StartSessionRequest =
+  | {
+      kind: 'practice' | 'flashcards';
+      countryCode: string;
+      /** Weak topics and reviews, anything at random, or one topic. */
+      focus: 'adaptive' | 'random' | { topicId: string };
+      size: number;
+    }
+  | { kind: 'mock_exam'; countryCode: string; examFormatId: string };
+
+/** How the session finished, as the client scored it. */
+export interface SessionResult {
+  correct: number;
+  total: number;
+  /** For a mock exam: whether it was a pass. */
+  passed: boolean | null;
+}
+
+/** A session question as the quiz engine wants it. */
+export function toQuizQuestion(question: SessionQuestion): QuizQuestion {
+  return {
+    id: question.id,
+    topicId: question.topicId,
+    // The engine only uses slugs to build exams; a running session has its
+    // sections already, so the id stands in.
+    topicSlug: question.topicId,
+    difficulty: 1,
+    type: question.type,
+    correctKeys: question.correctKeys,
+    regionCode: null,
+    version: question.version,
+  };
+}
+
+/** The session's exam as the quiz engine wants it; null for practice and flashcards. */
+export function toMockExam(session: StudySession): MockExam | null {
+  if (!session.exam) return null;
+  return {
+    formatId: session.attemptId,
+    questionIds: session.questions.map((question) => question.id),
+    sections: session.exam.sections,
+    questionCount: session.exam.questionCount,
+    passMark: session.exam.passMark,
+    timeLimitMs: session.exam.timeLimitMs,
+    stopEarly: session.exam.stopEarly,
+  };
 }

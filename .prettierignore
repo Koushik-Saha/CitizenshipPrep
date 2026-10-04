@@ -16,3 +16,5 @@ packages/tokens/theme.css
 
 # Vendored KTX2 transcoder (copied from three by apps/web/scripts/globe)
 apps/web/public/globe/basis
+.lighthouseci
+lighthouse-reports

@@ -30,6 +30,43 @@ export interface CountryFacts {
   publishedQuestions: number;
 }
 
+export interface TopicSummary {
+  slug: string;
+  name: string;
+  publishedQuestions: number;
+}
+
+/** Everything the public page for one country's exam shows. */
+export interface CountryGuide extends CountryFacts {
+  topics: TopicSummary[];
+}
+
+/** A published question as the public topic page shows it, in the exam's language. */
+export interface GuideQuestion {
+  id: string;
+  locale: string;
+  text: string;
+  options: { key: string; text: string }[];
+  correctKeys: string[];
+  explanation: string | null;
+  sourceUrl: string;
+  sourceQuote: string | null;
+  lastVerifiedAt: string;
+}
+
+export interface TopicGuide {
+  countryCode: string;
+  countryName: string;
+  topic: TopicSummary;
+  /** Other topics of the same exam, for navigation. */
+  otherTopics: TopicSummary[];
+  /** A sample of the topic's published questions. */
+  questions: GuideQuestion[];
+}
+
+/** URL segment for a country: its ISO code in lower case. */
+export const countrySlug = (isoCode: string) => isoCode.toLowerCase();
+
 /** "20 questions, 12 to pass, 45 minutes", leaving out what the format does not fix. */
 export function describeExam(
   exam: Pick<ExamFacts, 'questionCount' | 'passMark' | 'timeLimitMinutes'>,

@@ -51,3 +51,7 @@ CLAUDE.local.md
 
 # browser automation output
 .playwright-mcp/
+
+# Lighthouse CI output
+.lighthouseci/
+lighthouse-reports/

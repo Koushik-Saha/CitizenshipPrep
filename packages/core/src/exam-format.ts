@@ -1,37 +1,35 @@
-import { z } from 'zod';
+// zod/mini: this module reaches the browser (the study session), and the
+// functional API lets the bundler keep only what is used.
+import * as z from 'zod/mini';
 
 // An exam format as the engine needs it: the numbers from exam_formats, plus
 // an optional blueprint for the rules the numbers cannot express.
 
-const sectionSourceSchema = z
-  .object({
-    /** Only questions in these topics. */
-    topics: z.array(z.string().min(1)).optional(),
-    /** No questions from these topics. */
-    excludeTopics: z.array(z.string().min(1)).optional(),
-    /** Questions about the learner's own region (e.g. their Bundesland) rather than national ones. */
-    regional: z.boolean().optional(),
-  })
-  .strict();
+const name = z.string().check(z.minLength(1));
 
-const sectionSchema = z
-  .object({
-    id: z.string().min(1),
-    label: z.string().min(1),
-    count: z.number().int().positive(),
-    source: sectionSourceSchema.default({}),
-    /** Every question in this section must be answered correctly to pass (Australia's values questions). */
-    mustAllBeCorrect: z.boolean().default(false),
-  })
-  .strict();
+const sectionSourceSchema = z.strictObject({
+  /** Only questions in these topics. */
+  topics: z.optional(z.array(name)),
+  /** No questions from these topics. */
+  excludeTopics: z.optional(z.array(name)),
+  /** Questions about the learner's own region (e.g. their Bundesland) rather than national ones. */
+  regional: z.optional(z.boolean()),
+});
 
-export const examBlueprintSchema = z
-  .object({
-    sections: z.array(sectionSchema).min(1).optional(),
-    /** The examiner stops once the result is certain (the U.S. oral civics test). */
-    stopEarly: z.boolean().default(false),
-  })
-  .strict();
+const sectionSchema = z.strictObject({
+  id: name,
+  label: name,
+  count: z.int().check(z.positive()),
+  source: z._default(sectionSourceSchema, {}),
+  /** Every question in this section must be answered correctly to pass (Australia's values questions). */
+  mustAllBeCorrect: z._default(z.boolean(), false),
+});
+
+export const examBlueprintSchema = z.strictObject({
+  sections: z.optional(z.array(sectionSchema).check(z.minLength(1))),
+  /** The examiner stops once the result is certain (the U.S. oral civics test). */
+  stopEarly: z._default(z.boolean(), false),
+});
 
 export type ExamBlueprint = z.output<typeof examBlueprintSchema>;
 export type ExamSection = NonNullable<ExamBlueprint['sections']>[number];

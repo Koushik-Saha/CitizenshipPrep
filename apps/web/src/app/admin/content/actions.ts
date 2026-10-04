@@ -16,6 +16,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { getDb, requireReviewer } from '@/lib/admin';
+import { revalidatePublicContent } from '@/lib/revalidate';
 
 // Each action checks who is asking, makes one decision through
 // @oathly/content, then redirects. Problems the reviewer can fix come back as
@@ -63,6 +64,9 @@ async function attempt(decision: (reviewerId: string) => Promise<void>): Promise
 
 function finish(problem: string | null, here: string, next: string): never {
   revalidatePath('/admin/content', 'layout');
+  // A decision can publish, change or withdraw what learners and visitors
+  // see, so the public country and topic pages rebuild on their next visit.
+  if (!problem) revalidatePublicContent();
   redirect(problem ? `${here}?problem=${encodeURIComponent(problem)}` : next);
 }
 

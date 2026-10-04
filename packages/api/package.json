@@ -7,9 +7,17 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./client": "./src/client.ts",
     "./countries": "./src/countries.ts",
     "./country-search": "./src/country-search.ts",
-    "./server": "./src/server/index.ts"
+    "./hooks": "./src/hooks.ts",
+    "./me": "./src/me.ts",
+    "./onboarding-options": "./src/onboarding-options.ts",
+    "./pack": "./src/pack.ts",
+    "./queries": "./src/queries.ts",
+    "./schemas": "./src/schemas.ts",
+    "./server": "./src/server/index.ts",
+    "./study": "./src/study.ts"
   },
   "scripts": {
     "lint": "eslint .",
@@ -22,13 +30,20 @@
     "eslint": "catalog:",
     "pg": "^8.23.1",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "react": "catalog:",
+    "@types/react": "catalog:"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
     "@oathly/core": "workspace:*",
     "@oathly/i18n": "workspace:*",
+    "@tanstack/react-query": "^5.104.1",
     "jose": "^6.2.12",
     "zod": "^4.6.5"
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": "*"
   }
 }

@@ -105,4 +105,102 @@ describe('createOathlyApi', () => {
     });
     await expect(api.me()).rejects.toThrow();
   });
+
+  it('relies on the session cookie when no token source is given (the web app)', async () => {
+    const seen: RequestInit[] = [];
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      fetch: async (_input, init) => {
+        seen.push(init!);
+        return Response.json(me);
+      },
+    });
+    await api.me();
+    expect(seen[0]).toMatchObject({ credentials: 'same-origin' });
+    expect(seen[0]!.headers).not.toHaveProperty('authorization');
+  });
+
+  it('starts, loads and completes sessions', async () => {
+    const seen: Request[] = [];
+    const session = {
+      attemptId: 'a/1',
+      countryCode: 'ZZ',
+      countryName: 'Testland',
+      countryLocation: null,
+      mode: 'practice',
+      startedAt: '2026-10-03T10:00:00.000Z',
+      completedAt: null,
+      questions: [],
+      exam: null,
+    };
+    const replies: [number, unknown][] = [
+      [200, { attemptId: 'a/1' }],
+      [200, session],
+      [204, null],
+    ];
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: async (input, init) => {
+        seen.push(new Request(input as string, init));
+        const [status, body] = replies.shift()!;
+        return new Response(body === null ? null : JSON.stringify(body), { status });
+      },
+    });
+    await expect(
+      api.startSession({ kind: 'practice', countryCode: 'ZZ', focus: 'adaptive', size: 10 }),
+    ).resolves.toEqual({ attemptId: 'a/1' });
+    await expect(api.session('a/1')).resolves.toEqual(session);
+    await expect(
+      api.completeSession('a/1', { correct: 3, total: 4, passed: null }),
+    ).resolves.toBeUndefined();
+    expect(seen.map((request) => `${request.method} ${new URL(request.url).pathname}`)).toEqual([
+      'POST /api/study/sessions',
+      'GET /api/study/sessions/a%2F1',
+      'POST /api/attempts/a%2F1/complete',
+    ]);
+    expect(await seen[2]!.json()).toEqual({ correct: 3, total: 4, passed: null });
+  });
+
+  it('reads the dashboard and a country pack, and registers offline sessions', async () => {
+    const seen: Request[] = [];
+    const dashboard = { streakDays: 1, minutesToday: 0, dailyGoalMinutes: 15, countries: [] };
+    const pack = {
+      countryCode: 'ZZ',
+      countryName: 'Testland',
+      countryLocation: null,
+      generatedAt: '2026-10-03T10:00:00.000Z',
+      examFormats: [],
+      questions: [],
+      history: [],
+    };
+    const replies: [number, unknown][] = [
+      [200, dashboard],
+      [200, pack],
+      [204, null],
+      [204, null],
+      [500, 'oops'],
+    ];
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: async (input, init) => {
+        seen.push(new Request(input as string, init));
+        const [status, body] = replies.shift()!;
+        return new Response(body === null ? null : JSON.stringify(body), { status });
+      },
+    });
+    await expect(api.dashboard()).resolves.toEqual(dashboard);
+    await expect(api.countryPack('ZZ')).resolves.toEqual(pack);
+    await api.registerOfflineAttempts([]);
+    await api.setTimeZone('Europe/Berlin');
+    await expect(api.dashboard()).rejects.toEqual(new ApiError('Request failed (500).', 500));
+    expect(seen.map((request) => new URL(request.url).pathname)).toEqual([
+      '/api/study/dashboard',
+      '/api/packs/ZZ',
+      '/api/study/sessions/offline',
+      '/api/me/time-zone',
+      '/api/study/dashboard',
+    ]);
+  });
 });

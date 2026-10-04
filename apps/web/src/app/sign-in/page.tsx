@@ -1,22 +1,22 @@
-import { parseCountryCode } from '@oathly/api/countries';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { SignInForm } from '@/components/auth/sign-in-form';
+import { ContinueIfSignedIn, SignInForm } from '@/components/auth/sign-in-form';
 import { Notice } from '@/components/ui';
 import { isAuthConfigured } from '@/lib/auth/server';
-import { currentUser } from '@/lib/user';
 
 export const metadata: Metadata = { title: 'Sign in | Oathly' };
 
-export default async function SignInPage({ searchParams }: PageProps<'/sign-in'>) {
-  // Picked on the landing page; carried through sign-in to onboarding.
-  const country = parseCountryCode((await searchParams).country);
-  const callbackUrl = country ? `/welcome?country=${country}` : '/welcome';
-  if (await currentUser()) redirect(callbackUrl);
+// Static, so links to it prefetch the whole page and it opens at once.
+// Rebuilt every minute so a change to the auth configuration shows up.
+export const revalidate = 60;
 
+export default function SignInPage() {
   return (
     <main className="mx-auto max-w-md px-4 py-16 sm:py-24">
+      <Suspense>
+        <ContinueIfSignedIn />
+      </Suspense>
       <h1 className="font-display text-4xl font-semibold">Sign in to Oathly</h1>
       <p className="text-fg-muted mt-3">
         New here? Signing in creates your account. Your progress is saved to it, so you can carry on
@@ -24,7 +24,10 @@ export default async function SignInPage({ searchParams }: PageProps<'/sign-in'>
       </p>
       <div className="mt-8">
         {isAuthConfigured() ? (
-          <SignInForm callbackUrl={callbackUrl} />
+          // The form reads ?country= from the URL, which only the browser knows.
+          <Suspense fallback={<div className="h-56" aria-hidden="true" />}>
+            <SignInForm />
+          </Suspense>
         ) : (
           <Notice tone="warning">Sign-in is not set up on this server yet.</Notice>
         )}

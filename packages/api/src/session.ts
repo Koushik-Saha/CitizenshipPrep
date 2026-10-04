@@ -14,7 +14,10 @@ export interface SessionAuth {
 }
 
 /** Works out the session from the auth client and the API. An expired session counts as signed out. */
-export async function loadSession(auth: SessionAuth, api: OathlyApi): Promise<SessionState> {
+export async function loadSession(
+  auth: SessionAuth,
+  api: Pick<OathlyApi, 'me'>,
+): Promise<SessionState> {
   if (!(await auth.getToken())) return { status: 'signed-out' };
   try {
     const me = await api.me();

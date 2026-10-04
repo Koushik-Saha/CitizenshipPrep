@@ -63,3 +63,66 @@ jobs:
         run: |
           pnpm db:types
           git diff --exit-code -- packages/api/src/database.types.ts
+
+  performance:
+    name: Performance budgets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The public pages are built from the database, so it has to be up
+      # (migrated and seeded) before the build.
+      - run: pnpm db:start
+
+      - run: pnpm --filter @oathly/web build
+
+      - name: Start the production server
+        run: |
+          pnpm --filter @oathly/web start > web.log 2>&1 &
+          for _ in $(seq 1 60); do
+            curl -fsS http://localhost:3000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat web.log
+          exit 1
+
+      # The budgets in CLAUDE.md. Where the app does not meet one yet, the
+      # check fails on getting worse than today and warns about the target:
+      # see the limits in js-budget.mjs and lighthouserc.mobile.json.
+      - name: Landing JS before 3D
+        run: node apps/web/scripts/perf/js-budget.mjs
+
+      - name: Lighthouse, mobile
+        run: apps/web/scripts/perf/lighthouse.sh mobile
+
+      - name: Lighthouse, desktop
+        run: apps/web/scripts/perf/lighthouse.sh desktop
+
+      # Shared runners are several times slower than a laptop, so the time
+      # limit is looser here than the 100 ms the app is held to locally. The
+      # check that the route was prefetched (no wait on the server) is exact.
+      - name: Prefetched navigation
+        run: |
+          pnpm --filter @oathly/web exec playwright install --with-deps chromium
+          node apps/web/scripts/perf/navigation.mjs
+        env:
+          NAV_BUDGET_MS: 300
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: apps/web/lighthouse-reports
+          retention-days: 14

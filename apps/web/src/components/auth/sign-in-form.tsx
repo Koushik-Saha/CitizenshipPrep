@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { parseCountryCode } from '@oathly/api/country-search';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { buttonClass, fieldClass, labelClass, Notice } from '@/components/ui';
-import { authClient } from '@/lib/auth/client';
+import { loadAuthClient } from '@/lib/auth/load-client';
 
 type State =
   | { step: 'ready' }
@@ -11,13 +13,45 @@ type State =
   | { step: 'sent'; email: string }
   | { step: 'error'; message: string };
 
-/** `callbackUrl`: where to land after signing in, /welcome unless the visitor picked a country first. */
-export function SignInForm({ callbackUrl = '/welcome' }: { callbackUrl?: string }) {
+/** Where to land after signing in: /welcome, carrying a country picked on the landing page. */
+function useCallbackUrl(): string {
+  const country = parseCountryCode(useSearchParams().get('country'));
+  return country ? `/welcome?country=${country}` : '/welcome';
+}
+
+/**
+ * The sign-in page is static, so it cannot know who is looking at it. This
+ * asks once the page is up, and sends someone already signed in straight on.
+ * Render inside <Suspense>: it reads the query string.
+ */
+export function ContinueIfSignedIn() {
+  const router = useRouter();
+  const callbackUrl = useCallbackUrl();
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/me', { headers: { accept: 'application/json' } })
+      .then((response) => {
+        if (response.ok && !cancelled) router.replace(callbackUrl);
+      })
+      .catch(() => {
+        // Offline or the server is down: the form still works when it is back.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [callbackUrl, router]);
+  return null;
+}
+
+/** Render inside <Suspense>: it reads ?country= from the query string. */
+export function SignInForm() {
+  const callbackUrl = useCallbackUrl();
   const [state, setState] = useState<State>({ step: 'ready' });
 
   async function sendLink(form: FormData) {
     const email = String(form.get('email') ?? '').trim();
     setState({ step: 'sending' });
+    const authClient = await loadAuthClient();
     const { error } = await authClient.signIn.magicLink({ email, callbackURL: callbackUrl });
     setState(
       error
@@ -28,6 +62,7 @@ export function SignInForm({ callbackUrl = '/welcome' }: { callbackUrl?: string 
 
   async function continueWithGoogle() {
     setState({ step: 'sending' });
+    const authClient = await loadAuthClient();
     const { error } = await authClient.signIn.social({
       provider: 'google',
       callbackURL: callbackUrl,
@@ -63,7 +98,13 @@ export function SignInForm({ callbackUrl = '/welcome' }: { callbackUrl?: string 
           {state.message}
         </Notice>
       )}
-      <form action={sendLink} className="space-y-3">
+      {/* The auth client downloads as soon as someone starts using the form. */}
+      <form
+        action={sendLink}
+        onFocus={() => void loadAuthClient()}
+        onPointerEnter={() => void loadAuthClient()}
+        className="space-y-3"
+      >
         <div>
           <label htmlFor="email" className={labelClass}>
             Email
@@ -89,6 +130,8 @@ export function SignInForm({ callbackUrl = '/welcome' }: { callbackUrl?: string 
       <button
         type="button"
         onClick={continueWithGoogle}
+        onFocus={() => void loadAuthClient()}
+        onPointerEnter={() => void loadAuthClient()}
         disabled={busy}
         className={`${buttonClass.secondary} w-full`}
       >

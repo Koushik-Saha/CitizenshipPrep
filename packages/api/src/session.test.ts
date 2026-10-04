@@ -11,14 +11,11 @@ const me: Me = {
   progress: { attempts: 0, questionsAnswered: 0, correctAnswers: 0 },
 };
 
-const api = (result: Me | Error): OathlyApi => ({
+const api = (result: Me | Error): Pick<OathlyApi, 'me'> => ({
   me: async () => {
     if (result instanceof Error) throw result;
     return result;
   },
-  countries: async () => [],
-  saveOnboarding: async () => me,
-  sendAnswers: async () => ({ accepted: [], rejected: [] }),
 });
 
 describe('loadSession', () => {

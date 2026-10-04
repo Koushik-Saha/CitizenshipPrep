@@ -1,13 +1,14 @@
 'use client';
 
-import type { SessionQuestion, StudySession as Session } from '@oathly/api';
 import {
-  examDecision,
-  isCorrect,
-  type Answer,
-  type MockExam,
-  type QuizQuestion,
-} from '@oathly/core';
+  toMockExam,
+  toQuizQuestion,
+  type SessionQuestion,
+  type StudySession as Session,
+} from '@oathly/api/study';
+import { examDecision, isCorrect, type Answer } from '@oathly/core';
+import { queryKeys } from '@oathly/api/queries';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -30,32 +31,6 @@ type Phase = 'answering' | 'feedback' | 'results';
 
 const keyLabel = (index: number) => String(index + 1);
 
-function toQuizQuestion(question: SessionQuestion): QuizQuestion {
-  return {
-    id: question.id,
-    topicId: question.topicId,
-    topicSlug: question.topicId,
-    difficulty: 1,
-    type: question.type,
-    correctKeys: question.correctKeys,
-    regionCode: null,
-    version: question.version,
-  };
-}
-
-function toMockExam(session: Session): MockExam | null {
-  if (!session.exam) return null;
-  return {
-    formatId: session.attemptId,
-    questionIds: session.questions.map((question) => question.id),
-    sections: session.exam.sections,
-    questionCount: session.exam.questionCount,
-    passMark: session.exam.passMark,
-    timeLimitMs: session.exam.timeLimitMs,
-    stopEarly: session.exam.stopEarly,
-  };
-}
-
 function isTyping(target: EventTarget | null): boolean {
   return (
     target instanceof HTMLElement &&
@@ -69,6 +44,7 @@ export function StudySession({ session }: { session: Session }) {
   const isFlashcards = session.mode === 'flashcards';
   const quizQuestions = useMemo(() => questions.map(toQuizQuestion), [questions]);
   const mockExam = useMemo(() => toMockExam(session), [session]);
+  const queryClient = useQueryClient();
 
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
@@ -243,14 +219,25 @@ export function StudySession({ session }: { session: Session }) {
         [...strict].every((id) => right.has(id));
     }
     completeSession(session.attemptId, { correct, total: questions.length, passed });
-  }, [answers, isExam, mockExam, phase, questions.length, session.attemptId, session.completedAt]);
+    // The cached dashboard is now out of date: it refetches when next shown.
+    void queryClient.invalidateQueries({ queryKey: queryKeys.dashboard });
+  }, [
+    answers,
+    isExam,
+    mockExam,
+    phase,
+    queryClient,
+    questions.length,
+    session.attemptId,
+    session.completedAt,
+  ]);
 
   if (session.completedAt && answers.length === 0) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-16">
         <h1 className="font-display text-3xl font-semibold">This session is finished</h1>
         <p className="text-fg-muted mt-3">Start a new one from your study page.</p>
-        <Link href="/study" className={`${buttonClass.primary} mt-6`}>
+        <Link href="/study" prefetch className={`${buttonClass.primary} mt-6`}>
           Back to study
         </Link>
       </main>

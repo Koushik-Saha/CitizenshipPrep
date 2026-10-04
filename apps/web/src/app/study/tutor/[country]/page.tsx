@@ -18,7 +18,11 @@ export default async function TutorPage({ params }: PageProps<'/study/tutor/[cou
   return (
     <main className="mx-auto max-w-2xl px-4 py-10 sm:py-14">
       <p className="text-sm">
-        <Link href="/study" className={`${focusRing} text-primary-fg rounded-xs underline`}>
+        <Link
+          href="/study"
+          prefetch
+          className={`${focusRing} text-primary-fg rounded-xs underline`}
+        >
           Back to study
         </Link>
       </p>

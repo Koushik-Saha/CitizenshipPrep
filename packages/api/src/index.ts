@@ -20,5 +20,6 @@ export * from './client';
 export * from './countries';
 export * from './me';
 export * from './onboarding';
+export * from './pack';
 export * from './session';
 export * from './study';

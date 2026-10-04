@@ -19,15 +19,16 @@
   }
 }
 
-/* Page transitions (React <ViewTransition default="page"> in the root layout):
-   the old page fades out quickly, the new one rises in. */
-::view-transition-old(.page) {
+/* Page transitions (see components/route-fade.tsx): a short cross-fade of
+   the root snapshot, which is only the size of the viewport. The new page
+   starts appearing on the first frame, so a prefetched navigation still
+   feels instant. */
+::view-transition-old(root) {
   animation: page-out var(--transition-duration-fast, 120ms) var(--ease-exit, ease-in) both;
 }
 
-::view-transition-new(.page) {
-  animation: page-in var(--transition-duration-base, 200ms) var(--ease-enter, ease-out)
-    var(--transition-duration-fast, 120ms) both;
+::view-transition-new(root) {
+  animation: page-in 160ms var(--ease-enter, ease-out) both;
 }
 
 @keyframes page-out {
@@ -38,8 +39,8 @@
 
 @keyframes page-in {
   from {
-    opacity: 0;
-    transform: translateY(8px);
+    opacity: 0.35;
+    transform: translateY(4px);
   }
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { dailyGoalOptions, isoDate, type ExamCountry } from '@oathly/api';
+import type { ExamCountry } from '@oathly/api';
+import { dailyGoalOptions, isoDate } from '@oathly/api/onboarding-options';
 import { examLanguageList, searchCountries } from '@oathly/api/countries';
 import { endonym, languageName, studyLocales } from '@oathly/i18n';
 import { useActionState, useId, useState } from 'react';
