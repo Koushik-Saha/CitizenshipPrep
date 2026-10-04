@@ -6,6 +6,9 @@
 //                and kept on devices that do not get the 3D globe
 //   basis/       the KTX2 transcoder three.js loads in the browser
 //
+// and, in apps/mobile/assets/globe, the land as a list of dots plus a poster
+// for the phone app's welcome screen.
+//
 // Countries are not drawn into any of these: the page places them from the
 // database. Land outlines are Natural Earth's 1:110m land (public domain).
 //
@@ -48,6 +51,10 @@ const LAND_URL =
   'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_land.geojson';
 
 const OUT = path.resolve(import.meta.dirname, '../../public/globe');
+const MOBILE_OUT = path.resolve(import.meta.dirname, '../../../mobile/assets/globe');
+/** Spacing of the phone app's land dots, in degrees. */
+const MOBILE_DOT_STEP = 2.2;
+const MOBILE_POSTER = 720;
 const TEXTURE_WIDTH = 2048;
 const TEXTURE_HEIGHT = 1024;
 /** Spacing of the halftone dots, in degrees of latitude. */
@@ -107,6 +114,25 @@ function landTest(polygons: Polygon[]) {
       }
       return inside;
     });
+}
+
+/**
+ * The land as evenly spaced dots, for the phone app: a flat list of
+ * latitude, longitude pairs in tenths of a degree.
+ */
+function landDots(isLand: (lng: number, lat: number) => boolean): number[] {
+  const dots: number[] = [];
+  for (let lat = 90 - MOBILE_DOT_STEP / 2; lat > -90; lat -= MOBILE_DOT_STEP) {
+    const count = Math.max(
+      1,
+      Math.round((360 * Math.cos(lat * (Math.PI / 180))) / MOBILE_DOT_STEP),
+    );
+    for (let i = 0; i < count; i += 1) {
+      const lng = -180 + (360 * (i + 0.5)) / count;
+      if (isLand(lng, lat)) dots.push(Math.round(lat * 10), Math.round(lng * 10));
+    }
+  }
+  return dots;
 }
 
 /**
@@ -354,7 +380,8 @@ async function main() {
   mkdirSync(path.join(OUT, 'basis'), { recursive: true });
 
   console.log('Drawing the land texture…');
-  const texture = drawTexture(landTest(await loadLand()));
+  const isLand = landTest(await loadLand());
+  const texture = drawTexture(isLand);
 
   console.log('Encoding KTX2…');
   const ktx2 = await encodeToKTX2(new Uint8Array(0), {
@@ -397,6 +424,17 @@ async function main() {
   for (const file of ['basis_transcoder.js', 'basis_transcoder.wasm']) {
     copyFileSync(path.join(basis, file), path.join(OUT, 'basis', file));
   }
+
+  // The phone app draws the land as points rather than a texture, and keeps
+  // one poster for devices that do not get the 3D globe.
+  mkdirSync(MOBILE_OUT, { recursive: true });
+  const dots = landDots(isLand);
+  writeFileSync(path.join(MOBILE_OUT, 'land-dots.json'), `${JSON.stringify(dots)}\n`);
+  copyFileSync(
+    path.join(OUT, `poster-${MOBILE_POSTER}.webp`),
+    path.join(MOBILE_OUT, 'poster.webp'),
+  );
+  console.log(`Wrote ${MOBILE_OUT}: ${dots.length / 2} land dots and the poster.`);
 
   const sizes = ['earth.glb', ...POSTER_SIZES.map((size) => `poster-${size}.webp`)].map(
     (file) => `${file} ${(readFileSync(path.join(OUT, file)).length / 1024).toFixed(1)} KB`,

@@ -9,6 +9,7 @@ import type { OathlyApi } from './client';
 export const queryKeys = {
   me: ['me'] as const,
   countries: ['countries'] as const,
+  publicCountries: ['public-countries'] as const,
   dashboard: ['dashboard'] as const,
   session: (attemptId: string) => ['session', attemptId] as const,
   pack: (countryCode: string) => ['pack', countryCode] as const,
@@ -48,4 +49,12 @@ export const sessionQuery = (api: OathlyApi, attemptId: string) =>
     queryKey: queryKeys.session(attemptId),
     queryFn: () => api.session(attemptId),
     staleTime: Infinity,
+  });
+
+/** The public list of exams, for the signed-out welcome screen. */
+export const publicCountriesQuery = (api: OathlyApi) =>
+  queryOptions({
+    queryKey: queryKeys.publicCountries,
+    queryFn: () => api.publicCountries(),
+    staleTime: 60 * 60_000,
   });

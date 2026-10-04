@@ -1,0 +1,71 @@
+# Completes a mock exam on a phone: from the dashboard, through every
+# question, to the results.
+#
+#   maestro test .maestro/mock-exam.yaml \
+#     -e APP_ID=host.exp.Exponent -e APP_URL=exp://<your-computer-ip>:8081
+#
+# APP_ID is Expo Go: host.exp.Exponent on iOS, host.exp.exponent on Android.
+# The app must be running with a test session (see README.md), so there is no
+# sign-in to get through. Elements are found by testID, never by a country's
+# name: the flow works for whichever country the test learner studies.
+appId: ${APP_ID}
+---
+- launchApp:
+    appId: ${APP_ID}
+- openLink: ${APP_URL}
+
+# A brand-new test learner lands on onboarding first.
+- runFlow:
+    when:
+      visible:
+        id: 'finish-onboarding'
+    commands:
+      - tapOn:
+          id: 'country-.*'
+          index: 0
+      - scrollUntilVisible:
+          element:
+            id: 'finish-onboarding'
+          direction: DOWN
+      - tapOn:
+          id: 'finish-onboarding'
+
+- extendedWaitUntil:
+    visible:
+      id: 'practise-.*'
+    timeout: 60000
+
+- scrollUntilVisible:
+    element:
+      id: 'mock-exam-.*'
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: 'mock-exam-.*'
+    index: 0
+
+- extendedWaitUntil:
+    visible:
+      id: 'question-text'
+    timeout: 30000
+
+# Answer every question. A mock exam gives no feedback between questions; one
+# that stops early (when the result is certain) simply reaches the results sooner.
+- repeat:
+    while:
+      notVisible:
+        id: 'results'
+    commands:
+      - tapOn:
+          id: 'option-0'
+      - tapOn:
+          id: 'next'
+
+- assertVisible:
+    id: 'results'
+- assertVisible:
+    id: 'back-to-study'
+- tapOn:
+    id: 'back-to-study'
+- assertVisible:
+    id: 'practise-.*'

@@ -32,6 +32,14 @@ jobs:
 
       - run: pnpm test
 
+      # Bundles the phone app for both platforms with Metro. Catches what
+      # typecheck cannot: a module that only resolves in the browser build.
+      - name: Bundle the mobile app for iOS and Android
+        run: pnpm --filter @oathly/mobile bundle
+        env:
+          EXPO_PUBLIC_API_URL: https://oathly.invalid
+          EXPO_PUBLIC_NEON_AUTH_URL: https://auth.oathly.invalid
+
   database:
     name: Migrations, RLS tests, generated types
     runs-on: ubuntu-latest

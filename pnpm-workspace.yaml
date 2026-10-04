@@ -18,6 +18,8 @@ catalog:
   vitest: ^5.0.3
 
 allowBuilds:
+  # Copies Skia's prebuilt native libraries into place for native builds.
+  '@shopify/react-native-skia': true
   core-js: false
   esbuild: false
   sharp: false

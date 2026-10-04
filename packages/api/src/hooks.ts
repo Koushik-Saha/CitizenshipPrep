@@ -8,7 +8,14 @@ import { createContext, createElement, useContext, type ReactNode } from 'react'
 
 import type { OathlyApi } from './client';
 import type { OnboardingInput } from './onboarding';
-import { countriesQuery, dashboardQuery, meQuery, queryKeys, sessionQuery } from './queries';
+import {
+  countriesQuery,
+  dashboardQuery,
+  meQuery,
+  publicCountriesQuery,
+  queryKeys,
+  sessionQuery,
+} from './queries';
 import type { SessionResult, StartSessionRequest } from './study';
 
 const ApiContext = createContext<OathlyApi | null>(null);
@@ -26,6 +33,7 @@ export function useOathlyApi(): OathlyApi {
 export const useMe = () => useQuery(meQuery(useOathlyApi()));
 export const useDashboard = () => useQuery(dashboardQuery(useOathlyApi()));
 export const useExamCountries = () => useQuery(countriesQuery(useOathlyApi()));
+export const usePublicCountries = () => useQuery(publicCountriesQuery(useOathlyApi()));
 export const useStudySession = (attemptId: string) =>
   useQuery(sessionQuery(useOathlyApi(), attemptId));
 

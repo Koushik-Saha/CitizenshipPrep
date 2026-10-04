@@ -11,7 +11,7 @@ import { revalidatePath } from 'next/cache';
  * one. A literal path with a type matches nothing.
  */
 export function revalidatePublicContent(isoCode?: string): string[] {
-  const paths = ['/', '/countries'];
+  const paths = ['/', '/countries', '/api/public/countries'];
   for (const path of paths) revalidatePath(path);
   if (isoCode) {
     const path = `/countries/${countrySlug(isoCode)}`;

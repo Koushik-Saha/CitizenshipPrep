@@ -1,7 +1,7 @@
 // Shared by the globe asset script, the static poster and the WebGL scene,
 // so the poster and the first 3D frame match. No three.js imports here.
 
-import type { GlobeView } from '@oathly/core/globe';
+export { HERO_VIEW } from '@oathly/core/globe';
 
 /** Brand navy and gold (see @oathly/tokens). */
 export const GLOBE_COLORS = {
@@ -11,9 +11,6 @@ export const GLOBE_COLORS = {
   marker: '#E8B130', // gold-400
   markerHot: '#F5DC8F', // gold-200
 } as const;
-
-/** The view the landing page opens on: the Atlantic, with North America and Europe in sight. */
-export const HERO_VIEW: GlobeView = { latitude: 24, longitude: -38 };
 
 /** Poster widths in pixels; the globe fills the middle, leaving room for its atmosphere. */
 export const POSTER_SIZES = [560, 720, 1080] as const;

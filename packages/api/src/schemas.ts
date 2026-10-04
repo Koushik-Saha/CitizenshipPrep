@@ -5,11 +5,32 @@
 import { examBlueprintSchema } from '@oathly/core';
 import * as z from 'zod/mini';
 
+import type { CountryFacts } from './countries';
 import type { CountryPack, OfflineAttempt } from './pack';
 import type { Dashboard, SessionResult, StartSessionRequest, StudySession } from './study';
 
 const nullableNumber = z.nullable(z.number());
 const nullableString = z.nullable(z.string());
+
+export const countryFactsSchema = z.object({
+  isoCode: z.string(),
+  name: z.string(),
+  examLanguages: z.array(z.string()),
+  latitude: nullableNumber,
+  longitude: nullableNumber,
+  exams: z.array(
+    z.object({
+      name: z.string(),
+      formatType: z.enum(['written', 'oral', 'interview', 'language']),
+      questionCount: nullableNumber,
+      passMark: nullableNumber,
+      timeLimitMinutes: nullableNumber,
+      sourceUrl: z.string(),
+      lastVerifiedAt: nullableString,
+    }),
+  ),
+  publishedQuestions: z.number(),
+}) satisfies z.ZodMiniType<CountryFacts>;
 
 const suggestionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('start') }),

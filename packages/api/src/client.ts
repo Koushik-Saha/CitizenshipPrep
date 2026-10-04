@@ -1,10 +1,12 @@
 import type { QueuedAnswer, SyncOutcome } from '@oathly/core';
 import * as z from 'zod/mini';
 
+import type { CountryFacts } from './countries';
 import { examCountrySchema, meSchema, type ExamCountry, type Me } from './me';
 import type { OnboardingInput } from './onboarding';
 import type { CountryPack, OfflineAttempt } from './pack';
 import {
+  countryFactsSchema,
   countryPackSchema,
   dashboardSchema,
   startedSchema,
@@ -80,6 +82,14 @@ export function createOathlyApi(options: OathlyApiOptions) {
   const id = encodeURIComponent;
 
   return {
+    /** The exams Oathly covers. Public: works signed out. */
+    publicCountries: async (): Promise<CountryFacts[]> => {
+      const response = await doFetch(new URL('/api/public/countries', options.baseUrl).toString(), {
+        headers: { accept: 'application/json' },
+      });
+      if (!response.ok) throw new ApiError(`Request failed (${response.status}).`, response.status);
+      return z.array(countryFactsSchema).parse(await response.json());
+    },
     me: (): Promise<Me> => request('/api/me', meSchema),
     countries: (): Promise<ExamCountry[]> => request('/api/countries', z.array(examCountrySchema)),
     saveOnboarding: (input: OnboardingInput): Promise<Me> =>

@@ -19,6 +19,13 @@ export interface GlobeView {
   longitude: number;
 }
 
+/**
+ * The view the globe opens on: the Atlantic, with North America and Europe
+ * in sight. The static posters are rendered at this view, so anything drawn
+ * over a poster must use it too.
+ */
+export const HERO_VIEW: GlobeView = { latitude: 24, longitude: -38 };
+
 const RAD = Math.PI / 180;
 
 /**

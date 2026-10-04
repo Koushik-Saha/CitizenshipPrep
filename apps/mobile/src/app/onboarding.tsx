@@ -1,12 +1,12 @@
-import { dailyGoalOptions, onboardingSchema, type ExamCountry } from '@oathly/api';
+import { dailyGoalOptions, onboardingSchema, searchCountries } from '@oathly/api';
+import { useExamCountries, useSaveOnboarding } from '@oathly/api/hooks';
 import { endonym, isStudyLocale, studyLocales } from '@oathly/i18n';
 import { getLocales } from 'expo-localization';
 import { router } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 import { Body, Button, Choice, Field, Heading, Message, Screen, useTheme } from '@/components/ui';
-import { api } from '@/lib/auth';
 import { useSession } from '@/lib/session';
 
 function deviceLocale(): string {
@@ -22,7 +22,9 @@ export default function Onboarding() {
   const session = useSession();
   const me = session.status === 'signed-in' ? session.me : null;
 
-  const [countries, setCountries] = useState<ExamCountry[] | null>(null);
+  // The same cached queries and mutations the web app uses (packages/api).
+  const countries = useExamCountries();
+  const save = useSaveOnboarding();
   const [query, setQuery] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [examDate, setExamDate] = useState('');
@@ -31,28 +33,12 @@ export default function Onboarding() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    api
-      .countries()
-      .then(setCountries)
-      .catch((reason: unknown) =>
-        setError(reason instanceof Error ? reason.message : String(reason)),
-      );
-  }, []);
-
   const studying = useMemo(
     () => new Set(me?.studyCountries.map((country) => country.countryCode)),
     [me],
   );
-  const choices = (countries ?? []).filter((country) => !studying.has(country.isoCode));
-  const needle = query.trim().toLocaleLowerCase();
-  const visible = needle
-    ? choices.filter(
-        (country) =>
-          country.name.toLocaleLowerCase().includes(needle) ||
-          country.isoCode.toLowerCase() === needle,
-      )
-    : choices;
+  const choices = (countries.data ?? []).filter((country) => !studying.has(country.isoCode));
+  const visible = searchCountries(choices, query);
 
   async function submit() {
     const answer = {
@@ -71,7 +57,7 @@ export default function Onboarding() {
     setBusy(true);
     setError(null);
     try {
-      await api.saveOnboarding(answer);
+      await save.mutateAsync(answer);
       await session.refresh();
       router.replace('/');
     } catch (reason) {
@@ -88,7 +74,11 @@ export default function Onboarding() {
       <View style={{ gap: theme.spacing[3] }}>
         <Heading level={2}>Which exam are you preparing for?</Heading>
         <Field label="Search countries" value={query} onChangeText={setQuery} autoCorrect={false} />
-        {countries === null ? (
+        {countries.isError ? (
+          <Message tone="error">
+            We could not load the list of countries. Check your connection and try again.
+          </Message>
+        ) : countries.data === undefined ? (
           <ActivityIndicator accessibilityLabel="Loading countries" />
         ) : (
           <View accessibilityRole="radiogroup" style={{ gap: theme.spacing[2] }}>
@@ -100,6 +90,7 @@ export default function Onboarding() {
                   accessibilityRole="radio"
                   accessibilityState={{ selected }}
                   onPress={() => setCountryCode(country.isoCode)}
+                  testID={`country-${country.isoCode}`}
                   style={{
                     padding: theme.spacing[4],
                     borderWidth: selected ? 2 : 1,
@@ -173,6 +164,7 @@ export default function Onboarding() {
         onPress={() => void submit()}
         busy={busy}
         disabled={!countryCode}
+        testID="finish-onboarding"
       />
     </Screen>
   );

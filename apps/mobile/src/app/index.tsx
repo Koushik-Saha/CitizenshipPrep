@@ -31,6 +31,6 @@ export default function Index() {
       </Screen>
     );
   }
-  if (session.status === 'signed-out') return <Redirect href="/sign-in" />;
+  if (session.status === 'signed-out') return <Redirect href="/welcome" />;
   return <Redirect href={session.step === 'study' ? '/study' : '/onboarding'} />;
 }

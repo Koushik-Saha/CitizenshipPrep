@@ -6,11 +6,17 @@ function required(name: string, value: string | undefined): string {
   return value.replace(/\/$/, '');
 }
 
-/** Neon Auth's base URL: the same value as NEON_AUTH_BASE_URL on the web app. */
-export const neonAuthUrl = required(
-  'EXPO_PUBLIC_NEON_AUTH_URL',
-  process.env.EXPO_PUBLIC_NEON_AUTH_URL,
-);
-
 /** The web app's origin, which serves the API. */
 export const apiUrl = required('EXPO_PUBLIC_API_URL', process.env.EXPO_PUBLIC_API_URL);
+
+/**
+ * Development only: a test session from the web app's
+ * /api/test/sign-in?as=token, used instead of signing in. A release build
+ * ignores it, and the server only honours it on a development server.
+ */
+export const testSession = __DEV__ ? process.env.EXPO_PUBLIC_TEST_SESSION || null : null;
+
+/** Neon Auth's base URL: the same value as NEON_AUTH_BASE_URL on the web app. */
+export const neonAuthUrl = testSession
+  ? null
+  : required('EXPO_PUBLIC_NEON_AUTH_URL', process.env.EXPO_PUBLIC_NEON_AUTH_URL);

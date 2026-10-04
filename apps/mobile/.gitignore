@@ -4,3 +4,5 @@
 
 expo-env.d.ts
 # @end expo-cli
+# Skia's WebAssembly runtime for the browser build: copied by `pnpm web:setup`
+public/canvaskit.wasm
