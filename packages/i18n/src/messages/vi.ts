@@ -1,0 +1,437 @@
+import type { Messages } from './en';
+
+export const vi: Messages = {
+  common: {
+    signIn: 'Đăng nhập',
+    signOut: 'Đăng xuất',
+    countries: 'Quốc gia',
+    allCountries: 'Tất cả quốc gia',
+    pricing: 'Giá',
+    faq: 'Câu hỏi thường gặp',
+    backToStudy: 'Quay lại học',
+    tryAgain: 'Thử lại',
+    loading: 'Đang tải',
+    language: 'Ngôn ngữ',
+    mainNav: 'Chính',
+    footerNav: 'Chân trang',
+    breadcrumb: 'Đường dẫn',
+    comingSoon: 'Sắp ra mắt',
+    notAffiliated:
+      'Oathly là ứng dụng học tập độc lập. Ứng dụng không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ.',
+  },
+
+  exam: {
+    factSeparator: ', ',
+    questionCount: '{count, plural, other {# câu hỏi}}',
+    toPass: 'cần đúng {count} câu để đạt',
+    minutes: '{count, plural, other {# phút}}',
+    noTimeLimit: 'không giới hạn thời gian',
+    takenIn: 'Thi bằng {languages}',
+    officialSource: 'Nguồn chính thức',
+    checkedOn: 'đã kiểm tra ngày {date}',
+    detailsBeingChecked: 'thông tin đang được kiểm tra',
+    checkedQuestions: '{count, plural, other {# câu hỏi luyện tập đã kiểm tra}}',
+    questionsBeingChecked: 'Câu hỏi luyện tập đang được kiểm tra',
+    studyFor: 'Học cho kỳ thi {country}',
+    countdownNone: 'Chưa đặt ngày thi',
+    countdownPassed: 'Ngày thi đã qua',
+    countdownToday: 'Thi hôm nay',
+    countdownDays: '{count, plural, =1 {Thi vào ngày mai} other {Còn # ngày nữa là thi}}',
+  },
+
+  landing: {
+    metaTitle: 'Oathly: luyện thi quốc tịch cho mọi quốc gia',
+    metaDescription:
+      'Luyện thi quốc tịch với câu hỏi đã được đối chiếu với nguồn chính thức, đáp án được giải thích dễ hiểu và ước tính mức độ sẵn sàng của bạn. Độc lập: không liên kết với bất kỳ chính phủ nào.',
+    heroTitle: 'Bước vào kỳ thi quốc tịch với sự sẵn sàng.',
+    heroBody:
+      'Câu hỏi luyện tập được soạn từ tài liệu ôn thi chính thức của từng quốc gia, đáp án được giải thích dễ hiểu và ước tính trung thực về mức độ sẵn sàng của bạn.',
+    startFree: 'Bắt đầu học miễn phí',
+    seeCountries: '{count, plural, =1 {Xem các quốc gia} other {Xem tất cả # quốc gia}}',
+    searchLabel: 'Bạn sẽ thi quốc tịch của nước nào?',
+    searchNoMatch:
+      'Chưa có kết quả cho “{query}”. Chúng tôi thêm quốc gia sau khi đã đối chiếu kỳ thi với nguồn chính thức.',
+    searchStatusNone: 'Không có quốc gia nào phù hợp.',
+    searchStatus: '{count, plural, other {Có # quốc gia phù hợp. Nhấn Tab để chuyển đến.}}',
+
+    howTitle: 'Cách hoạt động',
+    step1Title: 'Chọn quốc gia và kỳ thi',
+    step1Body: 'Cho chúng tôi biết bạn thi kỳ thi nào, khi nào và muốn học bằng ngôn ngữ nào.',
+    step2Title: 'Luyện một ít mỗi ngày',
+    step2Body:
+      'Mỗi buổi học kết hợp những chủ đề bạn thấy khó nhất, các câu hỏi đến hạn ôn lại và câu hỏi mới. Câu trả lời sai đi kèm lời giải thích và đoạn trích từ tài liệu chính thức.',
+    step3Title: 'Thi thử khi gần đến ngày thi',
+    step3Body:
+      'Bài thi thử theo đúng hình thức và điểm đạt của kỳ thi thật. Điểm sẵn sàng cho biết bạn đã gần đến đâu và nên học gì tiếp theo.',
+
+    countriesTitle: 'Quốc gia và kỳ thi',
+    countriesIntro:
+      'Chúng tôi thêm quốc gia sau khi hình thức thi và tài liệu ôn tập đã được đối chiếu với nguồn chính thức. Sẽ có thêm nhiều quốc gia nữa.',
+    countriesEmpty: 'Danh sách quốc gia đang được cập nhật. Vui lòng quay lại sau ít phút.',
+
+    featuresTitle: 'Dành cho đúng kỳ thi bạn sẽ dự',
+    featuresIntro:
+      'Hầu hết ứng dụng thi quốc tịch chỉ dành cho một quốc gia với danh sách câu hỏi cố định. Oathly được xây dựng dựa trên nguồn chính thức và cách con người thực sự học.',
+    feature1Title: 'Kỳ thi của mọi quốc gia trong một ứng dụng',
+    feature1Body:
+      'Bạn chuẩn bị cho kỳ thi của nhiều nước? Học cho từng kỳ thi trong cùng một tài khoản, tiến độ được lưu riêng.',
+    feature2Title: 'Đối chiếu với nguồn chính thức',
+    feature2Body:
+      'Mỗi câu hỏi đều dẫn đến trang tài liệu chính thức mà nó dựa vào và cho biết lần kiểm tra gần nhất. Mỗi câu đều được một người duyệt trước khi bạn thấy.',
+    feature3Title: 'Đáp án có giải thích',
+    feature3Body:
+      'Hỏi vì sao một đáp án đúng và nhận lời giải thích ngắn gọn dựa trên tài liệu chính thức, hoặc hỏi thêm gia sư.',
+    feature4Title: 'Luyện tập thích ứng với bạn',
+    feature4Body:
+      'Các buổi học tập trung vào chủ đề bạn yếu nhất và đưa câu hỏi trở lại ngay trước khi bạn quên.',
+    feature5Title: 'Điểm sẵn sàng đáng tin cậy',
+    feature5Body:
+      'Một ước tính được tính trọng số giống kỳ thi thật và sẽ giảm nếu bạn ngừng học. Nó cho bạn biết cần cải thiện gì, không chỉ là một con số.',
+    feature6Title: 'Học bằng ngôn ngữ của bạn',
+    feature6Body:
+      'Chọn trong {count} ngôn ngữ. Câu hỏi hiển thị bằng ngôn ngữ của kỳ thi khi chưa có bản dịch đã kiểm tra.',
+    feature7Title: 'Nhóm học tập',
+    feature7Body: 'Ôn thi cùng những người dự cùng kỳ thi.',
+    feature8Title: 'Dành cho trường học và tổ chức',
+    feature8Body: 'Các lớp học và dịch vụ hỗ trợ định cư sẽ có thể theo dõi tiến độ của học viên.',
+
+    pricingTitle: 'Giá',
+    pricingIntro:
+      'Học miễn phí. Gói trả phí sẽ bổ sung thêm trợ giúp từ AI cho những ai dùng nhiều.',
+    planFree: 'Miễn phí',
+    planFreeNote: 'Không cần thẻ.',
+    planFreeItem1: 'Luyện tập, thẻ ghi nhớ và thi thử không giới hạn',
+    planFreeItem2: 'Điểm sẵn sàng và gợi ý học tập',
+    planAiAllowance: '{explanations} lời giải thích và {messages} tin nhắn cho gia sư mỗi ngày',
+    planFreeItem4: 'Mọi quốc gia và ngôn ngữ học',
+    planPremium: 'Cao cấp',
+    planPremiumNote: 'Giá sẽ được công bố sau.',
+    planPremiumItem1: 'Mọi thứ trong gói Miễn phí',
+    planGroups: 'Trường học, thư viện và dịch vụ hỗ trợ định cư: gói cho nhóm sắp ra mắt.',
+
+    storiesTitle: 'Học viên nói gì',
+    storiesBody:
+      'Oathly còn mới nên chưa có đánh giá nào. Khi những người học ở đây đã dự thi, lời của họ sẽ xuất hiện tại đây. Chỉ những đánh giá thật, với sự cho phép của họ.',
+
+    faqTitle: 'Câu hỏi thường gặp',
+    faq1Question: 'Oathly có phải là ứng dụng chính thức của chính phủ không?',
+    faq1Answer:
+      'Không. Oathly hoạt động độc lập, không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ. Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức của chính phủ nước bạn.',
+    faq2Question: 'Đây có phải là câu hỏi thi thật không?',
+    faq2Answer:
+      'Một số nước công bố đúng những câu hỏi họ dùng; những nước khác công bố tài liệu ôn thi và giữ kín câu hỏi. Dù thế nào, mỗi câu hỏi của Oathly đều được soạn từ tài liệu chính thức, dẫn đến trang nguồn và được một người kiểm tra trước khi bạn thấy.',
+    faq3Question: 'Điểm sẵn sàng chính xác đến mức nào?',
+    faq3Answer:
+      'Đó là ước tính, không phải dự đoán kết quả của bạn. Điểm dựa trên mức độ bạn nắm từng chủ đề, tính trọng số giống kỳ thi của bạn, và các bài thi thử gần đây. Điểm giảm nếu bạn ngừng học, vì chúng ta sẽ quên.',
+    faq4Question: 'Tôi có thể học bằng ngôn ngữ của mình không?',
+    faq4Answer:
+      'Có. Bạn có thể chọn trong {count} ngôn ngữ. Bản dịch được kiểm tra trước khi hiển thị; cho đến lúc đó bạn sẽ thấy câu hỏi bằng ngôn ngữ của kỳ thi. Kỳ thi thật diễn ra bằng ngôn ngữ do nước bạn quy định.',
+    faq5Question: 'Chi phí thế nào?',
+    faq5Answer:
+      'Luyện tập, thẻ ghi nhớ, thi thử và điểm sẵn sàng đều miễn phí. Gói trả phí với nhiều lời giải thích từ AI và tin nhắn cho gia sư hơn sắp ra mắt; giá chưa được ấn định.',
+    faq6Question: 'Nước của tôi chưa có trong danh sách. Các bạn có thêm không?',
+    faq6Answer:
+      'Chúng tôi đang hướng tới mọi quốc gia có thi quốc tịch. Mỗi quốc gia được thêm sau khi hình thức thi và tài liệu ôn tập đã được đối chiếu với nguồn chính thức.',
+  },
+
+  countries: {
+    indexMetaTitle: 'Thi quốc tịch theo quốc gia | Oathly',
+    indexMetaDescription:
+      'Các kỳ thi quốc tịch mà Oathly giúp bạn chuẩn bị: hình thức, điểm đạt, ngôn ngữ và chủ đề, tất cả đều được đối chiếu với nguồn chính thức.',
+    countryTitle: 'Thi quốc tịch {country}',
+    countryMetaTitle: 'Thi quốc tịch {country}: hình thức, chủ đề và luyện tập | Oathly',
+    countryMetaDescription:
+      'Kỳ thi quốc tịch {country} gồm những gì, bao quát nội dung nào, cùng câu hỏi luyện tập đã được đối chiếu với tài liệu chính thức.',
+    countryLeadWithQuestions:
+      '{count, plural, other {# câu hỏi luyện tập, mỗi câu đều được đối chiếu với tài liệu chính thức.}}',
+    countryLeadNoQuestions: 'Câu hỏi luyện tập đang được đối chiếu với tài liệu chính thức.',
+    studyForTest: 'Học cho kỳ thi {country}',
+    theTest: 'Kỳ thi',
+    formatBeingChecked: 'Hình thức thi đang được kiểm tra.',
+    whatItCovers: 'Nội dung thi',
+    topicBeingChecked: 'Đang kiểm tra',
+    topicsBeingAdded: 'Các chủ đề đang được bổ sung.',
+    bookingNote:
+      'Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức được dẫn ở trên. Oathly là ứng dụng học tập độc lập và không liên kết với bất kỳ chính phủ nào.',
+    topicMetaTitle: '{topic}: luyện thi quốc tịch {country} | Oathly',
+    topicMetaDescription:
+      'Câu hỏi luyện tập về {topic} cho kỳ thi quốc tịch {country}, mỗi câu đều được đối chiếu với tài liệu chính thức.',
+    topicLead: 'Câu hỏi luyện tập cho kỳ thi quốc tịch {country}.',
+    topicEmpty:
+      'Câu hỏi của chủ đề này đang được đối chiếu với tài liệu chính thức. Chúng sẽ xuất hiện ở đây sau khi người duyệt chấp thuận.',
+    showAnswer: 'Hiện đáp án',
+    answerLabel: 'Đáp án:',
+    fromGuide: 'Trích tài liệu chính thức: “{quote}”',
+    source: 'Nguồn',
+    moreInApp:
+      '{count, plural, other {Còn # câu hỏi về {topic}, kèm lời giải thích và ôn tập ngắt quãng, đang chờ bạn trong Oathly.}}',
+    practiseInApp: 'Luyện tập với lời giải thích, ôn tập ngắt quãng và thi thử trong Oathly.',
+    otherTopics: 'Chủ đề khác',
+  },
+
+  auth: {
+    metaTitle: 'Đăng nhập | Oathly',
+    title: 'Đăng nhập vào Oathly',
+    intro:
+      'Bạn mới đến? Đăng nhập sẽ tạo tài khoản cho bạn. Tiến độ được lưu vào tài khoản, nên bạn có thể tiếp tục trên điện thoại hoặc máy tính khác.',
+    notConfigured: 'Tính năng đăng nhập chưa được thiết lập trên máy chủ này.',
+    email: 'Email',
+    sendLink: 'Gửi liên kết đăng nhập qua email',
+    or: 'hoặc',
+    google: 'Tiếp tục với Google',
+    sentTitle: 'Hãy kiểm tra email',
+    sentBody:
+      'Chúng tôi đã gửi liên kết đăng nhập đến {email}. Liên kết chỉ dùng được một lần và sẽ sớm hết hạn. Bạn có thể đóng thẻ này.',
+    differentEmail: 'Dùng email khác',
+    sendFailed: 'Chúng tôi không gửi được liên kết. Hãy thử lại.',
+    googleFailed: 'Đăng nhập bằng Google không thành công. Hãy thử lại.',
+    introMobile:
+      'Bạn mới đến? Đăng nhập sẽ tạo tài khoản cho bạn. Hãy dùng cùng email như trên web để tiến độ đi theo bạn.',
+    emailRequired: 'Nhập địa chỉ email của bạn.',
+    sendCode: 'Gửi mã qua email',
+    codeSent: 'Chúng tôi đã gửi mã gồm sáu chữ số đến {email}. Mã sẽ sớm hết hạn.',
+    code: 'Mã',
+    verifyCode: 'Đăng nhập',
+    codeFailed: 'Mã đó không đúng. Hãy kiểm tra và thử lại.',
+  },
+
+  onboarding: {
+    metaTitle: 'Thiết lập việc học | Oathly',
+    title: 'Thiết lập việc học',
+    titleAdd: 'Thêm kỳ thi khác',
+    intro: 'Bốn câu hỏi là bạn có thể bắt đầu. Bạn có thể thay đổi mọi thứ sau này.',
+    introAdd:
+      'Bạn có thể chuẩn bị cho nhiều kỳ thi quốc tịch cùng lúc. Tiến độ được lưu riêng cho từng kỳ thi.',
+    allCovered: 'Bạn đã đang học cho mọi kỳ thi mà Oathly hỗ trợ.',
+    whichExam: 'Bạn đang chuẩn bị cho kỳ thi nào?',
+    searchCountries: 'Tìm quốc gia',
+    countryCount: '{count, plural, other {# quốc gia}}',
+    countryCountFiltered: '{shown} trong {total} quốc gia',
+    inLanguages: 'bằng {languages}',
+    noCountryMatch:
+      'Không có quốc gia nào khớp với “{query}”. Oathly bổ sung quốc gia khi đã xác minh kỳ thi.',
+    countriesFailed:
+      'Chúng tôi không tải được danh sách quốc gia. Hãy kiểm tra kết nối và thử lại.',
+    examDate: 'Khi nào bạn thi?',
+    optional: '(không bắt buộc)',
+    examDateHint: 'Chúng tôi dùng ngày này để sắp xếp nhịp độ học cho bạn.',
+    examDateHintMobile:
+      'Năm-tháng-ngày, ví dụ 2027-03-15. Chúng tôi dùng ngày này để sắp xếp nhịp độ học cho bạn.',
+    studyLanguage: 'Bạn muốn học bằng ngôn ngữ nào?',
+    studyLanguageHint:
+      'Câu hỏi hiển thị bằng ngôn ngữ này khi có bản dịch đã kiểm tra, nếu không sẽ hiển thị bằng ngôn ngữ của kỳ thi.',
+    dailyGoal: 'Mỗi ngày bạn có thể học bao lâu?',
+    minutesShort: '{count} phút',
+    makePrimary: 'Mở ứng dụng vào kỳ thi này',
+    start: 'Bắt đầu học',
+    add: 'Thêm kỳ thi này',
+    checkAnswers: 'Hãy kiểm tra lại các câu trả lời.',
+  },
+
+  dashboard: {
+    metaTitle: 'Học | Oathly',
+    greeting: 'Chào {name}',
+    title: 'Việc học của bạn',
+    todaysGoal: 'Mục tiêu hôm nay',
+    goalProgress: 'trên {goal} phút',
+    goalProgressToday: 'trên {goal} phút hôm nay',
+    streak: 'Chuỗi ngày học',
+    streakDays: '{count, plural, other {ngày liên tiếp}}',
+    opensFirst: 'Mở đầu tiên',
+    questionsReady: '{count, plural, other {# câu hỏi sẵn sàng để học.}}',
+    questionsBeingChecked:
+      'Câu hỏi cho {country} vẫn đang được đối chiếu với tài liệu chính thức. Chúng sẽ xuất hiện ở đây sau khi người duyệt xác minh.',
+    practise: 'Luyện tập',
+    mockExam: 'Thi thử',
+    askTutor: 'Hỏi gia sư về {country}',
+    stopStudying: 'Ngừng học cho kỳ thi này',
+    addExam: 'Thêm kỳ thi khác',
+    loadFailed: 'Chúng tôi không tải được kế hoạch học của bạn.',
+    loadingPlan: 'Đang tải kế hoạch học của bạn',
+  },
+
+  readiness: {
+    title: 'Mức độ sẵn sàng ước tính',
+    earlyEstimate: 'Ước tính ban đầu',
+    earlyTitle: 'Ước tính ban đầu về mức độ sẵn sàng',
+    meter: '{score}%, ước tính',
+    meterEarly: '{score}%, ước tính, ước tính ban đầu',
+    basedOn:
+      '{count, plural, other {Dựa trên # câu hỏi cho đến nay. Con số sẽ ổn định dần khi bạn luyện thêm.}}',
+    disclaimer:
+      'Đây là ước tính từ việc luyện tập và các bài thi thử của bạn, tính trọng số giống kỳ thi thật. Nó không bảo đảm kết quả của bạn và sẽ giảm nếu bạn ngừng ôn tập.',
+    topicKnowledge: 'Kiến thức theo chủ đề',
+    recentMocks: 'Các bài thi thử gần đây',
+    noMocks: 'Chưa có',
+    mockAverage: 'đúng {percent}%',
+    studyNext: 'Nên học gì tiếp theo',
+    nothingStandsOut: 'Không có gì nổi bật. Hãy duy trì việc luyện tập hằng ngày.',
+    suggestStart: 'Bắt đầu luyện tập',
+    suggestStartDetail: 'Bộ câu hỏi đầu tiên chọn lẫn câu hỏi từ mọi chủ đề.',
+    suggestReview: '{count, plural, other {Ôn lại # câu hỏi bạn sắp quên}}',
+    suggestReviewDetail: 'Trả lời ngay lúc đến hạn là cách để nhớ lâu.',
+    suggestTopicDetail: 'Chiếm khoảng {share}% bài thi, và bạn nắm vững {mastery}% trong số đó.',
+    suggestMock: 'Làm bài thi thử',
+    suggestMockDetail: '{exam}, tính giờ như kỳ thi thật.',
+    start: 'Bắt đầu',
+    byTopic: 'Theo chủ đề',
+    shareOfExam: '({share}% bài thi)',
+  },
+
+  start: {
+    questionsFrom: 'Câu hỏi từ',
+    adaptive: 'Dành cho tôi: chủ đề yếu, ôn lại và câu mới',
+    adaptiveDue: 'Dành cho tôi: chủ đề yếu, ôn lại và câu mới ({count} câu đến hạn)',
+    random: 'Mọi chủ đề, ngẫu nhiên',
+    howMany: 'Số câu',
+    flashcards: 'Thẻ ghi nhớ',
+    startMock: 'Bắt đầu thi thử',
+    practiceIntro: 'Mười câu hỏi được chọn cho bạn: chủ đề yếu, ôn lại và câu mới.',
+    practiceIntroDue:
+      'Mười câu hỏi được chọn cho bạn: chủ đề yếu, ôn lại ({count} câu đến hạn) và câu mới.',
+    oneTopic: 'Luyện một chủ đề',
+    hideTopics: 'Ẩn chủ đề',
+    topicWithMastery: '{topic} ({mastery}%)',
+  },
+
+  session: {
+    metaTitle: 'Buổi học | Oathly',
+    practice: 'Luyện tập',
+    flashcards: 'Thẻ ghi nhớ',
+    mockExam: 'Thi thử',
+    finishedTitle: 'Buổi học này đã kết thúc',
+    finishedBody: 'Hãy bắt đầu buổi mới từ trang học của bạn.',
+    timeLeftMinutes: '{count, plural, other {Thời gian còn lại: # phút}}',
+    timeLeft: 'Còn {time}',
+    questionOf: 'Câu {current} trên {total}',
+    progress: 'Tiến độ',
+    chooseOne: 'Chọn một đáp án',
+    chooseAll: 'Chọn tất cả đáp án đúng',
+    correct: 'Đúng',
+    notQuite: 'Chưa đúng',
+    check: 'Kiểm tra',
+    next: 'Tiếp',
+    submitExam: 'Nộp bài',
+    nextQuestion: 'Câu tiếp theo',
+    seeResults: 'Xem kết quả',
+    keysChoose: 'Phím: 1–{count} để chọn, Enter để xác nhận',
+    keysContinue: 'Phím: Enter để tiếp tục',
+    answer: 'Đáp án',
+    answerInHead: 'Hãy trả lời thầm trong đầu, rồi lật thẻ.',
+    didNotKnow: 'Tôi chưa biết',
+    knewIt: 'Tôi đã biết',
+    showAnswer: 'Hiện đáp án',
+    keysRate: 'Phím: 1 hoặc 2',
+    keysTurn: 'Phím: Enter hoặc phím cách để lật',
+    stillLearning: 'Vẫn đang học',
+    swipeHint: 'Vuốt thẻ sang phải nếu bạn đã biết, sang trái nếu bạn vẫn đang học.',
+    tapToShow: 'Chạm để hiện đáp án',
+    leave: 'Thoát',
+    yourAnswer: 'Câu trả lời của bạn',
+    correctAnswer: 'Đáp án đúng',
+    fromGuide: 'Trích tài liệu chính thức: “{quote}”',
+    openFailedTitle: 'Chúng tôi không mở được buổi học này',
+    openFailedBody:
+      'Có thể buổi học được bắt đầu trên thiết bị khác khi điện thoại này đang ngoại tuyến.',
+    loadingSession: 'Đang tải buổi học của bạn',
+    showInExamLanguage: 'Hiển thị bằng ngôn ngữ của kỳ thi ({language})',
+    showInStudyLanguage: 'Hiển thị bằng ngôn ngữ học của tôi ({language})',
+    languageNote: 'Kỳ thi thật diễn ra bằng {language}.',
+  },
+
+  results: {
+    passed: 'Bạn đã đạt',
+    notPassed: 'Lần này chưa đạt',
+    complete: 'Hoàn thành buổi học',
+    stoppedPassed: 'Bạn đã đạt điểm chuẩn, nên giám khảo sẽ dừng ở đây.',
+    stoppedFailed: 'Không còn khả năng đạt, nên giám khảo sẽ dừng ở đây.',
+    timeUp: 'Hết giờ.',
+    timedOut: 'Đã hết giờ trước những câu trả lời cuối.',
+    correctOf: 'câu đúng trên {total}.',
+    knownOf: 'thẻ đã biết trên {total}.',
+    neededToPass: 'Cần đúng {count} câu để đạt.',
+    sectionAllCorrect:
+      'Mọi câu hỏi trong phần “{section}” đều phải đúng; bạn đúng {correct} trên {total}.',
+    byTopic: 'Theo chủ đề',
+    topic: 'Chủ đề',
+    correctColumn: 'Đúng',
+    scoreOf: '{correct} trên {total}',
+    nothingToReview: 'Không có gì cần ôn lại',
+    reviewCards: 'Các thẻ cần xem lại',
+    reviewWrong: 'Xem lại các câu trả lời sai',
+    youAnswered: 'Bạn đã trả lời: {answer}',
+    nothing: 'không có',
+    correctAnswer: 'Đáp án đúng: {answer}',
+    source: 'nguồn',
+  },
+
+  explain: {
+    more: 'Giải thích thêm',
+    writing: 'Đang viết lời giải thích…',
+    aiNote:
+      'Do AI viết từ đoạn trích của tài liệu chính thức. Chưa được người duyệt kiểm tra và có thể có sai sót.',
+  },
+
+  tutor: {
+    metaTitle: 'Hỏi gia sư | Oathly',
+    title: 'Hỏi gia sư',
+    intro:
+      'Câu hỏi về kỳ thi quốc tịch {country} và tài liệu ôn thi. Gia sư chỉ trả lời dựa trên tài liệu chính thức và là AI: hãy đối chiếu mọi điều quan trọng với tài liệu. Gia sư không thể tư vấn về hồ sơ của riêng bạn.',
+    you: 'Bạn:',
+    tutor: 'Gia sư:',
+    questionLabel: 'Câu hỏi của bạn về kỳ thi {country}',
+    ask: 'Hỏi',
+    keys: 'Enter để gửi, Shift+Enter để xuống dòng.',
+    remaining: '{count, plural, other {Hôm nay còn # câu hỏi.}}',
+    opening: 'Đang mở gia sư',
+  },
+
+  offline: {
+    title: 'Học ngoại tuyến',
+    saved:
+      '{count, plural, other {Đã lưu # câu hỏi trên điện thoại này, tính đến {date}. Bạn có thể luyện tập và thi thử khi không có kết nối.}}',
+    notSaved:
+      'Lưu quốc gia này vào điện thoại để luyện tập và thi thử khi không có kết nối. Câu trả lời của bạn sẽ được gửi khi bạn trực tuyến trở lại.',
+    save: 'Lưu để dùng ngoại tuyến',
+    update: 'Cập nhật câu hỏi đã lưu',
+    bannerOfflineWaiting:
+      '{count, plural, other {Bạn đang ngoại tuyến. # mục đã lưu sẽ được gửi khi bạn trực tuyến trở lại.}}',
+    bannerOffline: 'Bạn đang ngoại tuyến. Các quốc gia đã lưu vẫn dùng được.',
+    bannerSending: '{count, plural, other {Đang gửi # mục đã lưu…}}',
+    bannerWaiting: '{count, plural, other {# mục đã lưu đang chờ gửi.}}',
+    progressLater: 'Tiến độ của bạn sẽ hiển thị ở đây khi bạn trực tuyến trở lại.',
+    noConnection:
+      'Không có kết nối. Hãy tải quốc gia này khi đang trực tuyến để học khi không có kết nối.',
+  },
+
+  profile: {
+    title: 'Hồ sơ của bạn',
+    tabStudy: 'Học',
+    tabProfile: 'Hồ sơ',
+    progress: 'Tiến độ',
+    sessions: 'Buổi học',
+    answered: 'Đã trả lời',
+    correct: 'Đúng',
+    dailyGoal: 'Mục tiêu hằng ngày: {count} phút.',
+    yourExams: 'Kỳ thi của bạn',
+    studyingIn: 'Đang học bằng {language}.',
+    offline: 'Ngoại tuyến',
+    noPacks:
+      'Chưa có quốc gia nào được lưu trên điện thoại này. Hãy lưu một quốc gia từ thẻ Học để luyện tập khi không có kết nối.',
+    packLine: '{count, plural, other {{country}: # câu hỏi, lưu ngày {date}.}}',
+    removePack: 'Xóa khỏi điện thoại này',
+    allSaved: 'Mọi câu trả lời của bạn đã được lưu vào tài khoản.',
+    waiting: '{count, plural, other {# mục đã lưu đang chờ gửi.}}',
+    lastTry: 'Lần thử gần nhất: {problem}',
+    sendNow: 'Gửi ngay',
+    appLanguage: 'Ngôn ngữ ứng dụng',
+    appLanguageHint:
+      'Ngôn ngữ của các nút và menu. Ngôn ngữ bạn dùng để học câu hỏi được đặt riêng cho từng kỳ thi.',
+  },
+
+  welcome: {
+    countriesSoFar: 'Hiện có {count} quốc gia.',
+    getStarted: 'Bắt đầu',
+    unreachable: 'Chúng tôi không kết nối được với Oathly. Hãy kiểm tra kết nối và thử lại.',
+  },
+};

@@ -4,10 +4,12 @@ import { useState } from 'react';
 
 import { Body, Button, Field, Heading, Message, Screen } from '@/components/ui';
 import { sendSignInCode, verifySignInCode } from '@/lib/auth';
+import { useT } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
 
 export default function SignIn() {
   const session = useSession();
+  const t = useT();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [step, setStep] = useState<'email' | 'code'>('email');
@@ -16,7 +18,7 @@ export default function SignIn() {
 
   async function sendCode() {
     if (!looksLikeEmail(email)) {
-      setError('Enter your email address.');
+      setError(t('auth.emailRequired'));
       return;
     }
     setBusy(true);
@@ -43,16 +45,13 @@ export default function SignIn() {
 
   return (
     <Screen>
-      <Heading>Sign in to Oathly</Heading>
+      <Heading>{t('auth.title')}</Heading>
       {step === 'email' ? (
         <>
-          <Body muted>
-            New here? Signing in creates your account. Use the same email as on the web and your
-            progress follows you.
-          </Body>
+          <Body muted>{t('auth.introMobile')}</Body>
           {error && <Message tone="error">{error}</Message>}
           <Field
-            label="Email"
+            label={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
@@ -62,14 +61,14 @@ export default function SignIn() {
             returnKeyType="send"
             onSubmitEditing={() => void sendCode()}
           />
-          <Button label="Email me a code" onPress={() => void sendCode()} busy={busy} />
+          <Button label={t('auth.sendCode')} onPress={() => void sendCode()} busy={busy} />
         </>
       ) : (
         <>
-          <Body muted>We sent a 6-digit code to {email.trim()}. It expires in a few minutes.</Body>
+          <Body muted>{t('auth.codeSent', { email: email.trim() })}</Body>
           {error && <Message tone="error">{error}</Message>}
           <Field
-            label="Code"
+            label={t('auth.code')}
             value={code}
             onChangeText={(value) => setCode(normalizeCode(value))}
             keyboardType="number-pad"
@@ -80,13 +79,13 @@ export default function SignIn() {
             onSubmitEditing={() => void verify()}
           />
           <Button
-            label="Sign in"
+            label={t('auth.verifyCode')}
             onPress={() => void verify()}
             busy={busy}
             disabled={code.length !== 6}
           />
           <Button
-            label="Use a different email"
+            label={t('auth.differentEmail')}
             variant="secondary"
             onPress={() => {
               setStep('email');
@@ -96,9 +95,7 @@ export default function SignIn() {
           />
         </>
       )}
-      <Body muted>
-        Oathly is an independent study app. It is not affiliated with any government.
-      </Body>
+      <Body muted>{t('common.notAffiliated')}</Body>
     </Screen>
   );
 }

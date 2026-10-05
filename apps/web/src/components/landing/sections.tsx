@@ -3,12 +3,18 @@
 import {
   countrySlug,
   describeExam,
-  examLanguageList,
+  localCountryName,
   type CountryFacts,
   type ExamFacts,
 } from '@oathly/api/countries';
 import { aiLimits } from '@oathly/core';
-import { studyLocales } from '@oathly/i18n';
+import {
+  languageList,
+  studyLocales,
+  type MessageKey,
+  type Translator,
+  localizePath,
+} from '@oathly/i18n';
 import Link from 'next/link';
 
 import { Badge, buttonClass, focusRing } from '@/components/ui';
@@ -43,23 +49,14 @@ function Section({
 }
 
 const steps = [
-  {
-    title: 'Choose your country and exam',
-    body: 'Tell us which test you are taking, when, and which language you would like to study in.',
-  },
-  {
-    title: 'Practise a little each day',
-    body: 'Each session mixes the topics you find hardest, questions due for review, and new ones. Wrong answers come with an explanation and the passage from the official guide.',
-  },
-  {
-    title: 'Sit mock exams when you are close',
-    body: 'Mock exams follow the real format and pass mark. Your readiness score shows how close you are, and what to study next.',
-  },
-];
+  { title: 'landing.step1Title', body: 'landing.step1Body' },
+  { title: 'landing.step2Title', body: 'landing.step2Body' },
+  { title: 'landing.step3Title', body: 'landing.step3Body' },
+] as const satisfies { title: MessageKey; body: MessageKey }[];
 
-export function HowItWorks() {
+export function HowItWorks({ t }: { t: Translator }) {
   return (
-    <Section id="how-it-works" title="How it works">
+    <Section id="how-it-works" title={t('landing.howTitle')}>
       <ol className="grid gap-10 sm:grid-cols-3 sm:gap-8">
         {steps.map((step, i) => (
           <li key={step.title}>
@@ -69,8 +66,8 @@ export function HowItWorks() {
             >
               {i + 1}
             </span>
-            <h3 className="font-display mt-3 text-xl font-medium">{step.title}</h3>
-            <p className="text-fg-muted mt-2">{step.body}</p>
+            <h3 className="font-display mt-3 text-xl font-medium">{t(step.title)}</h3>
+            <p className="text-fg-muted mt-2">{t(step.body)}</p>
           </li>
         ))}
       </ol>
@@ -78,16 +75,15 @@ export function HowItWorks() {
   );
 }
 
-const dateFormat = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' });
-
 /** One exam's numbers, its official source and whether they have been checked. */
-export function ExamFactsList({ exams }: { exams: ExamFacts[] }) {
+export function ExamFactsList({ exams, t }: { exams: ExamFacts[]; t: Translator }) {
+  const dateFormat = new Intl.DateTimeFormat(t.locale, { dateStyle: 'medium', timeZone: 'UTC' });
   return (
     <ul className="space-y-3">
       {exams.map((exam) => (
         <li key={exam.name}>
           <p className="font-medium">{exam.name}</p>
-          {describeExam(exam) && <p className="text-fg-muted">{describeExam(exam)}</p>}
+          {describeExam(exam, t) && <p className="text-fg-muted">{describeExam(exam, t)}</p>}
           <p className="text-fg-subtle text-sm">
             <a
               href={exam.sourceUrl}
@@ -95,11 +91,12 @@ export function ExamFactsList({ exams }: { exams: ExamFacts[] }) {
               rel="noopener noreferrer"
               className={`${focusRing} rounded-xs underline underline-offset-2`}
             >
-              Official source
+              {t('exam.officialSource')}
             </a>
+            {t('exam.factSeparator')}
             {exam.lastVerifiedAt
-              ? `, checked ${dateFormat.format(new Date(exam.lastVerifiedAt))}`
-              : ', details being checked'}
+              ? t('exam.checkedOn', { date: dateFormat.format(new Date(exam.lastVerifiedAt)) })
+              : t('exam.detailsBeingChecked')}
           </p>
         </li>
       ))}
@@ -110,13 +107,15 @@ export function ExamFactsList({ exams }: { exams: ExamFacts[] }) {
 /** The covered countries as a grid; each name links to the country's page. */
 export function CountryCards({
   countries,
+  t,
   headingLevel: Heading = 'h3',
 }: {
   countries: CountryFacts[];
+  t: Translator;
   headingLevel?: 'h2' | 'h3';
 }) {
   if (countries.length === 0) {
-    return <p className="text-fg-muted">The country list is being updated. Check back shortly.</p>;
+    return <p className="text-fg-muted">{t('landing.countriesEmpty')}</p>;
   }
   return (
     <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -125,30 +124,30 @@ export function CountryCards({
           <Heading className="font-display flex items-center gap-2.5 text-xl font-medium">
             <span className="bg-accent size-2.5 shrink-0 rounded-full" aria-hidden="true" />
             <Link
-              href={`/countries/${countrySlug(country.isoCode)}`}
+              href={localizePath(t.locale, `/countries/${countrySlug(country.isoCode)}`)}
               className={`${focusRing} rounded-xs underline-offset-4 hover:underline`}
             >
-              {country.name}
+              {localCountryName(country, t)}
             </Link>
           </Heading>
           <p className="text-fg-muted mt-1 text-sm">
-            Taken in {examLanguageList(country.examLanguages)}
+            {t('exam.takenIn', { languages: languageList(country.examLanguages, t.locale) })}
           </p>
           <div className="mt-4">
-            <ExamFactsList exams={country.exams} />
+            <ExamFactsList exams={country.exams} t={t} />
           </div>
           <p className="mt-4 text-sm">
             {country.publishedQuestions > 0 ? (
-              `${country.publishedQuestions} checked practice questions`
+              t('exam.checkedQuestions', { count: country.publishedQuestions })
             ) : (
-              <span className="text-fg-muted">Practice questions are being checked</span>
+              <span className="text-fg-muted">{t('exam.questionsBeingChecked')}</span>
             )}
           </p>
           <Link
-            href={`/sign-in?country=${country.isoCode}`}
+            href={localizePath(t.locale, `/sign-in?country=${country.isoCode}`)}
             className={`${focusRing} text-primary-fg mt-3 inline-block rounded-xs font-medium underline underline-offset-4`}
           >
-            Study for {country.name}
+            {t('exam.studyFor', { country: localCountryName(country, t) })}
           </Link>
         </li>
       ))}
@@ -156,71 +155,43 @@ export function CountryCards({
   );
 }
 
-export function CountryList({ countries }: { countries: CountryFacts[] }) {
+export function CountryList({ countries, t }: { countries: CountryFacts[]; t: Translator }) {
   return (
     <Section
       id="countries"
-      title="Countries and exams"
-      intro="We add a country once its exam format and study material have been checked against official sources. More are on the way."
+      title={t('landing.countriesTitle')}
+      intro={t('landing.countriesIntro')}
       className="bg-surface border-border border-y"
     >
-      <CountryCards countries={countries} />
+      <CountryCards countries={countries} t={t} />
     </Section>
   );
 }
 
-const features: { title: string; body: string; soon?: boolean }[] = [
-  {
-    title: 'Every country’s test, one app',
-    body: 'Preparing for more than one country’s test? Study for each in the same account, with progress kept separately.',
-  },
-  {
-    title: 'Checked against the official source',
-    body: 'Every question links to the page of the official guide it comes from and shows when it was last checked. A person approves each one before you see it.',
-  },
-  {
-    title: 'Answers explained',
-    body: 'Ask why an answer is right and get a short explanation built from the official guide, or ask the tutor follow-up questions.',
-  },
-  {
-    title: 'Practice that adapts to you',
-    body: 'Sessions focus on your weakest topics and bring questions back just before you would forget them.',
-  },
-  {
-    title: 'A readiness score you can trust',
-    body: 'An estimate weighted the way the real exam is, which drops if you stop studying. It tells you what to work on, not just a number.',
-  },
-  {
-    title: 'Study in your own language',
-    body: `Choose from ${studyLocales.length} languages. Questions switch to the exam’s language where a checked translation is not ready yet.`,
-  },
-  {
-    title: 'Study groups',
-    body: 'Prepare alongside people taking the same test.',
-    soon: true,
-  },
-  {
-    title: 'For schools and organisations',
-    body: 'Classes and settlement services will be able to track how their learners are doing.',
-    soon: true,
-  },
+const features: { title: MessageKey; body: MessageKey; soon?: boolean }[] = [
+  { title: 'landing.feature1Title', body: 'landing.feature1Body' },
+  { title: 'landing.feature2Title', body: 'landing.feature2Body' },
+  { title: 'landing.feature3Title', body: 'landing.feature3Body' },
+  { title: 'landing.feature4Title', body: 'landing.feature4Body' },
+  { title: 'landing.feature5Title', body: 'landing.feature5Body' },
+  { title: 'landing.feature6Title', body: 'landing.feature6Body' },
+  { title: 'landing.feature7Title', body: 'landing.feature7Body', soon: true },
+  { title: 'landing.feature8Title', body: 'landing.feature8Body', soon: true },
 ];
 
-export function Features() {
+export function Features({ t }: { t: Translator }) {
+  // Only one of these mentions a number, but passing it to all is harmless.
+  const count = studyLocales.length;
   return (
-    <Section
-      id="features"
-      title="Built for the test you are actually taking"
-      intro="Most citizenship apps cover one country with a fixed question list. Oathly is built around official sources and how people really learn."
-    >
+    <Section id="features" title={t('landing.featuresTitle')} intro={t('landing.featuresIntro')}>
       <dl className="grid gap-x-12 gap-y-10 sm:grid-cols-2">
         {features.map((feature) => (
           <div key={feature.title}>
             <dt className="font-display flex flex-wrap items-center gap-3 text-xl font-medium">
-              {feature.title}
-              {feature.soon && <Badge tone="warning">Coming soon</Badge>}
+              {t(feature.title)}
+              {feature.soon && <Badge tone="warning">{t('common.comingSoon')}</Badge>}
             </dt>
-            <dd className="text-fg-muted mt-2">{feature.body}</dd>
+            <dd className="text-fg-muted mt-2">{t(feature.body, { count })}</dd>
           </div>
         ))}
       </dl>
@@ -228,105 +199,80 @@ export function Features() {
   );
 }
 
-export function Pricing() {
+export function Pricing({ t }: { t: Translator }) {
   const free = aiLimits.free;
   const premium = aiLimits.premium;
   return (
     <Section
       id="pricing"
-      title="Pricing"
-      intro="Studying is free. A paid plan will add more AI help for people who use a lot of it."
+      title={t('landing.pricingTitle')}
+      intro={t('landing.pricingIntro')}
       className="bg-surface border-border border-y"
     >
       <div className="grid gap-6 md:grid-cols-2">
         <div className="border-border-strong rounded-xl border p-6 sm:p-8">
-          <h3 className="font-display text-2xl font-semibold">Free</h3>
-          <p className="text-fg-muted mt-1">No card needed.</p>
-          <ul className="mt-6 list-disc space-y-2 pl-5">
-            <li>Unlimited practice, flashcards and mock exams</li>
-            <li>Readiness score and study suggestions</li>
+          <h3 className="font-display text-2xl font-semibold">{t('landing.planFree')}</h3>
+          <p className="text-fg-muted mt-1">{t('landing.planFreeNote')}</p>
+          <ul className="mt-6 list-disc space-y-2 ps-5">
+            <li>{t('landing.planFreeItem1')}</li>
+            <li>{t('landing.planFreeItem2')}</li>
             <li>
-              {free.explanation} answer explanations and {free.tutor} tutor messages a day
+              {t('landing.planAiAllowance', {
+                explanations: free.explanation,
+                messages: free.tutor,
+              })}
             </li>
-            <li>Every country and study language</li>
+            <li>{t('landing.planFreeItem4')}</li>
           </ul>
-          <Link href="/sign-in" className={`${buttonClass.primary} mt-8`}>
-            Start studying free
+          <Link href={localizePath(t.locale, '/sign-in')} className={`${buttonClass.primary} mt-8`}>
+            {t('landing.startFree')}
           </Link>
         </div>
         <div className="border-border rounded-xl border border-dashed p-6 sm:p-8">
           <h3 className="font-display flex items-center gap-3 text-2xl font-semibold">
-            Premium <Badge tone="warning">Coming soon</Badge>
+            {t('landing.planPremium')} <Badge tone="warning">{t('common.comingSoon')}</Badge>
           </h3>
-          <p className="text-fg-muted mt-1">Price to be announced.</p>
-          <ul className="mt-6 list-disc space-y-2 pl-5">
-            <li>Everything in Free</li>
+          <p className="text-fg-muted mt-1">{t('landing.planPremiumNote')}</p>
+          <ul className="mt-6 list-disc space-y-2 ps-5">
+            <li>{t('landing.planPremiumItem1')}</li>
             <li>
-              {premium.explanation} answer explanations and {premium.tutor} tutor messages a day
+              {t('landing.planAiAllowance', {
+                explanations: premium.explanation,
+                messages: premium.tutor,
+              })}
             </li>
           </ul>
         </div>
       </div>
-      <p className="text-fg-muted mt-6">
-        Schools, libraries and settlement services: plans for groups are coming soon.
-      </p>
+      <p className="text-fg-muted mt-6">{t('landing.planGroups')}</p>
     </Section>
   );
 }
 
-export function Testimonials() {
+export function Testimonials({ t }: { t: Translator }) {
   return (
-    <Section id="stories" title="What learners say">
-      <p className="text-fg-muted max-w-2xl text-lg">
-        Oathly is new, so there are no reviews yet. Once learners who studied here have taken their
-        tests, their words will go here. Only real ones, with their permission.
-      </p>
+    <Section id="stories" title={t('landing.storiesTitle')}>
+      <p className="text-fg-muted max-w-2xl text-lg">{t('landing.storiesBody')}</p>
     </Section>
   );
 }
 
-const faqs: { question: string; answer: React.ReactNode }[] = [
-  {
-    question: 'Is Oathly an official government app?',
-    answer:
-      'No. Oathly is independent and is not affiliated with, or endorsed by, any government. To book your test or check the rules that apply to you, use your government’s official website.',
-  },
-  {
-    question: 'Are these the real exam questions?',
-    answer:
-      'Some countries publish the exact questions they ask; others publish a study guide and keep the questions private. Either way, every Oathly question is written from the official material, links to the page it comes from, and is checked by a person before you see it.',
-  },
-  {
-    question: 'How accurate is the readiness score?',
-    answer:
-      'It is an estimate, not a prediction of your result. It is based on how well you know each topic, weighted the way your exam is, and on your recent mock exams. It goes down if you stop studying, because you forget.',
-  },
-  {
-    question: 'Can I study in my own language?',
-    answer: `Yes. You can choose from ${studyLocales.length} languages. Translations are checked before they appear; until then you see the question in the exam’s language. The exam itself is taken in the language your country sets.`,
-  },
-  {
-    question: 'What does it cost?',
-    answer:
-      'Practice, flashcards, mock exams and the readiness score are free. A paid plan with more AI explanations and tutor messages is coming; its price is not set yet.',
-  },
-  {
-    question: 'My country is not listed. Will you add it?',
-    answer:
-      'We are working towards every country that has a citizenship test. We add each one once its exam format and study material have been checked against official sources.',
-  },
-];
+const faqs = [1, 2, 3, 4, 5, 6].map((n) => ({
+  question: `landing.faq${n}Question` as MessageKey,
+  answer: `landing.faq${n}Answer` as MessageKey,
+}));
 
-export function Faq() {
+export function Faq({ t }: { t: Translator }) {
+  const count = studyLocales.length;
   return (
-    <Section id="faq" title="Questions">
+    <Section id="faq" title={t('landing.faqTitle')}>
       <div className="divide-border border-border max-w-3xl divide-y border-y">
         {faqs.map((faq) => (
           <details key={faq.question} className="group">
             <summary
               className={`${focusRing} font-display flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-medium [&::-webkit-details-marker]:hidden`}
             >
-              {faq.question}
+              {t(faq.question)}
               <span
                 className="text-fg-muted text-2xl leading-none transition-transform group-open:rotate-45 motion-reduce:transition-none"
                 aria-hidden="true"
@@ -334,7 +280,7 @@ export function Faq() {
                 +
               </span>
             </summary>
-            <p className="text-fg-muted pb-6">{faq.answer}</p>
+            <p className="text-fg-muted pb-6">{t(faq.answer, { count })}</p>
           </details>
         ))}
       </div>

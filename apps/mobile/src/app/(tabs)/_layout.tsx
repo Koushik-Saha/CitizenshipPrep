@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { View, type ColorValue } from 'react-native';
 
 import { useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 
 /** A plain marker for the tab bar: a dot that fills in for the current tab. */
 function TabDot({ color, focused }: { color: ColorValue; focused: boolean }) {
@@ -21,6 +22,7 @@ function TabDot({ color, focused }: { color: ColorValue; focused: boolean }) {
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const t = useT();
   return (
     <Tabs
       screenOptions={{
@@ -32,10 +34,13 @@ export default function TabsLayout() {
         tabBarIcon: TabDot,
       }}
     >
-      <Tabs.Screen name="study" options={{ title: 'Study', tabBarButtonTestID: 'tab-study' }} />
+      <Tabs.Screen
+        name="study"
+        options={{ title: t('profile.tabStudy'), tabBarButtonTestID: 'tab-study' }}
+      />
       <Tabs.Screen
         name="profile"
-        options={{ title: 'Profile', tabBarButtonTestID: 'tab-profile' }}
+        options={{ title: t('profile.tabProfile'), tabBarButtonTestID: 'tab-profile' }}
       />
     </Tabs>
   );

@@ -5,6 +5,15 @@ import type { MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
 
 export type StudyMode = 'practice' | 'flashcards' | 'mock_exam';
 
+/** A question's words in one language. */
+export interface QuestionWording {
+  /** The language this wording is in. */
+  locale: string;
+  text: string;
+  options: { key: string; text: string }[];
+  explanation: string | null;
+}
+
 export interface SessionQuestion {
   id: string;
   version: number;
@@ -20,6 +29,30 @@ export interface SessionQuestion {
   /** The words in the official guide the answer rests on. */
   sourceQuote: string | null;
   sourceUrl: string;
+  /**
+   * The same question as the exam words it, when the wording above is a
+   * translation into the learner's study language. Null when the wording
+   * above already is the exam's.
+   */
+  original: QuestionWording | null;
+}
+
+/**
+ * The wording to show: the learner's study language, or the exam's own
+ * language if they have asked for that and the two differ.
+ */
+export function questionWording(
+  question: SessionQuestion,
+  inExamLanguage: boolean,
+): QuestionWording {
+  return inExamLanguage && question.original
+    ? question.original
+    : {
+        locale: question.locale,
+        text: question.text,
+        options: question.options,
+        explanation: question.explanation,
+      };
 }
 
 export interface SessionExam {

@@ -100,6 +100,7 @@ const toSessionQuestion = (question: PackQuestion): SessionQuestion => ({
   explanation: question.explanation,
   sourceQuote: question.sourceQuote,
   sourceUrl: question.sourceUrl,
+  original: question.original,
 });
 
 /** The pack's stored answers plus any made since, as the engine reads them. */

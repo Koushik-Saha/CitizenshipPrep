@@ -1,0 +1,448 @@
+import type { Messages } from './en';
+
+export const es: Messages = {
+  common: {
+    signIn: 'Iniciar sesión',
+    signOut: 'Cerrar sesión',
+    countries: 'Países',
+    allCountries: 'Todos los países',
+    pricing: 'Precios',
+    faq: 'Preguntas',
+    backToStudy: 'Volver a estudiar',
+    tryAgain: 'Intentar de nuevo',
+    loading: 'Cargando',
+    language: 'Idioma',
+    mainNav: 'Principal',
+    footerNav: 'Pie de página',
+    breadcrumb: 'Ruta de navegación',
+    comingSoon: 'Próximamente',
+    notAffiliated:
+      'Oathly es una aplicación de estudio independiente. No está afiliada a ningún gobierno ni cuenta con su respaldo.',
+  },
+
+  exam: {
+    factSeparator: ', ',
+    questionCount: '{count, plural, one {# pregunta} other {# preguntas}}',
+    toPass: '{count} para aprobar',
+    minutes: '{count, plural, one {# minuto} other {# minutos}}',
+    noTimeLimit: 'sin límite de tiempo',
+    takenIn: 'Se hace en {languages}',
+    officialSource: 'Fuente oficial',
+    checkedOn: 'revisado el {date}',
+    detailsBeingChecked: 'datos en revisión',
+    checkedQuestions:
+      '{count, plural, one {# pregunta de práctica revisada} other {# preguntas de práctica revisadas}}',
+    questionsBeingChecked: 'Las preguntas de práctica están en revisión',
+    studyFor: 'Estudiar para {country}',
+    countdownNone: 'Sin fecha de examen',
+    countdownPassed: 'La fecha del examen ya pasó',
+    countdownToday: 'El examen es hoy',
+    countdownDays: '{count, plural, one {El examen es mañana} other {Examen en # días}}',
+  },
+
+  landing: {
+    metaTitle: 'Oathly: práctica para el examen de ciudadanía de cada país',
+    metaDescription:
+      'Practica para tu examen de ciudadanía con preguntas contrastadas con fuentes oficiales, respuestas explicadas con claridad y una estimación de lo preparado que estás. Independiente: sin afiliación a ningún gobierno.',
+    heroTitle: 'Llega preparado a tu examen de ciudadanía.',
+    heroBody:
+      'Preguntas de práctica redactadas a partir de la guía oficial de cada país, respuestas explicadas con claridad y una estimación honesta de lo preparado que estás.',
+    startFree: 'Empieza a estudiar gratis',
+    seeCountries: '{count, plural, one {Ver los países} other {Ver los # países}}',
+    searchLabel: '¿De qué país es tu examen de ciudadanía?',
+    searchNoMatch:
+      'Aún no hay resultados para «{query}». Añadimos un país cuando hemos contrastado su examen con las fuentes oficiales.',
+    searchStatusNone: 'Ningún país coincide.',
+    searchStatus:
+      '{count, plural, one {# país coincide. Pulsa Tab para ir a él.} other {# países coinciden. Pulsa Tab para ir a ellos.}}',
+
+    howTitle: 'Cómo funciona',
+    step1Title: 'Elige tu país y tu examen',
+    step1Body: 'Dinos qué examen vas a hacer, cuándo y en qué idioma quieres estudiar.',
+    step2Title: 'Practica un poco cada día',
+    step2Body:
+      'Cada sesión mezcla los temas que más te cuestan, las preguntas que toca repasar y otras nuevas. Las respuestas incorrectas vienen con una explicación y el pasaje de la guía oficial.',
+    step3Title: 'Haz simulacros cuando estés cerca',
+    step3Body:
+      'Los simulacros siguen el formato y la nota de aprobado reales. Tu puntuación de preparación muestra lo cerca que estás y qué estudiar a continuación.',
+
+    countriesTitle: 'Países y exámenes',
+    countriesIntro:
+      'Añadimos un país cuando el formato de su examen y su material de estudio se han contrastado con las fuentes oficiales. Hay más en camino.',
+    countriesEmpty: 'Estamos actualizando la lista de países. Vuelve en un momento.',
+
+    featuresTitle: 'Hecho para el examen que de verdad vas a hacer',
+    featuresIntro:
+      'La mayoría de las aplicaciones de ciudadanía cubren un solo país con una lista fija de preguntas. Oathly se basa en las fuentes oficiales y en cómo aprende la gente de verdad.',
+    feature1Title: 'El examen de cada país, en una sola aplicación',
+    feature1Body:
+      '¿Te preparas para el examen de más de un país? Estudia para cada uno con la misma cuenta, con el progreso por separado.',
+    feature2Title: 'Contrastado con la fuente oficial',
+    feature2Body:
+      'Cada pregunta enlaza con la página de la guía oficial de la que procede y muestra cuándo se revisó por última vez. Una persona aprueba cada una antes de que la veas.',
+    feature3Title: 'Respuestas explicadas',
+    feature3Body:
+      'Pregunta por qué una respuesta es correcta y recibe una explicación breve basada en la guía oficial, o hazle más preguntas al tutor.',
+    feature4Title: 'Práctica que se adapta a ti',
+    feature4Body:
+      'Las sesiones se centran en tus temas más flojos y te vuelven a traer las preguntas justo antes de que las olvides.',
+    feature5Title: 'Una puntuación de preparación en la que puedes confiar',
+    feature5Body:
+      'Una estimación ponderada igual que el examen real, que baja si dejas de estudiar. Te dice en qué trabajar, no solo un número.',
+    feature6Title: 'Estudia en tu propio idioma',
+    feature6Body:
+      'Elige entre {count} idiomas. Las preguntas se muestran en el idioma del examen cuando aún no hay una traducción revisada.',
+    feature7Title: 'Grupos de estudio',
+    feature7Body: 'Prepárate junto a personas que hacen el mismo examen.',
+    feature8Title: 'Para escuelas y organizaciones',
+    feature8Body:
+      'Las clases y los servicios de acogida podrán seguir el progreso de sus estudiantes.',
+
+    pricingTitle: 'Precios',
+    pricingIntro:
+      'Estudiar es gratis. Un plan de pago añadirá más ayuda de IA para quienes la usen mucho.',
+    planFree: 'Gratis',
+    planFreeNote: 'Sin tarjeta.',
+    planFreeItem1: 'Práctica, tarjetas y simulacros sin límite',
+    planFreeItem2: 'Puntuación de preparación y sugerencias de estudio',
+    planAiAllowance: '{explanations} explicaciones y {messages} mensajes al tutor al día',
+    planFreeItem4: 'Todos los países e idiomas de estudio',
+    planPremium: 'Premium',
+    planPremiumNote: 'Precio por anunciar.',
+    planPremiumItem1: 'Todo lo del plan gratuito',
+    planGroups:
+      'Escuelas, bibliotecas y servicios de acogida: los planes para grupos llegarán pronto.',
+
+    storiesTitle: 'Qué dicen los estudiantes',
+    storiesBody:
+      'Oathly es nuevo, así que aún no hay opiniones. Cuando quienes estudiaron aquí hayan hecho su examen, sus palabras aparecerán aquí. Solo reales y con su permiso.',
+
+    faqTitle: 'Preguntas',
+    faq1Question: '¿Oathly es una aplicación oficial del gobierno?',
+    faq1Answer:
+      'No. Oathly es independiente y no está afiliada a ningún gobierno ni cuenta con su respaldo. Para reservar tu examen o consultar las normas que te corresponden, usa el sitio web oficial de tu gobierno.',
+    faq2Question: '¿Son las preguntas reales del examen?',
+    faq2Answer:
+      'Algunos países publican las preguntas exactas que hacen; otros publican una guía de estudio y mantienen las preguntas en privado. En ambos casos, cada pregunta de Oathly se redacta a partir del material oficial, enlaza con la página de la que procede y la revisa una persona antes de que la veas.',
+    faq3Question: '¿Qué tan precisa es la puntuación de preparación?',
+    faq3Answer:
+      'Es una estimación, no una predicción de tu resultado. Se basa en lo bien que conoces cada tema, ponderado como en tu examen, y en tus simulacros recientes. Baja si dejas de estudiar, porque se olvida.',
+    faq4Question: '¿Puedo estudiar en mi propio idioma?',
+    faq4Answer:
+      'Sí. Puedes elegir entre {count} idiomas. Las traducciones se revisan antes de aparecer; hasta entonces ves la pregunta en el idioma del examen. El examen se hace en el idioma que establece tu país.',
+    faq5Question: '¿Cuánto cuesta?',
+    faq5Answer:
+      'La práctica, las tarjetas, los simulacros y la puntuación de preparación son gratis. Habrá un plan de pago con más explicaciones de IA y mensajes al tutor; su precio aún no está fijado.',
+    faq6Question: 'Mi país no aparece. ¿Lo añadirán?',
+    faq6Answer:
+      'Trabajamos para cubrir todos los países que tienen examen de ciudadanía. Añadimos cada uno cuando el formato de su examen y su material de estudio se han contrastado con las fuentes oficiales.',
+  },
+
+  countries: {
+    indexMetaTitle: 'Exámenes de ciudadanía por país | Oathly',
+    indexMetaDescription:
+      'Los exámenes de ciudadanía para los que Oathly te ayuda a prepararte: formato, nota de aprobado, idiomas y temas, todo contrastado con la fuente oficial.',
+    countryTitle: 'Examen de ciudadanía de {country}',
+    countryMetaTitle: 'Examen de ciudadanía de {country}: formato, temas y práctica | Oathly',
+    countryMetaDescription:
+      'En qué consiste el examen de ciudadanía de {country}, qué abarca y preguntas de práctica contrastadas con la guía oficial.',
+    countryLeadWithQuestions:
+      '{count, plural, one {# pregunta de práctica, contrastada con la guía oficial.} other {# preguntas de práctica, cada una contrastada con la guía oficial.}}',
+    countryLeadNoQuestions: 'Las preguntas de práctica se están contrastando con la guía oficial.',
+    studyForTest: 'Estudiar para el examen de {country}',
+    theTest: 'El examen',
+    formatBeingChecked: 'El formato del examen está en revisión.',
+    whatItCovers: 'Qué abarca',
+    topicBeingChecked: 'En revisión',
+    topicsBeingAdded: 'Estamos añadiendo los temas.',
+    bookingNote:
+      'Para reservar el examen o consultar las normas que te corresponden, usa el sitio web oficial enlazado arriba. Oathly es una aplicación de estudio independiente y no está afiliada a ningún gobierno.',
+    topicMetaTitle: '{topic}: práctica para el examen de ciudadanía de {country} | Oathly',
+    topicMetaDescription:
+      'Preguntas de práctica sobre {topic} para el examen de ciudadanía de {country}, cada una contrastada con la guía oficial.',
+    topicLead: 'Preguntas de práctica para el examen de ciudadanía de {country}.',
+    topicEmpty:
+      'Las preguntas de este tema se están contrastando con la guía oficial. Aparecerán aquí cuando un revisor las haya aprobado.',
+    showAnswer: 'Mostrar la respuesta',
+    answerLabel: 'Respuesta:',
+    fromGuide: 'De la guía oficial: «{quote}»',
+    source: 'Fuente',
+    moreInApp:
+      '{count, plural, one {# pregunta más de {topic}, con explicaciones y repaso espaciado, te espera en Oathly.} other {# preguntas más de {topic}, con explicaciones y repaso espaciado, te esperan en Oathly.}}',
+    practiseInApp: 'Practica con explicaciones, repaso espaciado y simulacros en Oathly.',
+    otherTopics: 'Otros temas',
+  },
+
+  auth: {
+    metaTitle: 'Iniciar sesión | Oathly',
+    title: 'Inicia sesión en Oathly',
+    intro:
+      '¿Es tu primera vez? Al iniciar sesión se crea tu cuenta. Tu progreso se guarda en ella, así que puedes continuar desde el teléfono u otro ordenador.',
+    notConfigured: 'El inicio de sesión aún no está configurado en este servidor.',
+    email: 'Correo electrónico',
+    sendLink: 'Envíame un enlace para entrar',
+    or: 'o',
+    google: 'Continuar con Google',
+    sentTitle: 'Revisa tu correo',
+    sentBody:
+      'Hemos enviado un enlace para entrar a {email}. Funciona una sola vez y caduca pronto. Puedes cerrar esta pestaña.',
+    differentEmail: 'Usar otro correo',
+    sendFailed: 'No hemos podido enviar el enlace. Inténtalo de nuevo.',
+    googleFailed: 'No se pudo iniciar sesión con Google. Inténtalo de nuevo.',
+    introMobile:
+      '¿Es tu primera vez? Al iniciar sesión se crea tu cuenta. Usa el mismo correo que en la web y tu progreso te acompañará.',
+    emailRequired: 'Escribe tu correo electrónico.',
+    sendCode: 'Envíame un código',
+    codeSent: 'Hemos enviado un código de seis dígitos a {email}. Caduca pronto.',
+    code: 'Código',
+    verifyCode: 'Iniciar sesión',
+    codeFailed: 'Ese código no ha funcionado. Revísalo e inténtalo de nuevo.',
+  },
+
+  onboarding: {
+    metaTitle: 'Configura tu estudio | Oathly',
+    title: 'Configura tu estudio',
+    titleAdd: 'Añadir otro examen',
+    intro: 'Cuatro preguntas y podrás empezar. Puedes cambiar todo esto más adelante.',
+    introAdd:
+      'Puedes prepararte para varios exámenes de ciudadanía a la vez. El progreso se guarda por separado para cada uno.',
+    allCovered: 'Ya estudias para todos los exámenes que cubre Oathly.',
+    whichExam: '¿Para qué examen te preparas?',
+    searchCountries: 'Buscar países',
+    countryCount: '{count, plural, one {# país} other {# países}}',
+    countryCountFiltered: '{shown} de {total} países',
+    inLanguages: 'en {languages}',
+    noCountryMatch:
+      'Ningún país coincide con «{query}». Oathly añade países a medida que verifica sus exámenes.',
+    countriesFailed:
+      'No hemos podido cargar la lista de países. Revisa tu conexión e inténtalo de nuevo.',
+    examDate: '¿Cuándo es tu examen?',
+    optional: '(opcional)',
+    examDateHint: 'La usamos para marcar el ritmo de tu plan de estudio.',
+    examDateHintMobile:
+      'Año-mes-día, por ejemplo 2027-03-15. La usamos para marcar el ritmo de tu plan de estudio.',
+    studyLanguage: '¿En qué idioma quieres estudiar?',
+    studyLanguageHint:
+      'Las preguntas aparecen en este idioma cuando hay una traducción revisada y, si no, en el idioma del examen.',
+    dailyGoal: '¿Cuánto tiempo puedes estudiar cada día?',
+    minutesShort: '{count} min',
+    makePrimary: 'Abrir la aplicación con este examen',
+    start: 'Empezar a estudiar',
+    add: 'Añadir este examen',
+    checkAnswers: 'Revisa tus respuestas.',
+  },
+
+  dashboard: {
+    metaTitle: 'Estudiar | Oathly',
+    greeting: 'Hola, {name}',
+    title: 'Tu estudio',
+    todaysGoal: 'Objetivo de hoy',
+    goalProgress: 'de {goal} minutos',
+    goalProgressToday: 'de {goal} minutos hoy',
+    streak: 'Racha de estudio',
+    streakDays: '{count, plural, one {día seguido} other {días seguidos}}',
+    opensFirst: 'Se abre primero',
+    questionsReady:
+      '{count, plural, one {# pregunta lista para estudiar.} other {# preguntas listas para estudiar.}}',
+    questionsBeingChecked:
+      'Las preguntas de {country} aún se están contrastando con la guía oficial. Aparecerán aquí cuando un revisor las haya verificado.',
+    practise: 'Practicar',
+    mockExam: 'Simulacro de examen',
+    askTutor: 'Pregunta al tutor sobre {country}',
+    stopStudying: 'Dejar de estudiar para este examen',
+    addExam: 'Añadir otro examen',
+    loadFailed: 'No hemos podido cargar tu plan de estudio.',
+    loadingPlan: 'Cargando tu plan de estudio',
+  },
+
+  readiness: {
+    title: 'Preparación estimada',
+    earlyEstimate: 'Estimación inicial',
+    earlyTitle: 'Estimación inicial de tu preparación',
+    meter: '{score} %, estimado',
+    meterEarly: '{score} %, estimado, estimación inicial',
+    basedOn:
+      '{count, plural, one {Basada en # pregunta hasta ahora. Se asienta a medida que practicas.} other {Basada en # preguntas hasta ahora. Se asienta a medida que practicas.}}',
+    disclaimer:
+      'Es una estimación a partir de tu práctica y de tus simulacros, ponderada como el examen real. No garantiza tu resultado y baja si dejas de repasar.',
+    topicKnowledge: 'Conocimiento de los temas',
+    recentMocks: 'Simulacros recientes',
+    noMocks: 'Ninguno todavía',
+    mockAverage: '{percent} % de aciertos',
+    studyNext: 'Qué estudiar ahora',
+    nothingStandsOut: 'Nada destaca. Mantén tu práctica diaria.',
+    suggestStart: 'Empieza a practicar',
+    suggestStartDetail: 'Tu primera tanda mezcla preguntas de todos los temas.',
+    suggestReview:
+      '{count, plural, one {Repasa # pregunta que estás a punto de olvidar} other {Repasa # preguntas que estás a punto de olvidar}}',
+    suggestReviewDetail: 'Responderlas ahora, cuando toca, es lo que hace que se queden.',
+    suggestTopicDetail: 'Cerca del {share} % del examen, y dominas el {mastery} %.',
+    suggestMock: 'Haz un simulacro de examen',
+    suggestMockDetail: '{exam}, con el mismo tiempo que el real.',
+    start: 'Empezar',
+    byTopic: 'Por tema',
+    shareOfExam: '({share} % del examen)',
+  },
+
+  start: {
+    questionsFrom: 'Preguntas de',
+    adaptive: 'A mi medida: temas flojos, repasos y nuevas',
+    adaptiveDue: 'A mi medida: temas flojos, repasos y nuevas ({count} pendientes)',
+    random: 'Todos los temas, al azar',
+    howMany: 'Cuántas',
+    flashcards: 'Tarjetas',
+    startMock: 'Empezar simulacro',
+    practiceIntro: 'Diez preguntas elegidas para ti: temas flojos, repasos y nuevas.',
+    practiceIntroDue:
+      'Diez preguntas elegidas para ti: temas flojos, repasos ({count} pendientes) y nuevas.',
+    oneTopic: 'Practicar un tema',
+    hideTopics: 'Ocultar temas',
+    topicWithMastery: '{topic} ({mastery} %)',
+  },
+
+  session: {
+    metaTitle: 'Sesión de estudio | Oathly',
+    practice: 'Práctica',
+    flashcards: 'Tarjetas',
+    mockExam: 'Simulacro de examen',
+    finishedTitle: 'Esta sesión ha terminado',
+    finishedBody: 'Empieza una nueva desde tu página de estudio.',
+    timeLeftMinutes:
+      '{count, plural, one {Tiempo restante: # minuto} other {Tiempo restante: # minutos}}',
+    timeLeft: 'Quedan {time}',
+    questionOf: 'Pregunta {current} de {total}',
+    progress: 'Progreso',
+    chooseOne: 'Elige una respuesta',
+    chooseAll: 'Elige todas las respuestas correctas',
+    correct: 'Correcto',
+    notQuite: 'No del todo',
+    check: 'Comprobar',
+    next: 'Siguiente',
+    submitExam: 'Entregar examen',
+    nextQuestion: 'Siguiente pregunta',
+    seeResults: 'Ver resultados',
+    keysChoose: 'Teclas: 1–{count} para elegir, Intro para confirmar',
+    keysContinue: 'Teclas: Intro para continuar',
+    answer: 'Respuesta',
+    answerInHead: 'Respóndela mentalmente y luego dale la vuelta a la tarjeta.',
+    didNotKnow: 'No lo sabía',
+    knewIt: 'Lo sabía',
+    showAnswer: 'Mostrar respuesta',
+    keysRate: 'Teclas: 1 o 2',
+    keysTurn: 'Tecla: Intro o Espacio para dar la vuelta',
+    stillLearning: 'Aún aprendiendo',
+    swipeHint:
+      'Desliza la tarjeta a la derecha si lo sabías y a la izquierda si aún lo estás aprendiendo.',
+    tapToShow: 'Toca para ver la respuesta',
+    leave: 'Salir',
+    yourAnswer: 'Tu respuesta',
+    correctAnswer: 'Respuesta correcta',
+    fromGuide: 'De la guía oficial: «{quote}»',
+    openFailedTitle: 'No hemos podido abrir esta sesión',
+    openFailedBody:
+      'Puede que se iniciara en otro dispositivo mientras este teléfono estaba sin conexión.',
+    loadingSession: 'Cargando tu sesión',
+    showInExamLanguage: 'Ver en el idioma del examen ({language})',
+    showInStudyLanguage: 'Ver en mi idioma de estudio ({language})',
+    languageNote: 'El examen real es en {language}.',
+  },
+
+  results: {
+    passed: 'Has aprobado',
+    notPassed: 'Esta vez no has aprobado',
+    complete: 'Sesión completada',
+    stoppedPassed: 'Has alcanzado la nota de aprobado, así que el examinador se detendría aquí.',
+    stoppedFailed: 'Ya no es posible aprobar, así que el examinador se detendría aquí.',
+    timeUp: 'Se acabó el tiempo.',
+    timedOut: 'El tiempo se agotó antes de las últimas respuestas.',
+    correctOf: 'de {total} correctas.',
+    knownOf: 'de {total} sabidas.',
+    neededToPass: 'Se necesitan {count} para aprobar.',
+    sectionAllCorrect:
+      'Todas las preguntas de «{section}» deben ser correctas; acertaste {correct} de {total}.',
+    byTopic: 'Por tema',
+    topic: 'Tema',
+    correctColumn: 'Correctas',
+    scoreOf: '{correct} de {total}',
+    nothingToReview: 'Nada que repasar',
+    reviewCards: 'Tarjetas para repasar de nuevo',
+    reviewWrong: 'Repasa tus respuestas incorrectas',
+    youAnswered: 'Respondiste: {answer}',
+    nothing: 'nada',
+    correctAnswer: 'Respuesta correcta: {answer}',
+    source: 'fuente',
+  },
+
+  explain: {
+    more: 'Explicar más',
+    writing: 'Escribiendo una explicación…',
+    aiNote:
+      'Escrito por IA a partir del pasaje de la guía oficial. No lo ha revisado una persona y puede contener errores.',
+  },
+
+  tutor: {
+    metaTitle: 'Pregunta al tutor | Oathly',
+    title: 'Pregunta al tutor',
+    intro:
+      'Preguntas sobre el examen de ciudadanía de {country} y su material de estudio. El tutor responde solo a partir de la guía oficial y es una IA: contrasta con la guía todo lo importante. No puede asesorarte sobre tu propia solicitud.',
+    you: 'Tú:',
+    tutor: 'Tutor:',
+    questionLabel: 'Tu pregunta sobre el examen de {country}',
+    ask: 'Preguntar',
+    keys: 'Intro para enviar, Mayús+Intro para una línea nueva.',
+    remaining: '{count, plural, one {Te queda # pregunta hoy.} other {Te quedan # preguntas hoy.}}',
+    opening: 'Abriendo el tutor',
+  },
+
+  offline: {
+    title: 'Estudiar sin conexión',
+    saved:
+      '{count, plural, one {# pregunta guardada en este teléfono, a fecha de {date}. Puedes practicar y hacer simulacros sin conexión.} other {# preguntas guardadas en este teléfono, a fecha de {date}. Puedes practicar y hacer simulacros sin conexión.}}',
+    notSaved:
+      'Guarda este país en tu teléfono para practicar y hacer simulacros sin conexión. Tus respuestas se envían cuando vuelves a tener conexión.',
+    save: 'Guardar para usar sin conexión',
+    update: 'Actualizar las preguntas guardadas',
+    bannerOfflineWaiting:
+      '{count, plural, one {Estás sin conexión. # elemento guardado se enviará cuando vuelvas a tener conexión.} other {Estás sin conexión. # elementos guardados se enviarán cuando vuelvas a tener conexión.}}',
+    bannerOffline: 'Estás sin conexión. Los países guardados siguen funcionando.',
+    bannerSending:
+      '{count, plural, one {Enviando # elemento guardado…} other {Enviando # elementos guardados…}}',
+    bannerWaiting:
+      '{count, plural, one {# elemento guardado pendiente de envío.} other {# elementos guardados pendientes de envío.}}',
+    progressLater: 'Tu progreso aparecerá aquí cuando vuelvas a tener conexión.',
+    noConnection: 'Sin conexión. Descarga este país cuando tengas conexión para estudiar sin ella.',
+  },
+
+  profile: {
+    title: 'Tu perfil',
+    tabStudy: 'Estudiar',
+    tabProfile: 'Perfil',
+    progress: 'Progreso',
+    sessions: 'Sesiones',
+    answered: 'Respondidas',
+    correct: 'Correctas',
+    dailyGoal: 'Objetivo diario: {count} minutos.',
+    yourExams: 'Tus exámenes',
+    studyingIn: 'Estudias en {language}.',
+    offline: 'Sin conexión',
+    noPacks:
+      'Aún no hay países guardados en este teléfono. Guarda uno desde la pestaña Estudiar para practicar sin conexión.',
+    packLine:
+      '{count, plural, one {{country}: # pregunta, guardada el {date}.} other {{country}: # preguntas, guardadas el {date}.}}',
+    removePack: 'Quitar de este teléfono',
+    allSaved: 'Todo lo que has respondido está guardado en tu cuenta.',
+    waiting:
+      '{count, plural, one {# elemento guardado está pendiente de envío.} other {# elementos guardados están pendientes de envío.}}',
+    lastTry: 'Último intento: {problem}',
+    sendNow: 'Enviar ahora',
+    appLanguage: 'Idioma de la aplicación',
+    appLanguageHint:
+      'El idioma de los botones y menús. El idioma en el que estudias las preguntas se elige para cada examen.',
+  },
+
+  welcome: {
+    countriesSoFar: '{count} países por ahora.',
+    getStarted: 'Empezar',
+    unreachable: 'No hemos podido conectar con Oathly. Revisa tu conexión e inténtalo de nuevo.',
+  },
+};

@@ -2,12 +2,14 @@ import { Redirect } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
 
 import { Body, Button, Screen, useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
 
 // Sends the learner to the right screen for their session.
 export default function Index() {
   const session = useSession();
   const theme = useTheme();
+  const t = useT();
 
   if (session.status === 'loading') {
     return (
@@ -19,15 +21,15 @@ export default function Index() {
           backgroundColor: theme.colors.canvas,
         }}
       >
-        <ActivityIndicator accessibilityLabel="Loading" color={theme.colors.primary} />
+        <ActivityIndicator accessibilityLabel={t('common.loading')} color={theme.colors.primary} />
       </View>
     );
   }
   if (session.status === 'error') {
     return (
       <Screen>
-        <Body>We could not reach Oathly. Check your connection and try again.</Body>
-        <Button label="Try again" onPress={() => void session.refresh()} />
+        <Body>{t('welcome.unreachable')}</Body>
+        <Button label={t('common.tryAgain')} onPress={() => void session.refresh()} />
       </Screen>
     );
   }

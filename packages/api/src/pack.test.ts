@@ -9,6 +9,7 @@ import {
   type PackQuestion,
 } from './pack';
 import { countryPackSchema } from './schemas';
+import { questionWording } from './study';
 
 const question = (n: number, topic: 'government' | 'history'): PackQuestion => ({
   id: `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`,
@@ -29,6 +30,7 @@ const question = (n: number, topic: 'government' | 'history'): PackQuestion => (
   explanation: null,
   sourceQuote: null,
   sourceUrl: 'https://example.org/guide',
+  original: null,
 });
 
 const pack: CountryPack = {
@@ -190,5 +192,39 @@ describe('startOfflineSession', () => {
     expect(() =>
       start({ kind: 'practice', countryCode: 'ZZ', focus: { topicId: 'none' }, size: 5 }),
     ).toThrow('No questions match');
+  });
+});
+
+describe('questionWording', () => {
+  const english = question(1, 'government');
+  const translated: PackQuestion = {
+    ...english,
+    locale: 'es',
+    text: '¿Pregunta 1?',
+    explanation: 'Porque sí.',
+    original: { locale: 'en', text: english.text, options: english.options, explanation: null },
+  };
+
+  it('shows the study language unless the exam’s is asked for', () => {
+    expect(questionWording(translated, false)).toEqual({
+      locale: 'es',
+      text: '¿Pregunta 1?',
+      options: english.options,
+      explanation: 'Porque sí.',
+    });
+    expect(questionWording(translated, true)).toBe(translated.original);
+  });
+
+  it('has only one wording for a question the exam’s language already covers', () => {
+    expect(questionWording(english, true)).toMatchObject({ locale: 'en', text: 'Question 1?' });
+  });
+
+  it('keeps both wordings when a session is built from a pack', () => {
+    const { session } = startOfflineSession(
+      { ...pack, questions: [translated, ...pack.questions.slice(1)] },
+      { kind: 'practice', countryCode: 'ZZ', focus: 'random', size: 50 },
+      { attemptId: 'a', now: new Date('2026-10-02T00:00:00Z'), random: createRandom(1) },
+    );
+    expect(session.questions.find((q) => q.id === translated.id)?.original?.locale).toBe('en');
   });
 });

@@ -1,5 +1,6 @@
 import { ensureProfile, getMe } from '@oathly/api/server';
 import type { Me } from '@oathly/api';
+import { localizePath, type UiLocale } from '@oathly/i18n';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
@@ -32,10 +33,10 @@ export async function currentUser(): Promise<SignedInUser | null> {
 }
 
 /** The signed-in learner with everything the pages need, or a redirect to sign in. */
-export async function requireMe(): Promise<{ user: SignedInUser; me: Me }> {
+export async function requireMe(locale: UiLocale): Promise<{ user: SignedInUser; me: Me }> {
   const user = await currentUser();
-  if (!user) redirect('/sign-in');
+  if (!user) redirect(localizePath(locale, '/sign-in'));
   const me = await getMe(getDb(), user.userId);
-  if (!me) redirect('/sign-in');
+  if (!me) redirect(localizePath(locale, '/sign-in'));
   return { user, me };
 }

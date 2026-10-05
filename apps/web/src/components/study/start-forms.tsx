@@ -3,12 +3,18 @@
 import type { CountryDashboard } from '@oathly/api';
 import { useActionState } from 'react';
 
+import {
+  startMockExamSession,
+  startPracticeSession,
+  type StartState,
+} from '@/app/[locale]/study/actions';
+import { useT } from '@/components/i18n/provider';
 import { buttonClass, fieldClass, labelClass, Notice } from '@/components/ui';
-import { startMockExamSession, startPracticeSession, type StartState } from '@/app/study/actions';
 
 const initial: StartState = { error: null };
 
 export function PracticeForm({ country }: { country: CountryDashboard }) {
+  const t = useT();
   const [state, action, pending] = useActionState(startPracticeSession, initial);
   const id = country.countryCode;
   return (
@@ -22,14 +28,15 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
       <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
         <div>
           <label htmlFor={`focus-${id}`} className={labelClass}>
-            Questions from
+            {t('start.questionsFrom')}
           </label>
           <select id={`focus-${id}`} name="focus" defaultValue="adaptive" className={fieldClass}>
             <option value="adaptive">
-              Made for me: weak topics, reviews and new
-              {country.dueForReview > 0 ? ` (${country.dueForReview} due)` : ''}
+              {country.dueForReview > 0
+                ? t('start.adaptiveDue', { count: country.dueForReview })
+                : t('start.adaptive')}
             </option>
-            <option value="random">All topics, at random</option>
+            <option value="random">{t('start.random')}</option>
             {country.topics.map((topic) => (
               <option key={topic.topicId} value={`topic:${topic.topicId}`}>
                 {topic.name}
@@ -39,7 +46,7 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
         </div>
         <div>
           <label htmlFor={`size-${id}`} className={labelClass}>
-            How many
+            {t('start.howMany')}
           </label>
           <select id={`size-${id}`} name="size" defaultValue="10" className={fieldClass}>
             {[5, 10, 20, 30].map((size) => (
@@ -58,7 +65,7 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
           disabled={pending}
           className={buttonClass.primary}
         >
-          Practise
+          {t('dashboard.practise')}
         </button>
         <button
           type="submit"
@@ -67,7 +74,7 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
           disabled={pending}
           className={buttonClass.secondary}
         >
-          Flashcards
+          {t('start.flashcards')}
         </button>
       </div>
     </form>
@@ -75,6 +82,7 @@ export function PracticeForm({ country }: { country: CountryDashboard }) {
 }
 
 export function MockExamForm({ country }: { country: CountryDashboard }) {
+  const t = useT();
   const [state, action, pending] = useActionState(startMockExamSession, initial);
   return (
     <form action={action} className="space-y-3">
@@ -93,11 +101,15 @@ export function MockExamForm({ country }: { country: CountryDashboard }) {
             <div>
               <p className="font-medium">{exam.name}</p>
               <p className="text-fg-muted text-sm">
-                {exam.questionCount} questions
-                {exam.passMark !== null ? `, ${exam.passMark} to pass` : ''}
-                {exam.timeLimitMinutes !== null
-                  ? `, ${exam.timeLimitMinutes} minutes`
-                  : ', no time limit'}
+                {[
+                  t('exam.questionCount', { count: exam.questionCount }),
+                  exam.passMark !== null ? t('exam.toPass', { count: exam.passMark }) : null,
+                  exam.timeLimitMinutes !== null
+                    ? t('exam.minutes', { count: exam.timeLimitMinutes })
+                    : t('exam.noTimeLimit'),
+                ]
+                  .filter((part) => part !== null)
+                  .join(t('exam.factSeparator'))}
               </p>
               {exam.unavailableReason && (
                 <p className="text-fg-subtle text-sm">{exam.unavailableReason}</p>
@@ -110,7 +122,7 @@ export function MockExamForm({ country }: { country: CountryDashboard }) {
               disabled={pending || exam.unavailableReason !== null}
               className={buttonClass.secondary}
             >
-              Start mock exam
+              {t('start.startMock')}
             </button>
           </li>
         ))}

@@ -1,4 +1,4 @@
-import type { StudySession } from '@oathly/api';
+import { questionWording, type StudySession } from '@oathly/api';
 import {
   runResult,
   scoreAttempt,
@@ -6,17 +6,19 @@ import {
   type RunState,
   type StopReason,
 } from '@oathly/core';
+import { countryName, isolate, textDirection, type MessageKey } from '@oathly/i18n';
 import { Text, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
 
 import { Confetti } from '@/components/confetti';
 import { Body, Button, Card, Heading, Screen, useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 import { backToStudy } from '@/lib/navigation';
 
-const stopNotes: Partial<Record<StopReason, string>> = {
-  'passed-early': 'You have reached the pass mark, so the examiner would stop here.',
-  'failed-early': 'Passing is no longer possible, so the examiner would stop here.',
-  'time-up': 'Time is up.',
+const stopNotes: Partial<Record<StopReason, MessageKey>> = {
+  'passed-early': 'results.stoppedPassed',
+  'failed-early': 'results.stoppedFailed',
+  'time-up': 'results.timeUp',
 };
 
 /** How a session went: the score, where it was won and lost, and what to go over. */
@@ -25,13 +27,17 @@ export function Results({
   config,
   run,
   startedAt,
+  inExamLanguage,
 }: {
   session: StudySession;
   config: RunConfig;
   run: RunState;
   startedAt: Date;
+  /** Whether the learner was reading the questions as the exam words them. */
+  inExamLanguage: boolean;
 }) {
   const theme = useTheme();
+  const t = useT();
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
 
@@ -39,9 +45,9 @@ export function Results({
   if (session.completedAt && run.answers.length === 0) {
     return (
       <Screen>
-        <Heading>This session is finished</Heading>
-        <Body muted>Start a new one from your study page.</Body>
-        <Button label="Back to study" onPress={backToStudy} />
+        <Heading>{t('session.finishedTitle')}</Heading>
+        <Body muted>{t('session.finishedBody')}</Body>
+        <Button label={t('common.backToStudy')} onPress={backToStudy} />
       </Screen>
     );
   }
@@ -67,17 +73,22 @@ export function Results({
       <Screen>
         <View testID="results" style={{ gap: theme.spacing[2] }}>
           <Body muted size="sm">
-            {session.exam ? session.exam.name : isFlashcards ? 'Flashcards' : 'Practice'},{' '}
-            {session.countryName}
+            {session.exam
+              ? session.exam.name
+              : isFlashcards
+                ? t('session.flashcards')
+                : t('session.practice')}
+            {t('exam.factSeparator')}
+            {countryName(session.countryCode, t.locale, session.countryName)}
           </Body>
           <Heading>
             {result.passed === null
-              ? 'Session complete'
+              ? t('results.complete')
               : result.passed
-                ? 'You passed'
-                : 'Not a pass this time'}
+                ? t('results.passed')
+                : t('results.notPassed')}
           </Heading>
-          {note && <Body muted>{note}</Body>}
+          {note && <Body muted>{t(note)}</Body>}
         </View>
 
         <Animated.View entering={enter(0)}>
@@ -85,24 +96,33 @@ export function Results({
             <Text style={[theme.text['5xl'], { color: theme.colors.fg, fontWeight: '600' }]}>
               {result.correct}
             </Text>{' '}
-            of {result.total} {isFlashcards ? 'known' : 'correct'}
-            {session.exam?.passMark != null ? `. ${session.exam.passMark} needed to pass.` : '.'}
+            {t(isFlashcards ? 'results.knownOf' : 'results.correctOf', { total: result.total })}
+            {session.exam?.passMark != null
+              ? ` ${t('results.neededToPass', { count: session.exam.passMark })}`
+              : ''}
           </Text>
-          {score?.exam?.reasons.map((reason) => (
-            <Text key={reason} style={[theme.text.base, { color: theme.colors.errorFg }]}>
-              {reason}
-            </Text>
-          ))}
+          {/* Missing the pass mark is said above; a section that had to be perfect is said here. */}
+          {score?.exam?.sections
+            .filter((section) => !section.passed)
+            .map((section) => (
+              <Text key={section.id} style={[theme.text.base, { color: theme.colors.errorFg }]}>
+                {t('results.sectionAllCorrect', {
+                  section: isolate(section.label),
+                  correct: section.correct,
+                  total: section.total,
+                })}
+              </Text>
+            ))}
         </Animated.View>
 
         {score && (
           <Animated.View entering={enter(1)} style={{ gap: theme.spacing[2] }}>
-            <Heading level={2}>By topic</Heading>
+            <Heading level={2}>{t('results.byTopic')}</Heading>
             {Object.entries(score.byTopic).map(([topicId, topic]) => (
               <View
                 key={topicId}
                 accessible
-                accessibilityLabel={`${topicNames.get(topicId)}: ${topic.correct} of ${topic.total} correct`}
+                accessibilityLabel={`${topicNames.get(topicId)}: ${t('results.scoreOf', { correct: topic.correct, total: topic.total })}`}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
@@ -112,9 +132,7 @@ export function Results({
                 }}
               >
                 <Body>{topicNames.get(topicId)}</Body>
-                <Body>
-                  {topic.correct} of {topic.total}
-                </Body>
+                <Body>{t('results.scoreOf', { correct: topic.correct, total: topic.total })}</Body>
               </View>
             ))}
           </Animated.View>
@@ -123,38 +141,53 @@ export function Results({
         <Animated.View entering={enter(2)} style={{ gap: theme.spacing[3] }}>
           <Heading level={2}>
             {wrong.length === 0
-              ? 'Nothing to review'
+              ? t('results.nothingToReview')
               : isFlashcards
-                ? 'Cards to go over again'
-                : 'Review your wrong answers'}
+                ? t('results.reviewCards')
+                : t('results.reviewWrong')}
           </Heading>
           {wrong.map((answer) => {
             const question = byId.get(answer.questionId)!;
+            const wording = questionWording(question, inExamLanguage);
+            const wordingStyle = { writingDirection: textDirection(wording.locale) };
             const text = (keys: readonly string[]) =>
-              question.options
+              wording.options
                 .filter((option) => keys.includes(option.key))
                 .map((option) => option.text)
                 .join('; ');
             return (
               <Card key={answer.questionId}>
                 <Text
-                  accessibilityLanguage={question.locale}
-                  style={[theme.text.base, { color: theme.colors.fg, fontWeight: '600' }]}
+                  accessibilityLanguage={wording.locale}
+                  style={[
+                    theme.text.base,
+                    { color: theme.colors.fg, fontWeight: '600' },
+                    wordingStyle,
+                  ]}
                 >
-                  {question.text}
+                  {wording.text}
                 </Text>
                 {!isFlashcards && (
                   <Text style={[theme.text.base, { color: theme.colors.errorFg }]}>
-                    You answered: {text(answer.selectedKeys) || 'nothing'}
+                    {t('results.youAnswered', {
+                      answer:
+                        answer.selectedKeys.length > 0
+                          ? isolate(text(answer.selectedKeys))
+                          : t('results.nothing'),
+                    })}
                   </Text>
                 )}
                 <Text style={[theme.text.base, { color: theme.colors.successFg }]}>
-                  Correct answer: {text(question.correctKeys)}
+                  {t('results.correctAnswer', { answer: isolate(text(question.correctKeys)) })}
                 </Text>
-                {question.explanation && <Body muted>{question.explanation}</Body>}
+                {wording.explanation && (
+                  <Text style={[theme.text.base, { color: theme.colors.fgMuted }, wordingStyle]}>
+                    {wording.explanation}
+                  </Text>
+                )}
                 {question.sourceQuote && (
                   <Body muted size="sm">
-                    From the official guide: “{question.sourceQuote}”
+                    {t('session.fromGuide', { quote: isolate(question.sourceQuote) })}
                   </Body>
                 )}
               </Card>
@@ -162,7 +195,7 @@ export function Results({
           })}
         </Animated.View>
 
-        <Button label="Back to study" onPress={backToStudy} testID="back-to-study" />
+        <Button label={t('common.backToStudy')} onPress={backToStudy} testID="back-to-study" />
       </Screen>
       {result.passed && !reduceMotion && (
         <Confetti

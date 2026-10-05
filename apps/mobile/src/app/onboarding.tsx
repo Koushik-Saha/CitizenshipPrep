@@ -1,15 +1,18 @@
 import { dailyGoalOptions, onboardingSchema, searchCountries } from '@oathly/api';
 import { useExamCountries, useSaveOnboarding } from '@oathly/api/hooks';
-import { endonym, isStudyLocale, studyLocales } from '@oathly/i18n';
+import { countryName, endonym, isStudyLocale, studyLocales } from '@oathly/i18n';
 import { getLocales } from 'expo-localization';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 import { Body, Button, Choice, Field, Heading, Message, Screen, useTheme } from '@/components/ui';
+import { useI18n } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
 
-function deviceLocale(): string {
+/** The language to suggest studying in: the app's, or else the phone's. */
+function suggestedLocale(appLocale: string): string {
+  if (isStudyLocale(appLocale)) return appLocale;
   for (const locale of getLocales()) {
     if (isStudyLocale(locale.languageTag)) return locale.languageTag;
     if (locale.languageCode && isStudyLocale(locale.languageCode)) return locale.languageCode;
@@ -19,6 +22,7 @@ function deviceLocale(): string {
 
 export default function Onboarding() {
   const theme = useTheme();
+  const { t, locale: appLocale } = useI18n();
   const session = useSession();
   const me = session.status === 'signed-in' ? session.me : null;
 
@@ -28,7 +32,7 @@ export default function Onboarding() {
   const [query, setQuery] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [examDate, setExamDate] = useState('');
-  const [studyLocale, setStudyLocale] = useState(deviceLocale);
+  const [studyLocale, setStudyLocale] = useState(() => suggestedLocale(appLocale));
   const [dailyGoal, setDailyGoal] = useState<number>(me?.settings?.dailyGoalMinutes ?? 15);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +41,13 @@ export default function Onboarding() {
     () => new Set(me?.studyCountries.map((country) => country.countryCode)),
     [me],
   );
-  const choices = (countries.data ?? []).filter((country) => !studying.has(country.isoCode));
+  // Listed and searched under the names the reader knows them by.
+  const choices = (countries.data ?? [])
+    .filter((country) => !studying.has(country.isoCode))
+    .map((country) => ({
+      ...country,
+      name: countryName(country.isoCode, appLocale, country.name),
+    }));
   const visible = searchCountries(choices, query);
 
   async function submit() {
@@ -51,7 +61,7 @@ export default function Onboarding() {
     // The same rules the server applies, checked here first for a quicker answer.
     const checked = onboardingSchema.safeParse(answer);
     if (!checked.success) {
-      setError(checked.error.issues[0]?.message ?? 'Check your answers.');
+      setError(checked.error.issues[0]?.message ?? t('onboarding.checkAnswers'));
       return;
     }
     setBusy(true);
@@ -68,18 +78,23 @@ export default function Onboarding() {
 
   return (
     <Screen>
-      <Heading>{me?.studyCountries.length ? 'Add another exam' : 'Set up your study'}</Heading>
+      <Heading>
+        {me?.studyCountries.length ? t('onboarding.titleAdd') : t('onboarding.title')}
+      </Heading>
       {error && <Message tone="error">{error}</Message>}
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Which exam are you preparing for?</Heading>
-        <Field label="Search countries" value={query} onChangeText={setQuery} autoCorrect={false} />
+        <Heading level={2}>{t('onboarding.whichExam')}</Heading>
+        <Field
+          label={t('onboarding.searchCountries')}
+          value={query}
+          onChangeText={setQuery}
+          autoCorrect={false}
+        />
         {countries.isError ? (
-          <Message tone="error">
-            We could not load the list of countries. Check your connection and try again.
-          </Message>
+          <Message tone="error">{t('onboarding.countriesFailed')}</Message>
         ) : countries.data === undefined ? (
-          <ActivityIndicator accessibilityLabel="Loading countries" />
+          <ActivityIndicator accessibilityLabel={t('common.loading')} />
         ) : (
           <View accessibilityRole="radiogroup" style={{ gap: theme.spacing[2] }}>
             {visible.map((country) => {
@@ -110,14 +125,14 @@ export default function Onboarding() {
                 </Pressable>
               );
             })}
-            {visible.length === 0 && <Body muted>No country matches “{query}”.</Body>}
+            {visible.length === 0 && <Body muted>{t('onboarding.noCountryMatch', { query })}</Body>}
           </View>
         )}
       </View>
 
       <Field
-        label="Exam date (optional)"
-        hint="Year-month-day, for example 2027-03-15. We use it to pace your study plan."
+        label={`${t('onboarding.examDate')} ${t('onboarding.optional')}`}
+        hint={t('onboarding.examDateHintMobile')}
         value={examDate}
         onChangeText={setExamDate}
         placeholder="YYYY-MM-DD"
@@ -126,7 +141,7 @@ export default function Onboarding() {
       />
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Study language</Heading>
+        <Heading level={2}>{t('onboarding.studyLanguage')}</Heading>
         <View
           accessibilityRole="radiogroup"
           style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}
@@ -143,7 +158,7 @@ export default function Onboarding() {
       </View>
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Minutes a day</Heading>
+        <Heading level={2}>{t('onboarding.dailyGoal')}</Heading>
         <View
           accessibilityRole="radiogroup"
           style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}
@@ -151,7 +166,7 @@ export default function Onboarding() {
           {dailyGoalOptions.map((minutes) => (
             <Choice
               key={minutes}
-              label={`${minutes} min`}
+              label={t('onboarding.minutesShort', { count: minutes })}
               selected={minutes === dailyGoal}
               onPress={() => setDailyGoal(minutes)}
             />
@@ -160,7 +175,7 @@ export default function Onboarding() {
       </View>
 
       <Button
-        label={me?.studyCountries.length ? 'Add this exam' : 'Start studying'}
+        label={me?.studyCountries.length ? t('onboarding.add') : t('onboarding.start')}
         onPress={() => void submit()}
         busy={busy}
         disabled={!countryCode}

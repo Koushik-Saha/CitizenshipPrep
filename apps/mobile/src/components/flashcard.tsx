@@ -12,7 +12,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 
+import { textDirection } from '@oathly/i18n';
+
 import { useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 
 /** How far a card must be dragged, as a share of the screen, to count as a swipe. */
 const SWIPE_SHARE = 0.28;
@@ -44,6 +47,9 @@ export function Flashcard({
   onSwipe: (knewIt: boolean) => void;
 }) {
   const theme = useTheme();
+  const t = useT();
+  // The card's words keep their own direction, whatever the app's language.
+  const own = { writingDirection: textDirection(lang) };
   const { width } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
   const x = useSharedValue(0);
@@ -120,26 +126,30 @@ export function Flashcard({
       <Animated.View
         accessible
         accessibilityRole="button"
-        accessibilityLabel={flipped ? `Answer: ${back}` : `${front}. Tap to show the answer.`}
+        accessibilityLabel={
+          flipped ? `${t('session.answer')}: ${back}` : `${front}. ${t('session.tapToShow')}`
+        }
         accessibilityLanguage={lang}
         testID="flashcard"
         style={[styles.card, cardStyle]}
       >
         <Animated.View style={[face, frontStyle]}>
-          <Text style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }]}>
+          <Text style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }, own]}>
             {front}
           </Text>
           <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>
-            Tap to show the answer
+            {t('session.tapToShow')}
           </Text>
         </Animated.View>
         <Animated.View style={[face, styles.back, backStyle]}>
-          <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>Answer</Text>
-          <Text style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }]}>
+          <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>
+            {t('session.answer')}
+          </Text>
+          <Text style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }, own]}>
             {back}
           </Text>
           {footnote && (
-            <Text style={[theme.text.base, { color: theme.colors.fgMuted }]}>{footnote}</Text>
+            <Text style={[theme.text.base, { color: theme.colors.fgMuted }, own]}>{footnote}</Text>
           )}
           <Animated.View
             style={[
@@ -149,7 +159,7 @@ export function Flashcard({
             ]}
           >
             <Text style={[theme.text.sm, { color: theme.colors.successFg, fontWeight: '600' }]}>
-              Knew it
+              {t('session.knewIt')}
             </Text>
           </Animated.View>
           <Animated.View
@@ -160,7 +170,7 @@ export function Flashcard({
             ]}
           >
             <Text style={[theme.text.sm, { color: theme.colors.errorFg, fontWeight: '600' }]}>
-              Still learning
+              {t('session.stillLearning')}
             </Text>
           </Animated.View>
         </Animated.View>

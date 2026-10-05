@@ -1,5 +1,5 @@
 import { daysUntilExam } from '@oathly/api';
-import { endonym } from '@oathly/i18n';
+import { countryName, endonym, languageName, uiLocales, type Translator } from '@oathly/i18n';
 import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 
@@ -8,30 +8,32 @@ import {
   Body,
   Button,
   Card,
+  Choice,
   Heading,
   LinkButton,
   LoadingScreen,
   Screen,
   useTheme,
 } from '@/components/ui';
+import { useI18n } from '@/lib/i18n';
 import { removePack, sync, useOffline } from '@/lib/offline';
 import { useSession } from '@/lib/session';
 
-function examDate(days: number | null): string {
-  if (days === null) return 'No exam date set';
-  if (days < 0) return 'Exam date has passed';
-  if (days === 0) return 'Exam today';
-  return days === 1 ? 'Exam tomorrow' : `Exam in ${days} days`;
+function examDate(days: number | null, t: Translator): string {
+  if (days === null) return t('exam.countdownNone');
+  if (days < 0) return t('exam.countdownPassed');
+  if (days === 0) return t('exam.countdownToday');
+  return t('exam.countdownDays', { count: days });
 }
-
-const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
 
 export default function Profile() {
   const theme = useTheme();
+  const { t, locale, setLocale } = useI18n();
   const session = useSession();
   const offline = useOffline();
+  const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
   // Opened directly (a deep link) before the session is known: wait, do not bounce.
-  if (session.status === 'loading') return <LoadingScreen label="Loading" />;
+  if (session.status === 'loading') return <LoadingScreen label={t('common.loading')} />;
   if (session.status !== 'signed-in') return <Redirect href="/" />;
   const { me } = session;
   const accuracy = me.progress.questionsAnswered
@@ -42,15 +44,15 @@ export default function Profile() {
   return (
     <Screen>
       <OfflineBanner />
-      <Heading>{me.profile.displayName ?? 'Your profile'}</Heading>
+      <Heading>{me.profile.displayName ?? t('profile.title')}</Heading>
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Progress</Heading>
+        <Heading level={2}>{t('profile.progress')}</Heading>
         <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
           {[
-            ['Sessions', String(me.progress.attempts)],
-            ['Answered', String(me.progress.questionsAnswered)],
-            ['Correct', accuracy],
+            [t('profile.sessions'), String(me.progress.attempts)],
+            [t('profile.answered'), String(me.progress.questionsAnswered)],
+            [t('profile.correct'), accuracy],
           ].map(([label, value]) => (
             <View
               key={label}
@@ -71,47 +73,73 @@ export default function Profile() {
           ))}
         </View>
         <Body muted size="sm">
-          Daily goal: {me.settings?.dailyGoalMinutes ?? 15} minutes.
+          {t('profile.dailyGoal', { count: me.settings?.dailyGoalMinutes ?? 15 })}
         </Body>
       </View>
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Your exams</Heading>
+        <Heading level={2}>{t('profile.yourExams')}</Heading>
         {me.studyCountries.map((country) => (
           <Card key={country.countryCode}>
             <Text style={[theme.text.xl, { color: theme.colors.fg, fontWeight: '600' }]}>
-              {country.countryName}
+              {countryName(country.countryCode, locale, country.countryName)}
             </Text>
-            <Body muted>
-              {examDate(daysUntilExam(country))}
-              {country.studyLocale ? `. Studying in ${endonym(country.studyLocale)}.` : '.'}
-              {country.isPrimary && me.studyCountries.length > 1 ? ' Opens first.' : ''}
-            </Body>
+            <Body muted>{examDate(daysUntilExam(country), t)}</Body>
+            {country.studyLocale && (
+              <Body muted>
+                {t('profile.studyingIn', { language: languageName(country.studyLocale, locale) })}
+              </Body>
+            )}
+            {country.isPrimary && me.studyCountries.length > 1 && (
+              <Body muted>{t('dashboard.opensFirst')}</Body>
+            )}
           </Card>
         ))}
         <Button
-          label="Add another exam"
+          label={t('dashboard.addExam')}
           variant="secondary"
           onPress={() => router.push('/onboarding')}
         />
       </View>
 
       <View style={{ gap: theme.spacing[3] }}>
-        <Heading level={2}>Offline</Heading>
+        <Heading level={2}>{t('profile.appLanguage')}</Heading>
+        <Body muted size="sm">
+          {t('profile.appLanguageHint')}
+        </Body>
+        {/* Takes effect at once: nothing restarts, and nothing in progress is lost. */}
+        <View
+          accessibilityRole="radiogroup"
+          style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}
+        >
+          {uiLocales.map((option) => (
+            <Choice
+              key={option}
+              label={endonym(option)}
+              selected={option === locale}
+              onPress={() => setLocale(option)}
+              testID={`language-${option}`}
+            />
+          ))}
+        </View>
+      </View>
+
+      <View style={{ gap: theme.spacing[3] }}>
+        <Heading level={2}>{t('profile.offline')}</Heading>
         {packs.length === 0 ? (
-          <Body muted>
-            No countries saved on this phone yet. Save one from the Study tab to practise with no
-            connection.
-          </Body>
+          <Body muted>{t('profile.noPacks')}</Body>
         ) : (
           packs.map((pack) => (
             <Card key={pack.countryCode}>
               <Body>
-                {pack.countryName}: {pack.questions} questions, saved{' '}
-                {dateFormat.format(new Date(pack.generatedAt))}.
+                {t('profile.packLine', {
+                  country: countryName(pack.countryCode, locale, pack.countryName),
+                  count: pack.questions,
+                  date: dateFormat.format(new Date(pack.generatedAt)),
+                })}
               </Body>
               <LinkButton
-                label="Remove from this phone"
+                label={t('profile.removePack')}
                 tone="danger"
                 onPress={() => void removePack(pack.countryCode)}
               />
@@ -120,13 +148,15 @@ export default function Profile() {
         )}
         <Body muted size="sm">
           {offline.waiting === 0
-            ? 'Everything you have answered is saved to your account.'
-            : `${offline.waiting} saved ${offline.waiting === 1 ? 'item is' : 'items are'} waiting to be sent.`}
-          {offline.syncProblem && offline.waiting > 0 ? ` Last try: ${offline.syncProblem}` : ''}
+            ? t('profile.allSaved')
+            : t('profile.waiting', { count: offline.waiting })}
+          {offline.syncProblem && offline.waiting > 0
+            ? ` ${t('profile.lastTry', { problem: offline.syncProblem })}`
+            : ''}
         </Body>
         {offline.waiting > 0 && (
           <Button
-            label="Send now"
+            label={t('profile.sendNow')}
             variant="secondary"
             busy={offline.syncing}
             disabled={!offline.online}
@@ -136,13 +166,13 @@ export default function Profile() {
       </View>
 
       <Button
-        label="Sign out"
+        label={t('common.signOut')}
         variant="secondary"
         onPress={() => void session.signOut().then(() => router.replace('/'))}
         testID="sign-out"
       />
       <Body muted size="sm">
-        Oathly is an independent study app. It is not affiliated with any government.
+        {t('common.notAffiliated')}
       </Body>
     </Screen>
   );

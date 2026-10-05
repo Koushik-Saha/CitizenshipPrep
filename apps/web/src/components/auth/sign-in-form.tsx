@@ -4,6 +4,7 @@ import { parseCountryCode } from '@oathly/api/country-search';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { useLocalePath, useT } from '@/components/i18n/provider';
 import { buttonClass, fieldClass, labelClass, Notice } from '@/components/ui';
 import { loadAuthClient } from '@/lib/auth/load-client';
 
@@ -16,7 +17,8 @@ type State =
 /** Where to land after signing in: /welcome, carrying a country picked on the landing page. */
 function useCallbackUrl(): string {
   const country = parseCountryCode(useSearchParams().get('country'));
-  return country ? `/welcome?country=${country}` : '/welcome';
+  // In the language being read, so the link in the email comes back in it.
+  return useLocalePath()(country ? `/welcome?country=${country}` : '/welcome');
 }
 
 /**
@@ -45,6 +47,7 @@ export function ContinueIfSignedIn() {
 
 /** Render inside <Suspense>: it reads ?country= from the query string. */
 export function SignInForm() {
+  const t = useT();
   const callbackUrl = useCallbackUrl();
   const [state, setState] = useState<State>({ step: 'ready' });
 
@@ -55,7 +58,7 @@ export function SignInForm() {
     const { error } = await authClient.signIn.magicLink({ email, callbackURL: callbackUrl });
     setState(
       error
-        ? { step: 'error', message: error.message ?? 'We could not send the link. Try again.' }
+        ? { step: 'error', message: error.message ?? t('auth.sendFailed') }
         : { step: 'sent', email },
     );
   }
@@ -67,24 +70,20 @@ export function SignInForm() {
       provider: 'google',
       callbackURL: callbackUrl,
     });
-    if (error)
-      setState({ step: 'error', message: error.message ?? 'Google sign-in failed. Try again.' });
+    if (error) setState({ step: 'error', message: error.message ?? t('auth.googleFailed') });
   }
 
   if (state.step === 'sent') {
     return (
       <div role="status" className="space-y-3">
-        <h2 className="font-display text-xl font-medium">Check your email</h2>
-        <p>
-          We sent a sign-in link to <strong>{state.email}</strong>. It works once and expires soon.
-          You can close this tab.
-        </p>
+        <h2 className="font-display text-xl font-medium">{t('auth.sentTitle')}</h2>
+        <p>{t('auth.sentBody', { email: state.email })}</p>
         <button
           type="button"
           onClick={() => setState({ step: 'ready' })}
           className={buttonClass.secondary}
         >
-          Use a different email
+          {t('auth.differentEmail')}
         </button>
       </div>
     );
@@ -107,7 +106,7 @@ export function SignInForm() {
       >
         <div>
           <label htmlFor="email" className={labelClass}>
-            Email
+            {t('auth.email')}
           </label>
           <input
             id="email"
@@ -119,12 +118,12 @@ export function SignInForm() {
           />
         </div>
         <button type="submit" disabled={busy} className={`${buttonClass.primary} w-full`}>
-          Email me a sign-in link
+          {t('auth.sendLink')}
         </button>
       </form>
       <div className="text-fg-muted flex items-center gap-3 text-sm" aria-hidden="true">
         <span className="bg-border h-px flex-1" />
-        or
+        {t('auth.or')}
         <span className="bg-border h-px flex-1" />
       </div>
       <button
@@ -135,7 +134,7 @@ export function SignInForm() {
         disabled={busy}
         className={`${buttonClass.secondary} w-full`}
       >
-        Continue with Google
+        {t('auth.google')}
       </button>
     </div>
   );

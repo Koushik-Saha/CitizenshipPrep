@@ -2,21 +2,24 @@
 
 import { useDashboard } from '@oathly/api/hooks';
 import { daysUntilExam } from '@oathly/api/me';
-import Link from 'next/link';
+import { countryName, type Translator } from '@oathly/i18n';
 
-import { stopStudying } from '@/app/onboarding/actions';
+import { stopStudying } from '@/app/[locale]/onboarding/actions';
 import { SignOutButton } from '@/components/auth/sign-out-button';
+import { LanguageMenu } from '@/components/i18n/language-menu';
+import { useT } from '@/components/i18n/provider';
+import Link from '@/components/link';
 import { Badge, buttonClass, focusRing } from '@/components/ui';
 
 import { ReadinessPanel } from './readiness-gauge';
 import { MockExamForm, PracticeForm } from './start-forms';
 import { TimeZoneSync } from './time-zone-sync';
 
-function countdown(days: number | null): string {
-  if (days === null) return 'No exam date set';
-  if (days < 0) return 'Exam date has passed';
-  if (days === 0) return 'Exam today';
-  return days === 1 ? 'Exam tomorrow' : `Exam in ${days} days`;
+function countdown(days: number | null, t: Translator): string {
+  if (days === null) return t('exam.countdownNone');
+  if (days < 0) return t('exam.countdownPassed');
+  if (days === 0) return t('exam.countdownToday');
+  return t('exam.countdownDays', { count: days });
 }
 
 /**
@@ -31,6 +34,7 @@ export function DashboardView({
   displayName: string | null;
   timeZone: string;
 }) {
+  const t = useT();
   const { data: dashboard } = useDashboard();
   // The server always seeds the cache; this only guards a cleared cache.
   if (!dashboard) return null;
@@ -44,21 +48,27 @@ export function DashboardView({
       <TimeZoneSync current={timeZone} />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <h1 className="font-display text-4xl font-semibold">
-          {displayName ? `Hi, ${displayName}` : 'Your study'}
+          {displayName ? t('dashboard.greeting', { name: displayName }) : t('dashboard.title')}
         </h1>
-        <SignOutButton />
+        <div className="flex items-center gap-4 text-sm font-medium">
+          <LanguageMenu locale={t.locale} label={t('common.language')} path="/study" />
+          <SignOutButton />
+        </div>
       </div>
 
       <dl className="mt-8 grid gap-3 sm:grid-cols-2">
         <div className="bg-surface border-border rounded-lg border p-5">
-          <dt className="text-fg-muted text-sm">Today’s goal</dt>
+          <dt className="text-fg-muted text-sm">{t('dashboard.todaysGoal')}</dt>
           <dd className="mt-1">
             <span className="font-display text-3xl font-semibold">{dashboard.minutesToday}</span>
-            <span className="text-fg-muted"> of {dashboard.dailyGoalMinutes} minutes</span>
+            <span className="text-fg-muted">
+              {' '}
+              {t('dashboard.goalProgress', { goal: dashboard.dailyGoalMinutes })}
+            </span>
             <div
               className="bg-surface-sunken mt-3 h-2 overflow-hidden rounded-full"
               role="progressbar"
-              aria-label="Today’s goal"
+              aria-label={t('dashboard.todaysGoal')}
               aria-valuenow={goalProgress}
               aria-valuemin={0}
               aria-valuemax={100}
@@ -68,79 +78,82 @@ export function DashboardView({
           </dd>
         </div>
         <div className="bg-surface border-border rounded-lg border p-5">
-          <dt className="text-fg-muted text-sm">Study streak</dt>
+          <dt className="text-fg-muted text-sm">{t('dashboard.streak')}</dt>
           <dd className="mt-1">
             <span className="font-display text-3xl font-semibold">{dashboard.streakDays}</span>
             <span className="text-fg-muted">
               {' '}
-              {dashboard.streakDays === 1 ? 'day' : 'days'} in a row
+              {t('dashboard.streakDays', { count: dashboard.streakDays })}
             </span>
           </dd>
         </div>
       </dl>
 
-      {dashboard.countries.map((country) => (
-        <section
-          key={country.countryCode}
-          aria-labelledby={`country-${country.countryCode}`}
-          className="mt-12"
-        >
-          <div className="flex flex-wrap items-center gap-3">
-            <h2
-              id={`country-${country.countryCode}`}
-              className="font-display text-3xl font-semibold"
-            >
-              {country.countryName}
-            </h2>
-            {country.isPrimary && <Badge>Opens first</Badge>}
-          </div>
-          <p className="text-fg-muted mt-1">
-            {countdown(daysUntilExam({ ...country, studyLocale: null }))}.{' '}
-            {country.publishedQuestions} questions ready to study.
-          </p>
-
-          {country.publishedQuestions === 0 ? (
-            <p className="border-border text-fg-muted mt-6 rounded-lg border border-dashed px-6 py-8">
-              Questions for {country.countryName} are still being checked against the official
-              guide. They appear here once a reviewer has verified them.
-            </p>
-          ) : (
-            <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-              <ReadinessPanel countryCode={country.countryCode} readiness={country.readiness!} />
-              <div className="space-y-6">
-                <div className="bg-surface border-border rounded-lg border p-5">
-                  <h3 className="mb-3 font-medium">Practise</h3>
-                  <PracticeForm country={country} />
-                </div>
-                <div className="bg-surface border-border rounded-lg border p-5">
-                  <h3 className="mb-3 font-medium">Mock exam</h3>
-                  <MockExamForm country={country} />
-                </div>
-                <Link
-                  href={`/study/tutor/${country.countryCode.toLowerCase()}`}
-                  prefetch
-                  className={`${buttonClass.secondary} w-full`}
-                >
-                  Ask the tutor about {country.countryName}
-                </Link>
-              </div>
-            </div>
-          )}
-          {dashboard.countries.length > 1 && (
-            <form action={stopStudying.bind(null, country.countryCode)} className="mt-4">
-              <button
-                type="submit"
-                className={`${focusRing} text-error-fg rounded-xs text-sm underline`}
+      {dashboard.countries.map((country) => {
+        const name = countryName(country.countryCode, t.locale, country.countryName);
+        return (
+          <section
+            key={country.countryCode}
+            aria-labelledby={`country-${country.countryCode}`}
+            className="mt-12"
+          >
+            <div className="flex flex-wrap items-center gap-3">
+              <h2
+                id={`country-${country.countryCode}`}
+                className="font-display text-3xl font-semibold"
               >
-                Stop studying for this exam
-              </button>
-            </form>
-          )}
-        </section>
-      ))}
+                {name}
+              </h2>
+              {country.isPrimary && <Badge>{t('dashboard.opensFirst')}</Badge>}
+            </div>
+            <p className="text-fg-muted mt-1">
+              {countdown(daysUntilExam({ ...country, studyLocale: null }), t)}
+              {' · '}
+              {t('dashboard.questionsReady', { count: country.publishedQuestions })}
+            </p>
+
+            {country.publishedQuestions === 0 ? (
+              <p className="border-border text-fg-muted mt-6 rounded-lg border border-dashed px-6 py-8">
+                {t('dashboard.questionsBeingChecked', { country: name })}
+              </p>
+            ) : (
+              <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+                <ReadinessPanel countryCode={country.countryCode} readiness={country.readiness!} />
+                <div className="space-y-6">
+                  <div className="bg-surface border-border rounded-lg border p-5">
+                    <h3 className="mb-3 font-medium">{t('dashboard.practise')}</h3>
+                    <PracticeForm country={country} />
+                  </div>
+                  <div className="bg-surface border-border rounded-lg border p-5">
+                    <h3 className="mb-3 font-medium">{t('dashboard.mockExam')}</h3>
+                    <MockExamForm country={country} />
+                  </div>
+                  <Link
+                    href={`/study/tutor/${country.countryCode.toLowerCase()}`}
+                    prefetch
+                    className={`${buttonClass.secondary} w-full`}
+                  >
+                    {t('dashboard.askTutor', { country: name })}
+                  </Link>
+                </div>
+              </div>
+            )}
+            {dashboard.countries.length > 1 && (
+              <form action={stopStudying.bind(null, country.countryCode)} className="mt-4">
+                <button
+                  type="submit"
+                  className={`${focusRing} text-error-fg rounded-xs text-sm underline`}
+                >
+                  {t('dashboard.stopStudying')}
+                </button>
+              </form>
+            )}
+          </section>
+        );
+      })}
 
       <Link href="/onboarding?add=1" className={`${buttonClass.secondary} mt-12`}>
-        Add another exam
+        {t('dashboard.addExam')}
       </Link>
     </main>
   );

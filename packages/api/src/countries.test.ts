@@ -1,13 +1,17 @@
+import { translatorFor } from '@oathly/i18n/messages';
 import { describe, expect, it } from 'vitest';
 
 import {
   countryHighlights,
   describeExam,
-  examLanguageList,
+  localCountryName,
   parseCountryCode,
   searchCountries,
   type CountryFacts,
 } from './countries';
+
+const t = translatorFor('en');
+const es = translatorFor('es');
 
 const countries = [
   { isoCode: 'AU', name: 'Australia' },
@@ -49,14 +53,16 @@ describe('parseCountryCode', () => {
 });
 
 describe('describeExam', () => {
-  it('lists what the format fixes', () => {
-    expect(describeExam({ questionCount: 20, passMark: 12, timeLimitMinutes: 45 })).toBe(
-      '20 questions, 12 to pass, 45 minutes',
-    );
-    expect(describeExam({ questionCount: 1, passMark: null, timeLimitMinutes: null })).toBe(
+  it('lists what the format fixes, in the reader’s language', () => {
+    const exam = { questionCount: 20, passMark: 12, timeLimitMinutes: 45 };
+    expect(describeExam(exam, t)).toBe('20 questions, 12 to pass, 45 minutes');
+    expect(describeExam(exam, es)).toBe('20 preguntas, 12 para aprobar, 45 minutos');
+    expect(describeExam({ questionCount: 1, passMark: null, timeLimitMinutes: null }, t)).toBe(
       '1 question',
     );
-    expect(describeExam({ questionCount: null, passMark: null, timeLimitMinutes: null })).toBe('');
+    expect(describeExam({ questionCount: null, passMark: null, timeLimitMinutes: null }, t)).toBe(
+      '',
+    );
   });
 });
 
@@ -82,32 +88,41 @@ describe('countryHighlights', () => {
   };
 
   it('describes the main exam, its languages and the question bank', () => {
-    expect(examLanguageList(['en', 'fr'])).toBe('English or French');
-    expect(countryHighlights(canada)).toEqual([
+    expect(countryHighlights(canada, t)).toEqual([
       'Citizenship test: 20 questions, 15 to pass, 45 minutes',
       'Taken in English or French',
-      'Practice questions being checked',
+      'Practice questions are being checked',
     ]);
+    expect(countryHighlights(canada, es)).toEqual([
+      'Citizenship test: 20 preguntas, 15 para aprobar, 45 minutos',
+      'Se hace en inglés o francés',
+      'Las preguntas de práctica están en revisión',
+    ]);
+    expect(localCountryName({ isoCode: 'CA', name: 'Canada' }, es)).toBe('Canadá');
+    expect(localCountryName({ isoCode: 'ZZ', name: 'Testland' }, es)).toBe('Testland');
   });
 
   it('copes with an exam without fixed numbers, no languages and one question', () => {
     expect(
-      countryHighlights({
-        ...canada,
-        examLanguages: [],
-        exams: [
-          {
-            ...canada.exams[0]!,
-            name: 'Interview',
-            questionCount: null,
-            passMark: null,
-            timeLimitMinutes: null,
-          },
-        ],
-        publishedQuestions: 1,
-      }),
+      countryHighlights(
+        {
+          ...canada,
+          examLanguages: [],
+          exams: [
+            {
+              ...canada.exams[0]!,
+              name: 'Interview',
+              questionCount: null,
+              passMark: null,
+              timeLimitMinutes: null,
+            },
+          ],
+          publishedQuestions: 1,
+        },
+        t,
+      ),
     ).toEqual(['Interview', '1 checked practice question']);
-    expect(countryHighlights({ ...canada, exams: [], publishedQuestions: 40 })).toEqual([
+    expect(countryHighlights({ ...canada, exams: [], publishedQuestions: 40 }, t)).toEqual([
       'Taken in English or French',
       '40 checked practice questions',
     ]);

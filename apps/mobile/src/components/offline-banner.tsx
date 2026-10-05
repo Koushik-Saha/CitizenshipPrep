@@ -1,23 +1,24 @@
 import { Text, View } from 'react-native';
 
 import { useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 import { useOffline } from '@/lib/offline';
 
 /** Says when the phone is offline, and how much is waiting to be sent. */
 export function OfflineBanner() {
   const theme = useTheme();
+  const t = useT();
   const { online, waiting, syncing } = useOffline();
   if (online && waiting === 0) return null;
 
-  // Answers and session results both count: say "saved", not "answers".
-  const things = `${waiting} saved ${waiting === 1 ? 'item' : 'items'}`;
+  // Answers and session results both count: the messages say "saved items".
   const message = !online
     ? waiting > 0
-      ? `You are offline. ${things} will be sent when you are back online.`
-      : 'You are offline. Saved countries still work.'
+      ? t('offline.bannerOfflineWaiting', { count: waiting })
+      : t('offline.bannerOffline')
     : syncing
-      ? `Sending ${things}…`
-      : `${things} waiting to be sent.`;
+      ? t('offline.bannerSending', { count: waiting })
+      : t('offline.bannerWaiting', { count: waiting });
 
   return (
     <View

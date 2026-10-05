@@ -105,3 +105,11 @@ pnpm --filter @oathly/mobile test:web         # the Maestro flow, with Playwrigh
 - Answers give haptic feedback (`src/lib/haptics.ts`); a mock exam gives the
   same light tap for every answer, since a real exam does not say whether you
   were right.
+
+## Languages
+
+The app's text comes from `packages/i18n`, the same message files as the web
+app. It starts in the phone's language when Oathly has it, and the Profile
+tab has a picker that changes it at once, with no restart. Arabic lays the
+app out right to left through the `direction` style on the root view
+(`src/lib/i18n.tsx`), not `I18nManager.forceRTL`, which would need a restart.

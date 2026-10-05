@@ -7,7 +7,7 @@ export function PageSkeleton({
   blocks = 3,
 }: {
   /** What is loading, for screen readers. */
-  label: string;
+  label: React.ReactNode;
   width?: 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl';
   blocks?: number;
 }) {

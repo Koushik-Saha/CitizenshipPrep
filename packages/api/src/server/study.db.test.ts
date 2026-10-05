@@ -133,7 +133,20 @@ describe.skipIf(!url)('study sessions against the database', () => {
         { key: 'b', text: 'No' },
       ],
     });
-    expect(session.questions.filter((question) => question.locale === 'en')).toHaveLength(7);
+    // The exam's own wording comes too, so the learner can switch to it.
+    expect(translated!.original).toEqual({
+      locale: 'en',
+      text: 'Question 1',
+      options: [
+        { key: 'a', text: 'Yes' },
+        { key: 'b', text: 'No' },
+      ],
+      explanation: null,
+    });
+    const untranslated = session.questions.filter((question) => question.locale === 'en');
+    expect(untranslated).toHaveLength(7);
+    // Nothing to switch to when the wording already is the exam's.
+    expect(untranslated.every((question) => question.original === null)).toBe(true);
     expect(session.exam).toBeNull();
   });
 
@@ -283,6 +296,9 @@ describe.skipIf(!url)('study sessions against the database', () => {
     expect(pack.countryName).toBe('Examland');
     expect(pack.questions).toHaveLength(8);
     expect(pack.questions.every((question) => question.topicSlug === 'civics')).toBe(true);
+    expect(pack.questions.filter((question) => question.original !== null)).toMatchObject([
+      { locale: 'es', text: 'Pregunta 1', original: { locale: 'en', text: 'Question 1' } },
+    ]);
     expect(pack.examFormats.map((format) => format.name).sort()).toEqual([
       'Examland long test',
       'Examland test',

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { useT } from '@/components/i18n/provider';
 import { buttonClass } from '@/components/ui';
 import { streamText } from '@/lib/stream-text';
 
@@ -13,6 +14,7 @@ type State =
 
 /** "Explain more": a fuller explanation, written by AI from the question's source passage. */
 export function ExplainMore({ questionId }: { questionId: string }) {
+  const t = useT();
   const [state, setState] = useState<State>({ step: 'idle' });
 
   async function load() {
@@ -32,7 +34,7 @@ export function ExplainMore({ questionId }: { questionId: string }) {
   if (state.step === 'idle') {
     return (
       <button type="button" onClick={() => void load()} className={`${buttonClass.secondary} mt-3`}>
-        Explain more
+        {t('explain.more')}
       </button>
     );
   }
@@ -41,20 +43,18 @@ export function ExplainMore({ questionId }: { questionId: string }) {
   }
   return (
     <div
-      className="border-border mt-3 border-l-4 pl-4"
+      className="border-border mt-3 border-s-4 ps-4"
       aria-live="polite"
       aria-busy={state.step === 'loading'}
     >
       <p
         className="text-fg whitespace-pre-line"
+        dir="auto"
         lang={state.step === 'done' ? (state.locale ?? undefined) : undefined}
       >
-        {state.text || 'Writing an explanation…'}
+        {state.text || t('explain.writing')}
       </p>
-      <p className="text-fg-subtle mt-2 text-xs">
-        Written by AI from the official guide’s passage. It has not been checked by a reviewer and
-        may contain mistakes.
-      </p>
+      <p className="text-fg-subtle mt-2 text-xs">{t('explain.aiNote')}</p>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
 } from '@oathly/api';
 import { useDashboard } from '@oathly/api/hooks';
 import { queryKeys } from '@oathly/api/queries';
+import { countryName, type Translator } from '@oathly/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
@@ -24,27 +25,27 @@ import {
   Screen,
   useTheme,
 } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 import { downloadPack, startSession, useOffline } from '@/lib/offline';
 import { useSession } from '@/lib/session';
 
-function countdown(days: number | null): string {
-  if (days === null) return 'No exam date set';
-  if (days < 0) return 'Exam date has passed';
-  if (days === 0) return 'Exam today';
-  return days === 1 ? 'Exam tomorrow' : `Exam in ${days} days`;
+function countdown(days: number | null, t: Translator): string {
+  if (days === null) return t('exam.countdownNone');
+  if (days < 0) return t('exam.countdownPassed');
+  if (days === 0) return t('exam.countdownToday');
+  return t('exam.countdownDays', { count: days });
 }
-
-const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });
 
 /** The readiness score: a Skia gauge that sweeps up to it, with the number in words too. */
 function Readiness({ country }: { country: CountryDashboard }) {
   const theme = useTheme();
+  const t = useT();
   const readiness = country.readiness!;
   return (
     <View
       accessible
       accessibilityRole="text"
-      accessibilityLabel={`Estimated readiness ${readiness.score} percent${readiness.isEarlyEstimate ? ', an early estimate' : ''}`}
+      accessibilityLabel={`${t('readiness.title')}: ${t(readiness.isEarlyEstimate ? 'readiness.meterEarly' : 'readiness.meter', { score: readiness.score })}`}
       style={{ alignItems: 'center' }}
     >
       <Arc
@@ -59,7 +60,7 @@ function Readiness({ country }: { country: CountryDashboard }) {
           {readiness.score}%
         </Text>
         <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>
-          {readiness.isEarlyEstimate ? 'Early estimate of readiness' : 'Estimated readiness'}
+          {readiness.isEarlyEstimate ? t('readiness.earlyTitle') : t('readiness.title')}
         </Text>
       </View>
     </View>
@@ -70,7 +71,8 @@ function Readiness({ country }: { country: CountryDashboard }) {
 function suggestion(
   countryCode: string,
   item: StudySuggestionView,
-): { text: string; action: string; request: StartSessionRequest } {
+  t: Translator,
+): { title: string; detail: string; action: string; request: StartSessionRequest } {
   const practise = (focus: 'adaptive' | { topicId: string }): StartSessionRequest => ({
     kind: 'practice',
     countryCode,
@@ -80,26 +82,30 @@ function suggestion(
   switch (item.kind) {
     case 'start':
       return {
-        text: 'Answer a few questions to get your first estimate.',
-        action: 'Start',
+        title: t('readiness.suggestStart'),
+        detail: t('readiness.suggestStartDetail'),
+        action: t('readiness.start'),
         request: practise('adaptive'),
       };
     case 'review':
       return {
-        text: `${item.count} ${item.count === 1 ? 'question is' : 'questions are'} due for review.`,
-        action: 'Review',
+        title: t('readiness.suggestReview', { count: item.count }),
+        detail: t('readiness.suggestReviewDetail'),
+        action: t('readiness.start'),
         request: practise('adaptive'),
       };
     case 'topic':
       return {
-        text: `${item.name} is ${item.share}% of the exam and you are at ${item.mastery}%.`,
-        action: 'Practise it',
+        title: item.name,
+        detail: t('readiness.suggestTopicDetail', { share: item.share, mastery: item.mastery }),
+        action: t('dashboard.practise'),
         request: practise({ topicId: item.topicId }),
       };
     case 'mock':
       return {
-        text: `You look ready to try the ${item.examName}.`,
-        action: 'Take a mock exam',
+        title: t('readiness.suggestMock'),
+        detail: t('readiness.suggestMockDetail', { exam: item.examName }),
+        action: t('readiness.start'),
         request: { kind: 'mock_exam', countryCode, examFormatId: item.examFormatId },
       };
   }
@@ -116,11 +122,14 @@ function CountrySection({
   onStart: (key: string, request: StartSessionRequest) => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const offline = useOffline();
   const [showTopics, setShowTopics] = useState(false);
   const [packProblem, setPackProblem] = useState<string | null>(null);
   const code = country.countryCode;
   const pack = offline.packs[code];
+  const name = countryName(code, t.locale, country.countryName);
+  const dateFormat = new Intl.DateTimeFormat(t.locale, { dateStyle: 'medium' });
   const practise = (
     focus: 'adaptive' | 'random' | { topicId: string },
     kind: 'practice' | 'flashcards' = 'practice',
@@ -138,29 +147,27 @@ function CountrySection({
   return (
     <View style={{ gap: theme.spacing[4] }}>
       <View style={{ gap: theme.spacing[1] }}>
-        <Heading level={2}>{country.countryName}</Heading>
-        <Body muted>
-          {countdown(daysUntilExam({ ...country, studyLocale: null }))}.{' '}
-          {country.publishedQuestions} questions ready to study.
-        </Body>
+        <Heading level={2}>{name}</Heading>
+        <Body muted>{countdown(daysUntilExam({ ...country, studyLocale: null }), t)}</Body>
+        <Body muted>{t('dashboard.questionsReady', { count: country.publishedQuestions })}</Body>
       </View>
 
       {country.publishedQuestions === 0 ? (
         <Card>
-          <Body muted>
-            Questions for {country.countryName} are still being checked against the official guide.
-            They appear here once a reviewer has verified them.
-          </Body>
+          <Body muted>{t('dashboard.questionsBeingChecked', { country: name })}</Body>
         </Card>
       ) : (
         <>
           <Card>
             <Readiness country={country} />
             {country.readiness!.suggestions.slice(0, 2).map((item) => {
-              const { text, action, request } = suggestion(code, item);
+              const { title, detail, action, request } = suggestion(code, item, t);
               return (
-                <View key={`${item.kind}-${text}`} style={{ gap: theme.spacing[1] }}>
-                  <Body>{text}</Body>
+                <View key={`${item.kind}-${title}`} style={{ gap: theme.spacing[1] }}>
+                  <Body>{title}</Body>
+                  <Body muted size="sm">
+                    {detail}
+                  </Body>
                   <LinkButton label={action} onPress={() => onStart(`suggest-${code}`, request)} />
                 </View>
               );
@@ -169,21 +176,22 @@ function CountrySection({
 
           <Card>
             <Text style={[theme.text.lg, { color: theme.colors.fg, fontWeight: '600' }]}>
-              Practise
+              {t('dashboard.practise')}
             </Text>
             <Body muted size="sm">
-              Ten questions chosen for you: weak topics, reviews
-              {country.dueForReview > 0 ? ` (${country.dueForReview} due)` : ''} and new ones.
+              {country.dueForReview > 0
+                ? t('start.practiceIntroDue', { count: country.dueForReview })
+                : t('start.practiceIntro')}
             </Body>
             <Button
-              label="Practise"
+              label={t('dashboard.practise')}
               busy={busy === `practise-${code}`}
               disabled={busy !== null}
               onPress={() => onStart(`practise-${code}`, practise('adaptive'))}
               testID={`practise-${code}`}
             />
             <Button
-              label="Flashcards"
+              label={t('start.flashcards')}
               variant="secondary"
               busy={busy === `flashcards-${code}`}
               disabled={busy !== null}
@@ -191,14 +199,14 @@ function CountrySection({
               testID={`flashcards-${code}`}
             />
             <LinkButton
-              label={showTopics ? 'Hide topics' : 'Practise one topic'}
+              label={showTopics ? t('start.hideTopics') : t('start.oneTopic')}
               onPress={() => setShowTopics(!showTopics)}
             />
             {showTopics &&
               country.topics.map((topic) => (
                 <Button
                   key={topic.topicId}
-                  label={`${topic.name} (${topic.mastery}%)`}
+                  label={t('start.topicWithMastery', { topic: topic.name, mastery: topic.mastery })}
                   variant="secondary"
                   disabled={busy !== null}
                   onPress={() =>
@@ -210,21 +218,29 @@ function CountrySection({
 
           <Card>
             <Text style={[theme.text.lg, { color: theme.colors.fg, fontWeight: '600' }]}>
-              Mock exam
+              {t('dashboard.mockExam')}
             </Text>
             {country.exams.map((exam, i) => (
               <View key={exam.id} style={{ gap: theme.spacing[2] }}>
                 <Body>{exam.name}</Body>
                 <Body muted size="sm">
-                  {exam.questionCount} questions
-                  {exam.passMark !== null ? `, ${exam.passMark} to pass` : ''}
-                  {exam.timeLimitMinutes !== null
-                    ? `, ${exam.timeLimitMinutes} minutes`
-                    : ', no time limit'}
-                  {exam.unavailableReason ? `. ${exam.unavailableReason}` : ''}
+                  {[
+                    t('exam.questionCount', { count: exam.questionCount }),
+                    exam.passMark !== null ? t('exam.toPass', { count: exam.passMark }) : null,
+                    exam.timeLimitMinutes !== null
+                      ? t('exam.minutes', { count: exam.timeLimitMinutes })
+                      : t('exam.noTimeLimit'),
+                  ]
+                    .filter((part) => part !== null)
+                    .join(t('exam.factSeparator'))}
                 </Body>
+                {exam.unavailableReason && (
+                  <Body muted size="sm">
+                    {exam.unavailableReason}
+                  </Body>
+                )}
                 <Button
-                  label="Start mock exam"
+                  label={t('start.startMock')}
                   variant="secondary"
                   busy={busy === `mock-${exam.id}`}
                   disabled={busy !== null || exam.unavailableReason !== null}
@@ -243,16 +259,19 @@ function CountrySection({
 
           <Card>
             <Text style={[theme.text.lg, { color: theme.colors.fg, fontWeight: '600' }]}>
-              Study offline
+              {t('offline.title')}
             </Text>
             <Body muted size="sm">
               {pack
-                ? `${pack.questions} questions saved on this phone, as of ${dateFormat.format(new Date(pack.generatedAt))}. You can practise and take mock exams with no connection.`
-                : 'Save this country to your phone to practise and take mock exams with no connection. Your answers are sent when you are back online.'}
+                ? t('offline.saved', {
+                    count: pack.questions,
+                    date: dateFormat.format(new Date(pack.generatedAt)),
+                  })
+                : t('offline.notSaved')}
             </Body>
             {packProblem && <Message tone="error">{packProblem}</Message>}
             <Button
-              label={pack ? 'Update saved questions' : 'Save for offline'}
+              label={pack ? t('offline.update') : t('offline.save')}
               variant="secondary"
               busy={offline.downloading === code}
               disabled={!offline.online || offline.downloading !== null}
@@ -268,6 +287,7 @@ function CountrySection({
 
 export default function Study() {
   const theme = useTheme();
+  const t = useT();
   const session = useSession();
   const dashboard = useDashboard();
   const client = useQueryClient();
@@ -276,7 +296,7 @@ export default function Study() {
   const offline = useOffline();
 
   // Opened directly (a deep link) before the session is known: wait, do not bounce.
-  if (session.status === 'loading') return <LoadingScreen label="Loading" />;
+  if (session.status === 'loading') return <LoadingScreen label={t('common.loading')} />;
   if (session.status !== 'signed-in') return <Redirect href="/" />;
   const { me } = session;
 
@@ -302,7 +322,11 @@ export default function Study() {
   return (
     <Screen>
       <OfflineBanner />
-      <Heading>{me.profile.displayName ? `Hi, ${me.profile.displayName}` : 'Your study'}</Heading>
+      <Heading>
+        {me.profile.displayName
+          ? t('dashboard.greeting', { name: me.profile.displayName })
+          : t('dashboard.title')}
+      </Heading>
       {problem && <Message tone="error">{problem}</Message>}
 
       {data ? (
@@ -311,7 +335,7 @@ export default function Study() {
             <Card style={{ flex: 1, alignItems: 'center' }}>
               <View
                 accessible
-                accessibilityLabel={`Today: ${data.minutesToday} of ${data.dailyGoalMinutes} minutes`}
+                accessibilityLabel={`${t('dashboard.todaysGoal')}: ${data.minutesToday} ${t('dashboard.goalProgress', { goal: data.dailyGoalMinutes })}`}
                 style={{ alignItems: 'center', justifyContent: 'center' }}
               >
                 <Arc
@@ -332,7 +356,7 @@ export default function Study() {
                 </Text>
               </View>
               <Body muted size="sm">
-                of {data.dailyGoalMinutes} minutes today
+                {t('dashboard.goalProgressToday', { goal: data.dailyGoalMinutes })}
               </Body>
             </Card>
             <Card style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -340,7 +364,7 @@ export default function Study() {
                 {data.streakDays}
               </Text>
               <Body muted size="sm">
-                {data.streakDays === 1 ? 'day' : 'days'} in a row
+                {t('dashboard.streakDays', { count: data.streakDays })}
               </Body>
             </Card>
           </View>
@@ -356,14 +380,16 @@ export default function Study() {
       ) : !offline.online ? (
         // First launch with no connection and nothing cached: saved countries still work.
         <>
-          <Body muted>Your progress will show here when you are back online.</Body>
+          <Body muted>{t('offline.progressLater')}</Body>
           {me.studyCountries
             .filter((country) => offline.packs[country.countryCode])
             .map((country) => (
               <Card key={country.countryCode}>
-                <Heading level={2}>{country.countryName}</Heading>
+                <Heading level={2}>
+                  {countryName(country.countryCode, t.locale, country.countryName)}
+                </Heading>
                 <Button
-                  label="Practise"
+                  label={t('dashboard.practise')}
                   busy={busy === `practise-${country.countryCode}`}
                   disabled={busy !== null}
                   onPress={() =>
@@ -380,12 +406,16 @@ export default function Study() {
         </>
       ) : dashboard.isError ? (
         <Card>
-          <Body>We could not load your study plan.</Body>
-          <Button label="Try again" variant="secondary" onPress={() => void dashboard.refetch()} />
+          <Body>{t('dashboard.loadFailed')}</Body>
+          <Button
+            label={t('common.tryAgain')}
+            variant="secondary"
+            onPress={() => void dashboard.refetch()}
+          />
         </Card>
       ) : (
         <ActivityIndicator
-          accessibilityLabel="Loading your study plan"
+          accessibilityLabel={t('dashboard.loadingPlan')}
           color={theme.colors.primary}
         />
       )}

@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useTheme } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -34,6 +35,7 @@ export function OptionButton({
   onPress: () => void;
 }) {
   const theme = useTheme();
+  const t = useT();
   const reduceMotion = useReducedMotion();
   const scale = useSharedValue(1);
   const pressStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.get() }] }));
@@ -45,9 +47,11 @@ export function OptionButton({
     wrong: [theme.colors.error, theme.colors.errorSoft, theme.colors.errorFg],
     missed: [theme.colors.success, theme.colors.surface, theme.colors.successFg],
   }[state];
-  const verdict = { correct: 'Correct', wrong: 'Your answer', missed: 'Correct answer' }[
-    state as 'correct' | 'wrong' | 'missed'
-  ];
+  const verdict = {
+    correct: t('session.correct'),
+    wrong: t('session.yourAnswer'),
+    missed: t('session.correctAnswer'),
+  }[state as 'correct' | 'wrong' | 'missed'];
   const chosen = state === 'selected' || state === 'correct' || state === 'wrong';
 
   return (

@@ -12,8 +12,19 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useI18n } from '@/lib/i18n';
+
 export function useTheme(): Theme {
   return themeFor(useColorScheme());
+}
+
+/**
+ * Lines the app's own text up with its language: on the right in Arabic,
+ * even for a line that happens to be a Latin name. (Left to itself, each
+ * line follows its own first letter.)
+ */
+function useTextAlign(): { textAlign: 'left' | 'right' } {
+  return { textAlign: useI18n().direction === 'rtl' ? 'right' : 'left' };
 }
 
 export function Screen({
@@ -34,12 +45,14 @@ export function Screen({
 
 export function Heading({ children, level = 1 }: { children: React.ReactNode; level?: 1 | 2 }) {
   const theme = useTheme();
+  const align = useTextAlign();
   return (
     <Text
       accessibilityRole="header"
       style={[
         theme.text[level === 1 ? '4xl' : '2xl'],
         { color: theme.colors.fg, fontWeight: '600' },
+        align,
       ]}
     >
       {children}
@@ -57,8 +70,11 @@ export function Body({
   size?: 'sm' | 'base' | 'lg';
 }) {
   const theme = useTheme();
+  const align = useTextAlign();
   return (
-    <Text style={[theme.text[size], { color: muted ? theme.colors.fgMuted : theme.colors.fg }]}>
+    <Text
+      style={[theme.text[size], { color: muted ? theme.colors.fgMuted : theme.colors.fg }, align]}
+    >
       {children}
     </Text>
   );
@@ -151,10 +167,12 @@ export function Choice({
   label,
   selected,
   onPress,
+  testID,
 }: {
   label: string;
   selected: boolean;
   onPress: () => void;
+  testID?: string;
 }) {
   const theme = useTheme();
   return (
@@ -162,6 +180,7 @@ export function Choice({
       accessibilityRole="radio"
       accessibilityState={{ selected }}
       onPress={onPress}
+      testID={testID}
       style={[
         styles.choice,
         {

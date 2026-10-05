@@ -1,7 +1,7 @@
 // Public facts about the exams Oathly covers, for the landing page and the
 // globe. Everything here is safe to show signed-out visitors.
 
-import { languageName } from '@oathly/i18n';
+import { countryName, languageList, type Translator } from '@oathly/i18n';
 
 export { parseCountryCode, searchCountries } from './country-search';
 
@@ -70,40 +70,43 @@ export const countrySlug = (isoCode: string) => isoCode.toLowerCase();
 /** "20 questions, 12 to pass, 45 minutes", leaving out what the format does not fix. */
 export function describeExam(
   exam: Pick<ExamFacts, 'questionCount' | 'passMark' | 'timeLimitMinutes'>,
+  t: Translator,
 ): string {
   const parts: string[] = [];
-  if (exam.questionCount !== null) {
-    parts.push(`${exam.questionCount} question${exam.questionCount === 1 ? '' : 's'}`);
-  }
-  if (exam.passMark !== null) parts.push(`${exam.passMark} to pass`);
-  if (exam.timeLimitMinutes !== null) parts.push(`${exam.timeLimitMinutes} minutes`);
-  return parts.join(', ');
+  if (exam.questionCount !== null)
+    parts.push(t('exam.questionCount', { count: exam.questionCount }));
+  if (exam.passMark !== null) parts.push(t('exam.toPass', { count: exam.passMark }));
+  if (exam.timeLimitMinutes !== null)
+    parts.push(t('exam.minutes', { count: exam.timeLimitMinutes }));
+  return parts.join(t('exam.factSeparator'));
 }
 
-/** "English or French" */
-export function examLanguageList(languages: readonly string[], inLocale = 'en'): string {
-  const names = languages.map((language) => languageName(language, inLocale));
-  return new Intl.ListFormat(inLocale, { type: 'disjunction' }).format(names);
+/** A country's name in the reader's language. */
+export function localCountryName(
+  country: { isoCode: string; name: string },
+  t: Translator,
+): string {
+  return countryName(country.isoCode, t.locale, country.name);
 }
 
 /**
  * Short lines about a country's exam, for the globe's hover card: the main
  * test, its language, and whether there are questions to practise yet.
  */
-export function countryHighlights(country: CountryFacts): string[] {
+export function countryHighlights(country: CountryFacts, t: Translator): string[] {
   const lines: string[] = [];
   const exam = country.exams[0];
   if (exam) {
-    const details = describeExam(exam);
+    const details = describeExam(exam, t);
     lines.push(details ? `${exam.name}: ${details}` : exam.name);
   }
   if (country.examLanguages.length > 0) {
-    lines.push(`Taken in ${examLanguageList(country.examLanguages)}`);
+    lines.push(t('exam.takenIn', { languages: languageList(country.examLanguages, t.locale) }));
   }
   lines.push(
     country.publishedQuestions > 0
-      ? `${country.publishedQuestions} checked practice question${country.publishedQuestions === 1 ? '' : 's'}`
-      : 'Practice questions being checked',
+      ? t('exam.checkedQuestions', { count: country.publishedQuestions })
+      : t('exam.questionsBeingChecked'),
   );
   return lines;
 }

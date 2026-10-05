@@ -1,4 +1,4 @@
-import { toMockExam, toQuizQuestion, type StudySession } from '@oathly/api';
+import { questionWording, toMockExam, toQuizQuestion, type StudySession } from '@oathly/api';
 import { useStudySession } from '@oathly/api/hooks';
 import { queryKeys } from '@oathly/api/queries';
 import {
@@ -13,6 +13,7 @@ import {
   type RunConfig,
   type RunState,
 } from '@oathly/core';
+import { isolate, languageName, textDirection } from '@oathly/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import * as Crypto from 'expo-crypto';
 import { useLocalSearchParams } from 'expo-router';
@@ -25,6 +26,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { Results } from '@/components/results';
 import { Body, Button, Card, Heading, LinkButton, Screen, useTheme } from '@/components/ui';
 import { haptics } from '@/lib/haptics';
+import { useT } from '@/lib/i18n';
 import { backToStudy } from '@/lib/navigation';
 import { completeSession, recordAnswer } from '@/lib/offline';
 
@@ -56,11 +58,19 @@ function clock(ms: number): string {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
-const modeLabel = { practice: 'Practice', flashcards: 'Flashcards', mock_exam: 'Mock exam' };
+const modeLabel = {
+  practice: 'session.practice',
+  flashcards: 'session.flashcards',
+  mock_exam: 'session.mockExam',
+} as const;
 
 function Runner({ session }: { session: StudySession }) {
   const theme = useTheme();
+  const t = useT();
   const client = useQueryClient();
+  // Study language or the exam's own, for questions that have both. The
+  // choice carries on to the next question until it is changed back.
+  const [inExamLanguage, setInExamLanguage] = useState(false);
   const config = useMemo<RunConfig>(
     () => ({
       mode: session.mode,
@@ -77,6 +87,8 @@ function Runner({ session }: { session: StudySession }) {
   const reported = useRef(session.completedAt !== null);
 
   const question = session.questions[run.index]!;
+  const wording = questionWording(question, inExamLanguage);
+  const wordingStyle = { writingDirection: textDirection(wording.locale) };
   const isExam = session.mode === 'mock_exam';
   const isFlashcards = session.mode === 'flashcards';
 
@@ -128,7 +140,15 @@ function Runner({ session }: { session: StudySession }) {
   }
 
   if (run.phase === 'results') {
-    return <Results session={session} config={config} run={run} startedAt={startedAt} />;
+    return (
+      <Results
+        session={session}
+        config={config}
+        run={run}
+        startedAt={startedAt}
+        inExamLanguage={inExamLanguage}
+      />
+    );
   }
 
   const answered = run.answers.length;
@@ -149,13 +169,13 @@ function Runner({ session }: { session: StudySession }) {
         <View
           style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <LinkButton label="Leave" onPress={backToStudy} testID="leave-session" />
+          <LinkButton label={t('session.leave')} onPress={backToStudy} testID="leave-session" />
           <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>
-            {isExam ? (session.exam?.name ?? modeLabel.mock_exam) : modeLabel[session.mode]}
+            {isExam ? (session.exam?.name ?? t(modeLabel.mock_exam)) : t(modeLabel[session.mode])}
           </Text>
           {remaining !== null ? (
             <Text
-              accessibilityLabel={`${clock(remaining)} left`}
+              accessibilityLabel={t('session.timeLeft', { time: clock(remaining) })}
               accessibilityRole="timer"
               style={[
                 theme.text.base,
@@ -174,11 +194,36 @@ function Runner({ session }: { session: StudySession }) {
         </View>
         <ProgressBar
           value={answered / session.questions.length}
-          label={`Question ${run.index + 1} of ${session.questions.length}`}
+          label={t('session.questionOf', {
+            current: run.index + 1,
+            total: session.questions.length,
+          })}
         />
         <Text style={[theme.text.sm, { color: theme.colors.fgMuted }]}>
-          Question {run.index + 1} of {session.questions.length}, {question.topicName}
+          {t('session.questionOf', { current: run.index + 1, total: session.questions.length })}
+          {t('exam.factSeparator')}
+          {question.topicName}
         </Text>
+        {question.original && (
+          // The real exam is in its own language: one tap shows this question
+          // as the exam words it, and another brings the study language back.
+          <LinkButton
+            label={
+              inExamLanguage
+                ? t('session.showInStudyLanguage', {
+                    language: languageName(question.locale, t.locale),
+                  })
+                : t('session.showInExamLanguage', {
+                    language: languageName(question.original.locale, t.locale),
+                  })
+            }
+            onPress={() => {
+              haptics.select();
+              setInExamLanguage((current) => !current);
+            }}
+            testID="language-toggle"
+          />
+        )}
       </View>
 
       {isFlashcards ? (
@@ -186,14 +231,14 @@ function Runner({ session }: { session: StudySession }) {
           <Flashcard
             // A fresh card (and fresh animation state) for each question.
             key={question.id}
-            front={question.text}
-            back={question.options
+            front={wording.text}
+            back={wording.options
               .filter((option) => question.correctKeys.includes(option.key))
               .map((option) => option.text)
               .join('; ')}
-            footnote={question.explanation}
+            footnote={wording.explanation}
             flipped={run.flipped}
-            lang={question.locale}
+            lang={wording.locale}
             onFlip={() => {
               haptics.select();
               setRun((current) => flipCard(config, current));
@@ -204,19 +249,19 @@ function Runner({ session }: { session: StudySession }) {
             <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
               <View style={{ flex: 1 }}>
                 <Button
-                  label="Still learning"
+                  label={t('session.stillLearning')}
                   variant="secondary"
                   onPress={() => submit(false)}
                   testID="still-learning"
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Button label="Knew it" onPress={() => submit(true)} testID="knew-it" />
+                <Button label={t('session.knewIt')} onPress={() => submit(true)} testID="knew-it" />
               </View>
             </View>
           ) : (
             <Button
-              label="Show the answer"
+              label={t('session.showAnswer')}
               onPress={() => {
                 haptics.select();
                 setRun((current) => flipCard(config, current));
@@ -226,7 +271,7 @@ function Runner({ session }: { session: StudySession }) {
           )}
           {run.flipped && (
             <Body muted size="sm">
-              Swipe the card right if you knew it, left if you are still learning it.
+              {t('session.swipeHint')}
             </Body>
           )}
         </>
@@ -234,20 +279,18 @@ function Runner({ session }: { session: StudySession }) {
         <>
           <Text
             accessibilityRole="header"
-            accessibilityLanguage={question.locale}
+            accessibilityLanguage={wording.locale}
             testID="question-text"
-            style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }]}
+            style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }, wordingStyle]}
           >
-            {question.text}
+            {wording.text}
           </Text>
           <View
             accessibilityRole={question.type === 'multi_select' ? undefined : 'radiogroup'}
             style={{ gap: theme.spacing[3] }}
           >
-            {question.type === 'multi_select' && (
-              <Body muted>Choose every answer that applies.</Body>
-            )}
-            {question.options.map((option, i) => (
+            {question.type === 'multi_select' && <Body muted>{t('session.chooseAll')}</Body>}
+            {wording.options.map((option, i) => (
               <OptionButton
                 key={option.key}
                 label={option.text}
@@ -275,12 +318,16 @@ function Runner({ session }: { session: StudySession }) {
                   },
                 ]}
               >
-                {given.correct ? 'Correct' : 'Not quite'}
+                {given.correct ? t('session.correct') : t('session.notQuite')}
               </Text>
-              {question.explanation && <Body>{question.explanation}</Body>}
+              {wording.explanation && (
+                <Text style={[theme.text.base, { color: theme.colors.fg }, wordingStyle]}>
+                  {wording.explanation}
+                </Text>
+              )}
               {question.sourceQuote && (
                 <Body muted size="sm">
-                  From the official guide: “{question.sourceQuote}”
+                  {t('session.fromGuide', { quote: isolate(question.sourceQuote) })}
                 </Body>
               )}
             </Card>
@@ -288,13 +335,15 @@ function Runner({ session }: { session: StudySession }) {
 
           {run.phase === 'feedback' ? (
             <Button
-              label={last ? 'See results' : 'Next question'}
+              label={last ? t('session.seeResults') : t('session.nextQuestion')}
               onPress={() => setRun((current) => nextQuestion(config, current))}
               testID="next"
             />
           ) : (
             <Button
-              label={isExam ? (last ? 'Submit exam' : 'Next') : 'Check'}
+              label={
+                isExam ? (last ? t('session.submitExam') : t('session.next')) : t('session.check')
+              }
               disabled={run.selected.length === 0}
               onPress={() => submit()}
               testID={isExam ? 'next' : 'check'}
@@ -308,6 +357,7 @@ function Runner({ session }: { session: StudySession }) {
 
 export default function SessionScreen() {
   const theme = useTheme();
+  const t = useT();
   const { id } = useLocalSearchParams<{ id: string }>();
   const session = useStudySession(id);
 
@@ -319,14 +369,15 @@ export default function SessionScreen() {
     <Screen>
       {session.isError || session.data ? (
         <>
-          <Heading>We could not open this session</Heading>
-          <Body muted>
-            It may have been started on another device while this phone was offline.
-          </Body>
-          <Button label="Back to study" onPress={backToStudy} />
+          <Heading>{t('session.openFailedTitle')}</Heading>
+          <Body muted>{t('session.openFailedBody')}</Body>
+          <Button label={t('common.backToStudy')} onPress={backToStudy} />
         </>
       ) : (
-        <ActivityIndicator accessibilityLabel="Loading your session" color={theme.colors.primary} />
+        <ActivityIndicator
+          accessibilityLabel={t('session.loadingSession')}
+          color={theme.colors.primary}
+        />
       )}
     </Screen>
   );

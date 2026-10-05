@@ -21,3 +21,8 @@ Sign in as the fixture learner by opening
 `/api/test/sign-in?user=learner&secret=<TEST_SIGN_IN_SECRET>`. The test
 sign-in exists only on a development server started with that variable; a
 production build cannot turn it on.
+
+A second learner, `user=estudiante`, studies in Spanish. The first 24
+Testland questions have approved Spanish translations and the last six do
+not, so her sessions show both cases: questions with a "show in the exam's
+language" switch, and questions that fall back to the exam's wording.

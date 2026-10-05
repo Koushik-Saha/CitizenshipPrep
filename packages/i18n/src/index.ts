@@ -63,3 +63,31 @@ export function endonym(locale: string): string {
 export function textDirection(locale: string): 'ltr' | 'rtl' {
   return ['ar', 'fa', 'ur', 'he'].includes(locale.split('-')[0]!) ? 'rtl' : 'ltr';
 }
+
+/**
+ * A country's name in a language, from the browser's own data, so adding a
+ * country needs no translation work. Falls back to the stored name for codes
+ * the platform does not know.
+ */
+export function countryName(isoCode: string, inLocale: string, fallback: string): string {
+  try {
+    const name = new Intl.DisplayNames([inLocale], { type: 'region', fallback: 'none' }).of(
+      isoCode.toUpperCase(),
+    );
+    // "ZZ" is the standard's code for an unknown region.
+    return name && isoCode.toUpperCase() !== 'ZZ' ? name : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+/** "English or French", in the reader's language. */
+export function languageList(languages: readonly string[], inLocale: string): string {
+  const names = languages.map((language) => languageName(language, inLocale));
+  return new Intl.ListFormat(inLocale, { type: 'disjunction' }).format(names);
+}
+
+export * from './format';
+export * from './locales';
+export * from './negotiate';
+export * from './translate';

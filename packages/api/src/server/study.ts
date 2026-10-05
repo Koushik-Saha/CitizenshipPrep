@@ -20,6 +20,7 @@ import type { CountryPack, OfflineAttempt, PackQuestion } from '../pack';
 import type {
   CountryDashboard,
   Dashboard,
+  QuestionWording,
   ReadinessView,
   SessionQuestion,
   StartSessionRequest,
@@ -34,6 +35,25 @@ import { loadExamFormats, loadQuestionPool } from './quiz';
 // Every function is scoped to a verified user id.
 
 type Db = Pick<pg.Pool, 'query'>;
+
+// How a question is worded for a learner. `o` is the exam's own wording (the
+// approved row that is not a translation); `w` is what to show: the learner's
+// study language ($2) where an approved translation exists, otherwise `o`.
+// Both come back, so the learner can switch between them per question.
+const WORDING_JOINS = `
+     join public.question_translations o
+       on o.question_id = q.id and o.translated_from is null and o.status = 'approved'
+     join lateral (
+       select tr.locale, tr.text, tr.options, tr.explanation
+       from public.question_translations tr
+       where tr.question_id = q.id and tr.status = 'approved'
+         and (tr.locale = $2 or tr.translated_from is null)
+       order by (tr.locale = $2) desc, (tr.translated_from is null) desc
+       limit 1
+     ) w on true`;
+const ORIGINAL_WORDING = `json_build_object(
+              'locale', o.locale, 'text', o.text, 'options', o.options,
+              'explanation', o.explanation)`;
 
 export class StudyError extends Error {
   override readonly name = 'StudyError';
@@ -397,19 +417,14 @@ export async function loadStudySession(
     text: string;
     options: { key: string; text: string }[];
     explanation: string | null;
+    original: QuestionWording;
   }>(
     `select q.id, q.version, q.topic_id, t.name as topic_name, q.type, q.correct_answer,
-            q.source_quote, q.source_url, w.locale, w.text, w.options, w.explanation
+            q.source_quote, q.source_url, w.locale, w.text, w.options, w.explanation,
+            ${ORIGINAL_WORDING} as original
      from public.questions q
      join public.topics t on t.id = q.topic_id
-     join lateral (
-       select tr.locale, tr.text, tr.options, tr.explanation
-       from public.question_translations tr
-       where tr.question_id = q.id and tr.status = 'approved'
-         and (tr.locale = $2 or tr.translated_from is null)
-       order by (tr.locale = $2) desc, (tr.translated_from is null) desc
-       limit 1
-     ) w on true
+     ${WORDING_JOINS}
      where q.id = any($1::uuid[]) and q.status = 'published'`,
     [row.question_ids, row.study_locale],
   );
@@ -431,6 +446,7 @@ export async function loadStudySession(
             explanation: question.explanation,
             sourceQuote: question.source_quote,
             sourceUrl: question.source_url,
+            original: question.original.locale === question.locale ? null : question.original,
           },
         ]
       : [];
@@ -599,20 +615,14 @@ export async function getCountryPack(
     text: string;
     options: { key: string; text: string }[];
     explanation: string | null;
+    original: QuestionWording;
   }>(
     `select q.id, q.version, q.topic_id, t.name as topic_name, t.slug as topic_slug,
             q.difficulty, q.region_code, q.type, q.correct_answer, q.source_quote, q.source_url,
-            w.locale, w.text, w.options, w.explanation
+            w.locale, w.text, w.options, w.explanation, ${ORIGINAL_WORDING} as original
      from public.questions q
      join public.topics t on t.id = q.topic_id
-     join lateral (
-       select tr.locale, tr.text, tr.options, tr.explanation
-       from public.question_translations tr
-       where tr.question_id = q.id and tr.status = 'approved'
-         and (tr.locale = $2 or tr.translated_from is null)
-       order by (tr.locale = $2) desc, (tr.translated_from is null) desc
-       limit 1
-     ) w on true
+     ${WORDING_JOINS}
      where q.country_code = $1 and q.status = 'published'
      order by t.sort_order, q.created_at, q.id`,
     [code, row.study_locale],
@@ -633,6 +643,7 @@ export async function getCountryPack(
     explanation: question.explanation,
     sourceQuote: question.source_quote,
     sourceUrl: question.source_url,
+    original: question.original.locale === question.locale ? null : question.original,
   }));
 
   const formats = await loadExamFormats(db, code);

@@ -55,11 +55,31 @@ select q.id, 'en', format('Testland question %s: what is %s plus %s?', n, n, n),
 from numbered n
 join inserted q on q.id = n.id;
 
+-- Checked Spanish translations of the first 24 questions. The last six have
+-- none, so a learner studying in Spanish sees those as the exam words them.
+insert into public.question_translations
+  (question_id, locale, text, options, explanation, status, translated_from, reviewed_by,
+   reviewed_at)
+select en.question_id, 'es',
+       format('Pregunta %s de Testland: ¿cuánto es %s más %s?', n, n, n), en.options,
+       format('%s más %s es %s.', n, n, 2 * n), 'approved', 'en', 'test:reviewer', now()
+from generate_series(1, 24) as n
+join public.question_translations en
+  on en.question_id = ('10000000-0000-4000-8000-' || lpad(n::text, 12, '0'))::uuid
+ and en.locale = 'en';
+
 insert into public.user_settings (user_id, daily_goal_minutes, onboarded_at)
 values ('test:learner', 10, now());
 
 insert into public.user_countries (user_id, country_code, exam_date, study_locale, is_primary)
 values ('test:learner', 'ZZ', current_date + 30, 'en', true);
+
+-- A second learner who studies in Spanish, for the study/exam language switch.
+insert into public.profiles (id, display_name) values ('test:estudiante', 'Ana');
+insert into public.user_settings (user_id, daily_goal_minutes, onboarded_at)
+values ('test:estudiante', 10, now());
+insert into public.user_countries (user_id, country_code, exam_date, study_locale, is_primary)
+values ('test:estudiante', 'ZZ', current_date + 30, 'es', true);
 
 -- The Testland study guide: one passage per topic, each with some made-up
 -- civic facts and the sums its questions ask about. Questions cite their

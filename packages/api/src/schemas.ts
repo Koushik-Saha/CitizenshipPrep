@@ -110,6 +110,14 @@ const questionShape = {
   explanation: nullableString,
   sourceQuote: nullableString,
   sourceUrl: z.string(),
+  original: z.nullable(
+    z.object({
+      locale: z.string(),
+      text: z.string(),
+      options: z.array(z.object({ key: z.string(), text: z.string() })),
+      explanation: nullableString,
+    }),
+  ),
 };
 
 export const studySessionSchema = z.object({

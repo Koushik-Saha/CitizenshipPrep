@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { WelcomeGlobe } from '@/components/globe/welcome-globe';
 import { Button } from '@/components/ui';
+import { useT } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
 
 // The first screen for someone who is not signed in: the globe, with every
@@ -15,6 +16,7 @@ const theme = themeFor('dark');
 
 export default function Welcome() {
   const session = useSession();
+  const t = useT();
   const countries = usePublicCountries();
   if (session.status === 'signed-in') return <Redirect href="/" />;
 
@@ -34,23 +36,22 @@ export default function Welcome() {
           accessibilityRole="header"
           style={[theme.text['4xl'], { color: theme.colors.fg, fontWeight: '600' }]}
         >
-          Walk into your citizenship test ready.
+          {t('landing.heroTitle')}
         </Text>
         <Text style={[theme.text.lg, { color: theme.colors.fgMuted }]}>
-          Practice questions written from each country’s official study guide, answers explained in
-          plain language, and an honest estimate of how ready you are.
-          {count > 1 ? ` ${count} countries so far.` : ''}
+          {t('landing.heroBody')}
+          {count > 1 ? ` ${t('welcome.countriesSoFar', { count })}` : ''}
         </Text>
         <View style={{ gap: theme.spacing[3] }}>
           <Button
-            label="Get started"
+            label={t('welcome.getStarted')}
             variant="accent"
             onPress={() => router.push('/sign-in')}
             testID="get-started"
           />
         </View>
         <Text style={[theme.text.sm, { color: theme.colors.fgSubtle }]}>
-          Oathly is an independent study app. It is not affiliated with any government.
+          {t('common.notAffiliated')}
         </Text>
       </ScrollView>
     </SafeAreaView>

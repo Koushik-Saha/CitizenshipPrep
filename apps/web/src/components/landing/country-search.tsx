@@ -14,16 +14,42 @@ export interface SearchableCountry {
   detail: string;
 }
 
-const startHref = (code: string) => `/sign-in?country=${code}`;
+/** Where the typed text goes in `SearchText.noMatch`. */
+export const QUERY_SLOT = '\u0000';
+/** The most matches the list shows. */
+export const MAX_MATCHES = 6;
+
+/**
+ * The search's wording, already in the reader's language: the server fills
+ * the messages in, so the landing page does not load the message formatter.
+ */
+export interface SearchText {
+  label: string;
+  /** With QUERY_SLOT where the typed text goes. */
+  noMatch: string;
+  statusNone: string;
+  /** "3 matching countries…", for 1 match up to MAX_MATCHES. */
+  status: string[];
+}
 
 /** The hero's country search: type a country, go straight to signing up for its exam. */
-export function CountrySearch({ countries }: { countries: SearchableCountry[] }) {
+export function CountrySearch({
+  countries,
+  text,
+  startHref,
+}: {
+  countries: SearchableCountry[];
+  text: SearchText;
+  /** Where choosing a country goes, with "{code}" for its ISO code, in the page's language. */
+  startHref: string;
+}) {
   const router = useRouter();
+  const hrefFor = (code: string) => startHref.replace('{code}', code);
   const [query, setQuery] = useState('');
   const inputId = useId();
   const statusId = useId();
   const searching = query.trim() !== '';
-  const matches = searching ? searchCountries(countries, query).slice(0, 6) : [];
+  const matches = searching ? searchCountries(countries, query).slice(0, MAX_MATCHES) : [];
 
   return (
     <form
@@ -31,11 +57,11 @@ export function CountrySearch({ countries }: { countries: SearchableCountry[] })
       className="relative"
       onSubmit={(event) => {
         event.preventDefault();
-        if (matches[0]) router.push(startHref(matches[0].isoCode));
+        if (matches[0]) router.push(hrefFor(matches[0].isoCode));
       }}
     >
       <label htmlFor={inputId} className="mb-2 block font-medium">
-        Which country’s citizenship test are you taking?
+        {text.label}
       </label>
       <input
         id={inputId}
@@ -53,8 +79,8 @@ export function CountrySearch({ countries }: { countries: SearchableCountry[] })
       <p id={statusId} className="sr-only" aria-live="polite">
         {searching
           ? matches.length === 0
-            ? 'No matching country.'
-            : `${matches.length} matching ${matches.length === 1 ? 'country' : 'countries'}. Press Tab to reach them.`
+            ? text.statusNone
+            : text.status[matches.length - 1]
           : ''}
       </p>
       {searching && (
@@ -62,7 +88,7 @@ export function CountrySearch({ countries }: { countries: SearchableCountry[] })
           {matches.map((country) => (
             <li key={country.isoCode}>
               <Link
-                href={startHref(country.isoCode)}
+                href={hrefFor(country.isoCode)}
                 className={`hover:bg-surface-sunken block px-4 py-3 ${focusRing} focus-visible:-outline-offset-2`}
               >
                 <span className="font-medium">{country.name}</span>
@@ -74,8 +100,7 @@ export function CountrySearch({ countries }: { countries: SearchableCountry[] })
           ))}
           {matches.length === 0 && (
             <li className="text-fg-muted px-4 py-3">
-              No match for “{query.trim()}” yet. We add countries once we’ve checked their exam
-              against official sources.
+              {text.noMatch.replace(QUERY_SLOT, query.trim())}
             </li>
           )}
         </ul>
