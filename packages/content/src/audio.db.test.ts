@@ -6,10 +6,13 @@ import { clipId, recordAudio } from './pipeline/audio';
 import { NoVoiceError, type Speaker, type SpeakRequest } from './tts';
 
 // Records clips into a real database with a stand-in for the speech service.
+// A clip is named by its words, and other packages' tests share this database,
+// so every text here is one no other test uses.
 // Needs the local database (`pnpm db:start`); skipped when the URL is not set.
 const url = process.env.TEST_DATABASE_URL;
 
-const COUNTRY = 'ZW';
+// A made-up country code that no other package's tests use: they share this database.
+const COUNTRY = 'ZT';
 const REVIEWER = 'test:audio-reviewer';
 
 /** "Reads" a text by returning its bytes, and remembers what it was asked. */
@@ -69,7 +72,7 @@ describe.skipIf(!url)('recording audio (needs the local database)', () => {
     await pool.query(
       `insert into public.question_translations
          (question_id, locale, text, options, explanation, translated_from, status, reviewed_by, reviewed_at)
-       values ($1, $2, $3, '[{"key":"a","text":"Yes"},{"key":"b","text":"No"}]', $4, $5, $6::public.translation_status,
+       values ($1, $2, $3, '[{"key":"a","text":"Audioland yes"},{"key":"b","text":"Audioland no"}]', $4, $5, $6::public.translation_status,
                case when $6 = 'approved' then $7 end, case when $6 = 'approved' then now() end)`,
       [ids[name], locale, text, `Because: ${text}`, from, status, REVIEWER],
     );
@@ -108,7 +111,8 @@ describe.skipIf(!url)('recording audio (needs the local database)', () => {
   it('works out what is missing without recording on a dry run', async () => {
     const speaker = fakeSpeaker();
     const summary = await recordAudio(pool, speaker, { ...only, dryRun: true });
-    // English: 2 questions, 2 explanations, and "1. Yes 2. No" and "Yes" once each.
+    // English: 2 questions, 2 explanations, and the choices and the answer once each
+    // (both questions share them).
     // Spanish: a question, an explanation, the choices and the answer.
     // Somali: a question and an explanation, the choices and the answer.
     expect(summary).toMatchObject({ needed: 14, existing: 0, recorded: 0, remaining: 14 });
@@ -130,7 +134,7 @@ describe.skipIf(!url)('recording audio (needs the local database)', () => {
 
     const texts = speaker.asked.map((request) => request.text);
     expect(texts).toContain('Is this the first question?');
-    expect(texts).toContain('1. Yes\n2. No');
+    expect(texts).toContain('1. Audioland yes\n2. Audioland no');
     expect(texts).toContain('¿Es esta la primera pregunta?');
     // Neither the draft question nor the draft translation.
     expect(texts.some((text) => text.includes('draft') || text.includes('Borrador'))).toBe(false);
@@ -186,7 +190,9 @@ describe.skipIf(!url)('recording audio (needs the local database)', () => {
     const stale = clipId('en', 'Is this the first question?');
     const before = await pool.query('select 1 from public.audio_clips where id = $1', [stale]);
     expect(before.rowCount).toBe(1);
-    const summary = await recordAudio(pool, fakeSpeaker(), { prune: true, limit: 1 });
+    // Pruning looks at every country, so this run records nothing (limit 0):
+    // other packages' tests share this database and must not find clips they did not make.
+    const summary = await recordAudio(pool, fakeSpeaker(), { prune: true, limit: 0 });
     expect(summary.pruned).toBeGreaterThanOrEqual(1);
     const after = await pool.query('select 1 from public.audio_clips where id = $1', [stale]);
     expect(after.rowCount).toBe(0);
