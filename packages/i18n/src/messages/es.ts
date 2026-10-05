@@ -394,6 +394,34 @@ export const es: Messages = {
     opening: 'Abriendo el tutor',
   },
 
+  audio: {
+    mode: 'Modo audio',
+    hint: 'Cada pregunta se lee en voz alta. Responde tocando o en voz alta.',
+    replay: 'Leer otra vez',
+    voiceAnswers: 'Responder con la voz',
+    speak: 'Responder en voz alta',
+    stopListening: 'Dejar de escuchar',
+    listening: 'Escuchando…',
+    speaking: 'Leyendo en voz alta…',
+    sayNumber: 'Di el número de tu respuesta o la respuesta misma.',
+    heard: 'He oído: «{words}»',
+    notCaught: 'Eso no coincide con ninguna de las respuestas.',
+    useAnswer: 'Usar esta respuesta',
+    sayAgain: 'Decirlo otra vez',
+    showChoices: 'Elegir entre las respuestas',
+    showQuestion: 'Mostrar la pregunta por escrito',
+    hideQuestion: 'Ocultar la pregunta escrita',
+    listenToQuestion: 'Escucha la pregunta',
+    micBlocked: 'Oathly no puede usar el micrófono. Permítelo en los ajustes o responde tocando.',
+    voiceUnavailable: 'Este dispositivo no admite respuestas habladas. Responde tocando.',
+    correct: 'Correcto.',
+    notQuite: 'No del todo. La respuesta es:',
+    interview: 'Entrevista de práctica',
+    startInterview: 'Empezar la entrevista de práctica',
+    interviewIntro:
+      'Las preguntas se hacen en voz alta, como en el examen real. Responde en voz alta, en el idioma del examen.',
+  },
+
   offline: {
     title: 'Estudiar sin conexión',
     saved:
@@ -409,6 +437,9 @@ export const es: Messages = {
       '{count, plural, one {Enviando # elemento guardado…} other {Enviando # elementos guardados…}}',
     bannerWaiting:
       '{count, plural, one {# elemento guardado pendiente de envío.} other {# elementos guardados pendientes de envío.}}',
+    savingAudio: 'Guardando audio: {done} de {total}',
+    audioSaved:
+      '{count, plural, one {# grabación guardada para el modo audio.} other {# grabaciones guardadas para el modo audio.}}',
     progressLater: 'Tu progreso aparecerá aquí cuando vuelvas a tener conexión.',
     noConnection: 'Sin conexión. Descarga este país cuando tengas conexión para estudiar sin ella.',
   },

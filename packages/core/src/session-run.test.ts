@@ -106,6 +106,24 @@ describe('practice', () => {
   });
 });
 
+describe('spoken answers', () => {
+  it('takes an answer given aloud in place of the options chosen on screen', () => {
+    // Something else was tapped first: what was said is the answer.
+    const tapped = toggleOption(practice, startRun(), 'b');
+    const said = submitAnswer(practice, tapped, { now: later(4), shownAt: 0, spoken: ['a'] });
+    expect(said.answer).toMatchObject({ selectedKeys: ['a'], correct: true });
+    expect(said.state.phase).toBe('feedback');
+  });
+
+  it('counts something said that matched no option as a wrong answer, not a missing one', () => {
+    const said = submitAnswer(mock(), startRun(), { now: later(4), shownAt: 0, spoken: [] });
+    expect(said.answer).toMatchObject({ selectedKeys: [], correct: false });
+    expect(said.state.index).toBe(1);
+    // Nothing tapped and nothing said is still not an answer.
+    expect(submitAnswer(mock(), startRun(), { now: later(4), shownAt: 0 }).answer).toBeNull();
+  });
+});
+
 describe('flashcards', () => {
   it('flips, takes the learner’s own verdict, and moves straight on', () => {
     let state = startRun();

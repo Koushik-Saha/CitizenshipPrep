@@ -386,6 +386,36 @@ export const vi: Messages = {
     opening: 'Đang mở gia sư',
   },
 
+  audio: {
+    mode: 'Chế độ âm thanh',
+    hint: 'Mỗi câu hỏi được đọc to. Trả lời bằng cách chạm hoặc bằng giọng nói.',
+    replay: 'Đọc lại',
+    voiceAnswers: 'Trả lời bằng giọng nói',
+    speak: 'Trả lời thành tiếng',
+    stopListening: 'Dừng nghe',
+    listening: 'Đang nghe…',
+    speaking: 'Đang đọc to…',
+    sayNumber: 'Hãy nói số thứ tự của đáp án, hoặc nói chính đáp án đó.',
+    heard: 'Tôi nghe được: “{words}”',
+    notCaught: 'Câu đó không khớp với đáp án nào.',
+    useAnswer: 'Dùng câu trả lời này',
+    sayAgain: 'Nói lại',
+    showChoices: 'Chọn trong các đáp án',
+    showQuestion: 'Hiện câu hỏi bằng chữ',
+    hideQuestion: 'Ẩn câu hỏi bằng chữ',
+    listenToQuestion: 'Hãy nghe câu hỏi',
+    micBlocked:
+      'Oathly không dùng được micrô. Hãy cho phép trong phần cài đặt, hoặc trả lời bằng cách chạm.',
+    voiceUnavailable:
+      'Thiết bị này không nhận câu trả lời bằng giọng nói. Hãy trả lời bằng cách chạm.',
+    correct: 'Đúng.',
+    notQuite: 'Chưa đúng. Đáp án là:',
+    interview: 'Phỏng vấn thử',
+    startInterview: 'Bắt đầu phỏng vấn thử',
+    interviewIntro:
+      'Câu hỏi được hỏi thành tiếng như trong kỳ thi thật. Hãy trả lời thành tiếng, bằng ngôn ngữ của kỳ thi.',
+  },
+
   offline: {
     title: 'Học ngoại tuyến',
     saved:
@@ -399,6 +429,8 @@ export const vi: Messages = {
     bannerOffline: 'Bạn đang ngoại tuyến. Các quốc gia đã lưu vẫn dùng được.',
     bannerSending: '{count, plural, other {Đang gửi # mục đã lưu…}}',
     bannerWaiting: '{count, plural, other {# mục đã lưu đang chờ gửi.}}',
+    savingAudio: 'Đang lưu âm thanh: {done}/{total}',
+    audioSaved: '{count, plural, other {Đã lưu # bản ghi âm cho chế độ âm thanh.}}',
     progressLater: 'Tiến độ của bạn sẽ hiển thị ở đây khi bạn trực tuyến trở lại.',
     noConnection:
       'Không có kết nối. Hãy tải quốc gia này khi đang trực tuyến để học khi không có kết nối.',

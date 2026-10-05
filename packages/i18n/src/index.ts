@@ -87,6 +87,47 @@ export function languageList(languages: readonly string[], inLocale: string): st
   return new Intl.ListFormat(inLocale, { type: 'disjunction' }).format(names);
 }
 
+// Speech engines (a browser's or a phone's voices and recognisers) want a
+// language with a region. Most study languages have no region of their own,
+// so each gets its most widely supported one.
+const speechRegions: Record<string, string> = {
+  en: 'en-US',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+  it: 'it-IT',
+  pt: 'pt-BR',
+  pl: 'pl-PL',
+  ro: 'ro-RO',
+  uk: 'uk-UA',
+  ru: 'ru-RU',
+  tr: 'tr-TR',
+  ar: 'ar-SA',
+  fa: 'fa-IR',
+  ur: 'ur-PK',
+  hi: 'hi-IN',
+  bn: 'bn-IN',
+  pa: 'pa-IN',
+  gu: 'gu-IN',
+  ta: 'ta-IN',
+  te: 'te-IN',
+  ne: 'ne-NP',
+  'zh-Hans': 'zh-CN',
+  'zh-Hant': 'zh-TW',
+  ja: 'ja-JP',
+  ko: 'ko-KR',
+  vi: 'vi-VN',
+  tl: 'fil-PH',
+  am: 'am-ET',
+  so: 'so-SO',
+  sw: 'sw-KE',
+};
+
+/** The tag to give a device's speech engine for one of the app's languages. */
+export function speechLocale(locale: string): string {
+  return speechRegions[locale] ?? locale;
+}
+
 export * from './format';
 export * from './locales';
 export * from './negotiate';

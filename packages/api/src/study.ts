@@ -1,9 +1,16 @@
-import type { MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
+import type { ClipPart, MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
 
 // What a study session looks like on the client: everything needed to run it
 // without another request.
 
 export type StudyMode = 'practice' | 'flashcards' | 'mock_exam';
+
+/**
+ * The recorded clips of a wording being read aloud, for audio mode: a clip's
+ * id for each part, or null where none has been recorded and the app reads
+ * that part with the device's own voice.
+ */
+export type WordingAudio = Record<ClipPart, string | null>;
 
 /** A question's words in one language. */
 export interface QuestionWording {
@@ -12,6 +19,7 @@ export interface QuestionWording {
   text: string;
   options: { key: string; text: string }[];
   explanation: string | null;
+  audio: WordingAudio;
 }
 
 export interface SessionQuestion {
@@ -26,6 +34,8 @@ export interface SessionQuestion {
   options: { key: string; text: string }[];
   correctKeys: string[];
   explanation: string | null;
+  /** Recordings of the wording above. */
+  audio: WordingAudio;
   /** The words in the official guide the answer rests on. */
   sourceQuote: string | null;
   sourceUrl: string;
@@ -52,6 +62,7 @@ export function questionWording(
         text: question.text,
         options: question.options,
         explanation: question.explanation,
+        audio: question.audio,
       };
 }
 
@@ -61,7 +72,22 @@ export interface SessionExam {
   passMark: number | null;
   timeLimitMs: number | null;
   stopEarly: boolean;
+  /**
+   * The real exam is spoken: an examiner asks each question aloud and the
+   * candidate answers aloud. The apps run it as a mock interview.
+   */
+  spoken: boolean;
   sections: MockExamSection[];
+}
+
+/** Whether an exam of this kind is asked and answered aloud. */
+export function isSpokenFormat(formatType: string): boolean {
+  return formatType === 'oral' || formatType === 'interview';
+}
+
+/** Where a recorded clip is served from, given the web app's address. */
+export function audioClipUrl(baseUrl: string, clipId: string): string {
+  return `${baseUrl.replace(/\/$/, '')}/api/audio/${clipId}`;
 }
 
 export interface StudySession {
@@ -92,6 +118,8 @@ export interface ExamOption {
   timeLimitMinutes: number | null;
   passMark: number | null;
   isCurrent: boolean;
+  /** Asked and answered aloud in the real exam: offered as a mock interview. */
+  spoken: boolean;
   /** Why a mock exam cannot be built yet, if it cannot. */
   unavailableReason: string | null;
 }

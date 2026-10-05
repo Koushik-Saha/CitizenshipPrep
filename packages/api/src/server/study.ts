@@ -27,6 +27,8 @@ import type {
   StudyMode,
   StudySession,
 } from '../study';
+import { isSpokenFormat } from '../study';
+import { attachAudio, noAudio } from './audio';
 import { loadExamFormats, loadQuestionPool } from './quiz';
 
 // Server side of the study app: the dashboard, starting sessions (which picks
@@ -252,6 +254,7 @@ export async function getDashboard(
             timeLimitMinutes: format.timeLimitMinutes,
             passMark: format.passMark,
             isCurrent: format.isCurrent,
+            spoken: isSpokenFormat(format.formatType),
             unavailableReason,
           };
         }),
@@ -417,7 +420,7 @@ export async function loadStudySession(
     text: string;
     options: { key: string; text: string }[];
     explanation: string | null;
-    original: QuestionWording;
+    original: Omit<QuestionWording, 'audio'>;
   }>(
     `select q.id, q.version, q.topic_id, t.name as topic_name, q.type, q.correct_answer,
             q.source_quote, q.source_url, w.locale, w.text, w.options, w.explanation,
@@ -429,7 +432,7 @@ export async function loadStudySession(
     [row.question_ids, row.study_locale],
   );
   const byId = new Map(content.rows.map((question) => [question.id, question]));
-  const questions: SessionQuestion[] = row.question_ids.flatMap((id) => {
+  const worded: SessionQuestion[] = row.question_ids.flatMap((id) => {
     const question = byId.get(id);
     return question
       ? [
@@ -444,13 +447,18 @@ export async function loadStudySession(
             options: question.options,
             correctKeys: question.correct_answer.keys,
             explanation: question.explanation,
+            audio: noAudio,
             sourceQuote: question.source_quote,
             sourceUrl: question.source_url,
-            original: question.original.locale === question.locale ? null : question.original,
+            original:
+              question.original.locale === question.locale
+                ? null
+                : { ...question.original, audio: noAudio },
           },
         ]
       : [];
   });
+  const questions = await attachAudio(db, worded);
 
   let exam: StudySession['exam'] = null;
   if (row.exam_format_id) {
@@ -479,6 +487,7 @@ export async function loadStudySession(
         passMark: format.passMark,
         timeLimitMs: format.timeLimitMinutes === null ? null : format.timeLimitMinutes * 60_000,
         stopEarly: format.blueprint.stopEarly,
+        spoken: isSpokenFormat(format.formatType),
         sections: sections.map((section) => ({
           id: section.id,
           label: section.label,
@@ -615,7 +624,7 @@ export async function getCountryPack(
     text: string;
     options: { key: string; text: string }[];
     explanation: string | null;
-    original: QuestionWording;
+    original: Omit<QuestionWording, 'audio'>;
   }>(
     `select q.id, q.version, q.topic_id, t.name as topic_name, t.slug as topic_slug,
             q.difficulty, q.region_code, q.type, q.correct_answer, q.source_quote, q.source_url,
@@ -627,7 +636,7 @@ export async function getCountryPack(
      order by t.sort_order, q.created_at, q.id`,
     [code, row.study_locale],
   );
-  const questions: PackQuestion[] = content.rows.map((question) => ({
+  const worded: PackQuestion[] = content.rows.map((question) => ({
     id: question.id,
     version: question.version,
     topicId: question.topic_id,
@@ -641,10 +650,16 @@ export async function getCountryPack(
     options: question.options,
     correctKeys: question.correct_answer.keys,
     explanation: question.explanation,
+    audio: noAudio,
     sourceQuote: question.source_quote,
     sourceUrl: question.source_url,
-    original: question.original.locale === question.locale ? null : question.original,
+    original:
+      question.original.locale === question.locale
+        ? null
+        : { ...question.original, audio: noAudio },
   }));
+  // The clips come with the pack's questions, so the phone can save them too.
+  const questions = await attachAudio(db, worded);
 
   const formats = await loadExamFormats(db, code);
   const history = await answerHistory(db, userId, code);
@@ -663,6 +678,7 @@ export async function getCountryPack(
       passMark: format.passMark,
       timeLimitMinutes: format.timeLimitMinutes,
       isCurrent: format.isCurrent,
+      spoken: isSpokenFormat(format.formatType),
       blueprint: format.blueprint,
     })),
     questions,

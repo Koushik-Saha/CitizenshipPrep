@@ -6,3 +6,4 @@ export * from './tokens';
 export * from './quiz';
 export * from './study';
 export * from './ai';
+export * from './audio';

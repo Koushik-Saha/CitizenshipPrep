@@ -122,7 +122,8 @@ export function MockExamForm({ country }: { country: CountryDashboard }) {
               disabled={pending || exam.unavailableReason !== null}
               className={buttonClass.secondary}
             >
-              {t('start.startMock')}
+              {/* An exam that is asked and answered aloud is practised as an interview. */}
+              {exam.spoken ? t('audio.startInterview') : t('start.startMock')}
             </button>
           </li>
         ))}

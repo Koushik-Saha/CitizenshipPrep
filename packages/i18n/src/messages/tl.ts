@@ -398,6 +398,36 @@ export const tl: Messages = {
     opening: 'Binubuksan ang tutor',
   },
 
+  audio: {
+    mode: 'Audio mode',
+    hint: 'Binabasa nang malakas ang bawat tanong. Sumagot sa pag-tap o sa pagsasalita.',
+    replay: 'Basahin ulit',
+    voiceAnswers: 'Sumagot gamit ang boses',
+    speak: 'Sumagot nang malakas',
+    stopListening: 'Itigil ang pakikinig',
+    listening: 'Nakikinig…',
+    speaking: 'Binabasa nang malakas…',
+    sayNumber: 'Sabihin ang numero ng sagot mo, o ang mismong sagot.',
+    heard: 'Ang narinig ko: “{words}”',
+    notCaught: 'Hindi iyon tumutugma sa alinman sa mga sagot.',
+    useAnswer: 'Gamitin ang sagot na ito',
+    sayAgain: 'Sabihin ulit',
+    showChoices: 'Pumili na lang mula sa mga sagot',
+    showQuestion: 'Ipakita ang tanong nang nakasulat',
+    hideQuestion: 'Itago ang nakasulat na tanong',
+    listenToQuestion: 'Pakinggan ang tanong',
+    micBlocked:
+      'Hindi magamit ng Oathly ang mikropono. Payagan ito sa iyong settings, o sumagot sa pag-tap.',
+    voiceUnavailable:
+      'Hindi tumatanggap ng binigkas na sagot ang device na ito. Sumagot sa pag-tap.',
+    correct: 'Tama.',
+    notQuite: 'Hindi pa tama. Ang sagot ay:',
+    interview: 'Mock interview',
+    startInterview: 'Simulan ang mock interview',
+    interviewIntro:
+      'Itinatanong nang malakas ang mga tanong, gaya ng sa totoong pagsusulit. Sumagot nang malakas, sa wika ng pagsusulit.',
+  },
+
   offline: {
     title: 'Mag-aral offline',
     saved:
@@ -413,6 +443,9 @@ export const tl: Messages = {
       '{count, plural, one {Ipinapadala ang # naka-save na item…} other {Ipinapadala ang # naka-save na item…}}',
     bannerWaiting:
       '{count, plural, one {# naka-save na item ang naghihintay na maipadala.} other {# naka-save na item ang naghihintay na maipadala.}}',
+    savingAudio: 'Sine-save ang audio: {done} sa {total}',
+    audioSaved:
+      '{count, plural, one {# recording ang naka-save para sa audio mode.} other {# recording ang naka-save para sa audio mode.}}',
     progressLater: 'Lalabas dito ang iyong progreso kapag online ka na ulit.',
     noConnection:
       'Walang koneksyon. I-download ang bansang ito habang online ka para makapag-aral kahit wala nito.',

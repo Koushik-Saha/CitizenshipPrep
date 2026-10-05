@@ -13,7 +13,13 @@ import {
   studySessionSchema,
   syncOutcomeSchema,
 } from './schemas';
-import type { Dashboard, SessionResult, StartSessionRequest, StudySession } from './study';
+import {
+  audioClipUrl,
+  type Dashboard,
+  type SessionResult,
+  type StartSessionRequest,
+  type StudySession,
+} from './study';
 
 // Talks to the web app's /api routes. The mobile app sends Neon Auth's token;
 // the web app's own client components leave `getToken` out and rely on the
@@ -114,6 +120,8 @@ export function createOathlyApi(options: OathlyApiOptions) {
     /** Everything needed to study one country with no connection. */
     countryPack: (countryCode: string): Promise<CountryPack> =>
       request(`/api/packs/${id(countryCode)}`, countryPackSchema),
+    /** Where a recorded clip is served from (see SessionQuestion.audio). */
+    audioUrl: (clipId: string): string => audioClipUrl(options.baseUrl, clipId),
     /** Tells the server about sessions started offline. Safe to repeat. */
     registerOfflineAttempts: async (attempts: OfflineAttempt[]): Promise<void> => {
       await send('/api/study/sessions/offline', post({ attempts }));

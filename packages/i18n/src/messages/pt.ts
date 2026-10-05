@@ -394,6 +394,34 @@ export const pt: Messages = {
     opening: 'Abrindo o tutor',
   },
 
+  audio: {
+    mode: 'Modo áudio',
+    hint: 'Cada pergunta é lida em voz alta. Responda tocando ou em voz alta.',
+    replay: 'Ler de novo',
+    voiceAnswers: 'Responder por voz',
+    speak: 'Responder em voz alta',
+    stopListening: 'Parar de ouvir',
+    listening: 'Ouvindo…',
+    speaking: 'Lendo em voz alta…',
+    sayNumber: 'Diga o número da sua resposta ou a própria resposta.',
+    heard: 'Ouvi: “{words}”',
+    notCaught: 'Isso não corresponde a nenhuma das respostas.',
+    useAnswer: 'Usar esta resposta',
+    sayAgain: 'Dizer de novo',
+    showChoices: 'Escolher entre as respostas',
+    showQuestion: 'Mostrar a pergunta por escrito',
+    hideQuestion: 'Ocultar a pergunta escrita',
+    listenToQuestion: 'Ouça a pergunta',
+    micBlocked: 'O Oathly não consegue usar o microfone. Permita nos ajustes ou responda tocando.',
+    voiceUnavailable: 'Este aparelho não aceita respostas faladas. Responda tocando.',
+    correct: 'Correto.',
+    notQuite: 'Não exatamente. A resposta é:',
+    interview: 'Entrevista simulada',
+    startInterview: 'Iniciar entrevista simulada',
+    interviewIntro:
+      'As perguntas são feitas em voz alta, como no exame real. Responda em voz alta, no idioma do exame.',
+  },
+
   offline: {
     title: 'Estudar sem conexão',
     saved:
@@ -408,6 +436,9 @@ export const pt: Messages = {
     bannerSending: '{count, plural, one {Enviando # item salvo…} other {Enviando # itens salvos…}}',
     bannerWaiting:
       '{count, plural, one {# item salvo aguardando envio.} other {# itens salvos aguardando envio.}}',
+    savingAudio: 'Salvando áudio: {done} de {total}',
+    audioSaved:
+      '{count, plural, one {# gravação salva para o modo áudio.} other {# gravações salvas para o modo áudio.}}',
     progressLater: 'Seu progresso aparecerá aqui quando você voltar a ficar online.',
     noConnection: 'Sem conexão. Baixe este país enquanto estiver online para estudar sem ela.',
   },

@@ -3,6 +3,7 @@ import {
   addOfflineAttempt,
   ApiError,
   emptyOutbox,
+  packClipIds,
   parseOutbox,
   recordResult,
   serializeOutbox,
@@ -32,6 +33,7 @@ import * as Crypto from 'expo-crypto';
 import { useSyncExternalStore } from 'react';
 import { AppState } from 'react-native';
 
+import { audioStore } from './audio-store';
 import { api } from './auth';
 import { files, kv } from './storage';
 
@@ -39,6 +41,7 @@ import { files, kv } from './storage';
 //
 //   packs    one downloaded file per country: questions, exam formats and the
 //            learner's history, enough to build sessions with the quiz engine
+//   audio    the recorded clips those questions use, so audio mode works too
 //   queue    answers not yet confirmed by the server (the engine's offline queue)
 //   outbox   sessions started here, and results of sessions finished offline
 //
@@ -50,6 +53,7 @@ const KEYS = {
   outbox: 'oathly.outbox.v1',
   packs: 'oathly.packs.v1',
   localAnswers: 'oathly.local-answers.v1',
+  packAudio: 'oathly.pack-audio.v1',
 };
 const packFile = (countryCode: string) => `pack-${countryCode}.json`;
 
@@ -59,6 +63,8 @@ export interface PackInfo {
   /** When the server built the pack: how fresh the questions are. */
   generatedAt: string;
   questions: number;
+  /** Recorded clips saved with it, for audio mode. */
+  audioClips: number;
 }
 
 /** An answer given on this phone, kept so offline practice can adapt to it. */
@@ -77,6 +83,8 @@ export interface OfflineState {
   packs: Record<string, PackInfo>;
   /** The country whose pack is downloading, if any. */
   downloading: string | null;
+  /** While a pack's audio is being saved: how far along it is. */
+  audioProgress: { done: number; total: number } | null;
   /** Why the last sync stopped early, in the server's or the network's words. */
   syncProblem: string | null;
 }
@@ -88,11 +96,14 @@ let state: OfflineState = {
   waiting: 0,
   packs: {},
   downloading: null,
+  audioProgress: null,
   syncProblem: null,
 };
 let queue: OfflineQueue = emptyQueue();
 let outbox: Outbox = emptyOutbox();
 let localAnswers: LocalAnswer[] = [];
+/** Which saved clips each pack uses, so removing a pack removes only its own. */
+let packAudio: Record<string, string[]> = {};
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 const listeners = new Set<() => void>();
@@ -141,11 +152,12 @@ let started = false;
 export async function startOffline(): Promise<void> {
   if (started) return;
   started = true;
-  const [storedQueue, storedOutbox, storedPacks, storedAnswers] = await Promise.all([
+  const [storedQueue, storedOutbox, storedPacks, storedAnswers, storedAudio] = await Promise.all([
     kv.get(KEYS.queue),
     kv.get(KEYS.outbox),
     kv.get(KEYS.packs),
     kv.get(KEYS.localAnswers),
+    kv.get(KEYS.packAudio),
   ]);
   queue = parseQueue(storedQueue);
   outbox = parseOutbox(storedOutbox);
@@ -153,9 +165,11 @@ export async function startOffline(): Promise<void> {
   try {
     packs = storedPacks ? (JSON.parse(storedPacks) as Record<string, PackInfo>) : {};
     localAnswers = storedAnswers ? (JSON.parse(storedAnswers) as LocalAnswer[]) : [];
+    packAudio = storedAudio ? (JSON.parse(storedAudio) as Record<string, string[]>) : {};
   } catch {
     packs = {};
     localAnswers = [];
+    packAudio = {};
   }
   set({ ready: true, packs });
 
@@ -174,12 +188,55 @@ export async function startOffline(): Promise<void> {
   schedule(0);
 }
 
+/** How many clips to fetch at once. */
+const AUDIO_DOWNLOADS = 6;
+
+/**
+ * Saves a pack's recorded clips. Returns the ids that are now on the phone;
+ * one that fails is simply read by the phone's own voice when offline.
+ */
+async function saveAudio(clipIds: string[]): Promise<string[]> {
+  const saved: string[] = [];
+  let next = 0;
+  let done = 0;
+  set({ audioProgress: { done, total: clipIds.length } });
+  await Promise.all(
+    Array.from({ length: Math.min(AUDIO_DOWNLOADS, clipIds.length) }, async () => {
+      while (next < clipIds.length) {
+        const clipId = clipIds[next++]!;
+        if (await audioStore.save(clipId, api.audioUrl(clipId))) saved.push(clipId);
+        done += 1;
+        if (done % 5 === 0 || done === clipIds.length) {
+          set({ audioProgress: { done, total: clipIds.length } });
+        }
+      }
+    }),
+  );
+  set({ audioProgress: null });
+  return saved;
+}
+
+/** Deletes clips this pack used that no other pack does. */
+async function dropAudio(countryCode: string, keep: readonly string[] = []): Promise<void> {
+  const others = new Set(
+    Object.entries(packAudio).flatMap(([code, ids]) => (code === countryCode ? [] : ids)),
+  );
+  const kept = new Set(keep);
+  const unused = (packAudio[countryCode] ?? []).filter((id) => !others.has(id) && !kept.has(id));
+  await audioStore.remove(unused);
+}
+
 /** Downloads (or refreshes) everything needed to study a country offline. */
 export async function downloadPack(countryCode: string): Promise<void> {
   set({ downloading: countryCode });
   try {
     const pack = await api.countryPack(countryCode);
     await files.write(packFile(pack.countryCode), JSON.stringify(pack));
+    // The questions are safe on the phone; now the recordings of them.
+    const audio = await saveAudio(packClipIds(pack));
+    await dropAudio(pack.countryCode, audio);
+    packAudio = { ...packAudio, [pack.countryCode]: audio };
+    await kv.set(KEYS.packAudio, JSON.stringify(packAudio));
     const packs = {
       ...state.packs,
       [pack.countryCode]: {
@@ -187,6 +244,7 @@ export async function downloadPack(countryCode: string): Promise<void> {
         countryName: pack.countryName,
         generatedAt: pack.generatedAt,
         questions: pack.questions.length,
+        audioClips: audio.length,
       },
     };
     await kv.set(KEYS.packs, JSON.stringify(packs));
@@ -199,12 +257,17 @@ export async function downloadPack(countryCode: string): Promise<void> {
     persist();
     set({ packs });
   } finally {
-    set({ downloading: null });
+    set({ downloading: null, audioProgress: null });
   }
 }
 
 export async function removePack(countryCode: string): Promise<void> {
   await files.remove(packFile(countryCode));
+  await dropAudio(countryCode);
+  const remaining = { ...packAudio };
+  delete remaining[countryCode];
+  packAudio = remaining;
+  await kv.set(KEYS.packAudio, JSON.stringify(packAudio));
   const packs = { ...state.packs };
   delete packs[countryCode];
   await kv.set(KEYS.packs, JSON.stringify(packs));
@@ -298,6 +361,11 @@ export function onSynced(listener: () => void): () => void {
 function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => listeners.delete(listener);
+}
+
+/** Whether the phone has a connection, as last seen. */
+export function isOnline(): boolean {
+  return state.online;
 }
 
 export function useOffline(): OfflineState {

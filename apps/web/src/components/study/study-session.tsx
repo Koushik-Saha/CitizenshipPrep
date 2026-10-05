@@ -8,6 +8,7 @@ import {
   type SessionQuestion,
   type StudySession as Session,
 } from '@oathly/api/study';
+import { useAudioSession } from '@oathly/api/audio-hooks';
 import { examDecision, isCorrect, type Answer } from '@oathly/core';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, languageName, textDirection, type MessageKey } from '@oathly/i18n';
@@ -18,7 +19,10 @@ import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
 import { buttonClass, focusRing } from '@/components/ui';
 import { completeSession, flushAnswers, recordAnswer } from '@/lib/answer-sync';
+import { useAudioPlatform } from '@/lib/audio-platform';
+import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
 
+import { AudioControls } from './audio-controls';
 import { ExplainMore } from './explain-more';
 import { Results } from './results';
 import { useCountdown } from './use-countdown';
@@ -46,6 +50,8 @@ export function StudySession({ session }: { session: Session }) {
   const { questions } = session;
   const isExam = session.mode === 'mock_exam';
   const isFlashcards = session.mode === 'flashcards';
+  // The real exam is an interview: asked aloud, answered aloud, no list of choices.
+  const interview = isExam && (session.exam?.spoken ?? false);
   const quizQuestions = useMemo(() => questions.map(toQuizQuestion), [questions]);
   const mockExam = useMemo(() => toMockExam(session), [session]);
   const queryClient = useQueryClient();
@@ -59,7 +65,15 @@ export function StudySession({ session }: { session: Session }) {
   const [stopNote, setStopNote] = useState<MessageKey | null>(null);
   // Study language or the exam's own, for questions that have both. The
   // choice carries on to the next question until it is changed back.
-  const [inExamLanguage, setInExamLanguage] = useState(false);
+  // A mock interview starts in the exam's language: that is what will be heard on the day.
+  const [inExamLanguage, setInExamLanguage] = useState(interview);
+  // Audio mode: the learner's standing choice, except that an interview is spoken unless switched off.
+  const prefs = useAudioPrefs();
+  const [interviewAudio, setInterviewAudio] = useState(true);
+  // In an interview the written question stays out of sight until asked for, question by
+  // question; choosing to tap answers instead of saying them holds for the session.
+  const [textShownFor, setTextShownFor] = useState(-1);
+  const [choicesShown, setChoicesShown] = useState(false);
   const shownAt = useRef(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -175,6 +189,31 @@ export function StudySession({ session }: { session: Session }) {
     [phase, question.type],
   );
 
+  const lastAnswer = answers[answers.length - 1];
+  const audioOn =
+    !isFlashcards && phase !== 'results' && (interview ? interviewAudio : prefs.audio);
+  const platform = useAudioPlatform();
+  const audio = useAudioSession({
+    platform,
+    enabled: audioOn,
+    listen: prefs.voice,
+    phase,
+    questionKey: index,
+    wording,
+    question,
+    spokenExam: interview,
+    correct: lastAnswer?.correct ?? false,
+    phrases: { locale: t.locale, correct: t('audio.correct'), notQuite: t('audio.notQuite') },
+    onAnswer: (key) => submit([key]),
+    // Hands-free: once the explanation has been read, on to the next question.
+    onExplained: () => advance(answers),
+  });
+
+  // Without audio, or where answers cannot or are not to be spoken, an interview falls back
+  // to the written form.
+  const hideText = interview && audioOn && textShownFor !== index;
+  const hideChoices = interview && audioOn && audio.canListen && prefs.voice && !choicesShown;
+
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
@@ -195,6 +234,7 @@ export function StudySession({ session }: { session: Session }) {
       const digit = Number(event.key);
       if (
         phase === 'answering' &&
+        !hideChoices &&
         Number.isInteger(digit) &&
         digit >= 1 &&
         digit <= question.options.length
@@ -209,7 +249,18 @@ export function StudySession({ session }: { session: Session }) {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [advance, answers, flipped, isFlashcards, phase, question.options, selected, submit, toggle]);
+  }, [
+    advance,
+    answers,
+    flipped,
+    hideChoices,
+    isFlashcards,
+    phase,
+    question.options,
+    selected,
+    submit,
+    toggle,
+  ]);
 
   useEffect(() => {
     if (phase !== 'results' || session.completedAt) return;
@@ -265,7 +316,6 @@ export function StudySession({ session }: { session: Session }) {
     );
   }
 
-  const lastAnswer = answers[answers.length - 1];
   const title = isExam
     ? session.exam?.name
     : isFlashcards
@@ -309,15 +359,54 @@ export function StudySession({ session }: { session: Session }) {
         />
       </div>
 
+      {interview && <p className="text-fg-muted mt-6 text-sm">{t('audio.interviewIntro')}</p>}
+      {!isFlashcards && (
+        <AudioControls
+          on={audioOn}
+          onToggle={() =>
+            interview ? setInterviewAudio(!interviewAudio) : setAudioPrefs({ audio: !prefs.audio })
+          }
+          audio={audio}
+          voice={prefs.voice}
+          onVoiceChange={(voice) => setAudioPrefs({ voice })}
+          answering={phase === 'answering'}
+          interview={interview}
+          choicesShown={!hideChoices}
+          onShowChoices={() => setChoicesShown(true)}
+          onUseAnswer={() => submit([])}
+        />
+      )}
+
       <p className="text-fg-muted mt-8 text-sm">{question.topicName}</p>
-      <h1
-        ref={headingRef}
-        tabIndex={-1}
-        {...wordingProps}
-        className="font-display mt-2 text-2xl font-medium outline-none sm:text-3xl"
-      >
-        {wording.text}
-      </h1>
+      {hideText ? (
+        <>
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="font-display mt-2 text-2xl font-medium outline-none sm:text-3xl"
+          >
+            {t('audio.listenToQuestion')}
+          </h1>
+          <p className="mt-3 text-sm">
+            <button
+              type="button"
+              onClick={() => setTextShownFor(index)}
+              className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
+            >
+              {t('audio.showQuestion')}
+            </button>
+          </p>
+        </>
+      ) : (
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          {...wordingProps}
+          className="font-display mt-2 text-2xl font-medium outline-none sm:text-3xl"
+        >
+          {wording.text}
+        </h1>
+      )}
       {question.original && (
         // The real exam is in its own language: one press shows this question
         // as the exam words it, and another brings the study language back.
@@ -346,6 +435,17 @@ export function StudySession({ session }: { session: Session }) {
           onFlip={() => setFlipped(true)}
           onRate={(knew) => submit([], knew)}
         />
+      ) : hideChoices ? (
+        // An interview: the answer is said aloud. The choices are there if wanted.
+        <p className="mt-6 text-sm">
+          <button
+            type="button"
+            onClick={() => setChoicesShown(true)}
+            className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
+          >
+            {t('audio.showChoices')}
+          </button>
+        </p>
       ) : (
         <>
           <fieldset className="mt-6">

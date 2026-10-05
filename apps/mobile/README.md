@@ -63,6 +63,28 @@ built on the phone by the same engine the server uses. Answers and results
 wait in a queue on the phone and are sent when it is back online, sessions
 first and then their answers. The Profile tab shows what is waiting.
 
+## Audio mode
+
+On a session screen, **Audio mode** reads each question and its choices
+aloud, takes the answer by tap or by voice, then reads the explanation and
+moves on. A mock exam whose real exam is spoken (an oral test or interview)
+runs as a **mock interview**: each question is asked aloud in the exam's
+language, with the written question and the choices out of sight until asked
+for.
+
+- Questions are read from recorded clips where they exist (`pnpm content
+audio`), and by the phone's own voice (`expo-speech`) where they do not.
+- Saving a country for offline also saves its clips, so audio mode works with
+  no connection: `src/lib/audio-store.ts` (files on the phone; the browser's
+  cache in the web build).
+- Spoken answers use `expo-speech-recognition`, a native module that is **not
+  in Expo Go**: there the microphone controls do not appear and answers are
+  tapped. A development build (`npx expo run:ios` / `run:android`) has it.
+- The sequencing lives in `packages/api` (`audio.ts`, `audio-hooks.ts`) and
+  the matching of a spoken answer to an option in `packages/core`
+  (`speech.ts`); `src/lib/audio-platform.ts` is only how this device plays,
+  speaks and listens.
+
 ## Checks
 
 ```bash

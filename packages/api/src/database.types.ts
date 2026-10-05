@@ -234,6 +234,39 @@ export type Database = {
           },
         ];
       };
+      audio_clips: {
+        Row: {
+          byte_size: number;
+          char_count: number;
+          content_type: string;
+          created_at: string;
+          data: string;
+          id: string;
+          locale: string;
+          voice: string;
+        };
+        Insert: {
+          byte_size: number;
+          char_count: number;
+          content_type: string;
+          created_at?: string;
+          data: string;
+          id: string;
+          locale: string;
+          voice: string;
+        };
+        Update: {
+          byte_size?: number;
+          char_count?: number;
+          content_type?: string;
+          created_at?: string;
+          data?: string;
+          id?: string;
+          locale?: string;
+          voice?: string;
+        };
+        Relationships: [];
+      };
       community_comments: {
         Row: {
           author_id: string;

@@ -5,6 +5,7 @@
 export * from './claude';
 export * from './db';
 export * from './duplicates';
+export * from './pipeline/audio';
 export * from './pipeline/check-sources';
 export * from './pipeline/draft';
 export * from './pipeline/ingest';
@@ -14,3 +15,4 @@ export * from './review';
 export * from './schemas';
 export * from './source';
 export * from './text';
+export * from './tts';

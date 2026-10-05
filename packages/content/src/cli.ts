@@ -9,10 +9,12 @@ import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
 import { ingestSource } from './pipeline/ingest';
 import { describeNotify, notifyContentChanged } from './notify';
+import { recordAudio } from './pipeline/audio';
 import { translateQuestions } from './pipeline/translate';
 import { listDocuments, upsertCountry, upsertExamFormat } from './repository';
 import { getQueueCounts } from './review';
 import { fetchSource, readSourceFile } from './source';
+import { createSpeaker, type Speaker } from './tts';
 
 const USAGE = `Oathly content pipeline
 
@@ -43,10 +45,17 @@ Usage: pnpm content <command> [options]
   check-sources  Re-fetch every source, re-hash it, and flag questions whose passage changed
                  [--country US]
 
+  audio          Record published questions being read aloud, for audio mode. Records only
+                 what is missing, so it is safe to run again after publishing or translating
+                 [--country US] [--locales es,bn] [--limit 500] [--dry-run]
+                 [--prune]   (also delete clips no published question uses any more)
+
   status         Show sources and what is waiting for review
                  [--country US]
 
 Reads DATABASE_URL and ANTHROPIC_API_KEY from .env.local at the repository root.
+"audio" needs a text-to-speech service: GOOGLE_TTS_API_KEY, or TTS_PROVIDER=macos to try it
+with this Mac's own voices.
 With SITE_URL and REVALIDATE_SECRET set, changes refresh the site's public pages at once.
 Review drafts at /admin/content in the web app.`;
 
@@ -104,6 +113,12 @@ function httpsUrl(values: Record<string, unknown>, name: string): string {
   return url;
 }
 
+/** For --dry-run, which records nothing and so needs no speech service. */
+const silentSpeaker: Speaker = {
+  name: 'none',
+  speak: () => Promise.reject(new Error('A dry run records nothing.')),
+};
+
 async function main(): Promise<void> {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help' || command === '--help') {
@@ -142,6 +157,8 @@ async function main(): Promise<void> {
       'per-passage': { type: 'string' },
       locales: { type: 'string' },
       'include-unpublished': { type: 'boolean' },
+      'dry-run': { type: 'boolean' },
+      prune: { type: 'boolean' },
     },
   });
 
@@ -303,6 +320,39 @@ async function main(): Promise<void> {
         }
         // A source that cannot be fetched needs a person to look at it.
         if (failed) process.exitCode = 1;
+        break;
+      }
+
+      case 'audio': {
+        const dryRun = values['dry-run'] ?? false;
+        const summary = await recordAudio(pool, dryRun ? silentSpeaker : createSpeaker(), {
+          countryCode: optional(values, 'country')?.toUpperCase(),
+          locales: optional(values, 'locales')
+            ?.split(',')
+            .map((locale) => locale.trim())
+            .filter(Boolean),
+          limit: wholeNumber(values, 'limit') ?? undefined,
+          dryRun,
+          prune: values.prune ?? false,
+          log: (message) => console.log(message),
+        });
+        console.log(`Clips the published questions need: ${summary.needed}`);
+        console.log(`Already recorded: ${summary.existing}`);
+        if (!dryRun) {
+          console.log(`Recorded now: ${summary.recorded} (${summary.characters} characters)`);
+        }
+        console.log(`Still to record: ${summary.remaining}`);
+        if (summary.noVoice.length > 0) {
+          console.log(
+            `No voice for: ${summary.noVoice.join(', ')}. The apps read these with the device’s own voice.`,
+          );
+        }
+        if (summary.pruned > 0) console.log(`Deleted ${summary.pruned} clip(s) no longer used.`);
+        for (const failure of summary.failed.slice(0, 10)) {
+          console.log(`FAILED  ${failure.locale}  "${failure.text}": ${failure.error}`);
+        }
+        if (summary.failed.length > 10) console.log(`…and ${summary.failed.length - 10} more.`);
+        if (summary.failed.length > 0) process.exitCode = 1;
         break;
       }
 

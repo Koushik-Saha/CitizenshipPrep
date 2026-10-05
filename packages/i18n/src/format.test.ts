@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { formatMessage, isolate, messageShape } from './format';
 import { isUiLocale, localizePath, splitLocalePath } from './locales';
 import { matchUiLocale, negotiateLocale } from './negotiate';
-import { countryName, languageList } from './index';
+import { countryName, languageList, speechLocale, studyLocales } from './index';
 import { createTranslator, pickMessages } from './translate';
 import { en } from './messages/en';
 
@@ -117,6 +117,18 @@ describe('names', () => {
   it('lists languages with "or"', () => {
     expect(languageList(['en', 'fr'], 'en')).toBe('English or French');
     expect(languageList(['en', 'fr'], 'es')).toBe('inglés o francés');
+  });
+});
+
+describe('speechLocale', () => {
+  it('gives every study language a region a speech engine understands', () => {
+    for (const locale of studyLocales) {
+      expect(speechLocale(locale), locale).toMatch(/^[a-z]{2,3}-[A-Z]{2}$/);
+    }
+    expect(speechLocale('zh-Hans')).toBe('zh-CN');
+    expect(speechLocale('tl')).toBe('fil-PH');
+    // Already regional, or unknown: left as it is.
+    expect(speechLocale('en-GB')).toBe('en-GB');
   });
 });
 

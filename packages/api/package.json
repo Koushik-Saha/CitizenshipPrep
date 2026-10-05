@@ -7,6 +7,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./audio": "./src/audio.ts",
+    "./audio-hooks": "./src/audio-hooks.ts",
     "./client": "./src/client.ts",
     "./countries": "./src/countries.ts",
     "./country-search": "./src/country-search.ts",

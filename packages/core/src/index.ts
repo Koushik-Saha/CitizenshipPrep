@@ -2,6 +2,7 @@
 // questions, history and clock; the engine decides what to ask and what the
 // answers mean.
 export * from './ai-limits';
+export * from './audio';
 export * from './exam-format';
 export * from './globe';
 export { hello } from './hello';
@@ -14,4 +15,5 @@ export * from './random';
 export * from './readiness';
 export * from './scoring';
 export * from './session-run';
+export * from './speech';
 export * from './types';

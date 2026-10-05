@@ -396,6 +396,35 @@ export const en = {
     opening: 'Opening the tutor',
   },
 
+  audio: {
+    mode: 'Audio mode',
+    hint: 'Each question is read aloud. Answer by tapping, or aloud.',
+    replay: 'Read it again',
+    voiceAnswers: 'Answer by voice',
+    speak: 'Answer aloud',
+    stopListening: 'Stop listening',
+    listening: 'Listening…',
+    speaking: 'Reading aloud…',
+    sayNumber: 'Say the number of your answer, or the answer itself.',
+    heard: 'I heard: “{words}”',
+    notCaught: 'That does not match any of the answers.',
+    useAnswer: 'Use this answer',
+    sayAgain: 'Say it again',
+    showChoices: 'Choose from the answers instead',
+    showQuestion: 'Show the question in writing',
+    hideQuestion: 'Hide the written question',
+    listenToQuestion: 'Listen to the question',
+    micBlocked:
+      'Oathly cannot use the microphone. Allow it in your settings, or answer by tapping.',
+    voiceUnavailable: 'This device cannot take spoken answers. Answer by tapping.',
+    correct: 'Correct.',
+    notQuite: 'Not quite. The answer is:',
+    interview: 'Mock interview',
+    startInterview: 'Start mock interview',
+    interviewIntro:
+      'The questions are asked aloud, as in the real exam. Answer aloud, in the exam’s language.',
+  },
+
   offline: {
     title: 'Study offline',
     saved:
@@ -410,6 +439,9 @@ export const en = {
     bannerSending: '{count, plural, one {Sending # saved item…} other {Sending # saved items…}}',
     bannerWaiting:
       '{count, plural, one {# saved item waiting to be sent.} other {# saved items waiting to be sent.}}',
+    savingAudio: 'Saving audio: {done} of {total}',
+    audioSaved:
+      '{count, plural, one {# recording saved for audio mode.} other {# recordings saved for audio mode.}}',
     progressLater: 'Your progress will show here when you are back online.',
     noConnection: 'No connection. Download this country while you are online to study without one.',
   },

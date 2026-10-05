@@ -85,6 +85,12 @@ export interface SubmitOptions {
   shownAt: number;
   /** Flashcards: the learner's own verdict, since there is nothing to mark. */
   knewIt?: boolean;
+  /**
+   * An answer given aloud, in place of the options chosen on screen: the
+   * option it was heard as, or none when it matched no option (which is a
+   * wrong answer, not a missing one).
+   */
+  spoken?: readonly string[];
 }
 
 /**
@@ -102,10 +108,12 @@ export function submitAnswer(
   if (state.phase !== 'answering') return { state, answer: null };
   const question = current(config, state);
   const isFlashcards = config.mode === 'flashcards';
-  if (isFlashcards ? options.knewIt === undefined : state.selected.length === 0) {
+  const chosen = options.spoken ?? state.selected;
+  // Nothing chosen is not an answer, unless it was said aloud and matched no option.
+  if (isFlashcards ? options.knewIt === undefined : !options.spoken && chosen.length === 0) {
     return { state, answer: null };
   }
-  const selectedKeys = isFlashcards ? [] : [...state.selected];
+  const selectedKeys = isFlashcards ? [] : [...chosen];
   const answer: GivenAnswer = {
     questionId: question.id,
     selectedKeys,

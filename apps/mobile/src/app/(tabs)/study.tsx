@@ -240,7 +240,8 @@ function CountrySection({
                   </Body>
                 )}
                 <Button
-                  label={t('start.startMock')}
+                  // An exam that is asked and answered aloud is practised as an interview.
+                  label={exam.spoken ? t('audio.startInterview') : t('start.startMock')}
                   variant="secondary"
                   busy={busy === `mock-${exam.id}`}
                   disabled={busy !== null || exam.unavailableReason !== null}
@@ -269,6 +270,16 @@ function CountrySection({
                   })
                 : t('offline.notSaved')}
             </Body>
+            {offline.downloading === code && offline.audioProgress && (
+              <Body muted size="sm">
+                {t('offline.savingAudio', offline.audioProgress)}
+              </Body>
+            )}
+            {pack && pack.audioClips > 0 && offline.downloading !== code && (
+              <Body muted size="sm">
+                {t('offline.audioSaved', { count: pack.audioClips })}
+              </Body>
+            )}
             {packProblem && <Message tone="error">{packProblem}</Message>}
             <Button
               label={pack ? t('offline.update') : t('offline.save')}

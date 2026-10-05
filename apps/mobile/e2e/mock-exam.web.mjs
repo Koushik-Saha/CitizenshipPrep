@@ -31,6 +31,10 @@ if (await byId('finish-onboarding').count()) {
 
 await byPrefix('mock-exam-').first().waitFor({ timeout: 60_000 });
 await byPrefix('mock-exam-').first().click();
+await byId('audio-mode').waitFor({ timeout: 30_000 });
+// A spoken exam opens as a mock interview, with the question's text out of
+// sight. This flow answers by tapping, so it switches audio mode off.
+if (await byId('show-question').count()) await byId('audio-mode').click();
 await byId('question-text').waitFor({ timeout: 30_000 });
 
 let answered = 0;

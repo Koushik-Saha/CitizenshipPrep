@@ -399,6 +399,36 @@ export const fr: Messages = {
     opening: 'Ouverture du tuteur',
   },
 
+  audio: {
+    mode: 'Mode audio',
+    hint: 'Chaque question est lue à voix haute. Répondez en touchant l’écran ou à voix haute.',
+    replay: 'Relire',
+    voiceAnswers: 'Répondre à la voix',
+    speak: 'Répondre à voix haute',
+    stopListening: 'Arrêter l’écoute',
+    listening: 'Écoute en cours…',
+    speaking: 'Lecture à voix haute…',
+    sayNumber: 'Dites le numéro de votre réponse, ou la réponse elle-même.',
+    heard: 'J’ai entendu : « {words} »',
+    notCaught: 'Cela ne correspond à aucune des réponses.',
+    useAnswer: 'Utiliser cette réponse',
+    sayAgain: 'Répéter',
+    showChoices: 'Choisir parmi les réponses',
+    showQuestion: 'Afficher la question par écrit',
+    hideQuestion: 'Masquer la question écrite',
+    listenToQuestion: 'Écoutez la question',
+    micBlocked:
+      'Oathly ne peut pas utiliser le micro. Autorisez-le dans vos réglages, ou répondez en touchant l’écran.',
+    voiceUnavailable:
+      'Cet appareil ne prend pas en charge les réponses orales. Répondez en touchant l’écran.',
+    correct: 'Correct.',
+    notQuite: 'Pas tout à fait. La réponse est :',
+    interview: 'Entretien blanc',
+    startInterview: 'Commencer l’entretien blanc',
+    interviewIntro:
+      'Les questions sont posées à voix haute, comme à l’examen réel. Répondez à voix haute, dans la langue de l’examen.',
+  },
+
   offline: {
     title: 'Étudier hors ligne',
     saved:
@@ -414,6 +444,9 @@ export const fr: Messages = {
       '{count, plural, one {Envoi de # élément enregistré…} other {Envoi de # éléments enregistrés…}}',
     bannerWaiting:
       '{count, plural, one {# élément enregistré en attente d’envoi.} other {# éléments enregistrés en attente d’envoi.}}',
+    savingAudio: 'Enregistrement de l’audio : {done} sur {total}',
+    audioSaved:
+      '{count, plural, one {# enregistrement sauvegardé pour le mode audio.} other {# enregistrements sauvegardés pour le mode audio.}}',
     progressLater: 'Votre progression s’affichera ici quand vous serez de nouveau en ligne.',
     noConnection:
       'Pas de connexion. Téléchargez ce pays quand vous êtes en ligne pour étudier sans connexion.',

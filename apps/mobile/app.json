@@ -33,7 +33,15 @@
           "imageWidth": 76
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-audio",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Oathly listens only when you choose to answer a question aloud.",
+          "speechRecognitionPermission": "Oathly turns your spoken answer into text to check it against the right answer."
+        }
+      ]
     ],
     "experiments": {
       "reactCompiler": true

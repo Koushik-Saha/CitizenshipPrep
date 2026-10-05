@@ -1,4 +1,5 @@
 import { questionWording, toMockExam, toQuizQuestion, type StudySession } from '@oathly/api';
+import { useAudioSession } from '@oathly/api/audio-hooks';
 import { useStudySession } from '@oathly/api/hooks';
 import { queryKeys } from '@oathly/api/queries';
 import {
@@ -20,11 +21,14 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
+import { AudioControls } from '@/components/audio-controls';
 import { Flashcard } from '@/components/flashcard';
 import { OptionButton, type OptionState } from '@/components/option-button';
 import { ProgressBar } from '@/components/progress-bar';
 import { Results } from '@/components/results';
 import { Body, Button, Card, Heading, LinkButton, Screen, useTheme } from '@/components/ui';
+import { audioPlatform } from '@/lib/audio-platform';
+import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
 import { haptics } from '@/lib/haptics';
 import { useT } from '@/lib/i18n';
 import { backToStudy } from '@/lib/navigation';
@@ -70,7 +74,17 @@ function Runner({ session }: { session: StudySession }) {
   const client = useQueryClient();
   // Study language or the exam's own, for questions that have both. The
   // choice carries on to the next question until it is changed back.
-  const [inExamLanguage, setInExamLanguage] = useState(false);
+  // The real exam is an interview: asked aloud, answered aloud, no list of choices.
+  const interview = session.mode === 'mock_exam' && (session.exam?.spoken ?? false);
+  // A mock interview starts in the exam's language: that is what will be heard on the day.
+  const [inExamLanguage, setInExamLanguage] = useState(interview);
+  // Audio mode: the learner's standing choice, except that an interview is spoken unless switched off.
+  const prefs = useAudioPrefs();
+  const [interviewAudio, setInterviewAudio] = useState(true);
+  // In an interview the written question stays out of sight until asked for, question by
+  // question; choosing to tap answers instead of saying them holds for the session.
+  const [textShownFor, setTextShownFor] = useState(-1);
+  const [choicesShown, setChoicesShown] = useState(false);
   const config = useMemo<RunConfig>(
     () => ({
       mode: session.mode,
@@ -112,11 +126,13 @@ function Runner({ session }: { session: StudySession }) {
     void client.invalidateQueries({ queryKey: queryKeys.dashboard });
   }, [client, config, run, session.attemptId, startedAt]);
 
-  function submit(knewIt?: boolean) {
+  /** Submits the answer chosen on screen, a flashcard verdict, or an answer given aloud. */
+  function submit(knewIt?: boolean, spoken?: readonly string[]) {
     const { state, answer } = submitAnswer(config, run, {
       now: new Date(),
       shownAt: shownAt.current,
       knewIt,
+      spoken,
     });
     if (!answer) return;
     recordAnswer(
@@ -139,6 +155,29 @@ function Runner({ session }: { session: StudySession }) {
     setRun(state);
   }
 
+  const given = run.phase === 'feedback' ? run.answers[run.answers.length - 1]! : null;
+  const audioOn =
+    !isFlashcards && run.phase !== 'results' && (interview ? interviewAudio : prefs.audio);
+  const audio = useAudioSession({
+    platform: audioPlatform,
+    enabled: audioOn,
+    listen: prefs.voice,
+    phase: run.phase,
+    questionKey: run.index,
+    wording,
+    question,
+    spokenExam: interview,
+    correct: given?.correct ?? false,
+    phrases: { locale: t.locale, correct: t('audio.correct'), notQuite: t('audio.notQuite') },
+    onAnswer: (key) => submit(undefined, [key]),
+    // Hands-free: once the explanation has been read, on to the next question.
+    onExplained: () => setRun((current) => nextQuestion(config, current)),
+  });
+  // Without audio, or where answers cannot or are not to be spoken, an interview falls back
+  // to the written form.
+  const hideText = interview && audioOn && textShownFor !== run.index;
+  const hideChoices = interview && audioOn && audio.canListen && prefs.voice && !choicesShown;
+
   if (run.phase === 'results') {
     return (
       <Results
@@ -153,7 +192,6 @@ function Runner({ session }: { session: StudySession }) {
 
   const answered = run.answers.length;
   const last = run.index + 1 === session.questions.length;
-  const given = run.phase === 'feedback' ? run.answers[run.answers.length - 1]! : null;
 
   function optionState(key: string): OptionState {
     const chosen = (given?.selectedKeys ?? run.selected).includes(key);
@@ -226,6 +264,23 @@ function Runner({ session }: { session: StudySession }) {
         )}
       </View>
 
+      {!isFlashcards && (
+        <AudioControls
+          on={audioOn}
+          onToggle={() =>
+            interview ? setInterviewAudio(!interviewAudio) : setAudioPrefs({ audio: !prefs.audio })
+          }
+          audio={audio}
+          voice={prefs.voice}
+          onVoiceChange={(voice) => setAudioPrefs({ voice })}
+          answering={run.phase === 'answering'}
+          interview={interview}
+          choicesShown={!hideChoices}
+          onShowChoices={() => setChoicesShown(true)}
+          onUseAnswer={() => submit(undefined, [])}
+        />
+      )}
+
       {isFlashcards ? (
         <>
           <Flashcard
@@ -277,17 +332,37 @@ function Runner({ session }: { session: StudySession }) {
         </>
       ) : (
         <>
-          <Text
-            accessibilityRole="header"
-            accessibilityLanguage={wording.locale}
-            testID="question-text"
-            style={[theme.text['2xl'], { color: theme.colors.fg, fontWeight: '600' }, wordingStyle]}
-          >
-            {wording.text}
-          </Text>
+          {interview && (
+            <Body muted size="sm">
+              {t('audio.interviewIntro')}
+            </Body>
+          )}
+          {hideText ? (
+            <>
+              <Heading level={2}>{t('audio.listenToQuestion')}</Heading>
+              <LinkButton
+                label={t('audio.showQuestion')}
+                onPress={() => setTextShownFor(run.index)}
+                testID="show-question"
+              />
+            </>
+          ) : (
+            <Text
+              accessibilityRole="header"
+              accessibilityLanguage={wording.locale}
+              testID="question-text"
+              style={[
+                theme.text['2xl'],
+                { color: theme.colors.fg, fontWeight: '600' },
+                wordingStyle,
+              ]}
+            >
+              {wording.text}
+            </Text>
+          )}
           <View
             accessibilityRole={question.type === 'multi_select' ? undefined : 'radiogroup'}
-            style={{ gap: theme.spacing[3] }}
+            style={{ gap: theme.spacing[3], display: hideChoices ? 'none' : 'flex' }}
           >
             {question.type === 'multi_select' && <Body muted>{t('session.chooseAll')}</Body>}
             {wording.options.map((option, i) => (
@@ -339,7 +414,7 @@ function Runner({ session }: { session: StudySession }) {
               onPress={() => setRun((current) => nextQuestion(config, current))}
               testID="next"
             />
-          ) : (
+          ) : hideChoices ? null : (
             <Button
               label={
                 isExam ? (last ? t('session.submitExam') : t('session.next')) : t('session.check')

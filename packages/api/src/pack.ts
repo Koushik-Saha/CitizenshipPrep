@@ -34,6 +34,8 @@ export interface PackExamFormat {
   passMark: number | null;
   timeLimitMinutes: number | null;
   isCurrent: boolean;
+  /** Asked and answered aloud in the real exam (see SessionExam.spoken). */
+  spoken: boolean;
   blueprint: ExamBlueprint;
 }
 
@@ -98,10 +100,20 @@ const toSessionQuestion = (question: PackQuestion): SessionQuestion => ({
   options: question.options,
   correctKeys: question.correctKeys,
   explanation: question.explanation,
+  audio: question.audio,
   sourceQuote: question.sourceQuote,
   sourceUrl: question.sourceUrl,
   original: question.original,
 });
+
+/** Every recorded clip a pack's questions use, in either wording: what to save for audio mode offline. */
+export function packClipIds(pack: Pick<CountryPack, 'questions'>): string[] {
+  const ids = pack.questions.flatMap((question) => [
+    ...Object.values(question.audio),
+    ...Object.values(question.original?.audio ?? {}),
+  ]);
+  return [...new Set(ids.filter((id) => id !== null))];
+}
 
 /** The pack's stored answers plus any made since, as the engine reads them. */
 export function packHistory(pack: CountryPack, since: readonly PackAnswer[] = []): AnswerEvent[] {
@@ -171,6 +183,7 @@ export function startOfflineSession(
           passMark: exam.passMark,
           timeLimitMs: exam.timeLimitMs,
           stopEarly: exam.stopEarly,
+          spoken: format.spoken,
           sections: exam.sections,
         },
       },

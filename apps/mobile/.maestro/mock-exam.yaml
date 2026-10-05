@@ -46,6 +46,22 @@ appId: ${APP_ID}
 
 - extendedWaitUntil:
     visible:
+      id: 'audio-mode'
+    timeout: 30000
+
+# An exam that is spoken in real life opens as a mock interview: the question
+# is asked aloud and its text is out of sight. This flow answers by tapping,
+# so it switches audio mode off, which brings back the written form.
+- runFlow:
+    when:
+      visible:
+        id: 'show-question'
+    commands:
+      - tapOn:
+          id: 'audio-mode'
+
+- extendedWaitUntil:
+    visible:
       id: 'question-text'
     timeout: 30000
 

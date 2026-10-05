@@ -86,6 +86,7 @@ export const dashboardSchema = z.object({
           timeLimitMinutes: nullableNumber,
           passMark: nullableNumber,
           isCurrent: z.boolean(),
+          spoken: z.boolean(),
           unavailableReason: nullableString,
         }),
       ),
@@ -96,6 +97,13 @@ export const dashboardSchema = z.object({
 
 const locationSchema = z.nullable(z.object({ latitude: z.number(), longitude: z.number() }));
 const modeSchema = z.enum(['practice', 'flashcards', 'mock_exam']);
+
+const audioSchema = z.object({
+  question: nullableString,
+  options: nullableString,
+  answer: nullableString,
+  explanation: nullableString,
+});
 
 const questionShape = {
   id: z.string(),
@@ -108,6 +116,7 @@ const questionShape = {
   options: z.array(z.object({ key: z.string(), text: z.string() })),
   correctKeys: z.array(z.string()),
   explanation: nullableString,
+  audio: audioSchema,
   sourceQuote: nullableString,
   sourceUrl: z.string(),
   original: z.nullable(
@@ -116,6 +125,7 @@ const questionShape = {
       text: z.string(),
       options: z.array(z.object({ key: z.string(), text: z.string() })),
       explanation: nullableString,
+      audio: audioSchema,
     }),
   ),
 };
@@ -136,6 +146,7 @@ export const studySessionSchema = z.object({
       passMark: nullableNumber,
       timeLimitMs: nullableNumber,
       stopEarly: z.boolean(),
+      spoken: z.boolean(),
       sections: z.array(
         z.object({
           id: z.string(),
@@ -161,6 +172,7 @@ export const countryPackSchema = z.object({
       passMark: nullableNumber,
       timeLimitMinutes: nullableNumber,
       isCurrent: z.boolean(),
+      spoken: z.boolean(),
       blueprint: examBlueprintSchema,
     }),
   ),

@@ -3,13 +3,16 @@ import { describe, expect, it } from 'vitest';
 
 import {
   PackError,
+  packClipIds,
   packHistory,
   startOfflineSession,
   type CountryPack,
   type PackQuestion,
 } from './pack';
 import { countryPackSchema } from './schemas';
-import { questionWording } from './study';
+import { audioClipUrl, isSpokenFormat, questionWording, type WordingAudio } from './study';
+
+const noAudio: WordingAudio = { question: null, options: null, answer: null, explanation: null };
 
 const question = (n: number, topic: 'government' | 'history'): PackQuestion => ({
   id: `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`,
@@ -28,6 +31,7 @@ const question = (n: number, topic: 'government' | 'history'): PackQuestion => (
   ],
   correctKeys: ['a'],
   explanation: null,
+  audio: noAudio,
   sourceQuote: null,
   sourceUrl: 'https://example.org/guide',
   original: null,
@@ -46,6 +50,7 @@ const pack: CountryPack = {
       passMark: 4,
       timeLimitMinutes: 10,
       isCurrent: true,
+      spoken: false,
       blueprint: parseBlueprint({
         sections: [
           { id: 'gov', label: 'Government', count: 4, source: { topics: ['government'] } },
@@ -60,6 +65,7 @@ const pack: CountryPack = {
       passMark: 40,
       timeLimitMinutes: null,
       isCurrent: true,
+      spoken: false,
       blueprint: parseBlueprint(null),
     },
   ],
@@ -202,7 +208,13 @@ describe('questionWording', () => {
     locale: 'es',
     text: '¿Pregunta 1?',
     explanation: 'Porque sí.',
-    original: { locale: 'en', text: english.text, options: english.options, explanation: null },
+    original: {
+      locale: 'en',
+      text: english.text,
+      options: english.options,
+      explanation: null,
+      audio: { ...noAudio, question: 'c'.repeat(64) },
+    },
   };
 
   it('shows the study language unless the exam’s is asked for', () => {
@@ -211,7 +223,10 @@ describe('questionWording', () => {
       text: '¿Pregunta 1?',
       options: english.options,
       explanation: 'Porque sí.',
+      audio: noAudio,
     });
+    // Each wording has its own recordings.
+    expect(questionWording(translated, true).audio.question).toBe('c'.repeat(64));
     expect(questionWording(translated, true)).toBe(translated.original);
   });
 
@@ -226,5 +241,53 @@ describe('questionWording', () => {
       { attemptId: 'a', now: new Date('2026-10-02T00:00:00Z'), random: createRandom(1) },
     );
     expect(session.questions.find((q) => q.id === translated.id)?.original?.locale).toBe('en');
+  });
+});
+
+describe('spoken exams and clips', () => {
+  it('knows which kinds of exam are asked aloud', () => {
+    expect(isSpokenFormat('oral')).toBe(true);
+    expect(isSpokenFormat('interview')).toBe(true);
+    expect(isSpokenFormat('written')).toBe(false);
+    expect(isSpokenFormat('language')).toBe(false);
+  });
+
+  it('carries the exam’s kind into a session built from a pack', () => {
+    const spoken = { ...pack, examFormats: [{ ...pack.examFormats[0]!, spoken: true }] };
+    const { session } = startOfflineSession(
+      spoken,
+      { kind: 'mock_exam', countryCode: 'ZZ', examFormatId: 'format-written' },
+      { attemptId: 'a', now: new Date('2026-10-02T00:00:00Z'), random: createRandom(1) },
+    );
+    expect(session.exam?.spoken).toBe(true);
+  });
+
+  it('lists the clips a pack needs saved, each once', () => {
+    const a = 'a'.repeat(64);
+    const b = 'b'.repeat(64);
+    const c = 'c'.repeat(64);
+    const first = { ...question(1, 'government'), audio: { ...noAudio, question: a, options: b } };
+    const second: PackQuestion = {
+      ...question(2, 'government'),
+      audio: { ...noAudio, options: b },
+      original: {
+        locale: 'en',
+        text: 'Q',
+        options: [],
+        explanation: null,
+        audio: { ...noAudio, question: c, answer: a },
+      },
+    };
+    expect(packClipIds({ questions: [first, second] }).sort()).toEqual([a, b, c]);
+    expect(packClipIds(pack)).toEqual([]);
+  });
+
+  it('builds a clip’s address from the web app’s', () => {
+    expect(audioClipUrl('https://oathly.example/', 'abc')).toBe(
+      'https://oathly.example/api/audio/abc',
+    );
+    expect(audioClipUrl('http://localhost:3000', 'abc')).toBe(
+      'http://localhost:3000/api/audio/abc',
+    );
   });
 });

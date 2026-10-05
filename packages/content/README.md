@@ -44,3 +44,31 @@ Drafting uses `claude-opus-5-5`. A run of 20 questions makes about seven request
 `pnpm --filter @oathly/content test` runs the unit tests. With `TEST_DATABASE_URL` pointing at the
 local database (`pnpm db:start`), it also runs the whole pipeline against it with a stand-in for
 Claude. CI does both.
+
+## Audio
+
+`pnpm content audio` records published questions being read aloud, for the
+apps' audio mode: for each approved wording of a published question, the
+question, its numbered choices, its answer and its explanation.
+
+```sh
+pnpm content audio --dry-run          # what is missing; records nothing
+pnpm content audio --limit 500        # record up to 500 clips
+pnpm content audio --country US --locales es
+pnpm content audio --prune            # also delete clips nothing uses any more
+```
+
+A clip is named by a hash of its language and its exact words
+(`audio_clips.id`). So the command is safe to run again at any time: it
+records only what is new, a reworded question gets a new clip, and the same
+words used by two questions are recorded once. Run it after publishing or
+approving translations (a scheduled job is the simplest way).
+
+It needs a text-to-speech service: `GOOGLE_TTS_API_KEY` (Google Cloud
+Text-to-Speech), or `TTS_PROVIDER=macos` to try it with a Mac's own voices.
+The service is one small adapter in `src/tts.ts`. Where it has no voice for a
+language, or before anything has been recorded, the apps read the same words
+with the device's own voice, so audio mode never depends on this having run.
+
+Clips are stored in the database (`audio_clips.data`) and served by the web
+app at `/api/audio/<id>` with a year-long cache lifetime.

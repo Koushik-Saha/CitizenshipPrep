@@ -5,7 +5,8 @@ import { recordAnswers } from './quiz';
 import { createRandom } from '@oathly/core';
 
 import { startOfflineSession } from '../pack';
-import { countryPackSchema } from '../schemas';
+import { countryPackSchema, studySessionSchema } from '../schemas';
+import { clipId, getAudioClip } from './audio';
 import {
   completeAttempt,
   getCountryPack,
@@ -34,6 +35,7 @@ describe.skipIf(!url)('study sessions against the database', () => {
     await pool.query('delete from public.questions where country_code = $1', [COUNTRY]);
     await pool.query(`delete from public.profiles where id = 'test:study-reviewer'`);
     await pool.query('delete from public.countries where iso_code = $1', [COUNTRY]);
+    await pool.query(`delete from public.audio_clips where voice = 'test:study'`);
   }
 
   beforeAll(async () => {
@@ -142,6 +144,8 @@ describe.skipIf(!url)('study sessions against the database', () => {
         { key: 'b', text: 'No' },
       ],
       explanation: null,
+      // Nothing has been recorded yet.
+      audio: { question: null, options: null, answer: null, explanation: null },
     });
     const untranslated = session.questions.filter((question) => question.locale === 'en');
     expect(untranslated).toHaveLength(7);
@@ -396,5 +400,78 @@ describe.skipIf(!url)('study sessions against the database', () => {
     } finally {
       await pool.query(`delete from public.profiles where id = 'test:study-other'`);
     }
+  });
+
+  it('says which wordings have recorded audio, and which exams are spoken', async () => {
+    const record = (locale: string, text: string) =>
+      pool.query(
+        `insert into public.audio_clips (id, locale, voice, char_count, content_type, byte_size, data)
+         values ($1, $2, 'test:study', $3, 'audio/mpeg', 3, '\\x010203')`,
+        [clipId(locale, text), locale, text.length],
+      );
+    // The Spanish question, the English it was translated from, and the
+    // numbered choices and the answer in English. No explanation anywhere.
+    await record('es', 'Pregunta 1');
+    await record('en', 'Question 1');
+    await record('en', '1. Yes\n2. No');
+    await record('en', 'Yes');
+    // The same words in another language are another clip.
+    await record('fr', 'Question 2');
+
+    const attemptId = await startPractice(pool, USER, {
+      countryCode: COUNTRY,
+      mode: 'random',
+      size: 20,
+    });
+    const session = (await loadStudySession(pool, USER, attemptId))!;
+    expect(studySessionSchema.parse(JSON.parse(JSON.stringify(session)))).toEqual(session);
+    const translated = session.questions.find((question) => question.locale === 'es')!;
+    expect(translated.audio).toEqual({
+      question: clipId('es', 'Pregunta 1'),
+      options: null,
+      answer: null,
+      explanation: null,
+    });
+    expect(translated.original!.audio).toEqual({
+      question: clipId('en', 'Question 1'),
+      options: clipId('en', '1. Yes\n2. No'),
+      answer: clipId('en', 'Yes'),
+      explanation: null,
+    });
+    const second = session.questions.find((question) => question.text === 'Question 2')!;
+    // Its choices and answer are the same words as question 1's, so the same clips.
+    expect(second.audio).toEqual({
+      question: null,
+      options: clipId('en', '1. Yes\n2. No'),
+      answer: clipId('en', 'Yes'),
+      explanation: null,
+    });
+
+    expect(await getAudioClip(pool, clipId('en', 'Yes'))).toEqual({
+      contentType: 'audio/mpeg',
+      data: Buffer.from([1, 2, 3]),
+    });
+    expect(await getAudioClip(pool, clipId('en', 'Never recorded'))).toBeNull();
+    expect(await getAudioClip(pool, "'; drop table public.audio_clips; --")).toBeNull();
+
+    // A written exam is not a mock interview; an oral one is, in sessions and packs alike.
+    const exam = await startMockExam(pool, USER, { countryCode: COUNTRY, examFormatId: formatId });
+    expect((await loadStudySession(pool, USER, exam))!.exam!.spoken).toBe(false);
+    await pool.query(`update public.exam_formats set format_type = 'oral' where id = $1`, [
+      formatId,
+    ]);
+    expect((await loadStudySession(pool, USER, exam))!.exam!.spoken).toBe(true);
+    const pack = await getCountryPack(pool, USER, COUNTRY);
+    expect(pack.examFormats.find((format) => format.id === formatId)!.spoken).toBe(true);
+    expect(pack.questions.find((question) => question.locale === 'es')!.audio.question).toBe(
+      clipId('es', 'Pregunta 1'),
+    );
+    const dashboard = (await getDashboard(pool, USER))!;
+    expect(
+      dashboard.countries[0]!.exams.map((option) => [option.name, option.spoken]).sort(),
+    ).toEqual([
+      ['Examland long test', false],
+      ['Examland test', true],
+    ]);
   });
 });
