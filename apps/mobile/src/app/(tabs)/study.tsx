@@ -5,17 +5,19 @@ import {
   type StudySuggestionView,
 } from '@oathly/api';
 import { useDashboard } from '@oathly/api/hooks';
+import { brandingMembership, orgLogoPath } from '@oathly/api/org';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, type Translator } from '@oathly/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Text, View } from 'react-native';
 
 import { OfflineBanner } from '@/components/offline-banner';
 import { Arc } from '@/components/skia';
 import {
   Body,
+  BrandProvider,
   Button,
   Card,
   Heading,
@@ -25,6 +27,7 @@ import {
   Screen,
   useTheme,
 } from '@/components/ui';
+import { apiUrl } from '@/lib/env';
 import { useT } from '@/lib/i18n';
 import { downloadPack, startSession, useOffline } from '@/lib/offline';
 import { useSession } from '@/lib/session';
@@ -148,7 +151,7 @@ function CountrySection({
     <View style={{ gap: theme.spacing[4] }}>
       <View style={{ gap: theme.spacing[1] }}>
         <Heading level={2}>{name}</Heading>
-        <Body muted>{countdown(daysUntilExam({ ...country, studyLocale: null }), t)}</Body>
+        <Body muted>{countdown(daysUntilExam(country), t)}</Body>
         <Body muted>{t('dashboard.questionsReady', { count: country.publishedQuestions })}</Body>
       </View>
 
@@ -313,7 +316,22 @@ function CountrySection({
   );
 }
 
+/**
+ * The Study tab. A learner who studies with an organization that has a look
+ * of its own sees that organization's logo and colours here.
+ */
 export default function Study() {
+  const session = useSession();
+  const branded =
+    session.status === 'signed-in' ? brandingMembership(session.me.organizations) : null;
+  return (
+    <BrandProvider brand={branded?.brand ?? null}>
+      <StudyScreen />
+    </BrandProvider>
+  );
+}
+
+function StudyScreen() {
   const theme = useTheme();
   const t = useT();
   const session = useSession();
@@ -346,10 +364,38 @@ export default function Study() {
 
   const data = dashboard.data;
   const goal = data ? Math.min(1, data.minutesToday / data.dailyGoalMinutes) : 0;
+  const studyingWith = me.organizations.filter((membership) => membership.role === 'member');
+  const branded = brandingMembership(me.organizations);
 
   return (
     <Screen>
       <OfflineBanner />
+      {studyingWith.length > 0 && (
+        <View
+          testID="studying-with"
+          style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[3] }}
+        >
+          {branded?.brand.logoVersion && (
+            // The name is beside it: the logo itself adds nothing for a screen reader.
+            <Image
+              source={{
+                uri: `${apiUrl}${orgLogoPath(branded.organizationId, branded.brand.logoVersion)}`,
+              }}
+              resizeMode="contain"
+              accessibilityElementsHidden
+              importantForAccessibility="no"
+              style={{ height: 36, width: 96 }}
+            />
+          )}
+          <View style={{ flex: 1 }}>
+            <Body muted size="sm">
+              {t('org.studyingWith', {
+                organization: studyingWith.map((membership) => membership.name).join(', '),
+              })}
+            </Body>
+          </View>
+        </View>
+      )}
       <Heading>
         {me.profile.displayName
           ? t('dashboard.greeting', { name: me.profile.displayName })

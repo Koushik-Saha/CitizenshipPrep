@@ -13,9 +13,16 @@ export default async function Welcome({ params, searchParams }: PageProps<'/[loc
   const { locale } = await getT(params);
   const { me } = await requireMe(locale);
   const to = (path: string) => localizePath(locale, path);
-  const country = parseCountryCode((await searchParams).country);
+  const query = await searchParams;
+  const country = parseCountryCode(query.country);
+  // Just joined an organization: the dashboard says so.
+  const joined =
+    typeof query.joined === 'string' && /^[a-z0-9-]{1,80}$/.test(query.joined)
+      ? query.joined
+      : null;
   const studying = me.studyCountries.some((study) => study.countryCode === country);
   if (nextStep(me) === 'study') {
+    if (joined) redirect(to(`/study?joined=${joined}`));
     redirect(to(country && !studying ? `/onboarding?add=1&country=${country}` : '/study'));
   }
   redirect(to(country ? `/onboarding?country=${country}` : '/onboarding'));

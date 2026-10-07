@@ -1,3 +1,4 @@
+import { isIsoDate } from '@oathly/core';
 import { isStudyLocale, localizePath } from '@oathly/i18n';
 import { parseCountryCode } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
@@ -84,6 +85,9 @@ export default async function Onboarding({
                 'en'
               }
               defaultDailyGoal={me.settings?.dailyGoalMinutes ?? 15}
+              defaultExamDate={
+                typeof params.date === 'string' && isIsoDate(params.date) ? params.date : null
+              }
             />
           </I18nProvider>
         )}

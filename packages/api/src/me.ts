@@ -2,6 +2,8 @@
 import { paidPlans, type Entitlement } from '@oathly/core';
 import * as z from 'zod/mini';
 
+import { membershipSchema } from './org';
+
 // The shape of "the signed-in learner", shared by the web app, the mobile
 // app and the API between them.
 
@@ -14,12 +16,13 @@ export const studyCountrySchema = z.object({
 });
 
 export const entitlementSchema = z.object({
-  plan: z.enum(paidPlans),
+  plan: z.enum([...paidPlans, 'team']),
   countryCode: z.nullable(z.string()),
   status: z.enum(['trialing', 'active', 'past_due', 'canceled', 'expired']),
   currentPeriodEnd: z.nullable(z.string()),
   cancelAtPeriodEnd: z.boolean(),
   provider: z.enum(['stripe', 'app_store', 'play_store', 'manual']),
+  organizationName: z.optional(z.nullable(z.string())),
 }) satisfies z.ZodMiniType<Entitlement>;
 
 export const meSchema = z.object({
@@ -41,6 +44,11 @@ export const meSchema = z.object({
    * what it unlocks rather than reading it directly.
    */
   entitlements: z.array(entitlementSchema),
+  /**
+   * The organizations the learner studies with, or helps run. Optional on the
+   * way in, so a snapshot a phone saved before organizations existed still reads.
+   */
+  organizations: z._default(z.array(membershipSchema), []),
 });
 
 export const examCountrySchema = z.object({
@@ -64,7 +72,10 @@ export function primaryCountry(me: Me): StudyCountry | null {
 }
 
 /** Whole days from `today` until the exam, or null when no date is set. */
-export function daysUntilExam(country: StudyCountry, today: Date = new Date()): number | null {
+export function daysUntilExam(
+  country: Pick<StudyCountry, 'examDate'>,
+  today: Date = new Date(),
+): number | null {
   if (!country.examDate) return null;
   const exam = Date.parse(`${country.examDate}T00:00:00Z`);
   const start = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());

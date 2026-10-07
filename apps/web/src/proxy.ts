@@ -25,7 +25,12 @@ function adminGuard(request: NextRequest) {
 
 /** Pages only a signed-in learner sees, without their language prefix. */
 const isLearnerPath = (path: string) =>
-  path === '/welcome' || path === '/onboarding' || path === '/study' || path.startsWith('/study/');
+  path === '/welcome' ||
+  path === '/onboarding' ||
+  path === '/study' ||
+  path.startsWith('/study/') ||
+  path === '/org' ||
+  path.startsWith('/org/');
 
 // Learner pages: Neon Auth sends signed-out visitors to /sign-in and keeps
 // the session fresh. Pages check the session again with requireMe().

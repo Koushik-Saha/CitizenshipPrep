@@ -2,6 +2,7 @@ import { timingSafeEqual } from 'node:crypto';
 
 import {
   isPaidPlan,
+  seatSource,
   type AccessUser,
   type Entitlement,
   type PaidPlan,
@@ -26,9 +27,19 @@ type Provider = Entitlement['provider'];
 
 // What a learner holds --------------------------------------------------------
 
-/** Everything a learner has paid for, in force or not: their own, and their organisations'. */
-export async function listEntitlements(db: Db, userId: string): Promise<Entitlement[]> {
-  const { rows } = await db.query<{
+/**
+ * Everything each of these learners holds, in force or not: what they bought
+ * themselves, and a seat in any organization that has one for them.
+ */
+export async function entitlementsFor(
+  db: Db,
+  userIds: readonly string[],
+): Promise<Map<string, Entitlement[]>> {
+  const held = new Map<string, Entitlement[]>(userIds.map((userId) => [userId, []]));
+  if (userIds.length === 0) return held;
+
+  const own = await db.query<{
+    user_id: string;
     plan: string;
     country_code: string | null;
     status: SubscriptionStatus;
@@ -36,28 +47,109 @@ export async function listEntitlements(db: Db, userId: string): Promise<Entitlem
     cancel_at_period_end: boolean;
     provider: Provider;
   }>(
-    `select s.plan, s.country_code, s.status, s.current_period_end, s.cancel_at_period_end,
-            s.provider
-     from public.subscriptions s
-     left join public.org_members m on m.organization_id = s.organization_id and m.user_id = $1
-     where s.user_id = $1 or m.user_id is not null
-     order by s.created_at`,
-    [userId],
+    `select user_id, plan, country_code, status, current_period_end, cancel_at_period_end, provider
+     from public.subscriptions
+     where user_id = any($1)
+     order by created_at`,
+    [userIds],
   );
-  return rows.flatMap((row) =>
-    isPaidPlan(row.plan)
-      ? [
-          {
-            plan: row.plan,
-            countryCode: row.country_code,
-            status: row.status,
-            currentPeriodEnd: row.current_period_end?.toISOString() ?? null,
-            cancelAtPeriodEnd: row.cancel_at_period_end,
-            provider: row.provider,
-          },
-        ]
-      : [],
+  for (const row of own.rows) {
+    if (!isPaidPlan(row.plan)) continue;
+    held.get(row.user_id)!.push({
+      plan: row.plan,
+      countryCode: row.country_code,
+      status: row.status,
+      currentPeriodEnd: row.current_period_end?.toISOString() ?? null,
+      cancelAtPeriodEnd: row.cancel_at_period_end,
+      provider: row.provider,
+    });
+  }
+
+  // Seats: `ahead` is how many learners joined the organization before this one.
+  const memberships = await db.query<{
+    user_id: string;
+    organization_id: string;
+    name: string;
+    seat_limit: number | null;
+    ahead: number;
+  }>(
+    `select m.user_id, m.organization_id, o.name, o.seat_limit,
+            (select count(*)::int from public.org_members x
+             where x.organization_id = m.organization_id and x.role = 'member'
+               and (x.created_at, x.user_id) < (m.created_at, m.user_id)) as ahead
+     from public.org_members m
+     join public.organizations o on o.id = m.organization_id
+     where m.user_id = any($1) and m.role = 'member'
+     order by m.created_at`,
+    [userIds],
   );
+  if (memberships.rows.length === 0) return held;
+  const paid = await teamSubscriptions(db, [
+    ...new Set(memberships.rows.map((row) => row.organization_id)),
+  ]);
+  for (const row of memberships.rows) {
+    const source = seatSource(row.ahead, row.seat_limit, paid.get(row.organization_id) ?? []);
+    if (source === null) continue;
+    held.get(row.user_id)!.push({
+      plan: 'team',
+      countryCode: null,
+      status: source === 'granted' ? 'active' : source.status,
+      currentPeriodEnd: source === 'granted' ? null : source.currentPeriodEnd,
+      cancelAtPeriodEnd: source === 'granted' ? false : source.cancelAtPeriodEnd,
+      // Managed by the organization, wherever it was paid for.
+      provider: 'manual',
+      organizationName: row.name,
+    });
+  }
+  return held;
+}
+
+/** An organization's subscription for seats. */
+export interface TeamSubscription {
+  seats: number;
+  status: SubscriptionStatus;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  provider: Provider;
+}
+
+/** The seat subscriptions of each of these organizations, newest first. */
+export async function teamSubscriptions(
+  db: Db,
+  organizationIds: readonly string[],
+): Promise<Map<string, TeamSubscription[]>> {
+  const { rows } = await db.query<{
+    organization_id: string;
+    seats: number;
+    status: SubscriptionStatus;
+    current_period_end: Date | null;
+    cancel_at_period_end: boolean;
+    provider: Provider;
+  }>(
+    `select organization_id, seats, status, current_period_end, cancel_at_period_end, provider
+     from public.subscriptions
+     where organization_id = any($1) and plan = 'team'
+     order by created_at desc`,
+    [organizationIds],
+  );
+  const byOrganization = new Map<string, TeamSubscription[]>();
+  for (const row of rows) {
+    const list = byOrganization.get(row.organization_id) ?? [];
+    list.push({
+      seats: row.seats,
+      status: row.status,
+      currentPeriodEnd: row.current_period_end?.toISOString() ?? null,
+      cancelAtPeriodEnd: row.cancel_at_period_end,
+      provider: row.provider,
+    });
+    byOrganization.set(row.organization_id, list);
+  }
+  return byOrganization;
+}
+
+/** Everything a learner holds, in force or not. */
+export async function listEntitlements(db: Db, userId: string): Promise<Entitlement[]> {
+  return (await entitlementsFor(db, [userId])).get(userId)!;
 }
 
 /** A learner as hasAccess wants them. */
@@ -128,6 +220,54 @@ export async function applySubscriptionChange(
   return (result.rowCount ?? 0) > 0;
 }
 
+/** What Stripe says an organization's seat subscription now is. */
+export interface TeamSubscriptionChange {
+  organizationId: string;
+  seats: number;
+  status: SubscriptionStatus;
+  providerId: string;
+  currentPeriodStart: Date | null;
+  currentPeriodEnd: Date | null;
+  cancelAtPeriodEnd: boolean;
+  at: Date;
+}
+
+/** Records an organization's seats, with the same ordering rule as a learner's purchase. */
+export async function applyTeamSubscriptionChange(
+  db: Db,
+  change: TeamSubscriptionChange,
+): Promise<boolean> {
+  const start = change.currentPeriodStart;
+  const end = change.currentPeriodEnd;
+  const result = await db.query(
+    `insert into public.subscriptions
+       (organization_id, plan, seats, status, provider, provider_subscription_id,
+        current_period_start, current_period_end, cancel_at_period_end, provider_event_at)
+     values ($1, 'team', $2, $3, 'stripe', $4, $5, $6, $7, $8)
+     on conflict (provider, provider_subscription_id) do update set
+       seats = excluded.seats,
+       status = excluded.status,
+       current_period_start = excluded.current_period_start,
+       current_period_end = excluded.current_period_end,
+       cancel_at_period_end = excluded.cancel_at_period_end,
+       provider_event_at = excluded.provider_event_at
+     where public.subscriptions.organization_id = excluded.organization_id
+       and (public.subscriptions.provider_event_at is null
+            or public.subscriptions.provider_event_at <= excluded.provider_event_at)`,
+    [
+      change.organizationId,
+      change.seats,
+      change.status,
+      change.providerId,
+      start && end && start > end ? null : start,
+      end,
+      change.cancelAtPeriodEnd,
+      change.at,
+    ],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
 /** Notes that an event has been handled. False if it had been already. */
 async function firstDelivery(
   db: Db,
@@ -157,8 +297,11 @@ async function countryExists(db: Db, countryCode: string): Promise<boolean> {
 
 /** What handling a webhook event came to. */
 export type WebhookOutcome =
-  /** A subscription row was written (or already said the same or newer). */
-  | { kind: 'applied'; userId: string }
+  /**
+   * A subscription row was written (or already said the same or newer): a
+   * learner's own, or an organization's seats.
+   */
+  | { kind: 'applied'; userId: string | null; organizationId?: string }
   /** Seen before, or not something that changes what anyone holds. */
   | { kind: 'ignored'; reason: string };
 
@@ -171,6 +314,8 @@ export interface StripePrices {
   pro_monthly: string;
   pro_yearly: string;
   country_pass: string;
+  /** One seat in an organization. Organizations are sold only where this is set. */
+  team?: string;
 }
 
 /** The Stripe customer a learner already is, if they have bought before. */
@@ -189,6 +334,42 @@ export async function linkStripeCustomer(db: Db, userId: string, customerId: str
      on conflict do nothing`,
     [userId, customerId],
   );
+}
+
+/** The Stripe customer an organization already is, if it has bought seats before. */
+export async function orgStripeCustomerFor(db: Db, organizationId: string): Promise<string | null> {
+  const { rows } = await db.query<{ stripe_customer_id: string }>(
+    'select stripe_customer_id from public.org_billing_customers where organization_id = $1',
+    [organizationId],
+  );
+  return rows[0]?.stripe_customer_id ?? null;
+}
+
+/** Remembers which Stripe customer an organization is. The first one linked stays. */
+export async function linkOrgStripeCustomer(db: Db, organizationId: string, customerId: string) {
+  await db.query(
+    `insert into public.org_billing_customers (organization_id, stripe_customer_id)
+     values ($1, $2) on conflict do nothing`,
+    [organizationId, customerId],
+  );
+}
+
+async function orgForStripeCustomer(db: Db, customerId: string): Promise<string | null> {
+  const { rows } = await db.query<{ organization_id: string }>(
+    'select organization_id from public.org_billing_customers where stripe_customer_id = $1',
+    [customerId],
+  );
+  return rows[0]?.organization_id ?? null;
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+async function organizationExists(db: Db, organizationId: string): Promise<boolean> {
+  if (!UUID.test(organizationId)) return false;
+  const { rowCount } = await db.query('select 1 from public.organizations where id = $1', [
+    organizationId,
+  ]);
+  return (rowCount ?? 0) > 0;
 }
 
 async function userForStripeCustomer(db: Db, customerId: string): Promise<string | null> {
@@ -229,32 +410,13 @@ const stripeStatus: Record<string, SubscriptionStatus | undefined> = {
   // "incomplete" is a first payment that has not gone through: nothing to record yet.
 };
 
-/**
- * What a Stripe subscription object says, as a change to record. Null when
- * it is not (yet) something a learner holds, or not a plan of ours.
- */
-export function changeFromStripeSubscription(
-  subscription: Record<string, unknown>,
-  prices: StripePrices,
-  at: Date,
-): Omit<SubscriptionChange, 'userId'> | null {
+/** The state and dates a Stripe subscription object reports, whatever it is for. */
+function stripeSubscriptionState(subscription: Record<string, unknown>) {
   const providerId = text(subscription.id);
   const status = stripeStatus[String(subscription.status)];
   if (!providerId || !status) return null;
 
   const item = record((record(subscription.items).data as unknown[] | undefined)?.[0]);
-  const priceId = idOf(item.price);
-  const metadata = record(subscription.metadata);
-  const plan =
-    priceId === prices.pro_monthly
-      ? 'pro_monthly'
-      : priceId === prices.pro_yearly
-        ? 'pro_yearly'
-        : metadata.plan === 'pro_monthly' || metadata.plan === 'pro_yearly'
-          ? metadata.plan
-          : null;
-  if (!plan) return null;
-
   // Newer Stripe API versions report the period on the item, older ones on the subscription.
   const start = seconds(subscription.current_period_start) ?? seconds(item.current_period_start);
   const periodEnd = seconds(subscription.current_period_end) ?? seconds(item.current_period_end);
@@ -264,14 +426,75 @@ export function changeFromStripeSubscription(
   const end =
     status === 'canceled' ? (seconds(subscription.ended_at) ?? periodEnd) : (cancelAt ?? periodEnd);
   return {
-    plan,
-    countryCode: null,
+    item,
+    priceId: idOf(item.price),
+    metadata: record(subscription.metadata),
     status,
-    provider: 'stripe',
     providerId,
     currentPeriodStart: start,
     currentPeriodEnd: end,
     cancelAtPeriodEnd: subscription.cancel_at_period_end === true || cancelAt !== null,
+  };
+}
+
+/**
+ * What a Stripe subscription object says, as a change to record. Null when
+ * it is not (yet) something a learner holds, or not a learner's plan.
+ */
+export function changeFromStripeSubscription(
+  subscription: Record<string, unknown>,
+  prices: StripePrices,
+  at: Date,
+): Omit<SubscriptionChange, 'userId'> | null {
+  const state = stripeSubscriptionState(subscription);
+  if (!state) return null;
+  const { priceId, metadata } = state;
+  const plan =
+    priceId === prices.pro_monthly
+      ? 'pro_monthly'
+      : priceId === prices.pro_yearly
+        ? 'pro_yearly'
+        : metadata.plan === 'pro_monthly' || metadata.plan === 'pro_yearly'
+          ? metadata.plan
+          : null;
+  if (!plan) return null;
+  return {
+    plan,
+    countryCode: null,
+    status: state.status,
+    provider: 'stripe',
+    providerId: state.providerId,
+    currentPeriodStart: state.currentPeriodStart,
+    currentPeriodEnd: state.currentPeriodEnd,
+    cancelAtPeriodEnd: state.cancelAtPeriodEnd,
+    at,
+  };
+}
+
+/**
+ * What a Stripe subscription object says about an organization's seats.
+ * Null when it is not a seat subscription. The organization is named in the
+ * subscription's metadata; when it is not, the caller finds it by customer.
+ */
+export function teamChangeFromStripeSubscription(
+  subscription: Record<string, unknown>,
+  prices: StripePrices,
+  at: Date,
+): (Omit<TeamSubscriptionChange, 'organizationId'> & { organizationId: string | null }) | null {
+  const state = stripeSubscriptionState(subscription);
+  if (!state) return null;
+  const isTeam =
+    (prices.team !== undefined && state.priceId === prices.team) || state.metadata.plan === 'team';
+  const seats = state.item.quantity;
+  if (!isTeam || typeof seats !== 'number' || !Number.isInteger(seats) || seats < 1) return null;
+  return {
+    organizationId: text(state.metadata.organization_id),
+    seats,
+    status: state.status,
+    providerId: state.providerId,
+    currentPeriodStart: state.currentPeriodStart,
+    currentPeriodEnd: state.currentPeriodEnd,
+    cancelAtPeriodEnd: state.cancelAtPeriodEnd,
     at,
   };
 }
@@ -296,6 +519,14 @@ export async function applyStripeEvent(
       if (!userId || !(await profileExists(db, userId))) return ignored('no such learner');
       if (!(await firstDelivery(db, 'stripe', event, userId))) return ignored('already handled');
       const customerId = idOf(object.customer);
+      if (metadata.plan === 'team') {
+        // Seats: the customer is the organization, not the admin who paid.
+        const organizationId = text(metadata.organization_id);
+        if (customerId && organizationId && (await organizationExists(db, organizationId))) {
+          await linkOrgStripeCustomer(db, organizationId, customerId);
+        }
+        return ignored('seats are recorded from the subscription');
+      }
       if (customerId) await linkStripeCustomer(db, userId, customerId);
       // A subscription reports itself through its own events. A Country Pass
       // is a single payment, and this is the only word of it.
@@ -325,6 +556,21 @@ export async function applyStripeEvent(
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
+      const team = teamChangeFromStripeSubscription(object, prices, at);
+      if (team) {
+        const customer = idOf(object.customer);
+        const organizationId =
+          team.organizationId ?? (customer ? await orgForStripeCustomer(db, customer) : null);
+        if (!organizationId || !(await organizationExists(db, organizationId))) {
+          return ignored('no such organization');
+        }
+        const buyer = text(metadata.user_id);
+        const userId = buyer && (await profileExists(db, buyer)) ? buyer : null;
+        if (!(await firstDelivery(db, 'stripe', event, userId))) return ignored('already handled');
+        if (customer) await linkOrgStripeCustomer(db, organizationId, customer);
+        await applyTeamSubscriptionChange(db, { ...team, organizationId });
+        return { kind: 'applied', userId, organizationId };
+      }
       const change = changeFromStripeSubscription(object, prices, at);
       if (!change) return ignored('not a plan to record');
       const customerId = idOf(object.customer);

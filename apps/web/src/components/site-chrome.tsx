@@ -48,9 +48,13 @@ export function SiteFooter({ t }: { t: Translator }) {
     <footer className="border-border border-t">
       <div className="text-fg-muted mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 text-sm sm:flex-row sm:justify-between sm:px-6">
         <p>{t('common.notAffiliated')}</p>
-        <nav aria-label={t('common.footerNav')} className="flex shrink-0 gap-6">
+        <nav aria-label={t('common.footerNav')} className="flex shrink-0 flex-wrap gap-x-6 gap-y-2">
           <Link href={localizePath(t.locale, '/countries')} className={navLink}>
             {t('common.allCountries')}
+          </Link>
+          {/* Behind sign-in: nothing to prefetch for a passer-by. */}
+          <Link href={localizePath(t.locale, '/org')} prefetch={false} className={navLink}>
+            {t('org.forOrganizations')}
           </Link>
           <Link href={localizePath(t.locale, '/sign-in')} className={navLink}>
             {t('common.signIn')}

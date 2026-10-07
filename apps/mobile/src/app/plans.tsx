@@ -126,14 +126,16 @@ export default function Plans() {
         {pro ? (
           <>
             <Body muted>
-              {t('plans.onPro')}
-              {pro.currentPeriodEnd
+              {pro.plan === 'team' && pro.organizationName
+                ? t('org.planFromOrg', { organization: pro.organizationName })
+                : t('plans.onPro')}
+              {pro.plan !== 'team' && pro.currentPeriodEnd
                 ? ` ${t(pro.cancelAtPeriodEnd ? 'plans.endsOn' : 'plans.renewsOn', {
                     date: dateFormat.format(new Date(pro.currentPeriodEnd)),
                   })}`
                 : ''}
             </Body>
-            {pro.provider === 'stripe' && (
+            {pro.plan !== 'team' && pro.provider === 'stripe' && (
               <Body muted size="sm">
                 {t('plans.boughtOnWeb')}
               </Body>

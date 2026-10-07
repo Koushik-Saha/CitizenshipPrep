@@ -17,6 +17,7 @@ import {
   type AnswerEvent,
   type PracticeMode,
   type QuizQuestion,
+  type ReadinessScore,
 } from '@oathly/core';
 import type pg from 'pg';
 
@@ -34,7 +35,7 @@ import type {
 import { isSpokenFormat } from '../study';
 import { attachAudio, noAudio } from './audio';
 import { accessUser } from './billing';
-import { loadExamFormats, loadQuestionPool } from './quiz';
+import { loadExamFormats, loadQuestionPool, type CountryExamFormat } from './quiz';
 
 // Server side of the study app: the dashboard, starting sessions (which picks
 // the questions with the quiz engine and stores the list), and loading a
@@ -131,6 +132,48 @@ async function studyPool(
   return { pool: accessibleQuestions(user, countryCode, bank, now), bank };
 }
 
+/** A submitted mock exam, as readiness is measured from it. */
+export interface MockRow {
+  exam_format_id: string;
+  submitted_at: Date;
+  correct_count: number;
+  total: number;
+}
+
+/**
+ * How ready a learner is for a country's exam, and the exam that was
+ * measured against: the one they last sat as a mock, or else the first
+ * current one that can be practised. `mocks` is newest first. Null when the
+ * country has no questions to measure with.
+ */
+export function measureReadiness(
+  pool: readonly QuizQuestion[],
+  history: readonly AnswerEvent[],
+  formats: readonly CountryExamFormat[],
+  mocks: readonly MockRow[],
+  now: Date,
+): { estimate: ReadinessScore; format: CountryExamFormat | null } | null {
+  if (pool.length === 0) return null;
+  const practisable = formats.filter((candidate) => candidate.questionCount !== null);
+  const format =
+    practisable.find((candidate) => candidate.id === mocks[0]?.exam_format_id) ??
+    practisable.find((candidate) => candidate.isCurrent) ??
+    practisable[0] ??
+    null;
+  const estimate = readinessScore({
+    pool,
+    history,
+    format,
+    mocks: mocks.map((row) => ({
+      submittedAt: row.submitted_at,
+      correct: row.correct_count,
+      total: row.total,
+    })),
+    now,
+  });
+  return { estimate, format };
+}
+
 /** What a learner who has run out of free sample is told. */
 const NEEDS_UPGRADE =
   'This exam needs more questions than the Free plan includes. Pro or a Country Pass for this country opens all of them.';
@@ -176,12 +219,7 @@ export async function getDashboard(
     );
     const formats = await loadExamFormats(db, country.country_code);
     const names = new Map(topicNames.rows.map((topic) => [topic.id, topic.name]));
-    const mocks = await db.query<{
-      exam_format_id: string;
-      submitted_at: Date;
-      correct_count: number;
-      total: number;
-    }>(
+    const mocks = await db.query<MockRow>(
       `select m.exam_format_id, m.submitted_at, m.correct_count, cardinality(m.question_ids) as total
        from public.mock_exams m
        join public.exam_formats f on f.id = m.exam_format_id
@@ -190,27 +228,11 @@ export async function getDashboard(
        order by m.submitted_at desc`,
       [userId, country.country_code],
     );
-    // Measure against the exam the learner last sat as a mock, or else the
-    // first current one that can be practised.
-    const practisable = formats.filter((candidate) => candidate.questionCount !== null);
-    const format =
-      practisable.find((candidate) => candidate.id === mocks.rows[0]?.exam_format_id) ??
-      practisable.find((candidate) => candidate.isCurrent) ??
-      practisable[0] ??
-      null;
+    const measured = measureReadiness(pool, history, formats, mocks.rows, now);
+    const format = measured?.format ?? null;
     let readinessView: ReadinessView | null = null;
-    if (pool.length > 0) {
-      const estimate = readinessScore({
-        pool,
-        history,
-        format,
-        mocks: mocks.rows.map((row) => ({
-          submittedAt: row.submitted_at,
-          correct: row.correct_count,
-          total: row.total,
-        })),
-        now,
-      });
+    if (measured) {
+      const { estimate } = measured;
       const percent = (value: number) => Math.round(value * 100);
       readinessView = {
         score: estimate.score,

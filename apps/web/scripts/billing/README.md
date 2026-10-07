@@ -74,3 +74,35 @@ node scripts/billing/simulate.mjs stripe-pass      --user test:learner --country
 
 This exercises everything after the payment itself. The payment pages
 (Stripe Checkout, the store's purchase sheet) need real test-mode accounts.
+
+## Organizations (seats)
+
+A law firm, school or nonprofit buys seats rather than a plan: one Stripe
+subscription per organization, whose quantity is the number of seats. Each
+learner who joins takes a seat and studies on Pro for as long as the
+organization has one for them (`seatSource` in `packages/core/src/org.ts`,
+read by the same `hasAccess`).
+
+1. Create one more recurring price, per seat (monthly or yearly), and put its
+   id in `STRIPE_PRICE_ORG_SEAT`. Without it, seats are not sold; staff can
+   still grant them by setting `organizations.seat_limit`.
+2. In the customer portal settings, allow customers to update quantities, so
+   an admin can add or remove seats themselves. Checkout is only for the
+   first purchase.
+3. The webhook above already carries what is needed: seats are recorded from
+   `customer.subscription.created`, `.updated` and `.deleted`.
+
+When an organization has fewer seats than learners (it shrank its
+subscription, or let it end), the learners who joined first keep theirs, the
+rest are on the Free plan, and the console says how many are over.
+
+Invitations go out by email when `RESEND_API_KEY` and `EMAIL_FROM` are set.
+Without them the admin is shown each invitation link, once, to send
+themselves.
+
+```sh
+# Seats for an organization (its id is in the address of its CSV export):
+node scripts/billing/simulate.mjs org-seats        --user test:owner --org <organization id> --seats 10
+node scripts/billing/simulate.mjs org-seats-cancel --user test:owner --org <organization id> --seats 10
+node scripts/billing/simulate.mjs org-seats-end    --user test:owner --org <organization id> --seats 10
+```

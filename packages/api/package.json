@@ -16,6 +16,8 @@
     "./hooks": "./src/hooks.ts",
     "./me": "./src/me.ts",
     "./onboarding-options": "./src/onboarding-options.ts",
+    "./org": "./src/org.ts",
+    "./org-mail": "./src/org-mail.ts",
     "./pack": "./src/pack.ts",
     "./queries": "./src/queries.ts",
     "./schemas": "./src/schemas.ts",

@@ -92,13 +92,16 @@ export default async function PlansPage({
         {pro ? (
           <>
             <p className="text-fg-muted mt-2">
-              {t('plans.onPro')}{' '}
-              {pro.currentPeriodEnd &&
+              {pro.plan === 'team' && pro.organizationName
+                ? t('org.planFromOrg', { organization: pro.organizationName })
+                : t('plans.onPro')}{' '}
+              {pro.plan !== 'team' &&
+                pro.currentPeriodEnd &&
                 t(pro.cancelAtPeriodEnd ? 'plans.endsOn' : 'plans.renewsOn', {
                   date: dateFormat.format(new Date(pro.currentPeriodEnd)),
                 })}
             </p>
-            {pro.provider === 'stripe' && canBuy && (
+            {pro.plan !== 'team' && pro.provider === 'stripe' && canBuy && (
               <form action={openBillingPortal} className="mt-4">
                 <button type="submit" className={buttonClass.secondary}>
                   {t('plans.manage')}

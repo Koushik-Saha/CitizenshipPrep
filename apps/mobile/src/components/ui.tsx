@@ -1,4 +1,5 @@
-import { themeFor, type Theme } from '@oathly/tokens';
+import { brandRoles, themeFor, type Brand, type Theme } from '@oathly/tokens';
+import { createContext, useContext } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -14,8 +15,31 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useI18n } from '@/lib/i18n';
 
+const BrandContext = createContext<Brand | null>(null);
+
+/**
+ * White-label: everything inside takes an organization's colours, in shades
+ * that stay readable in the theme that is showing (see brandRoles).
+ */
+export function BrandProvider({
+  brand,
+  children,
+}: {
+  brand: Brand | null;
+  children: React.ReactNode;
+}) {
+  return <BrandContext.Provider value={brand}>{children}</BrandContext.Provider>;
+}
+
 export function useTheme(): Theme {
-  return themeFor(useColorScheme());
+  const scheme = useColorScheme();
+  const brand = useContext(BrandContext);
+  const theme = themeFor(scheme);
+  if (!brand) return theme;
+  return {
+    ...theme,
+    colors: { ...theme.colors, ...brandRoles(brand, scheme === 'dark' ? 'dark' : 'light') },
+  };
 }
 
 /**

@@ -686,29 +686,173 @@ export type Database = {
           },
         ];
       };
-      org_members: {
+      org_billing_customers: {
         Row: {
           created_at: string;
-          invited_by: string | null;
           organization_id: string;
-          role: Database['public']['Enums']['org_role'];
-          user_id: string;
+          stripe_customer_id: string;
         };
         Insert: {
           created_at?: string;
-          invited_by?: string | null;
           organization_id: string;
-          role?: Database['public']['Enums']['org_role'];
-          user_id: string;
+          stripe_customer_id: string;
         };
         Update: {
           created_at?: string;
+          organization_id?: string;
+          stripe_customer_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'org_billing_customers_organization_id_fkey';
+            columns: ['organization_id'];
+            isOneToOne: true;
+            referencedRelation: 'organizations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      org_invites: {
+        Row: {
+          country_code: string | null;
+          created_at: string;
+          email: string;
+          expires_at: string;
+          id: string;
+          invited_by: string | null;
+          name: string | null;
+          organization_id: string;
+          role: Database['public']['Enums']['org_role'];
+          target_date: string | null;
+          token_hash: string;
+        };
+        Insert: {
+          country_code?: string | null;
+          created_at?: string;
+          email: string;
+          expires_at?: string;
+          id?: string;
           invited_by?: string | null;
+          name?: string | null;
+          organization_id: string;
+          role?: Database['public']['Enums']['org_role'];
+          target_date?: string | null;
+          token_hash: string;
+        };
+        Update: {
+          country_code?: string | null;
+          created_at?: string;
+          email?: string;
+          expires_at?: string;
+          id?: string;
+          invited_by?: string | null;
+          name?: string | null;
           organization_id?: string;
           role?: Database['public']['Enums']['org_role'];
+          target_date?: string | null;
+          token_hash?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'org_invites_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
+          {
+            foreignKeyName: 'org_invites_invited_by_fkey';
+            columns: ['invited_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'org_invites_organization_id_fkey';
+            columns: ['organization_id'];
+            isOneToOne: false;
+            referencedRelation: 'organizations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      org_logos: {
+        Row: {
+          byte_size: number;
+          content_type: string;
+          data: string;
+          organization_id: string;
+          updated_at: string;
+          version: string;
+        };
+        Insert: {
+          byte_size: number;
+          content_type: string;
+          data: string;
+          organization_id: string;
+          updated_at?: string;
+          version: string;
+        };
+        Update: {
+          byte_size?: number;
+          content_type?: string;
+          data?: string;
+          organization_id?: string;
+          updated_at?: string;
+          version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'org_logos_organization_id_fkey';
+            columns: ['organization_id'];
+            isOneToOne: true;
+            referencedRelation: 'organizations';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      org_members: {
+        Row: {
+          country_code: string | null;
+          created_at: string;
+          email: string | null;
+          invited_by: string | null;
+          name: string | null;
+          organization_id: string;
+          role: Database['public']['Enums']['org_role'];
+          target_date: string | null;
+          user_id: string;
+        };
+        Insert: {
+          country_code?: string | null;
+          created_at?: string;
+          email?: string | null;
+          invited_by?: string | null;
+          name?: string | null;
+          organization_id: string;
+          role?: Database['public']['Enums']['org_role'];
+          target_date?: string | null;
+          user_id: string;
+        };
+        Update: {
+          country_code?: string | null;
+          created_at?: string;
+          email?: string | null;
+          invited_by?: string | null;
+          name?: string | null;
+          organization_id?: string;
+          role?: Database['public']['Enums']['org_role'];
+          target_date?: string | null;
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'org_members_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
           {
             foreignKeyName: 'org_members_invited_by_fkey';
             columns: ['invited_by'];
@@ -734,27 +878,36 @@ export type Database = {
       };
       organizations: {
         Row: {
+          brand_accent: string | null;
+          brand_color: string | null;
           created_at: string;
           created_by: string | null;
           id: string;
+          kind: Database['public']['Enums']['org_kind'];
           name: string;
           seat_limit: number | null;
           slug: string;
           updated_at: string;
         };
         Insert: {
+          brand_accent?: string | null;
+          brand_color?: string | null;
           created_at?: string;
           created_by?: string | null;
           id?: string;
+          kind?: Database['public']['Enums']['org_kind'];
           name: string;
           seat_limit?: number | null;
           slug: string;
           updated_at?: string;
         };
         Update: {
+          brand_accent?: string | null;
+          brand_color?: string | null;
           created_at?: string;
           created_by?: string | null;
           id?: string;
+          kind?: Database['public']['Enums']['org_kind'];
           name?: string;
           seat_limit?: number | null;
           slug?: string;
@@ -1149,6 +1302,7 @@ export type Database = {
           provider: string;
           provider_event_at: string | null;
           provider_subscription_id: string | null;
+          seats: number | null;
           status: Database['public']['Enums']['subscription_status'];
           updated_at: string;
           user_id: string | null;
@@ -1165,6 +1319,7 @@ export type Database = {
           provider: string;
           provider_event_at?: string | null;
           provider_subscription_id?: string | null;
+          seats?: number | null;
           status: Database['public']['Enums']['subscription_status'];
           updated_at?: string;
           user_id?: string | null;
@@ -1181,6 +1336,7 @@ export type Database = {
           provider?: string;
           provider_event_at?: string | null;
           provider_subscription_id?: string | null;
+          seats?: number | null;
           status?: Database['public']['Enums']['subscription_status'];
           updated_at?: string;
           user_id?: string | null;
@@ -1374,6 +1530,7 @@ export type Database = {
       exam_format_type: 'written' | 'oral' | 'interview' | 'language';
       flag_reason: 'outdated' | 'incorrect' | 'unclear' | 'translation' | 'other';
       flag_status: 'open' | 'resolved' | 'dismissed';
+      org_kind: 'law_firm' | 'school' | 'nonprofit' | 'other';
       org_role: 'owner' | 'admin' | 'member';
       question_status: 'draft' | 'in_review' | 'published' | 'retired' | 'rejected';
       question_type: 'multiple_choice' | 'multi_select' | 'true_false' | 'free_response';
@@ -1506,6 +1663,7 @@ export const Constants = {
       exam_format_type: ['written', 'oral', 'interview', 'language'],
       flag_reason: ['outdated', 'incorrect', 'unclear', 'translation', 'other'],
       flag_status: ['open', 'resolved', 'dismissed'],
+      org_kind: ['law_firm', 'school', 'nonprofit', 'other'],
       org_role: ['owner', 'admin', 'member'],
       question_status: ['draft', 'in_review', 'published', 'retired', 'rejected'],
       question_type: ['multiple_choice', 'multi_select', 'true_false', 'free_response'],

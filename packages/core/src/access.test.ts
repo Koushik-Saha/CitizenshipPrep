@@ -38,6 +38,17 @@ const pass = (countryCode: string, overrides: Partial<Entitlement> = {}): Entitl
 const user = (...entitlements: Entitlement[]): AccessUser => ({ entitlements });
 const free = user();
 
+describe('a seat in an organization', () => {
+  const seat = pro({ plan: 'team', provider: 'manual', organizationName: 'Riverside Legal Aid' });
+
+  it('is Pro for as long as it lasts', () => {
+    expect(hasAccess(user(seat), 'all_questions', 'US', now)).toBe(true);
+    expect(hasAccess(user(seat), 'more_ai', null, now)).toBe(true);
+    expect(proSubscription(user(seat), now)).toBe(seat);
+    expect(hasAccess(user({ ...seat, status: 'expired' }), 'all_questions', 'US', now)).toBe(false);
+  });
+});
+
 describe('hasAccess', () => {
   it('gives the Free plan no paid feature', () => {
     expect(hasAccess(free, 'all_questions', 'US', now)).toBe(false);

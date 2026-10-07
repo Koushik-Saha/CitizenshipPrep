@@ -114,7 +114,7 @@ export function DashboardView({
               {country.isPrimary && <Badge>{t('dashboard.opensFirst')}</Badge>}
             </div>
             <p className="text-fg-muted mt-1">
-              {countdown(daysUntilExam({ ...country, studyLocale: null }), t)}
+              {countdown(daysUntilExam(country), t)}
               {' · '}
               {t('dashboard.questionsReady', { count: country.publishedQuestions })}
             </p>

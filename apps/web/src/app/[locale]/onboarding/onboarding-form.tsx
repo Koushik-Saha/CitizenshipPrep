@@ -25,6 +25,8 @@ interface Props {
   adding: boolean;
   defaultLocale: string;
   defaultDailyGoal: number;
+  /** A target date an organization set with its invitation (YYYY-MM-DD). */
+  defaultExamDate?: string | null;
 }
 
 const initialState: OnboardingState = { error: null };
@@ -36,6 +38,7 @@ export function OnboardingForm({
   adding,
   defaultLocale,
   defaultDailyGoal,
+  defaultExamDate,
 }: Props) {
   const t = useT();
   const [state, action, pending] = useActionState(completeOnboarding, initialState);
@@ -144,6 +147,7 @@ export function OnboardingForm({
           id="examDate"
           name="examDate"
           type="date"
+          defaultValue={defaultExamDate ?? undefined}
           min={isoDate(new Date())}
           className={`${fieldClass} mt-3 max-w-xs`}
         />

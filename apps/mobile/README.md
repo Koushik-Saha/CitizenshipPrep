@@ -155,3 +155,14 @@ app. It starts in the phone's language when Oathly has it, and the Profile
 tab has a picker that changes it at once, with no restart. Arabic lays the
 app out right to left through the `direction` style on the root view
 (`src/lib/i18n.tsx`), not `I18nManager.forceRTL`, which would need a restart.
+
+## Organizations
+
+A learner who has joined an organization (through the invitation link, on
+the website) sees "Studying with …" on the Study tab, with the
+organization's logo and colours if it has set any. The colours come through
+`BrandProvider` in `src/components/ui.tsx`, which swaps the theme's primary
+and accent roles for shades that stay readable (`brandRoles` in
+`@oathly/tokens`). A seat in an organization is Pro: the Plans screen says
+who provides it and offers nothing to buy. Inviting, assigning and reports
+are on the website only.

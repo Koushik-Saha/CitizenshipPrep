@@ -1,5 +1,6 @@
 // Design tokens shared by web (Tailwind, via ../theme.css) and mobile (the
 // theme objects below).
+export * from './brand';
 export * from './colors';
 export * from './contrast';
 export * from './layout';

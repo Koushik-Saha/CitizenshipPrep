@@ -6,6 +6,7 @@
 //   Pro           everything, in every country, while the subscription runs
 //                 (monthly or yearly: the same access, billed differently)
 //   Country Pass  everything for one country, bought once, kept for good
+//   Team          Pro, through a seat an organization gives the learner
 
 export const paidPlans = ['pro_monthly', 'pro_yearly', 'country_pass'] as const;
 export type PaidPlan = (typeof paidPlans)[number];
@@ -16,9 +17,12 @@ export function isPaidPlan(value: string): value is PaidPlan {
 
 export type SubscriptionStatus = 'trialing' | 'active' | 'past_due' | 'canceled' | 'expired';
 
-/** One thing a learner has paid for, as the subscriptions table records it. */
+/** What a learner can hold: a plan of their own, or a seat in an organization's. */
+export type EntitlementPlan = PaidPlan | 'team';
+
+/** One thing a learner holds, as the subscriptions table records it. */
 export interface Entitlement {
-  plan: PaidPlan;
+  plan: EntitlementPlan;
   /** The country a Country Pass is for; null for Pro. */
   countryCode: string | null;
   status: SubscriptionStatus;
@@ -28,6 +32,8 @@ export interface Entitlement {
   cancelAtPeriodEnd: boolean;
   /** Where it was bought, which is also where it is managed. */
   provider: 'stripe' | 'app_store' | 'play_store' | 'manual';
+  /** For a team seat: the organization that gives it. */
+  organizationName?: string | null;
 }
 
 /** The part of a user that access depends on. */
@@ -60,7 +66,10 @@ export const FREE_QUESTIONS_PER_COUNTRY = 20;
 export const RENEWAL_GRACE_MS = 3 * 24 * 60 * 60 * 1000;
 
 /** Whether something paid for is in force at `now`. */
-export function isInForce(entitlement: Entitlement, now: Date = new Date()): boolean {
+export function isInForce(
+  entitlement: Pick<Entitlement, 'status' | 'currentPeriodEnd'>,
+  now: Date = new Date(),
+): boolean {
   const end =
     entitlement.currentPeriodEnd === null ? null : Date.parse(entitlement.currentPeriodEnd);
   switch (entitlement.status) {
@@ -76,8 +85,8 @@ export function isInForce(entitlement: Entitlement, now: Date = new Date()): boo
   }
 }
 
-const isPro = (entitlement: Entitlement) =>
-  entitlement.plan === 'pro_monthly' || entitlement.plan === 'pro_yearly';
+// A seat in an organization is Pro, paid for by someone else.
+const isPro = (entitlement: Entitlement) => entitlement.plan !== 'country_pass';
 
 /**
  * Whether a learner may use a feature. `country` is the ISO code of the

@@ -129,13 +129,20 @@ select throws_ok(
 );
 
 select tests.authenticate_as('a0000000-0000-0000-0000-00000000000a');
-select lives_ok(
+select throws_ok(
   $$ insert into public.org_members (organization_id, user_id, invited_by)
      values ('0a000000-0000-0000-0000-000000000001',
              'b0000000-0000-0000-0000-00000000000b',
              'a0000000-0000-0000-0000-00000000000a') $$,
-  'Alice, as owner, can add Bob as a member'
+  '42501', null,
+  'not even the owner can add Bob directly: joining takes Bob accepting an invite'
 );
+
+-- The server adds Bob once he has accepted.
+select tests.clear_authentication();
+insert into public.org_members (organization_id, user_id, invited_by)
+values ('0a000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-00000000000b',
+        'a0000000-0000-0000-0000-00000000000a');
 
 select tests.authenticate_as('b0000000-0000-0000-0000-00000000000b');
 select results_eq(
@@ -144,9 +151,9 @@ select results_eq(
   'Bob now sees the organization he belongs to, and only that one'
 );
 select results_eq(
-  'select count(*)::int from public.org_members',
-  array[2],
-  'Bob sees his fellow members'
+  'select user_id from public.org_members',
+  array['b0000000-0000-0000-0000-00000000000b'],
+  'Bob sees his own membership, and no other member'
 );
 select is_empty(
   $$ update public.org_members set role = 'owner'

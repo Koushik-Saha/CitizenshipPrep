@@ -14,6 +14,9 @@
 //   store-cancel       ...auto-renew turned off in the store
 //   store-expire       ...it ran out
 //   store-pass         a Country Pass bought in the mobile app   --country US
+//   org-seats          seats bought for an organization          --org <organization id> --seats 10
+//   org-seats-cancel   ...cancelled: seats run to the end of the period
+//   org-seats-end      ...the period is over: the seats are gone
 //
 // Options: --base http://localhost:3000   --days 30 (length of the paid period)
 //
@@ -34,6 +37,8 @@ const { positionals, values } = parseArgs({
     store: { type: 'string', default: 'app_store' },
     base: { type: 'string', default: 'http://localhost:3000' },
     days: { type: 'string', default: '30' },
+    org: { type: 'string' },
+    seats: { type: 'string', default: '10' },
   },
 });
 const command = positionals[0];
@@ -128,6 +133,35 @@ async function store(event) {
   );
 }
 
+// An organization's seats: its own subscription and customer, the buyer only named.
+const seats = (overrides = {}) => {
+  if (!/^[0-9a-f-]{36}$/i.test(values.org ?? '')) {
+    console.error('Give --org as the organization id (shown in the address of its CSV export).');
+    process.exit(1);
+  }
+  const org = values.org.replace(/-/g, '');
+  return {
+    id: `sub_sim_org_${org}`,
+    object: 'subscription',
+    status: 'active',
+    customer: `cus_simorg${org}`,
+    metadata: { organization_id: values.org, plan: 'team', user_id: user },
+    cancel_at_period_end: false,
+    current_period_start: unix(now - DAY),
+    current_period_end: unix(periodEnd),
+    items: {
+      data: [
+        {
+          // The seat price if the server has one; it also knows seats by the metadata.
+          price: { id: process.env.STRIPE_PRICE_ORG_SEAT ?? 'price_sim_seat' },
+          quantity: Number(values.seats),
+        },
+      ],
+    },
+    ...overrides,
+  };
+};
+
 const country = () => {
   if (!/^[A-Za-z]{2}$/.test(values.country ?? '')) {
     console.error('Give --country as a two-letter code.');
@@ -190,6 +224,23 @@ switch (command) {
       original_transaction_id: `tx_sim_${slug}_${country()}`,
       expiration_at_ms: null,
     });
+    break;
+  case 'org-seats':
+    await stripe('customer.subscription.updated', seats());
+    break;
+  case 'org-seats-cancel':
+    await stripe('customer.subscription.updated', seats({ cancel_at_period_end: true }));
+    break;
+  case 'org-seats-end':
+    await stripe(
+      'customer.subscription.deleted',
+      seats({
+        status: 'canceled',
+        cancel_at_period_end: true,
+        current_period_end: unix(now),
+        ended_at: unix(now),
+      }),
+    );
     break;
   default:
     console.error(`Unknown command "${command}".`);

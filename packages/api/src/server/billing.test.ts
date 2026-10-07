@@ -6,6 +6,7 @@ import {
   changeFromRevenueCat,
   changeFromStripeSubscription,
   isRevenueCatAuthorized,
+  teamChangeFromStripeSubscription,
   type RevenueCatEvent,
 } from './billing';
 
@@ -268,5 +269,68 @@ describe('isRevenueCatAuthorized', () => {
     // Unset or weak: nothing gets in.
     expect(isRevenueCatAuthorized('', undefined)).toBe(false);
     expect(isRevenueCatAuthorized('tooshort', 'tooshort')).toBe(false);
+  });
+});
+
+describe('teamChangeFromStripeSubscription', () => {
+  const teamPrices = { ...prices, team: 'price_seat' };
+  const seats = (quantity: unknown, overrides: Record<string, unknown> = {}) =>
+    subscription({
+      metadata: { organization_id: 'org-1', plan: 'team', user_id: 'u1' },
+      items: { data: [{ price: { id: 'price_seat' }, quantity }] },
+      ...overrides,
+    });
+
+  it('reads an organization’s seats from the quantity bought', () => {
+    expect(teamChangeFromStripeSubscription(seats(12), teamPrices, at)).toEqual({
+      organizationId: 'org-1',
+      seats: 12,
+      status: 'active',
+      providerId: 'sub_123',
+      currentPeriodStart: new Date('2026-10-01T00:00:00Z'),
+      currentPeriodEnd: new Date('2026-11-01T00:00:00Z'),
+      cancelAtPeriodEnd: false,
+      at,
+    });
+  });
+
+  it('knows a seat subscription by its price or by what it was bought as', () => {
+    // The price alone: the organization is then found from the Stripe customer.
+    const byPrice = seats(3, { metadata: {} });
+    expect(teamChangeFromStripeSubscription(byPrice, teamPrices, at)).toMatchObject({
+      organizationId: null,
+      seats: 3,
+    });
+    // The metadata alone, as when the seat price has since been replaced.
+    const byMetadata = seats(3, { items: { data: [{ price: { id: 'price_old' }, quantity: 3 }] } });
+    expect(teamChangeFromStripeSubscription(byMetadata, prices, at)?.seats).toBe(3);
+  });
+
+  it('is not a learner’s plan, and a learner’s plan is not seats', () => {
+    expect(changeFromStripeSubscription(seats(5), teamPrices, at)).toBeNull();
+    expect(teamChangeFromStripeSubscription(subscription(), teamPrices, at)).toBeNull();
+    expect(teamChangeFromStripeSubscription(subscription(), prices, at)).toBeNull();
+  });
+
+  it('refuses a seat count that is not a whole number of seats', () => {
+    for (const quantity of [0, -2, 2.5, '4', undefined, null]) {
+      expect(teamChangeFromStripeSubscription(seats(quantity), teamPrices, at)).toBeNull();
+    }
+  });
+
+  it('carries cancellation and the end of the paid period like any subscription', () => {
+    const cancelling = seats(4, { cancel_at_period_end: true });
+    expect(teamChangeFromStripeSubscription(cancelling, teamPrices, at)).toMatchObject({
+      status: 'active',
+      cancelAtPeriodEnd: true,
+    });
+    const ended = seats(4, { status: 'canceled', ended_at: unix('2026-10-20T00:00:00Z') });
+    expect(teamChangeFromStripeSubscription(ended, teamPrices, at)).toMatchObject({
+      status: 'canceled',
+      currentPeriodEnd: new Date('2026-10-20T00:00:00Z'),
+    });
+    expect(
+      teamChangeFromStripeSubscription(seats(4, { status: 'incomplete' }), teamPrices, at),
+    ).toBeNull();
   });
 });

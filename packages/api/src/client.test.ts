@@ -9,6 +9,7 @@ const me: Me = {
   studyCountries: [],
   progress: { attempts: 0, questionsAnswered: 0, correctAnswers: 0 },
   entitlements: [],
+  organizations: [],
 };
 
 function fakeFetch(status: number, body: unknown, seen: Request[] = []): typeof fetch {

@@ -14,11 +14,22 @@ type State =
   | { step: 'sent'; email: string }
   | { step: 'error'; message: string };
 
-/** Where to land after signing in: /welcome, carrying a country picked on the landing page. */
+/**
+ * Where to land after signing in: /welcome, carrying a country picked on the
+ * landing page, or back to the invitation someone was about to accept.
+ */
 function useCallbackUrl(): string {
-  const country = parseCountryCode(useSearchParams().get('country'));
+  const params = useSearchParams();
+  const country = parseCountryCode(params.get('country'));
+  const invitation = params.get('join');
+  const path =
+    invitation && /^[A-Za-z0-9_-]{20,100}$/.test(invitation)
+      ? `/join/${invitation}`
+      : country
+        ? `/welcome?country=${country}`
+        : '/welcome';
   // In the language being read, so the link in the email comes back in it.
-  return useLocalePath()(country ? `/welcome?country=${country}` : '/welcome');
+  return useLocalePath()(path);
 }
 
 /**
