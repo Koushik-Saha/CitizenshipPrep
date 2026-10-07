@@ -51,6 +51,13 @@ export function DashboardView({
           {displayName ? t('dashboard.greeting', { name: displayName }) : t('dashboard.title')}
         </h1>
         <div className="flex items-center gap-4 text-sm font-medium">
+          <Link
+            href="/study/plans"
+            prefetch
+            className={`${focusRing} text-fg-muted hover:text-fg rounded-xs`}
+          >
+            {t('plans.title')}
+          </Link>
           <LanguageMenu locale={t.locale} label={t('common.language')} path="/study" />
           <SignOutButton />
         </div>
@@ -111,6 +118,23 @@ export function DashboardView({
               {' · '}
               {t('dashboard.questionsReady', { count: country.publishedQuestions })}
             </p>
+
+            {!country.fullAccess && country.totalQuestions > country.publishedQuestions && (
+              // On the Free plan, and there is more to this country than its sample.
+              <p className="mt-2 text-sm" data-testid={`free-limit-${country.countryCode}`}>
+                {t('plans.freeLimit', {
+                  available: country.publishedQuestions,
+                  total: country.totalQuestions,
+                })}{' '}
+                <Link
+                  href="/study/plans"
+                  prefetch
+                  className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
+                >
+                  {t('plans.seePlans')}
+                </Link>
+              </p>
+            )}
 
             {country.publishedQuestions === 0 ? (
               <p className="border-border text-fg-muted mt-6 rounded-lg border border-dashed px-6 py-8">

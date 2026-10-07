@@ -97,16 +97,10 @@ export const vi: Messages = {
 
     pricingTitle: 'Giá',
     pricingIntro:
-      'Học miễn phí. Gói trả phí sẽ bổ sung thêm trợ giúp từ AI cho những ai dùng nhiều.',
+      'Bắt đầu miễn phí với bộ câu hỏi mẫu của mỗi quốc gia. Pro mở mọi thứ; Vé Quốc gia mở một quốc gia mãi mãi.',
     planFree: 'Miễn phí',
     planFreeNote: 'Không cần thẻ.',
-    planFreeItem1: 'Luyện tập, thẻ ghi nhớ và thi thử không giới hạn',
-    planFreeItem2: 'Điểm sẵn sàng và gợi ý học tập',
     planAiAllowance: '{explanations} lời giải thích và {messages} tin nhắn cho gia sư mỗi ngày',
-    planFreeItem4: 'Mọi quốc gia và ngôn ngữ học',
-    planPremium: 'Cao cấp',
-    planPremiumNote: 'Giá sẽ được công bố sau.',
-    planPremiumItem1: 'Mọi thứ trong gói Miễn phí',
     planGroups: 'Trường học, thư viện và dịch vụ hỗ trợ định cư: gói cho nhóm sắp ra mắt.',
 
     storiesTitle: 'Học viên nói gì',
@@ -128,7 +122,7 @@ export const vi: Messages = {
       'Có. Bạn có thể chọn trong {count} ngôn ngữ. Bản dịch được kiểm tra trước khi hiển thị; cho đến lúc đó bạn sẽ thấy câu hỏi bằng ngôn ngữ của kỳ thi. Kỳ thi thật diễn ra bằng ngôn ngữ do nước bạn quy định.',
     faq5Question: 'Chi phí thế nào?',
     faq5Answer:
-      'Luyện tập, thẻ ghi nhớ, thi thử và điểm sẵn sàng đều miễn phí. Gói trả phí với nhiều lời giải thích từ AI và tin nhắn cho gia sư hơn sắp ra mắt; giá chưa được ấn định.',
+      'Bộ câu hỏi mẫu của mỗi quốc gia là miễn phí, kèm luyện tập, thẻ ghi nhớ, điểm sẵn sàng và chế độ âm thanh. Pro, theo tháng hoặc theo năm, mở mọi câu hỏi của mọi quốc gia và có thêm trợ giúp từ AI. Vé Quốc gia là khoản trả một lần, mở một quốc gia mãi mãi.',
     faq6Question: 'Nước của tôi chưa có trong danh sách. Các bạn có thêm không?',
     faq6Answer:
       'Chúng tôi đang hướng tới mọi quốc gia có thi quốc tịch. Mỗi quốc gia được thêm sau khi hình thức thi và tài liệu ôn tập đã được đối chiếu với nguồn chính thức.',
@@ -414,6 +408,46 @@ export const vi: Messages = {
     startInterview: 'Bắt đầu phỏng vấn thử',
     interviewIntro:
       'Câu hỏi được hỏi thành tiếng như trong kỳ thi thật. Hãy trả lời thành tiếng, bằng ngôn ngữ của kỳ thi.',
+  },
+
+  plans: {
+    title: 'Các gói',
+    metaTitle: 'Các gói | Oathly',
+    yourPlan: 'Gói của bạn',
+    free: 'Miễn phí',
+    pro: 'Pro',
+    countryPass: 'Vé Quốc gia',
+    freeSummary:
+      'Một bộ mẫu gồm {count} câu hỏi của mỗi quốc gia, kèm luyện tập, thẻ ghi nhớ, điểm sẵn sàng và chế độ âm thanh.',
+    proSummary:
+      'Mọi câu hỏi của mọi quốc gia, bài thi thử và phỏng vấn thử đầy đủ, cùng nhiều trợ giúp từ AI hơn.',
+    passSummary:
+      'Mọi câu hỏi của một quốc gia, kèm các bài thi thử đầy đủ. Trả một lần, dùng mãi mãi.',
+    proNote: 'Theo tháng hoặc theo năm. Hủy bất cứ lúc nào.',
+    passNote: 'Trả một lần. Không cần đăng ký.',
+    perMonth: '{price} mỗi tháng',
+    perYear: '{price} mỗi năm',
+    once: '{price}, trả một lần',
+    getMonthly: 'Đăng ký Pro theo tháng',
+    getYearly: 'Đăng ký Pro theo năm',
+    getPass: 'Mua vé cho {country}',
+    onPro: 'Bạn đang dùng Pro.',
+    renewsOn: 'Gói sẽ gia hạn vào {date}.',
+    endsOn: 'Gói sẽ kết thúc vào {date} và không gia hạn.',
+    passFor: 'Vé Quốc gia: {country}',
+    manage: 'Quản lý thanh toán',
+    manageInStore: 'Gói đăng ký này được mua trên {store}. Hãy thay đổi hoặc hủy tại đó.',
+    boughtOnWeb: 'Gói đăng ký này được mua trên trang web Oathly. Hãy thay đổi hoặc hủy tại đó.',
+    unavailable: 'Hiện chưa thể mua gói tại đây.',
+    thanks: 'Cảm ơn bạn. Gói của bạn sẽ hiển thị ở đây trong giây lát.',
+    freeLimit: 'Gói Miễn phí gồm {available} trên {total} câu hỏi.',
+    seePlans: 'Xem các gói',
+    examLocked: 'Bài thi này cần nhiều câu hỏi hơn số câu có trong gói Miễn phí.',
+    terms:
+      'Pro tự gia hạn cho đến khi bạn hủy. Nếu hủy, bạn vẫn dùng Pro đến hết kỳ đã thanh toán.',
+    restore: 'Khôi phục giao dịch mua',
+    purchaseFailed: 'Giao dịch mua chưa hoàn tất.',
+    notInThisBuild: 'Không thể mua hàng trong bản dựng này của ứng dụng.',
   },
 
   offline: {

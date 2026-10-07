@@ -267,6 +267,64 @@ export type Database = {
         };
         Relationships: [];
       };
+      billing_customers: {
+        Row: {
+          created_at: string;
+          stripe_customer_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          stripe_customer_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          stripe_customer_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'billing_customers_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      billing_events: {
+        Row: {
+          event_id: string;
+          event_type: string;
+          provider: string;
+          received_at: string;
+          user_id: string | null;
+        };
+        Insert: {
+          event_id: string;
+          event_type: string;
+          provider: string;
+          received_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          event_id?: string;
+          event_type?: string;
+          provider?: string;
+          received_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'billing_events_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       community_comments: {
         Row: {
           author_id: string;
@@ -1081,6 +1139,7 @@ export type Database = {
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean;
+          country_code: string | null;
           created_at: string;
           current_period_end: string | null;
           current_period_start: string | null;
@@ -1088,6 +1147,7 @@ export type Database = {
           organization_id: string | null;
           plan: string;
           provider: string;
+          provider_event_at: string | null;
           provider_subscription_id: string | null;
           status: Database['public']['Enums']['subscription_status'];
           updated_at: string;
@@ -1095,6 +1155,7 @@ export type Database = {
         };
         Insert: {
           cancel_at_period_end?: boolean;
+          country_code?: string | null;
           created_at?: string;
           current_period_end?: string | null;
           current_period_start?: string | null;
@@ -1102,6 +1163,7 @@ export type Database = {
           organization_id?: string | null;
           plan: string;
           provider: string;
+          provider_event_at?: string | null;
           provider_subscription_id?: string | null;
           status: Database['public']['Enums']['subscription_status'];
           updated_at?: string;
@@ -1109,6 +1171,7 @@ export type Database = {
         };
         Update: {
           cancel_at_period_end?: boolean;
+          country_code?: string | null;
           created_at?: string;
           current_period_end?: string | null;
           current_period_start?: string | null;
@@ -1116,12 +1179,20 @@ export type Database = {
           organization_id?: string | null;
           plan?: string;
           provider?: string;
+          provider_event_at?: string | null;
           provider_subscription_id?: string | null;
           status?: Database['public']['Enums']['subscription_status'];
           updated_at?: string;
           user_id?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: 'subscriptions_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['iso_code'];
+          },
           {
             foreignKeyName: 'subscriptions_organization_id_fkey';
             columns: ['organization_id'];

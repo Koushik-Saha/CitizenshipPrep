@@ -26,7 +26,7 @@ values
    'multiple_choice', '{"keys": ["a"]}', 'https://example.test/source', 'draft', null, null);
 
 insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id)
-values ('a0000000-0000-0000-0000-00000000000a', 'premium', 'active', 'manual', 'sub_alice');
+values ('a0000000-0000-0000-0000-00000000000a', 'pro_monthly', 'active', 'manual', 'sub_alice');
 
 -- An organization Alice owns (the trigger adds her as owner) and a post she wrote,
 -- both with known ids so the other users can be pointed at them.
@@ -88,17 +88,17 @@ select results_eq(
 -- Subscriptions ------------------------------------------------------------------------
 select results_eq(
   'select plan from public.subscriptions',
-  array['premium'],
+  array['pro_monthly'],
   'Alice can read her own subscription'
 );
 select throws_ok(
   $$ insert into public.subscriptions (user_id, plan, status, provider)
-     values ('a0000000-0000-0000-0000-00000000000a', 'premium', 'active', 'manual') $$,
+     values ('a0000000-0000-0000-0000-00000000000a', 'pro_monthly', 'active', 'manual') $$,
   '42501', null,
   'a client cannot create a subscription for itself'
 );
 select throws_ok(
-  $$ update public.subscriptions set plan = 'lifetime' $$,
+  $$ update public.subscriptions set plan = 'pro_yearly' $$,
   '42501', null,
   'a client cannot change a subscription'
 );

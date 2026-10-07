@@ -85,6 +85,26 @@ audio`), and by the phone's own voice (`expo-speech`) where they do not.
   (`speech.ts`); `src/lib/audio-platform.ts` is only how this device plays,
   speaks and listens.
 
+## Plans
+
+The Plans screen (Profile, or the note under a country on the Free plan)
+shows what the learner holds and sells Pro and Country Passes through the
+App Store and Google Play, by way of RevenueCat (`src/lib/purchases.ts`).
+
+- What a learner may use is never decided on the phone. The store takes the
+  payment, RevenueCat tells the server, and the app reads the learner's plan
+  from the server like everything else, so a plan bought on the web shows
+  here and one bought here shows on the web.
+- It needs RevenueCat's public SDK keys in `.env.local`:
+  `EXPO_PUBLIC_REVENUECAT_IOS_KEY` and `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`.
+  Without a key for the platform, plans are shown but cannot be bought.
+- `react-native-purchases` is a native module: buying needs a development
+  build, not Expo Go, and is not possible in the browser build.
+- Store products are recognised by their identifiers: `…pro_monthly`,
+  `…pro_yearly`, and one non-consumable per country, `…country_pass_<iso>`
+  (for example `oathly_country_pass_us`). Setup is in
+  `apps/web/scripts/billing/README.md`.
+
 ## Checks
 
 ```bash

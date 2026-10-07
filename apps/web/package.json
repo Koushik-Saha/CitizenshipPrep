@@ -27,6 +27,7 @@
     "next": "16.3.8",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "stripe": "^23.0.0",
     "three": "^0.186.1"
   },
   "devDependencies": {

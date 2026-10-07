@@ -1,9 +1,11 @@
 import { randomInt } from 'node:crypto';
 
 import {
+  accessibleQuestions,
   buildMockExam,
   buildPracticeSet,
   createRandom,
+  hasAccess,
   isDue,
   isValidTimeZone,
   minutesStudiedToday,
@@ -11,8 +13,10 @@ import {
   reviewsFromEvents,
   studyStreak,
   topicMastery,
+  type AccessUser,
   type AnswerEvent,
   type PracticeMode,
+  type QuizQuestion,
 } from '@oathly/core';
 import type pg from 'pg';
 
@@ -29,6 +33,7 @@ import type {
 } from '../study';
 import { isSpokenFormat } from '../study';
 import { attachAudio, noAudio } from './audio';
+import { accessUser } from './billing';
 import { loadExamFormats, loadQuestionPool } from './quiz';
 
 // Server side of the study app: the dashboard, starting sessions (which picks
@@ -112,6 +117,24 @@ export async function setTimeZone(db: Db, userId: string, timeZone: string): Pro
   ]);
 }
 
+/**
+ * The questions of a country a learner may study: every published one with
+ * Pro or that country's pass, otherwise the Free plan's sample of them.
+ */
+async function studyPool(
+  db: Db,
+  user: AccessUser,
+  countryCode: string,
+  now: Date,
+): Promise<{ pool: QuizQuestion[]; bank: QuizQuestion[] }> {
+  const bank = await loadQuestionPool(db, countryCode);
+  return { pool: accessibleQuestions(user, countryCode, bank, now), bank };
+}
+
+/** What a learner who has run out of free sample is told. */
+const NEEDS_UPGRADE =
+  'This exam needs more questions than the Free plan includes. Pro or a Country Pass for this country opens all of them.';
+
 export async function getDashboard(
   db: Db,
   userId: string,
@@ -139,9 +162,10 @@ export async function getDashboard(
   );
 
   const allHistory = await answerHistory(db, userId);
+  const user = await accessUser(db, userId);
   const countries: CountryDashboard[] = [];
   for (const country of studying.rows) {
-    const pool = await loadQuestionPool(db, country.country_code);
+    const { pool, bank } = await studyPool(db, user, country.country_code, now);
     const poolIds = new Set(pool.map((question) => question.id));
     const history = allHistory.filter((event) => poolIds.has(event.questionId));
     const mastery = topicMastery(pool, history, now);
@@ -227,6 +251,8 @@ export async function getDashboard(
       examDate: country.exam_date,
       readiness: readinessView,
       publishedQuestions: pool.length,
+      totalQuestions: bank.length,
+      fullAccess: hasAccess(user, 'all_questions', country.country_code, now),
       topics: topicNames.rows
         .filter((topic) => mastery.has(topic.id))
         .map((topic) => ({
@@ -239,6 +265,7 @@ export async function getDashboard(
         .filter((format) => format.questionCount !== null)
         .map((format) => {
           let unavailableReason: string | null = null;
+          let locked = false;
           try {
             buildMockExam(format, pool, { random: createRandom(1) });
           } catch (error) {
@@ -246,6 +273,16 @@ export async function getDashboard(
               error instanceof Error && /region/.test(error.message)
                 ? 'Needs your state or region, which Oathly does not ask for yet.'
                 : `Needs ${format.questionCount} published questions; ${pool.length} are ready.`;
+            // Would the whole bank do? Then it is the plan that is short, not the content.
+            if (bank.length > pool.length) {
+              try {
+                buildMockExam(format, bank, { random: createRandom(1) });
+                locked = true;
+                unavailableReason = NEEDS_UPGRADE;
+              } catch {
+                // The bank cannot fill it either.
+              }
+            }
           }
           return {
             id: format.id,
@@ -256,6 +293,7 @@ export async function getDashboard(
             isCurrent: format.isCurrent,
             spoken: isSpokenFormat(format.formatType),
             unavailableReason,
+            locked,
           };
         }),
       dueForReview: [...reviews.values()].filter((review) => isDue(review, now)).length,
@@ -306,7 +344,12 @@ export async function startPractice(
   kind: 'practice' | 'flashcards' = 'practice',
 ): Promise<string> {
   await assertStudying(db, userId, request.countryCode);
-  const pool = await loadQuestionPool(db, request.countryCode);
+  const { pool } = await studyPool(
+    db,
+    await accessUser(db, userId),
+    request.countryCode,
+    new Date(),
+  );
   if (pool.length === 0) throw new StudyError('No questions are published for this country yet.');
   const set = buildPracticeSet(pool, {
     mode: request.mode,
@@ -337,13 +380,27 @@ export async function startMockExam(
     (candidate) => candidate.id === request.examFormatId,
   );
   if (!format) throw new StudyError('That exam is not available.');
+  const questions = await studyPool(
+    pool,
+    await accessUser(pool, userId),
+    request.countryCode,
+    new Date(),
+  );
   let exam;
   try {
-    exam = buildMockExam(format, await loadQuestionPool(pool, request.countryCode), {
-      random: createRandom(randomInt(2 ** 31)),
-    });
+    exam = buildMockExam(format, questions.pool, { random: createRandom(randomInt(2 ** 31)) });
   } catch (error) {
-    throw new StudyError(error instanceof Error ? error.message : String(error));
+    let fillable = questions.bank.length > questions.pool.length;
+    if (fillable) {
+      try {
+        buildMockExam(format, questions.bank, { random: createRandom(1) });
+      } catch {
+        fillable = false;
+      }
+    }
+    throw new StudyError(
+      fillable ? NEEDS_UPGRADE : error instanceof Error ? error.message : String(error),
+    );
   }
 
   const client = await pool.connect();
@@ -636,7 +693,7 @@ export async function getCountryPack(
      order by t.sort_order, q.created_at, q.id`,
     [code, row.study_locale],
   );
-  const worded: PackQuestion[] = content.rows.map((question) => ({
+  const published: PackQuestion[] = content.rows.map((question) => ({
     id: question.id,
     version: question.version,
     topicId: question.topic_id,
@@ -658,6 +715,9 @@ export async function getCountryPack(
         ? null
         : { ...question.original, audio: noAudio },
   }));
+  // A pack holds what the learner's plan includes: all of the country's
+  // questions, or the Free plan's sample.
+  const worded = accessibleQuestions(await accessUser(db, userId), code, published, new Date());
   // The clips come with the pack's questions, so the phone can save them too.
   const questions = await attachAudio(db, worded);
 

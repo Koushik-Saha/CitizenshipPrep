@@ -22,6 +22,7 @@ import {
 import { LanguageMenu } from '@/components/i18n/language-menu';
 import { SiteFooter } from '@/components/site-chrome';
 import { focusRing } from '@/components/ui';
+import { planPrices } from '@/lib/billing';
 import { alternates, getT } from '@/lib/i18n';
 import { loadPublic } from '@/lib/public-content';
 
@@ -42,6 +43,7 @@ const navLink = `${focusRing} rounded-xs text-fg-muted hover:text-fg`;
 export default async function Landing({ params }: PageProps<'/[locale]'>) {
   const { t } = await getT(params);
   const countries = await loadPublic((db) => listCountryFacts(db), []);
+  const prices = await planPrices();
   const markers = toMarkers(countries, t);
   // Picking a country, in the search or on the globe, goes to signing up for it.
   const startHref = localizePath(t.locale, '/sign-in?country={code}');
@@ -150,7 +152,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
         <HowItWorks t={t} />
         <CountryList countries={countries} t={t} />
         <Features t={t} />
-        <Pricing t={t} />
+        <Pricing t={t} prices={prices} />
         <Testimonials t={t} />
         <Faq t={t} />
       </main>

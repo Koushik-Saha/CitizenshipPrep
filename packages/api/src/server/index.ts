@@ -7,3 +7,4 @@ export * from './quiz';
 export * from './study';
 export * from './ai';
 export * from './audio';
+export * from './billing';

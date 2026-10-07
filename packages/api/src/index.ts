@@ -16,6 +16,7 @@ export interface CorrectAnswer {
   keys: string[];
 }
 
+export * from './billing';
 export * from './client';
 export * from './countries';
 export * from './me';

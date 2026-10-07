@@ -122,6 +122,8 @@ export interface ExamOption {
   spoken: boolean;
   /** Why a mock exam cannot be built yet, if it cannot. */
   unavailableReason: string | null;
+  /** It cannot be built from the Free plan's sample, but could with all the questions. */
+  locked: boolean;
 }
 
 export type StudySuggestionView =
@@ -154,7 +156,12 @@ export interface CountryDashboard {
   examDate: string | null;
   /** Null when no questions are published yet. */
   readiness: ReadinessView | null;
+  /** Questions this learner can study: all of them, or the Free plan's sample. */
   publishedQuestions: number;
+  /** Every published question the country has. */
+  totalQuestions: number;
+  /** Whether the learner's plan opens all of them (Pro, or this country's pass). */
+  fullAccess: boolean;
   /** For choosing a topic to practise. */
   topics: TopicReadiness[];
   exams: ExamOption[];

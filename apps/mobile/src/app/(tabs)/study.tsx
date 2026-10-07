@@ -152,6 +152,23 @@ function CountrySection({
         <Body muted>{t('dashboard.questionsReady', { count: country.publishedQuestions })}</Body>
       </View>
 
+      {!country.fullAccess && country.totalQuestions > country.publishedQuestions && (
+        // On the Free plan, and there is more to this country than its sample.
+        <View testID={`free-limit-${code}`} style={{ gap: theme.spacing[1] }}>
+          <Body muted size="sm">
+            {t('plans.freeLimit', {
+              available: country.publishedQuestions,
+              total: country.totalQuestions,
+            })}
+          </Body>
+          <LinkButton
+            label={t('plans.seePlans')}
+            onPress={() => router.push('/plans')}
+            testID={`see-plans-${code}`}
+          />
+        </View>
+      )}
+
       {country.publishedQuestions === 0 ? (
         <Card>
           <Body muted>{t('dashboard.questionsBeingChecked', { country: name })}</Body>
@@ -234,9 +251,9 @@ function CountrySection({
                     .filter((part) => part !== null)
                     .join(t('exam.factSeparator'))}
                 </Body>
-                {exam.unavailableReason && (
+                {(exam.locked || exam.unavailableReason) && (
                   <Body muted size="sm">
-                    {exam.unavailableReason}
+                    {exam.locked ? t('plans.examLocked') : exam.unavailableReason}
                   </Body>
                 )}
                 <Button

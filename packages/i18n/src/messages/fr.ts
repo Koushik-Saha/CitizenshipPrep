@@ -101,16 +101,10 @@ export const fr: Messages = {
 
     pricingTitle: 'Tarifs',
     pricingIntro:
-      'Étudier est gratuit. Une formule payante ajoutera davantage d’aide par IA pour ceux qui l’utilisent beaucoup.',
+      'Commencez gratuitement avec un échantillon des questions de chaque pays. Pro ouvre tout ; un Pass Pays ouvre un pays pour de bon.',
     planFree: 'Gratuit',
     planFreeNote: 'Sans carte bancaire.',
-    planFreeItem1: 'Entraînement, cartes mémoire et examens blancs illimités',
-    planFreeItem2: 'Score de préparation et suggestions d’étude',
     planAiAllowance: '{explanations} explications et {messages} messages au tuteur par jour',
-    planFreeItem4: 'Tous les pays et toutes les langues d’étude',
-    planPremium: 'Premium',
-    planPremiumNote: 'Prix à venir.',
-    planPremiumItem1: 'Tout ce qui est inclus dans Gratuit',
     planGroups:
       'Écoles, bibliothèques et services d’accueil : des formules pour les groupes arrivent bientôt.',
 
@@ -133,7 +127,7 @@ export const fr: Messages = {
       'Oui. Vous pouvez choisir parmi {count} langues. Les traductions sont vérifiées avant d’apparaître ; en attendant, vous voyez la question dans la langue de l’examen. L’examen lui-même se passe dans la langue fixée par votre pays.',
     faq5Question: 'Combien ça coûte ?',
     faq5Answer:
-      'L’entraînement, les cartes mémoire, les examens blancs et le score de préparation sont gratuits. Une formule payante avec davantage d’explications par IA et de messages au tuteur est prévue ; son prix n’est pas encore fixé.',
+      'Un échantillon des questions de chaque pays est gratuit, avec l’entraînement, les cartes mémoire, le score de préparation et le mode audio. Pro, mensuel ou annuel, ouvre toutes les questions de tous les pays et ajoute davantage d’aide de l’IA. Un Pass Pays est un paiement unique qui ouvre un pays pour de bon.',
     faq6Question: 'Mon pays n’est pas dans la liste. Allez-vous l’ajouter ?',
     faq6Answer:
       'Nous visons tous les pays qui ont un test de citoyenneté. Nous ajoutons chacun une fois le format de son examen et son matériel d’étude vérifiés à partir des sources officielles.',
@@ -427,6 +421,47 @@ export const fr: Messages = {
     startInterview: 'Commencer l’entretien blanc',
     interviewIntro:
       'Les questions sont posées à voix haute, comme à l’examen réel. Répondez à voix haute, dans la langue de l’examen.',
+  },
+
+  plans: {
+    title: 'Offres',
+    metaTitle: 'Offres | Oathly',
+    yourPlan: 'Votre offre',
+    free: 'Gratuit',
+    pro: 'Pro',
+    countryPass: 'Pass Pays',
+    freeSummary:
+      'Un échantillon de {count} questions par pays, avec l’entraînement, les cartes mémoire, le score de préparation et le mode audio.',
+    proSummary:
+      'Toutes les questions de tous les pays, des examens et entretiens blancs complets, et davantage d’aide de l’IA.',
+    passSummary:
+      'Toutes les questions d’un pays, avec ses examens blancs complets. Un seul paiement, à vous pour toujours.',
+    proNote: 'Mensuel ou annuel. Résiliable à tout moment.',
+    passNote: 'Un seul paiement. Sans abonnement.',
+    perMonth: '{price} par mois',
+    perYear: '{price} par an',
+    once: '{price}, une seule fois',
+    getMonthly: 'Passer à Pro, mensuel',
+    getYearly: 'Passer à Pro, annuel',
+    getPass: 'Obtenir le pass pour {country}',
+    onPro: 'Vous avez Pro.',
+    renewsOn: 'Renouvellement le {date}.',
+    endsOn: 'Il prend fin le {date} et ne sera pas renouvelé.',
+    passFor: 'Pass Pays : {country}',
+    manage: 'Gérer la facturation',
+    manageInStore: 'Cet abonnement a été acheté sur {store}. Modifiez-le ou résiliez-le là-bas.',
+    boughtOnWeb:
+      'Cet abonnement a été acheté sur le site web d’Oathly. Modifiez-le ou résiliez-le là-bas.',
+    unavailable: 'Les offres ne peuvent pas encore être achetées ici.',
+    thanks: 'Merci. Votre offre apparaîtra ici dans un instant.',
+    freeLimit: 'L’offre Gratuit comprend {available} questions sur {total}.',
+    seePlans: 'Voir les offres',
+    examLocked: 'Cet examen demande plus de questions que n’en comprend l’offre Gratuit.',
+    terms:
+      'Pro se renouvelle jusqu’à résiliation. Si vous résiliez, vous gardez Pro jusqu’à la fin de la période payée.',
+    restore: 'Restaurer les achats',
+    purchaseFailed: 'L’achat n’a pas abouti.',
+    notInThisBuild: 'Les achats ne sont pas disponibles dans cette version de l’application.',
   },
 
   offline: {

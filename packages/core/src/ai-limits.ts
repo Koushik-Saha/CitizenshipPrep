@@ -1,33 +1,22 @@
 // How much AI help each plan includes, and whether a learner has some left.
 // Limits are per rolling 24 hours, so there is no midnight rush.
 
-export type Plan = 'free' | 'premium';
+import { hasAccess, type AccessUser } from './access';
+
+/** Which allowance a learner is on. */
+export type AiAllowance = 'free' | 'pro';
 export type AiFeature = 'explanation' | 'tutor';
 
-export const aiLimits: Record<Plan, Record<AiFeature, number>> = {
+export const aiLimits: Record<AiAllowance, Record<AiFeature, number>> = {
   free: { explanation: 20, tutor: 15 },
-  premium: { explanation: 200, tutor: 150 },
+  pro: { explanation: 200, tutor: 150 },
 };
 
 const WINDOW_MS = 24 * 60 * 60 * 1000;
 
-export interface SubscriptionSummary {
-  plan: string;
-  status: 'trialing' | 'active' | 'past_due' | 'canceled' | 'expired';
-  currentPeriodEnd: Date | null;
-}
-
-/** Premium while any subscription is trialing, active, or past due but still in its paid period. */
-export function planFrom(subscriptions: readonly SubscriptionSummary[], now: Date): Plan {
-  const paid = subscriptions.some((subscription) => {
-    if (subscription.status === 'trialing' || subscription.status === 'active') return true;
-    return (
-      subscription.status === 'past_due' &&
-      subscription.currentPeriodEnd !== null &&
-      subscription.currentPeriodEnd > now
-    );
-  });
-  return paid ? 'premium' : 'free';
+/** The larger allowance comes with Pro (see hasAccess); everyone else has the free one. */
+export function aiAllowance(user: AccessUser, now: Date): AiAllowance {
+  return hasAccess(user, 'more_ai', null, now) ? 'pro' : 'free';
 }
 
 export interface Quota {
@@ -40,12 +29,12 @@ export interface Quota {
 
 /** Whether one more use is allowed, given the times of earlier uses. */
 export function checkQuota(
-  plan: Plan,
+  allowance: AiAllowance,
   feature: AiFeature,
   usedAt: readonly Date[],
   now: Date,
 ): Quota {
-  const limit = aiLimits[plan][feature];
+  const limit = aiLimits[allowance][feature];
   const recent = usedAt
     .filter((at) => now.getTime() - at.getTime() < WINDOW_MS)
     .sort((a, b) => a.getTime() - b.getTime());

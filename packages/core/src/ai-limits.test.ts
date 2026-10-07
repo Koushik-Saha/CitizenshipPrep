@@ -1,53 +1,28 @@
 import { describe, expect, it } from 'vitest';
 
-import { aiLimits, checkQuota, planFrom } from './ai-limits';
+import { aiAllowance, aiLimits, checkQuota } from './ai-limits';
 import { at } from './test-fixtures';
 
 const now = at('2026-10-04T12:00:00Z');
 const hoursAgo = (hours: number) => new Date(now.getTime() - hours * 60 * 60 * 1000);
 
-describe('planFrom', () => {
-  it('is free without a subscription', () => {
-    expect(planFrom([], now)).toBe('free');
-  });
+describe('aiAllowance', () => {
+  const pro = {
+    plan: 'pro_yearly',
+    countryCode: null,
+    status: 'active',
+    currentPeriodEnd: null,
+    cancelAtPeriodEnd: false,
+    provider: 'stripe',
+  } as const;
 
-  it('is premium while trialing or active', () => {
-    expect(planFrom([{ plan: 'premium', status: 'active', currentPeriodEnd: null }], now)).toBe(
-      'premium',
-    );
-    expect(planFrom([{ plan: 'premium', status: 'trialing', currentPeriodEnd: null }], now)).toBe(
-      'premium',
-    );
-  });
-
-  it('keeps premium for a late payment only until the paid period ends', () => {
+  it('is the larger one with Pro, and the free one otherwise', () => {
+    expect(aiAllowance({ entitlements: [] }, now)).toBe('free');
+    expect(aiAllowance({ entitlements: [pro] }, now)).toBe('pro');
     expect(
-      planFrom(
-        [{ plan: 'premium', status: 'past_due', currentPeriodEnd: at('2026-10-05T00:00:00Z') }],
-        now,
-      ),
-    ).toBe('premium');
-    expect(
-      planFrom(
-        [{ plan: 'premium', status: 'past_due', currentPeriodEnd: at('2026-10-01T00:00:00Z') }],
-        now,
-      ),
+      aiAllowance({ entitlements: [{ ...pro, plan: 'country_pass', countryCode: 'US' }] }, now),
     ).toBe('free');
-    expect(planFrom([{ plan: 'premium', status: 'past_due', currentPeriodEnd: null }], now)).toBe(
-      'free',
-    );
-  });
-
-  it('is free once canceled or expired', () => {
-    expect(
-      planFrom(
-        [
-          { plan: 'premium', status: 'canceled', currentPeriodEnd: null },
-          { plan: 'premium', status: 'expired', currentPeriodEnd: null },
-        ],
-        now,
-      ),
-    ).toBe('free');
+    expect(aiAllowance({ entitlements: [{ ...pro, status: 'expired' }] }, now)).toBe('free');
   });
 });
 
@@ -78,7 +53,7 @@ describe('checkQuota', () => {
   it('gives premium learners more', () => {
     const used = Array.from({ length: 20 }, () => hoursAgo(1));
     expect(checkQuota('free', 'explanation', used, now).allowed).toBe(false);
-    expect(checkQuota('premium', 'explanation', used, now)).toMatchObject({
+    expect(checkQuota('pro', 'explanation', used, now)).toMatchObject({
       allowed: true,
       remaining: 180,
     });

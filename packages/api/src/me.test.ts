@@ -7,6 +7,7 @@ const base: Me = {
   settings: null,
   studyCountries: [],
   progress: { attempts: 0, questionsAnswered: 0, correctAnswers: 0 },
+  entitlements: [],
 };
 const us = {
   countryCode: 'US',

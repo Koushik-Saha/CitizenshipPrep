@@ -100,16 +100,10 @@ export const pt: Messages = {
 
     pricingTitle: 'Preços',
     pricingIntro:
-      'Estudar é grátis. Um plano pago vai acrescentar mais ajuda de IA para quem usa muito.',
+      'Comece grátis com uma amostra das perguntas de cada país. O Pro abre tudo; um Passe de País abre um país para sempre.',
     planFree: 'Grátis',
     planFreeNote: 'Sem cartão.',
-    planFreeItem1: 'Prática, cartões e simulados ilimitados',
-    planFreeItem2: 'Pontuação de preparo e sugestões de estudo',
     planAiAllowance: '{explanations} explicações e {messages} mensagens ao tutor por dia',
-    planFreeItem4: 'Todos os países e idiomas de estudo',
-    planPremium: 'Premium',
-    planPremiumNote: 'Preço a ser anunciado.',
-    planPremiumItem1: 'Tudo do plano Grátis',
     planGroups:
       'Escolas, bibliotecas e serviços de acolhimento: planos para grupos chegam em breve.',
 
@@ -132,7 +126,7 @@ export const pt: Messages = {
       'Sim. Você pode escolher entre {count} idiomas. As traduções são verificadas antes de aparecer; até lá, você vê a pergunta no idioma do exame. O exame em si é feito no idioma definido pelo seu país.',
     faq5Question: 'Quanto custa?',
     faq5Answer:
-      'A prática, os cartões, os simulados e a pontuação de preparo são grátis. Um plano pago com mais explicações de IA e mensagens ao tutor está a caminho; o preço ainda não foi definido.',
+      'Uma amostra das perguntas de cada país é grátis, com prática, flashcards, a pontuação de preparação e o modo áudio. O Pro, mensal ou anual, abre todas as perguntas de todos os países e traz mais ajuda de IA. Um Passe de País é um pagamento único que abre um país para sempre.',
     faq6Question: 'Meu país não está na lista. Vocês vão adicioná-lo?',
     faq6Answer:
       'Estamos trabalhando para cobrir todos os países que têm teste de cidadania. Adicionamos cada um depois que o formato do exame e o material de estudo são conferidos com as fontes oficiais.',
@@ -420,6 +414,46 @@ export const pt: Messages = {
     startInterview: 'Iniciar entrevista simulada',
     interviewIntro:
       'As perguntas são feitas em voz alta, como no exame real. Responda em voz alta, no idioma do exame.',
+  },
+
+  plans: {
+    title: 'Planos',
+    metaTitle: 'Planos | Oathly',
+    yourPlan: 'Seu plano',
+    free: 'Grátis',
+    pro: 'Pro',
+    countryPass: 'Passe de País',
+    freeSummary:
+      'Uma amostra de {count} perguntas de cada país, com prática, flashcards, a pontuação de preparação e o modo áudio.',
+    proSummary:
+      'Todas as perguntas de todos os países, simulados e entrevistas simuladas completos, e mais ajuda de IA.',
+    passSummary:
+      'Todas as perguntas de um país, com seus simulados completos. Um pagamento único, seu para sempre.',
+    proNote: 'Mensal ou anual. Cancele quando quiser.',
+    passNote: 'Um pagamento único. Sem assinatura.',
+    perMonth: '{price} por mês',
+    perYear: '{price} por ano',
+    once: '{price}, uma única vez',
+    getMonthly: 'Assinar o Pro mensal',
+    getYearly: 'Assinar o Pro anual',
+    getPass: 'Obter o passe de {country}',
+    onPro: 'Você tem o Pro.',
+    renewsOn: 'Renova em {date}.',
+    endsOn: 'Termina em {date} e não será renovado.',
+    passFor: 'Passe de País: {country}',
+    manage: 'Gerenciar cobrança',
+    manageInStore: 'Esta assinatura foi comprada na {store}. Altere ou cancele por lá.',
+    boughtOnWeb: 'Esta assinatura foi comprada no site do Oathly. Altere ou cancele por lá.',
+    unavailable: 'Ainda não é possível comprar planos aqui.',
+    thanks: 'Obrigado. Seu plano aparecerá aqui em instantes.',
+    freeLimit: 'O plano Grátis inclui {available} de {total} perguntas.',
+    seePlans: 'Ver planos',
+    examLocked: 'Este exame precisa de mais perguntas do que o plano Grátis inclui.',
+    terms:
+      'O Pro é renovado até você cancelar. Se cancelar, você mantém o Pro até o fim do período já pago.',
+    restore: 'Restaurar compras',
+    purchaseFailed: 'A compra não foi concluída.',
+    notInThisBuild: 'As compras não estão disponíveis nesta versão do app.',
   },
 
   offline: {

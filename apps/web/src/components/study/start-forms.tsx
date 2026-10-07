@@ -9,6 +9,7 @@ import {
   type StartState,
 } from '@/app/[locale]/study/actions';
 import { useT } from '@/components/i18n/provider';
+import Link from '@/components/link';
 import { buttonClass, fieldClass, labelClass, Notice } from '@/components/ui';
 
 const initial: StartState = { error: null };
@@ -111,8 +112,21 @@ export function MockExamForm({ country }: { country: CountryDashboard }) {
                   .filter((part) => part !== null)
                   .join(t('exam.factSeparator'))}
               </p>
-              {exam.unavailableReason && (
-                <p className="text-fg-subtle text-sm">{exam.unavailableReason}</p>
+              {exam.locked ? (
+                <p className="text-fg-subtle text-sm">
+                  {t('plans.examLocked')}{' '}
+                  <Link
+                    href="/study/plans"
+                    prefetch
+                    className="text-primary-fg font-medium underline underline-offset-4"
+                  >
+                    {t('plans.seePlans')}
+                  </Link>
+                </p>
+              ) : (
+                exam.unavailableReason && (
+                  <p className="text-fg-subtle text-sm">{exam.unavailableReason}</p>
+                )
               )}
             </div>
             <button

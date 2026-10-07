@@ -9,6 +9,7 @@ const me: Me = {
   settings: null,
   studyCountries: [],
   progress: { attempts: 0, questionsAnswered: 0, correctAnswers: 0 },
+  entitlements: [],
 };
 
 const api = (result: Me | Error): Pick<OathlyApi, 'me'> => ({

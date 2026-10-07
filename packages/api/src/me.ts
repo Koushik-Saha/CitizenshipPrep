@@ -1,4 +1,5 @@
 // zod/mini: these schemas run in the browser and on phones.
+import { paidPlans, type Entitlement } from '@oathly/core';
 import * as z from 'zod/mini';
 
 // The shape of "the signed-in learner", shared by the web app, the mobile
@@ -11,6 +12,15 @@ export const studyCountrySchema = z.object({
   studyLocale: z.nullable(z.string()),
   isPrimary: z.boolean(),
 });
+
+export const entitlementSchema = z.object({
+  plan: z.enum(paidPlans),
+  countryCode: z.nullable(z.string()),
+  status: z.enum(['trialing', 'active', 'past_due', 'canceled', 'expired']),
+  currentPeriodEnd: z.nullable(z.string()),
+  cancelAtPeriodEnd: z.boolean(),
+  provider: z.enum(['stripe', 'app_store', 'play_store', 'manual']),
+}) satisfies z.ZodMiniType<Entitlement>;
 
 export const meSchema = z.object({
   profile: z.object({ id: z.string(), displayName: z.nullable(z.string()) }),
@@ -26,6 +36,11 @@ export const meSchema = z.object({
     questionsAnswered: z.number(),
     correctAnswers: z.number(),
   }),
+  /**
+   * What the learner has paid for, on any device. Ask hasAccess (packages/core)
+   * what it unlocks rather than reading it directly.
+   */
+  entitlements: z.array(entitlementSchema),
 });
 
 export const examCountrySchema = z.object({

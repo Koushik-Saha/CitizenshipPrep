@@ -186,7 +186,7 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
     expect(requests).toHaveLength(0);
 
     await pool.query(
-      `insert into public.subscriptions (user_id, plan, status, provider) values ($1, 'premium', 'active', 'manual')`,
+      `insert into public.subscriptions (user_id, plan, status, provider) values ($1, 'pro_monthly', 'active', 'manual')`,
       [USER],
     );
     expect((await quotaFor(pool, USER, 'tutor', new Date())).remaining).toBe(135);

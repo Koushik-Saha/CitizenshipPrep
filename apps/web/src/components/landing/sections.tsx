@@ -7,7 +7,8 @@ import {
   type CountryFacts,
   type ExamFacts,
 } from '@oathly/api/countries';
-import { aiLimits } from '@oathly/core';
+import { formatPrice, type PlanPrice } from '@oathly/api/billing';
+import { aiLimits, FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
 import {
   languageList,
   studyLocales,
@@ -199,9 +200,28 @@ export function Features({ t }: { t: Translator }) {
   );
 }
 
-export function Pricing({ t }: { t: Translator }) {
-  const free = aiLimits.free;
-  const premium = aiLimits.premium;
+/** "$7.99 a month", or nothing where the price is not known (billing is not set up). */
+function priceLine(
+  t: Translator,
+  prices: readonly PlanPrice[],
+  plan: PlanPrice['plan'],
+  message: 'plans.perMonth' | 'plans.perYear' | 'plans.once',
+): string | null {
+  const price = prices.find((candidate) => candidate.plan === plan);
+  return price ? t(message, { price: formatPrice(price, t.locale) }) : null;
+}
+
+export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPrice[] }) {
+  const ai = (allowance: 'free' | 'pro') =>
+    t('landing.planAiAllowance', {
+      explanations: aiLimits[allowance].explanation,
+      messages: aiLimits[allowance].tutor,
+    });
+  const proPrices = [
+    priceLine(t, prices, 'pro_monthly', 'plans.perMonth'),
+    priceLine(t, prices, 'pro_yearly', 'plans.perYear'),
+  ].filter((line) => line !== null);
+  const card = 'rounded-xl border p-6 sm:p-8';
   return (
     <Section
       id="pricing"
@@ -209,38 +229,40 @@ export function Pricing({ t }: { t: Translator }) {
       intro={t('landing.pricingIntro')}
       className="bg-surface border-border border-y"
     >
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="border-border-strong rounded-xl border p-6 sm:p-8">
-          <h3 className="font-display text-2xl font-semibold">{t('landing.planFree')}</h3>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className={`border-border ${card}`}>
+          <h3 className="font-display text-2xl font-semibold">{t('plans.free')}</h3>
           <p className="text-fg-muted mt-1">{t('landing.planFreeNote')}</p>
           <ul className="mt-6 list-disc space-y-2 ps-5">
-            <li>{t('landing.planFreeItem1')}</li>
-            <li>{t('landing.planFreeItem2')}</li>
-            <li>
-              {t('landing.planAiAllowance', {
-                explanations: free.explanation,
-                messages: free.tutor,
-              })}
-            </li>
-            <li>{t('landing.planFreeItem4')}</li>
+            <li>{t('plans.freeSummary', { count: FREE_QUESTIONS_PER_COUNTRY })}</li>
+            <li>{ai('free')}</li>
           </ul>
-          <Link href={localizePath(t.locale, '/sign-in')} className={`${buttonClass.primary} mt-8`}>
+          <Link
+            href={localizePath(t.locale, '/sign-in')}
+            className={`${buttonClass.secondary} mt-8`}
+          >
             {t('landing.startFree')}
           </Link>
         </div>
-        <div className="border-border rounded-xl border border-dashed p-6 sm:p-8">
-          <h3 className="font-display flex items-center gap-3 text-2xl font-semibold">
-            {t('landing.planPremium')} <Badge tone="warning">{t('common.comingSoon')}</Badge>
-          </h3>
-          <p className="text-fg-muted mt-1">{t('landing.planPremiumNote')}</p>
+        <div className={`border-border-strong ${card}`}>
+          <h3 className="font-display text-2xl font-semibold">{t('plans.pro')}</h3>
+          <p className="text-fg-muted mt-1">
+            {proPrices.length > 0 ? proPrices.join(t('exam.factSeparator')) : t('plans.proNote')}
+          </p>
           <ul className="mt-6 list-disc space-y-2 ps-5">
-            <li>{t('landing.planPremiumItem1')}</li>
-            <li>
-              {t('landing.planAiAllowance', {
-                explanations: premium.explanation,
-                messages: premium.tutor,
-              })}
-            </li>
+            <li>{t('plans.proSummary')}</li>
+            <li>{ai('pro')}</li>
+            {proPrices.length > 0 && <li>{t('plans.proNote')}</li>}
+          </ul>
+        </div>
+        <div className={`border-border ${card}`}>
+          <h3 className="font-display text-2xl font-semibold">{t('plans.countryPass')}</h3>
+          <p className="text-fg-muted mt-1">
+            {priceLine(t, prices, 'country_pass', 'plans.once') ?? t('plans.passNote')}
+          </p>
+          <ul className="mt-6 list-disc space-y-2 ps-5">
+            <li>{t('plans.passSummary')}</li>
+            <li>{ai('free')}</li>
           </ul>
         </div>
       </div>

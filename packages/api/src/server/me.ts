@@ -2,6 +2,7 @@ import type pg from 'pg';
 
 import type { ExamCountry, Me } from '../me';
 import { onboardingSchema, type OnboardingInput } from '../onboarding';
+import { listEntitlements } from './billing';
 
 // Server-side reads and writes for the signed-in learner. These run on the
 // owner connection, so every query is scoped to `userId` explicitly; callers
@@ -85,6 +86,7 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
       questionsAnswered: Number(progressRow.answered),
       correctAnswers: Number(progressRow.correct),
     },
+    entitlements: await listEntitlements(db, userId),
   };
 }
 

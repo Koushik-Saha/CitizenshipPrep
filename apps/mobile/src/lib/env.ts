@@ -20,3 +20,13 @@ export const testSession = __DEV__ ? process.env.EXPO_PUBLIC_TEST_SESSION || nul
 export const neonAuthUrl = testSession
   ? null
   : required('EXPO_PUBLIC_NEON_AUTH_URL', process.env.EXPO_PUBLIC_NEON_AUTH_URL);
+
+/**
+ * RevenueCat's public SDK key for this platform's store, from its dashboard
+ * (they start "appl_" and "goog_"). Without one, plans are shown but cannot
+ * be bought in the app.
+ */
+export const revenueCatKeys = {
+  ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || null,
+  android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || null,
+};

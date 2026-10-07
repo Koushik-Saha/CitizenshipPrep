@@ -8,6 +8,7 @@ const me: Me = {
   settings: { dailyGoalMinutes: 15, onboardedAt: '2026-10-02T00:00:00.000Z' },
   studyCountries: [],
   progress: { attempts: 0, questionsAnswered: 0, correctAnswers: 0 },
+  entitlements: [],
 };
 
 function fakeFetch(status: number, body: unknown, seen: Request[] = []): typeof fetch {

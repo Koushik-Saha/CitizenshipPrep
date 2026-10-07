@@ -1,4 +1,5 @@
 import { daysUntilExam } from '@oathly/api';
+import { planSummary } from '@oathly/api/billing';
 import { countryName, endonym, languageName, uiLocales, type Translator } from '@oathly/i18n';
 import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
@@ -40,6 +41,10 @@ export default function Profile() {
     ? `${Math.round((me.progress.correctAnswers / me.progress.questionsAnswered) * 100)}%`
     : '–';
   const packs = Object.values(offline.packs);
+  const plan = planSummary(
+    me,
+    me.studyCountries.map((country) => country.countryCode),
+  );
 
   return (
     <Screen>
@@ -100,6 +105,25 @@ export default function Profile() {
           variant="secondary"
           onPress={() => router.push('/onboarding')}
         />
+      </View>
+
+      <View style={{ gap: theme.spacing[3] }}>
+        <Heading level={2}>{t('plans.yourPlan')}</Heading>
+        <Card>
+          <View testID="profile-plan">
+            <Body>{plan.pro ? t('plans.pro') : t('plans.free')}</Body>
+          </View>
+          {plan.passes.map((code) => (
+            <Body key={code} muted>
+              {t('plans.passFor', { country: countryName(code, locale, code) })}
+            </Body>
+          ))}
+          <LinkButton
+            label={t('plans.seePlans')}
+            onPress={() => router.push('/plans')}
+            testID="open-plans"
+          />
+        </Card>
       </View>
 
       <View style={{ gap: theme.spacing[3] }}>

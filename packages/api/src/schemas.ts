@@ -70,6 +70,8 @@ export const dashboardSchema = z.object({
       examDate: nullableString,
       readiness: z.nullable(readinessSchema),
       publishedQuestions: z.number(),
+      totalQuestions: z.number(),
+      fullAccess: z.boolean(),
       topics: z.array(
         z.object({
           topicId: z.string(),
@@ -88,6 +90,7 @@ export const dashboardSchema = z.object({
           isCurrent: z.boolean(),
           spoken: z.boolean(),
           unavailableReason: nullableString,
+          locked: z.boolean(),
         }),
       ),
       dueForReview: z.number(),

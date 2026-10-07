@@ -104,16 +104,10 @@ export const en = {
 
     pricingTitle: 'Pricing',
     pricingIntro:
-      'Studying is free. A paid plan will add more AI help for people who use a lot of it.',
+      'Start free with a sample of each country’s questions. Pro opens everything; a Country Pass opens one country for good.',
     planFree: 'Free',
     planFreeNote: 'No card needed.',
-    planFreeItem1: 'Unlimited practice, flashcards and mock exams',
-    planFreeItem2: 'Readiness score and study suggestions',
     planAiAllowance: '{explanations} answer explanations and {messages} tutor messages a day',
-    planFreeItem4: 'Every country and study language',
-    planPremium: 'Premium',
-    planPremiumNote: 'Price to be announced.',
-    planPremiumItem1: 'Everything in Free',
     planGroups: 'Schools, libraries and settlement services: plans for groups are coming soon.',
 
     storiesTitle: 'What learners say',
@@ -135,7 +129,7 @@ export const en = {
       'Yes. You can choose from {count} languages. Translations are checked before they appear; until then you see the question in the exam’s language. The exam itself is taken in the language your country sets.',
     faq5Question: 'What does it cost?',
     faq5Answer:
-      'Practice, flashcards, mock exams and the readiness score are free. A paid plan with more AI explanations and tutor messages is coming; its price is not set yet.',
+      'A sample of each country’s questions is free, with practice, flashcards, the readiness score and audio mode. Pro, monthly or yearly, opens every question in every country and adds more AI help. A Country Pass is one payment that opens one country for good.',
     faq6Question: 'My country is not listed. Will you add it?',
     faq6Answer:
       'We are working towards every country that has a citizenship test. We add each one once its exam format and study material have been checked against official sources.',
@@ -423,6 +417,46 @@ export const en = {
     startInterview: 'Start mock interview',
     interviewIntro:
       'The questions are asked aloud, as in the real exam. Answer aloud, in the exam’s language.',
+  },
+
+  plans: {
+    title: 'Plans',
+    metaTitle: 'Plans | Oathly',
+    yourPlan: 'Your plan',
+    free: 'Free',
+    pro: 'Pro',
+    countryPass: 'Country Pass',
+    freeSummary:
+      'A sample of {count} questions from each country, with practice, flashcards, the readiness score and audio mode.',
+    proSummary:
+      'Every question in every country, full-length mock exams and mock interviews, and more AI help.',
+    passSummary:
+      'Every question for one country, with its full-length mock exams. One payment, yours to keep.',
+    proNote: 'Monthly or yearly. Cancel any time.',
+    passNote: 'One payment. No subscription.',
+    perMonth: '{price} a month',
+    perYear: '{price} a year',
+    once: '{price}, once',
+    getMonthly: 'Get Pro, monthly',
+    getYearly: 'Get Pro, yearly',
+    getPass: 'Get the pass for {country}',
+    onPro: 'You have Pro.',
+    renewsOn: 'It renews on {date}.',
+    endsOn: 'It ends on {date} and will not renew.',
+    passFor: 'Country Pass: {country}',
+    manage: 'Manage billing',
+    manageInStore: 'This subscription was bought in the {store}. Change or cancel it there.',
+    boughtOnWeb: 'This subscription was bought on the Oathly website. Change or cancel it there.',
+    unavailable: 'Plans cannot be bought here yet.',
+    thanks: 'Thank you. Your plan will show here in a moment.',
+    freeLimit: '{available} of {total} questions are included in the Free plan.',
+    seePlans: 'See plans',
+    examLocked: 'This exam needs more questions than the Free plan includes.',
+    terms:
+      'Pro renews until you cancel. If you cancel, you keep Pro until the end of the period you have paid for.',
+    restore: 'Restore purchases',
+    purchaseFailed: 'The purchase did not go through.',
+    notInThisBuild: 'Purchases are not available in this build of the app.',
   },
 
   offline: {

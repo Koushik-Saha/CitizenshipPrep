@@ -103,16 +103,10 @@ export const tl: Messages = {
 
     pricingTitle: 'Presyo',
     pricingIntro:
-      'Libre ang pag-aaral. Magdaragdag ang bayad na plan ng mas maraming tulong ng AI para sa mga madalas gumamit nito.',
+      'Magsimula nang libre gamit ang sample ng mga tanong ng bawat bansa. Binubuksan ng Pro ang lahat; binubuksan ng Country Pass ang isang bansa habambuhay.',
     planFree: 'Libre',
     planFreeNote: 'Hindi kailangan ng card.',
-    planFreeItem1: 'Walang limitasyong pagsasanay, flashcard at mock exam',
-    planFreeItem2: 'Readiness score at mga mungkahi sa pag-aaral',
     planAiAllowance: '{explanations} paliwanag ng sagot at {messages} mensahe sa tutor bawat araw',
-    planFreeItem4: 'Lahat ng bansa at wika ng pag-aaral',
-    planPremium: 'Premium',
-    planPremiumNote: 'Iaanunsiyo pa ang presyo.',
-    planPremiumItem1: 'Lahat ng nasa Libre',
     planGroups:
       'Mga paaralan, aklatan at settlement service: malapit nang dumating ang mga plan para sa grupo.',
 
@@ -135,7 +129,7 @@ export const tl: Messages = {
       'Oo. Makakapili ka mula sa {count} wika. Sinusuri ang mga salin bago lumabas; hangga’t wala pa, makikita mo ang tanong sa wika ng pagsusulit. Ang mismong pagsusulit ay nasa wikang itinakda ng iyong bansa.',
     faq5Question: 'Magkano ito?',
     faq5Answer:
-      'Libre ang pagsasanay, mga flashcard, mga mock exam at ang readiness score. Parating ang bayad na plan na may mas maraming paliwanag ng AI at mensahe sa tutor; hindi pa naitatakda ang presyo nito.',
+      'Libre ang sample ng mga tanong ng bawat bansa, kasama ang pagsasanay, flashcard, readiness score at audio mode. Binubuksan ng Pro, buwanan o taunan, ang lahat ng tanong sa lahat ng bansa at nagdaragdag ng mas maraming tulong ng AI. Ang Country Pass ay isang bayad na nagbubukas ng isang bansa habambuhay.',
     faq6Question: 'Wala sa listahan ang bansa ko. Idaragdag ba ninyo ito?',
     faq6Answer:
       'Pinagsisikapan naming masakop ang bawat bansang may citizenship test. Idinaragdag namin ang bawat isa kapag nasuri na ang format ng pagsusulit at mga materyales sa pag-aaral nito laban sa mga opisyal na pinagmulan.',
@@ -426,6 +420,48 @@ export const tl: Messages = {
     startInterview: 'Simulan ang mock interview',
     interviewIntro:
       'Itinatanong nang malakas ang mga tanong, gaya ng sa totoong pagsusulit. Sumagot nang malakas, sa wika ng pagsusulit.',
+  },
+
+  plans: {
+    title: 'Mga plan',
+    metaTitle: 'Mga plan | Oathly',
+    yourPlan: 'Ang plan mo',
+    free: 'Libre',
+    pro: 'Pro',
+    countryPass: 'Country Pass',
+    freeSummary:
+      'Sample na {count} tanong mula sa bawat bansa, may pagsasanay, flashcard, readiness score at audio mode.',
+    proSummary:
+      'Lahat ng tanong sa lahat ng bansa, buong mock exam at mock interview, at mas maraming tulong ng AI.',
+    passSummary:
+      'Lahat ng tanong para sa isang bansa, kasama ang buong mock exam nito. Isang bayad lang, sa iyo na habambuhay.',
+    proNote: 'Buwanan o taunan. Kanselahin anumang oras.',
+    passNote: 'Isang bayad lang. Walang subscription.',
+    perMonth: '{price} bawat buwan',
+    perYear: '{price} bawat taon',
+    once: '{price}, isang beses lang',
+    getMonthly: 'Kunin ang Pro, buwanan',
+    getYearly: 'Kunin ang Pro, taunan',
+    getPass: 'Kunin ang pass para sa {country}',
+    onPro: 'May Pro ka.',
+    renewsOn: 'Magre-renew ito sa {date}.',
+    endsOn: 'Matatapos ito sa {date} at hindi na magre-renew.',
+    passFor: 'Country Pass: {country}',
+    manage: 'Pamahalaan ang billing',
+    manageInStore: 'Binili ang subscription na ito sa {store}. Doon ito palitan o kanselahin.',
+    boughtOnWeb:
+      'Binili ang subscription na ito sa website ng Oathly. Doon ito palitan o kanselahin.',
+    unavailable: 'Hindi pa mabibili ang mga plan dito.',
+    thanks: 'Salamat. Lalabas dito ang plan mo sa ilang sandali.',
+    freeLimit: 'Kasama sa Libreng plan ang {available} sa {total} tanong.',
+    seePlans: 'Tingnan ang mga plan',
+    examLocked:
+      'Kailangan ng pagsusulit na ito ng mas maraming tanong kaysa sa kasama sa Libreng plan.',
+    terms:
+      'Nagre-renew ang Pro hanggang kanselahin mo. Kapag kinansela mo, mananatili ang Pro hanggang sa katapusan ng panahong nabayaran mo na.',
+    restore: 'I-restore ang mga binili',
+    purchaseFailed: 'Hindi natuloy ang pagbili.',
+    notInThisBuild: 'Hindi available ang pagbili sa build na ito ng app.',
   },
 
   offline: {

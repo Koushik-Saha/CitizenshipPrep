@@ -100,16 +100,10 @@ export const es: Messages = {
 
     pricingTitle: 'Precios',
     pricingIntro:
-      'Estudiar es gratis. Un plan de pago añadirá más ayuda de IA para quienes la usen mucho.',
+      'Empieza gratis con una muestra de las preguntas de cada país. Pro lo abre todo; un Pase de país abre un país para siempre.',
     planFree: 'Gratis',
     planFreeNote: 'Sin tarjeta.',
-    planFreeItem1: 'Práctica, tarjetas y simulacros sin límite',
-    planFreeItem2: 'Puntuación de preparación y sugerencias de estudio',
     planAiAllowance: '{explanations} explicaciones y {messages} mensajes al tutor al día',
-    planFreeItem4: 'Todos los países e idiomas de estudio',
-    planPremium: 'Premium',
-    planPremiumNote: 'Precio por anunciar.',
-    planPremiumItem1: 'Todo lo del plan gratuito',
     planGroups:
       'Escuelas, bibliotecas y servicios de acogida: los planes para grupos llegarán pronto.',
 
@@ -132,7 +126,7 @@ export const es: Messages = {
       'Sí. Puedes elegir entre {count} idiomas. Las traducciones se revisan antes de aparecer; hasta entonces ves la pregunta en el idioma del examen. El examen se hace en el idioma que establece tu país.',
     faq5Question: '¿Cuánto cuesta?',
     faq5Answer:
-      'La práctica, las tarjetas, los simulacros y la puntuación de preparación son gratis. Habrá un plan de pago con más explicaciones de IA y mensajes al tutor; su precio aún no está fijado.',
+      'Una muestra de las preguntas de cada país es gratis, con práctica, tarjetas, la puntuación de preparación y el modo audio. Pro, mensual o anual, abre todas las preguntas de todos los países y añade más ayuda de IA. Un Pase de país es un solo pago que abre un país para siempre.',
     faq6Question: 'Mi país no aparece. ¿Lo añadirán?',
     faq6Answer:
       'Trabajamos para cubrir todos los países que tienen examen de ciudadanía. Añadimos cada uno cuando el formato de su examen y su material de estudio se han contrastado con las fuentes oficiales.',
@@ -420,6 +414,46 @@ export const es: Messages = {
     startInterview: 'Empezar la entrevista de práctica',
     interviewIntro:
       'Las preguntas se hacen en voz alta, como en el examen real. Responde en voz alta, en el idioma del examen.',
+  },
+
+  plans: {
+    title: 'Planes',
+    metaTitle: 'Planes | Oathly',
+    yourPlan: 'Tu plan',
+    free: 'Gratis',
+    pro: 'Pro',
+    countryPass: 'Pase de país',
+    freeSummary:
+      'Una muestra de {count} preguntas de cada país, con práctica, tarjetas, la puntuación de preparación y el modo audio.',
+    proSummary:
+      'Todas las preguntas de todos los países, simulacros de examen y de entrevista completos, y más ayuda de IA.',
+    passSummary:
+      'Todas las preguntas de un país, con sus simulacros de examen completos. Un solo pago, tuyo para siempre.',
+    proNote: 'Mensual o anual. Cancela cuando quieras.',
+    passNote: 'Un solo pago. Sin suscripción.',
+    perMonth: '{price} al mes',
+    perYear: '{price} al año',
+    once: '{price}, una sola vez',
+    getMonthly: 'Obtener Pro mensual',
+    getYearly: 'Obtener Pro anual',
+    getPass: 'Obtener el pase de {country}',
+    onPro: 'Tienes Pro.',
+    renewsOn: 'Se renueva el {date}.',
+    endsOn: 'Termina el {date} y no se renovará.',
+    passFor: 'Pase de país: {country}',
+    manage: 'Gestionar la facturación',
+    manageInStore: 'Esta suscripción se compró en {store}. Cámbiala o cancélala allí.',
+    boughtOnWeb: 'Esta suscripción se compró en el sitio web de Oathly. Cámbiala o cancélala allí.',
+    unavailable: 'Todavía no se pueden comprar planes aquí.',
+    thanks: 'Gracias. Tu plan aparecerá aquí en un momento.',
+    freeLimit: 'El plan Gratis incluye {available} de {total} preguntas.',
+    seePlans: 'Ver planes',
+    examLocked: 'Este examen necesita más preguntas de las que incluye el plan Gratis.',
+    terms:
+      'Pro se renueva hasta que canceles. Si cancelas, conservas Pro hasta el final del periodo que has pagado.',
+    restore: 'Restaurar compras',
+    purchaseFailed: 'La compra no se ha completado.',
+    notInThisBuild: 'Las compras no están disponibles en esta versión de la app.',
   },
 
   offline: {

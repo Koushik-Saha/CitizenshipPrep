@@ -13,6 +13,7 @@ const groups = [
   'explain',
   'tutor',
   'audio',
+  'plans',
 ] as const;
 
 export default async function StudyLayout({ children, params }: LayoutProps<'/[locale]/study'>) {
