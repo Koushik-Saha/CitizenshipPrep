@@ -14,6 +14,7 @@ const nullableString = z.nullable(z.string());
 
 export const countryFactsSchema = z.object({
   isoCode: z.string(),
+  slug: z.string(),
   name: z.string(),
   examLanguages: z.array(z.string()),
   latitude: nullableNumber,

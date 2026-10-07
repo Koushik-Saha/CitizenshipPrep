@@ -1,7 +1,9 @@
 import { timingSafeEqual } from 'node:crypto';
 
 import { parseCountryCode } from '@oathly/api/country-search';
+import { listTestPages } from '@oathly/api/server';
 
+import { getDb } from '@/lib/db';
 import { revalidatePublicContent } from '@/lib/revalidate';
 
 // POST /api/revalidate  (Authorization: Bearer <REVALIDATE_SECRET>)
@@ -42,5 +44,10 @@ export async function POST(request: Request) {
       }
     }
   }
-  return Response.json({ revalidated: revalidatePublicContent(country ?? undefined) });
+  // The pages are addressed by the country's slug. A code Oathly has no
+  // country for refreshes everything, as no code does.
+  const slug = country
+    ? (await listTestPages(getDb())).find((page) => page.isoCode === country)?.slug
+    : undefined;
+  return Response.json({ revalidated: revalidatePublicContent(slug) });
 }

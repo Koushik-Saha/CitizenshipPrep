@@ -94,6 +94,12 @@ jobs:
       # (migrated and seeded) before the build.
       - run: pnpm db:start
 
+      # The seed's questions are unreviewed, so it has nothing published. The
+      # made-up country from the browser checks has: with it the pages measured
+      # below carry sample questions and topic pages, as the real ones will.
+      - name: Add a country with published questions
+        run: docker compose -f db/local/compose.yaml exec -T db psql -v ON_ERROR_STOP=1 -q -U postgres -d oathly < apps/web/e2e/fixture.sql
+
       - run: pnpm --filter @oathly/web build
 
       - name: Start the production server

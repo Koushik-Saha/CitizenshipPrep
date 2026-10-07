@@ -501,6 +501,7 @@ export type Database = {
           latitude: number | null;
           longitude: number | null;
           name: string;
+          slug: string;
           updated_at: string;
         };
         Insert: {
@@ -511,6 +512,7 @@ export type Database = {
           latitude?: number | null;
           longitude?: number | null;
           name: string;
+          slug: string;
           updated_at?: string;
         };
         Update: {
@@ -521,6 +523,7 @@ export type Database = {
           latitude?: number | null;
           longitude?: number | null;
           name?: string;
+          slug?: string;
           updated_at?: string;
         };
         Relationships: [];

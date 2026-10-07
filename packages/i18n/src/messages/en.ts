@@ -158,8 +158,6 @@ export const en = {
     topicMetaDescription:
       'Practice questions on {topic} for the {country} citizenship test, each checked against the official guide.',
     topicLead: 'Practice questions for the {country} citizenship test.',
-    topicEmpty:
-      'The questions for this topic are being checked against the official guide. They appear here once a reviewer has approved them.',
     showAnswer: 'Show the answer',
     answerLabel: 'Answer:',
     fromGuide: 'From the official guide: “{quote}”',
@@ -168,6 +166,56 @@ export const en = {
       '{count, plural, one {# more {topic} question, with explanations and spaced review, is waiting in Oathly.} other {# more {topic} questions, with explanations and spaced review, are waiting in Oathly.}}',
     practiseInApp: 'Practise with explanations, spaced review and mock exams in Oathly.',
     otherTopics: 'Other topics',
+  },
+
+  seo: {
+    // The public test pages: /<country>/citizenship-test and its topics.
+    lastChecked: 'Last checked against the official sources:',
+    beingChecked: 'Being checked against the official sources.',
+    factType: 'Type',
+    typeWritten: 'Written test',
+    typeOral: 'Oral test',
+    typeInterview: 'Interview',
+    typeLanguage: 'Language test',
+    factQuestions: 'Questions',
+    factPassMark: 'Pass mark',
+    passMarkOf: '{pass} of {count} ({percent}%)',
+    factTime: 'Time limit',
+    factPool: 'Question pool',
+    factNotes: 'Good to know',
+    samplesTitle: '{count, plural, one {# free sample question} other {# free sample questions}}',
+    samplesIntro: 'Answer each one in your head, then open the answer to see why it is right.',
+    originalWording: 'As the test words it:',
+    topicTitle: '{topic}: {country} citizenship test questions',
+    allFacts: 'All the facts about the {country} citizenship test',
+    faqTitle: 'Common questions',
+    faqCountQ: 'How many questions are on the {country} citizenship test?',
+    faqCountA:
+      '{count, plural, one {The {exam} has # question.} other {The {exam} has # questions.}}',
+    faqCountPoolA:
+      '{count, plural, one {The {exam} has # question, drawn from a pool of {pool}.} other {The {exam} has # questions, drawn from a pool of {pool}.}}',
+    faqPassQ: 'What score do you need to pass the {country} citizenship test?',
+    faqPassA: 'To pass the {exam} you need {pass} correct answers out of {count} ({percent}%).',
+    faqPassOnlyA:
+      '{pass, plural, one {To pass the {exam} you need # correct answer.} other {To pass the {exam} you need # correct answers.}}',
+    faqTimeQ: 'How long does the {country} citizenship test take?',
+    faqTimeA:
+      '{minutes, plural, one {You have # minute for the {exam}.} other {You have # minutes for the {exam}.}}',
+    faqLanguageQ: 'What language is the {country} citizenship test in?',
+    faqLanguageA: 'The test is taken in {languages}.',
+    faqTopicsQ: 'What does the {country} citizenship test cover?',
+    faqTopicsA:
+      '{count, plural, one {Oathly’s practice questions cover # topic: {topics}.} other {Oathly’s practice questions cover # topics: {topics}.}}',
+    faqSourceQ: 'Where do these practice questions come from?',
+    faqSourceA:
+      'Each question is written from the official study material, checked against it by a reviewer, and linked to its source. They are for practice: the questions you are asked on the day may be worded differently.',
+    faqOfficialQ: 'Is Oathly an official government website?',
+    faqOfficialA:
+      'No. Oathly is an independent study app and is not affiliated with any government. To book the test or check the rules that apply to you, use the official website.',
+    faqTopicQ: 'How can I practise {topic} questions for the {country} citizenship test?',
+    faqTopicA:
+      '{count, plural, one {Oathly has # checked practice question on {topic}. The sample on this page is free, with the answer explained.} other {Oathly has # checked practice questions on {topic}. The sample on this page is free, with the answers explained; the rest are in the app.}}',
+    ogAlt: '{country} citizenship test: practice questions on Oathly',
   },
 
   auth: {

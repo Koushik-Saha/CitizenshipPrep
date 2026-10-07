@@ -7,6 +7,7 @@ import {
   localCountryName,
   parseCountryCode,
   searchCountries,
+  testPath,
   type CountryFacts,
 } from './countries';
 
@@ -69,6 +70,7 @@ describe('describeExam', () => {
 describe('countryHighlights', () => {
   const canada: CountryFacts = {
     isoCode: 'CA',
+    slug: 'canada',
     name: 'Canada',
     examLanguages: ['en', 'fr'],
     latitude: 56.1,
@@ -126,5 +128,12 @@ describe('countryHighlights', () => {
       'Taken in English or French',
       '40 checked practice questions',
     ]);
+  });
+});
+
+describe('testPath', () => {
+  it('addresses a country’s test page and each topic under it', () => {
+    expect(testPath('united-states')).toBe('/united-states/citizenship-test');
+    expect(testPath('canada', 'history')).toBe('/canada/citizenship-test/history');
   });
 });

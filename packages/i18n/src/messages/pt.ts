@@ -155,8 +155,6 @@ export const pt: Messages = {
     topicMetaDescription:
       'Perguntas de prática sobre {topic} para o teste de cidadania ({country}), cada uma conferida com o guia oficial.',
     topicLead: 'Perguntas de prática para o teste de cidadania ({country}).',
-    topicEmpty:
-      'As perguntas deste tema estão sendo conferidas com o guia oficial. Elas aparecem aqui depois que um revisor as aprova.',
     showAnswer: 'Mostrar a resposta',
     answerLabel: 'Resposta:',
     fromGuide: 'Do guia oficial: “{quote}”',
@@ -165,6 +163,57 @@ export const pt: Messages = {
       '{count, plural, one {Mais # pergunta de {topic}, com explicações e revisão espaçada, espera por você no Oathly.} other {Mais # perguntas de {topic}, com explicações e revisão espaçada, esperam por você no Oathly.}}',
     practiseInApp: 'Pratique com explicações, revisão espaçada e simulados no Oathly.',
     otherTopics: 'Outros temas',
+  },
+
+  seo: {
+    lastChecked: 'Última verificação com as fontes oficiais:',
+    beingChecked: 'Em verificação com as fontes oficiais.',
+    factType: 'Tipo',
+    typeWritten: 'Prova escrita',
+    typeOral: 'Prova oral',
+    typeInterview: 'Entrevista',
+    typeLanguage: 'Teste de idioma',
+    factQuestions: 'Perguntas',
+    factPassMark: 'Nota para passar',
+    passMarkOf: '{pass} de {count} ({percent}%)',
+    factTime: 'Tempo limite',
+    factPool: 'Banco de perguntas',
+    factNotes: 'Bom saber',
+    samplesTitle:
+      '{count, plural, one {# pergunta de exemplo grátis} other {# perguntas de exemplo grátis}}',
+    samplesIntro:
+      'Responda a cada uma mentalmente e depois abra a resposta para ver por que está certa.',
+    originalWording: 'Como o teste pergunta:',
+    topicTitle: '{topic}: perguntas do teste de cidadania ({country})',
+    allFacts: 'Todos os dados do teste de cidadania ({country})',
+    faqTitle: 'Perguntas frequentes',
+    faqCountQ: 'Quantas perguntas tem o teste de cidadania ({country})?',
+    faqCountA: '{count, plural, one {{exam}: # pergunta.} other {{exam}: # perguntas.}}',
+    faqCountPoolA:
+      '{count, plural, one {{exam}: # pergunta, tirada de um banco de {pool}.} other {{exam}: # perguntas, tiradas de um banco de {pool}.}}',
+    faqPassQ: 'Que pontuação é preciso para passar no teste de cidadania ({country})?',
+    faqPassA:
+      '{exam}: para passar, você precisa de {pass} respostas certas em {count} ({percent}%).',
+    faqPassOnlyA:
+      '{pass, plural, one {{exam}: para passar, você precisa de # resposta certa.} other {{exam}: para passar, você precisa de # respostas certas.}}',
+    faqTimeQ: 'Quanto tempo dura o teste de cidadania ({country})?',
+    faqTimeA:
+      '{minutes, plural, one {{exam}: você tem # minuto.} other {{exam}: você tem # minutos.}}',
+    faqLanguageQ: 'Em que idioma é o teste de cidadania ({country})?',
+    faqLanguageA: 'O teste é feito em {languages}.',
+    faqTopicsQ: 'O que cai no teste de cidadania ({country})?',
+    faqTopicsA:
+      '{count, plural, one {As perguntas de prática do Oathly cobrem # tema: {topics}.} other {As perguntas de prática do Oathly cobrem # temas: {topics}.}}',
+    faqSourceQ: 'De onde vêm estas perguntas de prática?',
+    faqSourceA:
+      'Cada pergunta é escrita a partir do material de estudo oficial, conferida com ele por um revisor e ligada à sua fonte. Servem para praticar: as perguntas do dia do teste podem vir com outras palavras.',
+    faqOfficialQ: 'O Oathly é um site oficial do governo?',
+    faqOfficialA:
+      'Não. O Oathly é um aplicativo de estudo independente e não é afiliado a nenhum governo. Para agendar o teste ou conferir as regras que valem para você, use o site oficial.',
+    faqTopicQ: 'Como praticar perguntas de {topic} para o teste de cidadania ({country})?',
+    faqTopicA:
+      '{count, plural, one {O Oathly tem # pergunta de prática conferida sobre {topic}. O exemplo desta página é grátis, com a resposta explicada.} other {O Oathly tem # perguntas de prática conferidas sobre {topic}. Os exemplos desta página são grátis, com as respostas explicadas; o restante está no aplicativo.}}',
+    ogAlt: 'Teste de cidadania ({country}): perguntas de prática no Oathly',
   },
 
   auth: {

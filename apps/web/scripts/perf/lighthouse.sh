@@ -4,9 +4,11 @@
 #
 #   scripts/perf/lighthouse.sh mobile|desktop [base-url]
 #
-# The pages: the landing page, the country list, one country, one of its
-# topics, and sign-in. The country and topic are whichever the country list
-# shows first, so nothing here names a country.
+# The pages: the landing page, the country list, one country's test page, one
+# of its topics, and sign-in. The country is the first in the sitemap that has
+# a topic page (a topic gets one with its first published question), or
+# failing that the first country, so nothing here names a country. Each page
+# is scored for performance and for SEO, which has to be 100.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 
@@ -14,9 +16,16 @@ FORM_FACTOR="${1:?usage: lighthouse.sh mobile|desktop [base-url]}"
 BASE="${2:-http://localhost:3000}"
 CONFIG="lighthouserc.${FORM_FACTOR}.json"
 
-country="$(curl -fsS "$BASE/countries" | grep -oE 'href="/countries/[a-z]{2}"' | head -1 | cut -d'"' -f2)"
-[ -n "$country" ] || { echo "No country pages found at $BASE/countries: is the database seeded?" >&2; exit 1; }
-topic="$(curl -fsS "$BASE$country" | grep -oE "href=\"$country/[a-z0-9-]+\"" | head -1 | cut -d'"' -f2)"
+# The sitemap's paths, whatever origin the site was built for. English
+# addresses only: "/canada/citizenship-test", not "/es/canada/...".
+pages="$(curl -fsS "$BASE/sitemap.xml" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g; s#^https?://[^/]+##')"
+topic="$(grep -E '^/[a-z0-9-]{4,}/citizenship-test/[a-z0-9-]+$' <<< "$pages" | head -1 || true)"
+if [ -n "$topic" ]; then
+  country="${topic%/*}"
+else
+  country="$(grep -E '^/[a-z0-9-]{4,}/citizenship-test$' <<< "$pages" | head -1 || true)"
+fi
+[ -n "$country" ] || { echo "No country pages in $BASE/sitemap.xml: is the database seeded?" >&2; exit 1; }
 
 urls=("--url=$BASE/" "--url=$BASE/countries" "--url=$BASE$country" "--url=$BASE/sign-in")
 [ -n "$topic" ] && urls+=("--url=$BASE$topic")

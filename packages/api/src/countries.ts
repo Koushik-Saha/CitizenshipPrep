@@ -19,6 +19,8 @@ export interface ExamFacts {
 
 export interface CountryFacts {
   isoCode: string;
+  /** The country in a public address: "united-states". */
+  slug: string;
   name: string;
   examLanguages: string[];
   /** A point inside the country for the globe; null when not set. */
@@ -36,36 +38,68 @@ export interface TopicSummary {
   publishedQuestions: number;
 }
 
-/** Everything the public page for one country's exam shows. */
-export interface CountryGuide extends CountryFacts {
-  topics: TopicSummary[];
+/** An exam format with everything the country's public page says about it. */
+export interface ExamDetails extends ExamFacts {
+  /** How many questions the test's are drawn from, where the source says. */
+  questionPoolSize: number | null;
+  /** Rules the numbers cannot express, as the source words them. */
+  notes: string | null;
 }
 
-/** A published question as the public topic page shows it, in the exam's language. */
-export interface GuideQuestion {
-  id: string;
+/** One wording of a question: the exam's own, or a reviewed translation. */
+export interface GuideWording {
   locale: string;
   text: string;
   options: { key: string; text: string }[];
+}
+
+/** A published question as a public page shows it. */
+export interface GuideQuestion extends GuideWording {
+  id: string;
+  topic: { slug: string; name: string };
   correctKeys: string[];
   explanation: string | null;
+  /** The exam's own wording, when the question is shown in translation. */
+  original: GuideWording | null;
   sourceUrl: string;
   sourceQuote: string | null;
   lastVerifiedAt: string;
 }
 
+/** Everything the public page for one country's test shows. */
+export interface TestGuide extends Omit<CountryFacts, 'exams' | 'latitude' | 'longitude'> {
+  exams: ExamDetails[];
+  topics: TopicSummary[];
+  /** A sample of the published questions, spread across the topics. */
+  questions: GuideQuestion[];
+  /** When a fact or question on the page was last checked against its source. */
+  lastVerifiedAt: string | null;
+}
+
+/** Everything the public page for one topic of a country's test shows. */
 export interface TopicGuide {
-  countryCode: string;
-  countryName: string;
+  country: Pick<CountryFacts, 'isoCode' | 'slug' | 'name' | 'examLanguages'>;
+  exams: ExamDetails[];
   topic: TopicSummary;
-  /** Other topics of the same exam, for navigation. */
+  /** The exam's other topics that have a page, for navigation. */
   otherTopics: TopicSummary[];
   /** A sample of the topic's published questions. */
   questions: GuideQuestion[];
+  /** When a question in the topic was last checked against its source. */
+  lastVerifiedAt: string | null;
 }
 
-/** URL segment for a country: its ISO code in lower case. */
-export const countrySlug = (isoCode: string) => isoCode.toLowerCase();
+/** A country's public pages: its own and one per topic with published questions. */
+export interface TestPages {
+  isoCode: string;
+  slug: string;
+  lastVerifiedAt: string | null;
+  topics: { slug: string; lastVerifiedAt: string | null }[];
+}
+
+/** The public page for a country's test, and for one of its topics, without a language prefix. */
+export const testPath = (countrySlug: string, topicSlug?: string) =>
+  `/${countrySlug}/citizenship-test${topicSlug ? `/${topicSlug}` : ''}`;
 
 /** "20 questions, 12 to pass, 45 minutes", leaving out what the format does not fix. */
 export function describeExam(

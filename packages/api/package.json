@@ -21,6 +21,7 @@
     "./pack": "./src/pack.ts",
     "./queries": "./src/queries.ts",
     "./schemas": "./src/schemas.ts",
+    "./seo": "./src/seo.ts",
     "./server": "./src/server/index.ts",
     "./study": "./src/study.ts"
   },

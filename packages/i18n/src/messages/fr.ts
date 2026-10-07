@@ -157,8 +157,6 @@ export const fr: Messages = {
     topicMetaDescription:
       'Questions d’entraînement sur {topic} pour le test de citoyenneté ({country}), chacune vérifiée à partir du guide officiel.',
     topicLead: 'Questions d’entraînement pour le test de citoyenneté ({country}).',
-    topicEmpty:
-      'Les questions de ce sujet sont en cours de vérification à partir du guide officiel. Elles apparaîtront ici une fois validées par un relecteur.',
     showAnswer: 'Afficher la réponse',
     answerLabel: 'Réponse :',
     fromGuide: 'D’après le guide officiel : « {quote} »',
@@ -168,6 +166,56 @@ export const fr: Messages = {
     practiseInApp:
       'Entraînez-vous avec des explications, la révision espacée et des examens blancs dans Oathly.',
     otherTopics: 'Autres sujets',
+  },
+
+  seo: {
+    lastChecked: 'Dernière vérification auprès des sources officielles :',
+    beingChecked: 'En cours de vérification auprès des sources officielles.',
+    factType: 'Type',
+    typeWritten: 'Épreuve écrite',
+    typeOral: 'Épreuve orale',
+    typeInterview: 'Entretien',
+    typeLanguage: 'Test de langue',
+    factQuestions: 'Questions',
+    factPassMark: 'Seuil de réussite',
+    passMarkOf: '{pass} sur {count} ({percent} %)',
+    factTime: 'Durée',
+    factPool: 'Banque de questions',
+    factNotes: 'Bon à savoir',
+    samplesTitle:
+      '{count, plural, one {# question d’exemple gratuite} other {# questions d’exemple gratuites}}',
+    samplesIntro:
+      'Répondez à chacune dans votre tête, puis ouvrez la réponse pour voir pourquoi elle est juste.',
+    originalWording: 'Telle que le test la formule :',
+    topicTitle: '{topic} : questions du test de citoyenneté ({country})',
+    allFacts: 'Tout savoir sur le test de citoyenneté ({country})',
+    faqTitle: 'Questions fréquentes',
+    faqCountQ: 'Combien de questions compte le test de citoyenneté ({country}) ?',
+    faqCountA: '{count, plural, one {{exam} : # question.} other {{exam} : # questions.}}',
+    faqCountPoolA:
+      '{count, plural, one {{exam} : # question, tirée d’une banque de {pool}.} other {{exam} : # questions, tirées d’une banque de {pool}.}}',
+    faqPassQ: 'Quel score faut-il pour réussir le test de citoyenneté ({country}) ?',
+    faqPassA: '{exam} : il faut {pass} bonnes réponses sur {count} ({percent} %) pour réussir.',
+    faqPassOnlyA:
+      '{pass, plural, one {{exam} : il faut # bonne réponse pour réussir.} other {{exam} : il faut # bonnes réponses pour réussir.}}',
+    faqTimeQ: 'Combien de temps dure le test de citoyenneté ({country}) ?',
+    faqTimeA:
+      '{minutes, plural, one {{exam} : vous disposez de # minute.} other {{exam} : vous disposez de # minutes.}}',
+    faqLanguageQ: 'Dans quelle langue se passe le test de citoyenneté ({country}) ?',
+    faqLanguageA: 'Le test se passe en {languages}.',
+    faqTopicsQ: 'Sur quoi porte le test de citoyenneté ({country}) ?',
+    faqTopicsA:
+      '{count, plural, one {Les questions d’entraînement d’Oathly couvrent # sujet : {topics}.} other {Les questions d’entraînement d’Oathly couvrent # sujets : {topics}.}}',
+    faqSourceQ: 'D’où viennent ces questions d’entraînement ?',
+    faqSourceA:
+      'Chaque question est rédigée à partir du matériel d’étude officiel, vérifiée par un relecteur et reliée à sa source. Elles servent à s’entraîner : les questions posées le jour du test peuvent être formulées autrement.',
+    faqOfficialQ: 'Oathly est-il un site officiel du gouvernement ?',
+    faqOfficialA:
+      'Non. Oathly est une application d’étude indépendante, sans lien avec aucun gouvernement. Pour réserver le test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel.',
+    faqTopicQ: 'Comment s’entraîner aux questions « {topic} » du test de citoyenneté ({country}) ?',
+    faqTopicA:
+      '{count, plural, one {Oathly propose # question d’entraînement vérifiée sur « {topic} ». L’exemple de cette page est gratuit, avec la réponse expliquée.} other {Oathly propose # questions d’entraînement vérifiées sur « {topic} ». Les exemples de cette page sont gratuits, avec les réponses expliquées ; les autres sont dans l’application.}}',
+    ogAlt: 'Test de citoyenneté ({country}) : questions d’entraînement sur Oathly',
   },
 
   auth: {

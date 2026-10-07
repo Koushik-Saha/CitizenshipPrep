@@ -1,7 +1,7 @@
 // The landing page below the hero. Server Components: no client JavaScript.
 
 import {
-  countrySlug,
+  testPath,
   describeExam,
   localCountryName,
   type CountryFacts,
@@ -125,7 +125,7 @@ export function CountryCards({
           <Heading className="font-display flex items-center gap-2.5 text-xl font-medium">
             <span className="bg-accent size-2.5 shrink-0 rounded-full" aria-hidden="true" />
             <Link
-              href={localizePath(t.locale, `/countries/${countrySlug(country.isoCode)}`)}
+              href={localizePath(t.locale, testPath(country.slug))}
               className={`${focusRing} rounded-xs underline-offset-4 hover:underline`}
             >
               {localCountryName(country, t)}

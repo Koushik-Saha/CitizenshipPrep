@@ -155,8 +155,6 @@ export const es: Messages = {
     topicMetaDescription:
       'Preguntas de práctica sobre {topic} para el examen de ciudadanía de {country}, cada una contrastada con la guía oficial.',
     topicLead: 'Preguntas de práctica para el examen de ciudadanía de {country}.',
-    topicEmpty:
-      'Las preguntas de este tema se están contrastando con la guía oficial. Aparecerán aquí cuando un revisor las haya aprobado.',
     showAnswer: 'Mostrar la respuesta',
     answerLabel: 'Respuesta:',
     fromGuide: 'De la guía oficial: «{quote}»',
@@ -165,6 +163,57 @@ export const es: Messages = {
       '{count, plural, one {# pregunta más de {topic}, con explicaciones y repaso espaciado, te espera en Oathly.} other {# preguntas más de {topic}, con explicaciones y repaso espaciado, te esperan en Oathly.}}',
     practiseInApp: 'Practica con explicaciones, repaso espaciado y simulacros en Oathly.',
     otherTopics: 'Otros temas',
+  },
+
+  seo: {
+    lastChecked: 'Última revisión con las fuentes oficiales:',
+    beingChecked: 'En revisión con las fuentes oficiales.',
+    factType: 'Tipo',
+    typeWritten: 'Examen escrito',
+    typeOral: 'Examen oral',
+    typeInterview: 'Entrevista',
+    typeLanguage: 'Examen de idioma',
+    factQuestions: 'Preguntas',
+    factPassMark: 'Nota para aprobar',
+    passMarkOf: '{pass} de {count} ({percent} %)',
+    factTime: 'Tiempo límite',
+    factPool: 'Banco de preguntas',
+    factNotes: 'Conviene saber',
+    samplesTitle:
+      '{count, plural, one {# pregunta de muestra gratis} other {# preguntas de muestra gratis}}',
+    samplesIntro:
+      'Responde cada una mentalmente y luego abre la respuesta para ver por qué es correcta.',
+    originalWording: 'Así lo pregunta el examen:',
+    topicTitle: '{topic}: preguntas del examen de ciudadanía de {country}',
+    allFacts: 'Todos los datos del examen de ciudadanía de {country}',
+    faqTitle: 'Preguntas frecuentes',
+    faqCountQ: '¿Cuántas preguntas tiene el examen de ciudadanía de {country}?',
+    faqCountA: '{count, plural, one {{exam} tiene # pregunta.} other {{exam} tiene # preguntas.}}',
+    faqCountPoolA:
+      '{count, plural, one {{exam} tiene # pregunta, tomada de un banco de {pool}.} other {{exam} tiene # preguntas, tomadas de un banco de {pool}.}}',
+    faqPassQ: '¿Qué puntuación se necesita para aprobar el examen de ciudadanía de {country}?',
+    faqPassA: 'Para aprobar {exam} necesitas {pass} respuestas correctas de {count} ({percent} %).',
+    faqPassOnlyA:
+      '{pass, plural, one {Para aprobar {exam} necesitas # respuesta correcta.} other {Para aprobar {exam} necesitas # respuestas correctas.}}',
+    faqTimeQ: '¿Cuánto dura el examen de ciudadanía de {country}?',
+    faqTimeA:
+      '{minutes, plural, one {Tienes # minuto para {exam}.} other {Tienes # minutos para {exam}.}}',
+    faqLanguageQ: '¿En qué idioma es el examen de ciudadanía de {country}?',
+    faqLanguageA: 'El examen se hace en {languages}.',
+    faqTopicsQ: '¿Qué temas incluye el examen de ciudadanía de {country}?',
+    faqTopicsA:
+      '{count, plural, one {Las preguntas de práctica de Oathly cubren # tema: {topics}.} other {Las preguntas de práctica de Oathly cubren # temas: {topics}.}}',
+    faqSourceQ: '¿De dónde salen estas preguntas de práctica?',
+    faqSourceA:
+      'Cada pregunta se redacta a partir del material de estudio oficial, un revisor la contrasta con él y enlaza a su fuente. Son para practicar: las preguntas del día del examen pueden estar formuladas de otra manera.',
+    faqOfficialQ: '¿Es Oathly un sitio web oficial del gobierno?',
+    faqOfficialA:
+      'No. Oathly es una aplicación de estudio independiente y no está afiliada a ningún gobierno. Para reservar el examen o consultar las normas que se te aplican, usa el sitio web oficial.',
+    faqTopicQ:
+      '¿Cómo puedo practicar preguntas de {topic} para el examen de ciudadanía de {country}?',
+    faqTopicA:
+      '{count, plural, one {Oathly tiene # pregunta de práctica revisada sobre {topic}. La muestra de esta página es gratis, con la respuesta explicada.} other {Oathly tiene # preguntas de práctica revisadas sobre {topic}. La muestra de esta página es gratis, con las respuestas explicadas; el resto está en la aplicación.}}',
+    ogAlt: 'Examen de ciudadanía de {country}: preguntas de práctica en Oathly',
   },
 
   auth: {

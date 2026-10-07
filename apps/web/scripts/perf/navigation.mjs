@@ -18,15 +18,25 @@ const base = process.argv[2] ?? 'http://localhost:3000';
 const budget = Number(process.env.NAV_BUDGET_MS ?? 100);
 const RUNS = 5;
 
-/** Finds a country and one of its topics from the pages themselves: nothing here names a country. */
-async function discover(page) {
-  await page.goto(`${base}/countries`, { waitUntil: 'load' });
-  const country = await page.locator('main a[href^="/countries/"]').first().getAttribute('href');
+/**
+ * Finds a country's test page and one of its topics from the sitemap: nothing
+ * here names a country. A topic gets a page with its first published
+ * question, so the country is the first that has one; a database with no
+ * published questions (the seed alone) has no topic pages to visit.
+ */
+async function discover() {
+  const sitemap = await (await fetch(`${base}/sitemap.xml`)).text();
+  // The sitemap's paths, whatever origin the site was built for. English
+  // addresses only: "/canada/citizenship-test", not "/es/canada/...".
+  const paths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+    (match) => new URL(match[1]).pathname,
+  );
+  const topic = paths.find((path) => /^\/[a-z0-9-]{4,}\/citizenship-test\/[a-z0-9-]+$/.test(path));
+  const country = topic
+    ? topic.slice(0, topic.lastIndexOf('/'))
+    : paths.find((path) => /^\/[a-z0-9-]{4,}\/citizenship-test$/.test(path));
   if (!country) throw new Error('No country pages to test: is the database seeded?');
-  await page.goto(base + country, { waitUntil: 'load' });
-  const topic = await page.locator(`main a[href^="${country}/"]`).first().getAttribute('href');
-  if (!topic) throw new Error(`No topic pages under ${country}.`);
-  return { country, topic };
+  return { country, topic: topic ?? null };
 }
 
 async function measure(page, { from, link }) {
@@ -75,14 +85,21 @@ async function measure(page, { from, link }) {
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-const { country, topic } = await discover(page);
+const { country, topic } = await discover();
 const routes = [
   { name: `/ -> ${country}`, from: '/', link: `a[href="${country}"]` },
-  { name: `${country} -> ${topic}`, from: country, link: `a[href="${topic}"]` },
-  { name: `${topic} -> /countries`, from: topic, link: 'main a[href="/countries"]' },
+  { name: `${country} -> /countries`, from: country, link: 'main a[href="/countries"]' },
   { name: '/ -> /sign-in', from: '/', link: 'header a[href="/sign-in"]' },
   { name: '/countries -> /', from: '/countries', link: 'header a[href="/"]' },
 ];
+if (topic) {
+  routes.push(
+    { name: `${country} -> ${topic}`, from: country, link: `a[href="${topic}"]` },
+    { name: `${topic} -> ${country}`, from: topic, link: `main nav a[href="${country}"]` },
+  );
+} else {
+  console.log('No topic pages yet (no published questions): skipping the topic routes.');
+}
 
 let failed = false;
 for (const route of routes) {

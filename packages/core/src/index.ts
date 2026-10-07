@@ -16,6 +16,7 @@ export * from './progress';
 export * from './random';
 export * from './readiness';
 export * from './scoring';
+export * from './seo';
 export * from './session-run';
 export * from './speech';
 export * from './types';

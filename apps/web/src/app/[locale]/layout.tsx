@@ -6,6 +6,7 @@ import { I18nProvider } from '@/components/i18n/locale';
 import { RouteFade } from '@/components/route-fade';
 import { fontVariables } from '@/lib/fonts';
 import { clientMessages, getT, localeParams } from '@/lib/i18n';
+import { siteUrl } from '@/lib/site';
 
 import '../globals.css';
 
@@ -17,8 +18,9 @@ export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Pr
   return {
     title: 'Oathly',
     description: t('common.notAffiliated'),
-    // Makes the per-language links in each page's <head> absolute.
-    metadataBase: process.env.SITE_URL ? new URL(process.env.SITE_URL) : undefined,
+    // Makes the links in each page's <head> absolute: the canonical address,
+    // its other languages, the preview image.
+    metadataBase: new URL(siteUrl()),
   };
 }
 

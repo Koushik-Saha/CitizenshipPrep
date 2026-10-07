@@ -158,8 +158,6 @@ export const tl: Messages = {
     topicMetaDescription:
       'Mga tanong sa pagsasanay tungkol sa {topic} para sa citizenship test ng {country}, bawat isa ay sinuri laban sa opisyal na gabay.',
     topicLead: 'Mga tanong sa pagsasanay para sa citizenship test ng {country}.',
-    topicEmpty:
-      'Sinusuri pa ang mga tanong sa paksang ito laban sa opisyal na gabay. Lalabas ang mga ito rito kapag naaprubahan na ng isang reviewer.',
     showAnswer: 'Ipakita ang sagot',
     answerLabel: 'Sagot:',
     fromGuide: 'Mula sa opisyal na gabay: “{quote}”',
@@ -168,6 +166,57 @@ export const tl: Messages = {
       '{count, plural, one {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Oathly.} other {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Oathly.}}',
     practiseInApp: 'Magsanay nang may mga paliwanag, spaced review at mga mock exam sa Oathly.',
     otherTopics: 'Iba pang paksa',
+  },
+
+  seo: {
+    lastChecked: 'Huling sinuri laban sa mga opisyal na pinagmulan:',
+    beingChecked: 'Sinusuri pa laban sa mga opisyal na pinagmulan.',
+    factType: 'Uri',
+    typeWritten: 'Nakasulat na pagsusulit',
+    typeOral: 'Pasalitang pagsusulit',
+    typeInterview: 'Panayam',
+    typeLanguage: 'Pagsusulit sa wika',
+    factQuestions: 'Mga tanong',
+    factPassMark: 'Pasadong marka',
+    passMarkOf: '{pass} sa {count} ({percent}%)',
+    factTime: 'Takdang oras',
+    factPool: 'Kabuuang listahan ng tanong',
+    factNotes: 'Mabuting malaman',
+    samplesTitle:
+      '{count, plural, one {# libreng halimbawang tanong} other {# libreng halimbawang tanong}}',
+    samplesIntro:
+      'Sagutin muna ang bawat isa sa isip, saka buksan ang sagot para makita kung bakit ito tama.',
+    originalWording: 'Ganito ito sa pagsusulit:',
+    topicTitle: '{topic}: mga tanong sa citizenship test ng {country}',
+    allFacts: 'Lahat ng detalye tungkol sa citizenship test ng {country}',
+    faqTitle: 'Mga madalas itanong',
+    faqCountQ: 'Ilang tanong ang nasa citizenship test ng {country}?',
+    faqCountA: '{count, plural, one {May # tanong ang {exam}.} other {May # tanong ang {exam}.}}',
+    faqCountPoolA:
+      '{count, plural, one {May # tanong ang {exam}, kinuha mula sa listahan ng {pool}.} other {May # tanong ang {exam}, kinuha mula sa listahan ng {pool}.}}',
+    faqPassQ: 'Anong marka ang kailangan para pumasa sa citizenship test ng {country}?',
+    faqPassA: 'Para pumasa sa {exam}, kailangan mo ng {pass} tamang sagot sa {count} ({percent}%).',
+    faqPassOnlyA:
+      '{pass, plural, one {Para pumasa sa {exam}, kailangan mo ng # tamang sagot.} other {Para pumasa sa {exam}, kailangan mo ng # tamang sagot.}}',
+    faqTimeQ: 'Gaano katagal ang citizenship test ng {country}?',
+    faqTimeA:
+      '{minutes, plural, one {May # minuto ka para sa {exam}.} other {May # minuto ka para sa {exam}.}}',
+    faqLanguageQ: 'Sa anong wika ang citizenship test ng {country}?',
+    faqLanguageA: 'Ang pagsusulit ay kinukuha sa {languages}.',
+    faqTopicsQ: 'Ano ang saklaw ng citizenship test ng {country}?',
+    faqTopicsA:
+      '{count, plural, one {Saklaw ng mga tanong sa pagsasanay ng Oathly ang # paksa: {topics}.} other {Saklaw ng mga tanong sa pagsasanay ng Oathly ang # paksa: {topics}.}}',
+    faqSourceQ: 'Saan galing ang mga tanong sa pagsasanay na ito?',
+    faqSourceA:
+      'Bawat tanong ay isinulat mula sa opisyal na materyal sa pag-aaral, sinuri ng tagasuri laban dito, at may link sa pinagmulan. Para ito sa pagsasanay: maaaring iba ang pagkakasabi ng mga tanong sa araw ng pagsusulit.',
+    faqOfficialQ: 'Opisyal na website ba ng gobyerno ang Oathly?',
+    faqOfficialA:
+      'Hindi. Ang Oathly ay malayang app sa pag-aaral at walang kaugnayan sa anumang gobyerno. Para mag-book ng pagsusulit o alamin ang mga patakarang angkop sa iyo, gamitin ang opisyal na website.',
+    faqTopicQ:
+      'Paano ako magsasanay sa mga tanong tungkol sa {topic} para sa citizenship test ng {country}?',
+    faqTopicA:
+      '{count, plural, one {May # nasuring tanong sa pagsasanay ang Oathly tungkol sa {topic}. Libre ang halimbawa sa pahinang ito, may paliwanag ang sagot.} other {May # nasuring tanong sa pagsasanay ang Oathly tungkol sa {topic}. Libre ang mga halimbawa sa pahinang ito, may paliwanag ang mga sagot; nasa app ang iba pa.}}',
+    ogAlt: 'Citizenship test ng {country}: mga tanong sa pagsasanay sa Oathly',
   },
 
   auth: {

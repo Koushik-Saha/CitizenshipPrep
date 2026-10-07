@@ -3,7 +3,7 @@
     "collect": {
       "numberOfRuns": 3,
       "settings": {
-        "onlyCategories": ["performance"],
+        "onlyCategories": ["performance", "seo"],
         "chromeFlags": "--headless=new --no-sandbox --disable-dev-shm-usage"
       }
     },
@@ -38,6 +38,13 @@
               {
                 "maxNumericValue": 600,
                 "aggregationMethod": "optimistic"
+              }
+            ],
+            "categories:seo": [
+              "error",
+              {
+                "minScore": 1,
+                "aggregationMethod": "pessimistic"
               }
             ]
           }
