@@ -1,0 +1,66 @@
+{
+  "iso": "DK",
+  "name": "Denmark",
+  "has_exam": true,
+  "exam_name": "Indfødsretsprøven",
+  "administering_agency": "Styrelsen for International Rekruttering og Integration (SIRI); held by language centres",
+  "format": {
+    "question_count": 45,
+    "pass_mark": 36,
+    "pass_percent": null,
+    "time_limit_minutes": 45,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "35 questions on the learning material, 5 on current affairs of the last half year, 5 on Danish values. Held twice a year. No aids allowed."
+  },
+  "languages": ["da"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Læremateriale til Indfødsretsprøven, og tidligere prøver",
+      "url": "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/forberedelse-til-indfoedsretsproeven/",
+      "publisher": "Styrelsen for International Rekruttering og Integration",
+      "kind": "study_guide",
+      "language": "da",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/om-indfoedsretsproeven/"
+    ],
+    "exam_name": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/om-indfoedsretsproeven/"
+    ],
+    "administering_agency": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/forberedelse-til-indfoedsretsproeven/",
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/om-indfoedsretsproeven/"
+    ],
+    "format": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/om-indfoedsretsproeven/",
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/forberedelse-til-indfoedsretsproeven/"
+    ],
+    "languages": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/om-indfoedsretsproeven/"
+    ],
+    "official_study_material": [
+      "https://danskogproever.dk/borger/indfoedsretsproeve-statsborgerskab/forberedelse-til-indfoedsretsproeven/"
+    ]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "A fee is charged for each sitting; the amount is on a page not read.",
+    "exemptions": "Not read.",
+    "format.pass_mark": "Reported from the same official site as 36 correct including 4 of the 5 values questions; the sentence itself was not read in full."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "The learning material and past papers are free to access. No licence statement was found, so reuse is unclear."
+}

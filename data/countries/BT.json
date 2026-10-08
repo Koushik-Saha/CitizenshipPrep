@@ -1,0 +1,43 @@
+{
+  "iso": "BT",
+  "name": "Bhutan",
+  "has_exam": true,
+  "exam_name": null,
+  "administering_agency": "Ministry of Home Affairs",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["written", "oral"],
+    "notes": "The Act says only that written and oral tests are held on Dzongkha and on knowledge of the culture, customs, traditions and history of Bhutan."
+  },
+  "languages": ["dz"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://www.judiciary.gov.bt/storage/files/1/Bhutan_Citizen_Act_1985Eng.pdf"],
+    "administering_agency": [
+      "https://www.judiciary.gov.bt/storage/files/1/Bhutan_Citizen_Act_1985Eng.pdf"
+    ],
+    "format": ["https://www.judiciary.gov.bt/storage/files/1/Bhutan_Citizen_Act_1985Eng.pdf"],
+    "languages": ["https://www.judiciary.gov.bt/storage/files/1/Bhutan_Citizen_Act_1985Eng.pdf"]
+  },
+  "unverified": {
+    "exam_name": "The Act gives the tests no name.",
+    "official_study_material": "None found.",
+    "fee": "Not found.",
+    "exemptions": "None in the Act.",
+    "regional_variants": "None described."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "Bhutan Citizenship Act 1985, as published by the judiciary. Nothing official was found on how the tests are run today."
+}

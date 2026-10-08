@@ -1,0 +1,47 @@
+{
+  "iso": "AM",
+  "name": "Armenia",
+  "has_exam": true,
+  "exam_name": "Test of knowledge of the Constitution of the Republic of Armenia",
+  "administering_agency": "Migration and Citizenship Service",
+  "format": {
+    "question_count": 33,
+    "pass_mark": 17,
+    "pass_percent": null,
+    "time_limit_minutes": 60,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "The system draws 33 questions at random from a bank whose scope the head of the Service approves and updates every six months. The test is in Armenian."
+  },
+  "languages": ["hy"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.arlis.am/hy/acts/219991/latest",
+      "https://mcs-citizenship.am/en/guest"
+    ],
+    "exam_name": ["https://www.arlis.am/hy/acts/219991/latest"],
+    "administering_agency": [
+      "https://www.arlis.am/hy/acts/219991/latest",
+      "https://mcs-citizenship.am/en/guest"
+    ],
+    "format": ["https://www.arlis.am/hy/acts/219991/latest"],
+    "languages": ["https://www.arlis.am/hy/acts/219991/latest"]
+  },
+  "unverified": {
+    "official_study_material": "No published question bank or guide was found on the official pages read.",
+    "exemptions": "Not read in the procedure. A secondary report says people of Armenian ancestry are exempt; not confirmed.",
+    "fee": "Not stated in the points of the procedure read.",
+    "regional_variants": "None described."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "Format read from points 56 to 59 of the procedure on the official legal database. Secondary reports say the procedure was overhauled recently; the date was not confirmed, so no change is flagged."
+}

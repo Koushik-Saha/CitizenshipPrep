@@ -1,0 +1,42 @@
+{
+  "iso": "EE",
+  "name": "Estonia",
+  "has_exam": true,
+  "exam_name": "Examination on knowledge of the Constitution and Citizenship Act of the Republic of Estonia",
+  "administering_agency": "Education and Youth Board (Harno)",
+  "format": {
+    "question_count": 24,
+    "pass_mark": 18,
+    "pass_percent": null,
+    "time_limit_minutes": 45,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Multiple choice, in Estonian, taken on a computer at an examination point in Tallinn, Jõhvi, Narva or Tartu."
+  },
+  "languages": ["et"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": "Special conditions or exemption can be requested with a medical expert decision on disability or incapacity for work; an expert committee decides the scope and method."
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://harno.ee/en/citizenship-examinations"],
+    "exam_name": ["https://harno.ee/en/citizenship-examinations"],
+    "administering_agency": ["https://harno.ee/en/citizenship-examinations"],
+    "format": ["https://harno.ee/en/citizenship-examinations"],
+    "languages": ["https://harno.ee/en/citizenship-examinations"],
+    "exemptions.disability": ["https://harno.ee/en/citizenship-examinations"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions.age": "Not read.",
+    "official_study_material": "Not read on the page."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "An Estonian language examination is required separately."
+}

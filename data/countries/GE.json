@@ -1,0 +1,48 @@
+{
+  "iso": "GE",
+  "name": "Georgia",
+  "has_exam": true,
+  "exam_name": "Test of knowledge of the official language, history and basic principles of law of Georgia",
+  "administering_agency": "Public Service Development Agency",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Taken electronically with special software before applying; a result is valid for one year."
+  },
+  "languages": ["ka"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": {
+    "amount": 0,
+    "currency": "GEL",
+    "covers": "The first sitting is free; the second and each later one costs GEL 40."
+  },
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://sda.gov.ge/en/products/citizenship/",
+      "https://matsne.gov.ge/en/document/view/2342552"
+    ],
+    "exam_name": ["https://sda.gov.ge/en/products/citizenship/"],
+    "administering_agency": ["https://sda.gov.ge/en/products/citizenship/"],
+    "format": ["https://sda.gov.ge/en/products/citizenship/"],
+    "fee": ["https://sda.gov.ge/en/products/citizenship/"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "exemptions": "Not read.",
+    "official_study_material": "None found on the page read.",
+    "languages": "The page does not say in which language the history and law parts are set; Georgian is assumed."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": null
+}

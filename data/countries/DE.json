@@ -1,0 +1,150 @@
+{
+  "iso": "DE",
+  "name": "Germany",
+  "has_exam": true,
+  "exam_name": "Einbürgerungstest",
+  "administering_agency": "Bundesamt für Migration und Flüchtlinge (questions); sat at test centres named by the naturalization authority",
+  "format": {
+    "question_count": 33,
+    "pass_mark": 17,
+    "pass_percent": null,
+    "time_limit_minutes": 60,
+    "question_pool_size": 310,
+    "modes": ["written"],
+    "notes": "A test booklet of 33 questions with four answers each, one right. 30 questions are nationwide and 3 are about the Land of residence. The full catalogue has 300 nationwide questions and 10 for each Land (160)."
+  },
+  "languages": ["de"],
+  "regional_variants": [
+    {
+      "region": "DE-BW",
+      "name": "Baden-Württemberg",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-BY",
+      "name": "Bayern",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-BE",
+      "name": "Berlin",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-BB",
+      "name": "Brandenburg",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-HB",
+      "name": "Bremen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-HH",
+      "name": "Hamburg",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-HE",
+      "name": "Hessen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-MV",
+      "name": "Mecklenburg-Vorpommern",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-NI",
+      "name": "Niedersachsen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-NW",
+      "name": "Nordrhein-Westfalen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-RP",
+      "name": "Rheinland-Pfalz",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-SL",
+      "name": "Saarland",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-SN",
+      "name": "Sachsen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-ST",
+      "name": "Sachsen-Anhalt",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-SH",
+      "name": "Schleswig-Holstein",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    },
+    {
+      "region": "DE-TH",
+      "name": "Thüringen",
+      "note": "Three of the 33 questions come from this Land’s ten."
+    }
+  ],
+  "exemptions": {
+    "age": "People who cannot meet the requirement because of age are exempt. Holders of a German school-leaving certificate do not need the test.",
+    "disability": "People who cannot meet the requirement because of a physical, mental or psychological illness or a disability are exempt."
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Gesamtfragenkatalog zum Test \"Leben in Deutschland\" und zum \"Einbürgerungstest\"",
+      "url": "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html",
+      "publisher": "Bundesamt für Migration und Flüchtlinge",
+      "kind": "question_bank",
+      "language": "de",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+    ],
+    "exam_name": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+    ],
+    "administering_agency": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+    ],
+    "format": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html",
+      "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html"
+    ],
+    "languages": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+    ],
+    "regional_variants": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html",
+      "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html"
+    ],
+    "exemptions": [
+      "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+    ],
+    "official_study_material": [
+      "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html"
+    ]
+  },
+  "unverified": {
+    "fee": "The page read gives the naturalization fee (255 euros), not the test fee."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "The whole question catalogue is published by the federal office, with an online test centre. The site carries a general © notice and no licence for the catalogue; whether it counts as an official work free of copyright was not established."
+}

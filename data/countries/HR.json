@@ -1,0 +1,51 @@
+{
+  "iso": "HR",
+  "name": "Croatia",
+  "has_exam": true,
+  "exam_name": "Upitnik o poznavanju hrvatske kulture i društvenog uređenja",
+  "administering_agency": "Ministry of the Interior (police administrations and stations)",
+  "format": {
+    "question_count": 15,
+    "pass_mark": 10,
+    "pass_percent": null,
+    "time_limit_minutes": 60,
+    "question_pool_size": 110,
+    "modes": ["written"],
+    "notes": "A questionnaire chosen at random by the official, filled in alone in front of them: circle one answer or write the answer in."
+  },
+  "languages": ["hr"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Pravilnik o načinu provjere poznavanja hrvatskog jezika i latiničnog pisma, hrvatske kulture i društvenog uređenja (NN 6/2021), Prilog 1: 110 pitanja",
+      "url": "https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html",
+      "publisher": "Narodne novine (official gazette)",
+      "kind": "question_bank",
+      "language": "hr",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"],
+    "exam_name": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"],
+    "administering_agency": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"],
+    "format": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"],
+    "languages": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"],
+    "official_study_material": ["https://narodne-novine.nn.hr/clanci/sluzbeni/2021_01_6_124.html"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "None stated in the regulation.",
+    "exemptions": "Not read in the regulation."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "All 110 questions are printed as Annex 1 of the regulation in the official gazette. Whether a gazette text may be reused was not checked against Croatian copyright law."
+}

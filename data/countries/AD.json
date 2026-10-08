@@ -1,0 +1,36 @@
+{
+  "iso": "AD",
+  "name": "Andorra",
+  "has_exam": true,
+  "exam_name": "Apreciació de la suficient integració a Andorra",
+  "administering_agency": null,
+  "format": null,
+  "languages": ["ca"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.govern.ad/ca/ministeris-i-secretaries-d-estat/ministeri-de-justicia-i-interior/nacionalitat/adquisicio-de-la-nacionalitat-andorrana",
+      "https://www.e-tramits.ad/tramits/ca/demanda-de-nacionalitat/p/GV100016"
+    ],
+    "exam_name": ["https://www.e-tramits.ad/tramits/ca/demanda-de-nacionalitat/p/GV100016"],
+    "languages": ["https://www.e-tramits.ad/tramits/ca/demanda-de-nacionalitat/p/GV100016"]
+  },
+  "unverified": {
+    "administering_agency": "The pages read name the Government; the body that assesses integration is set by a regulation (Reglament per a l’apreciació de la suficient integració a Andorra, 3-5-96, amended 27-3-2019) that was not read.",
+    "format": "Set by the same regulation, which was not read.",
+    "fee": "The procedure page lists passport fees only; none for the assessment.",
+    "official_study_material": "None found on the pages read.",
+    "regional_variants": "None described.",
+    "exemptions": "The procedure page asks for the Catalan B1 diploma only of people under 70; nothing read about the integration assessment itself."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "Applicants must prove their integration. The procedure page asks for a B1 Catalan diploma and, \"if held\", the Diploma de ciències humanes i socials d’Andorra; how integration is assessed for those without it is in a regulation not read here. A press report (not a source) says the diploma course stands in for the assessment."
+}

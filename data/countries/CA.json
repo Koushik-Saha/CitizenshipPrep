@@ -1,0 +1,66 @@
+{
+  "iso": "CA",
+  "name": "Canada",
+  "has_exam": true,
+  "exam_name": "Citizenship test",
+  "administering_agency": "Immigration, Refugees and Citizenship Canada",
+  "format": {
+    "question_count": 20,
+    "pass_mark": 15,
+    "pass_percent": null,
+    "time_limit_minutes": 45,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Multiple choice or true/false, in English or French. Three chances to pass. The test does not assess language skills."
+  },
+  "languages": ["en", "fr"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Discover Canada: The Rights and Responsibilities of Citizenship",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada.html",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "kind": "study_guide",
+      "language": "en",
+      "license": "Canada.ca terms: reproduction for non-commercial purposes without permission; commercial reproduction needs written permission",
+      "reusable": "no"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test.html"
+    ],
+    "exam_name": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test.html"
+    ],
+    "administering_agency": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test.html"
+    ],
+    "format": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test/study.html"
+    ],
+    "languages": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test/study.html"
+    ],
+    "official_study_material": [
+      "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada.html",
+      "https://www.canada.ca/en/transparency/terms.html"
+    ]
+  },
+  "unverified": {
+    "format.modes": "The study page gives the length and question types; the page on how the test is conducted (online or in person) could not be opened. \"computer\" is unconfirmed.",
+    "exemptions": "The page saying who must take the test could not be opened. Widely reported as ages 18 to 54; not confirmed here.",
+    "fee": "No separate test fee stated on the pages read.",
+    "regional_variants": "None described: one national test.",
+    "format.question_pool_size": "The questions are not published."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "Discover Canada is the only official study guide. Reuse in a paid app is commercial, so it needs permission under the Canada.ca terms."
+}

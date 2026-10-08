@@ -1,0 +1,37 @@
+{
+  "iso": "AL",
+  "name": "Albania",
+  "has_exam": true,
+  "exam_name": null,
+  "administering_agency": null,
+  "format": null,
+  "languages": ["sq"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://mb.gov.al/wp-content/uploads/2024/10/LIGJ-PER-SHTETESINE-Nr.-1132020.pdf"
+    ],
+    "languages": [
+      "https://mb.gov.al/wp-content/uploads/2024/10/LIGJ-PER-SHTETESINE-Nr.-1132020.pdf"
+    ]
+  },
+  "unverified": {
+    "exam_name": "The law names no test: it requires basic knowledge of the history of Albania, alongside Albanian, \"certified by the relevant educational institution\" under rules set by institutions of higher education.",
+    "administering_agency": "The law says only \"the relevant educational institution\".",
+    "format": "Left by the law to rules set by institutions of higher education, which were not found.",
+    "official_study_material": "None found.",
+    "fee": "Not found.",
+    "exemptions": "Not read.",
+    "regional_variants": "None described."
+  },
+  "confidence": "low",
+  "recent_change": null,
+  "notes": "Law 113/2020, naturalization conditions, letter (e): spoken and written Albanian and \"basic knowledge of the history of the Republic of Albania\". A second provision adds the Constitution. Counted as a test because the knowledge must be certified, but no official description of an examination was read. A secondary report of 2024 amendments was not confirmed."
+}

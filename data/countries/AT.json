@@ -1,0 +1,125 @@
+{
+  "iso": "AT",
+  "name": "Austria",
+  "has_exam": true,
+  "exam_name": "Staatsbürgerschaftsprüfung",
+  "administering_agency": "The government of each Land (Landesregierung), under rules set by the Federal Ministry of the Interior",
+  "format": {
+    "question_count": 18,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": 120,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "Six questions from each of three areas: the democratic order, the history of Austria, the history of the Land. Four answers are offered, of which one to three are right; one point per fully correct question. Passed with at least half the points in each area, or two thirds of all points (12 of 18)."
+  },
+  "languages": ["de"],
+  "regional_variants": [
+    {
+      "region": "AT-1",
+      "name": "Burgenland",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-2",
+      "name": "Kärnten",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-3",
+      "name": "Niederösterreich",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-4",
+      "name": "Oberösterreich",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-5",
+      "name": "Salzburg",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-6",
+      "name": "Steiermark",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-7",
+      "name": "Tirol",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-8",
+      "name": "Vorarlberg",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    },
+    {
+      "region": "AT-9",
+      "name": "Wien",
+      "note": "Six of the 18 questions are on the history of this Land, set by its own regulation."
+    }
+  ],
+  "exemptions": {
+    "age": "Children under 14 (unmündige Minderjährige) are exempt.",
+    "disability": "People whose lasting poor physical or mental health, including speech or hearing impairment, makes it impossible are exempt, on a public medical officer’s report."
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Lernunterlage zur Staatsbürgerschaftsprüfung",
+      "url": "https://www.staatsbuergerschaft.gv.at/fileadmin/user_upload/Broschuere/RZ_BMI_StaBuBro_Gesamt-Buch_2020_screen.pdf",
+      "publisher": "Bundesministerium für Inneres",
+      "kind": "study_guide",
+      "language": "de",
+      "license": "© BMI, Dezember 2020; no open licence stated",
+      "reusable": "no"
+    },
+    {
+      "title": "Online-Übungstest zur Staatsbürgerschaftsprüfung",
+      "url": "https://www.staatsbuergerschaft.gv.at/index.php?id=24",
+      "publisher": "Bundesministerium für Inneres",
+      "kind": "practice_test",
+      "language": "de",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10005579&Paragraf=10a"
+    ],
+    "exam_name": [
+      "https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20004685"
+    ],
+    "administering_agency": [
+      "https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10005579&Paragraf=10a"
+    ],
+    "format": [
+      "https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20004685",
+      "https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10005579&Paragraf=10a"
+    ],
+    "regional_variants": [
+      "https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10005579&Paragraf=10a"
+    ],
+    "exemptions": [
+      "https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10005579&Paragraf=10a"
+    ],
+    "official_study_material": [
+      "https://www.staatsbuergerschaft.gv.at/fileadmin/user_upload/Broschuere/RZ_BMI_StaBuBro_Gesamt-Buch_2020_screen.pdf",
+      "https://www.staatsbuergerschaft.gv.at/index.php?id=24"
+    ],
+    "languages": [
+      "https://www.staatsbuergerschaft.gv.at/fileadmin/user_upload/Broschuere/RZ_BMI_StaBuBro_Gesamt-Buch_2020_screen.pdf"
+    ]
+  },
+  "unverified": {
+    "fee": "No fee for the examination is stated in the law or the regulation read.",
+    "format.question_pool_size": "Not stated in the regulation."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "The language of the examination is taken from the German-only study material and regulation; the law does not name it separately."
+}

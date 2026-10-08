@@ -1,0 +1,58 @@
+{
+  "iso": "CZ",
+  "name": "Czechia",
+  "has_exam": true,
+  "exam_name": "Zkouška z českých reálií",
+  "administering_agency": "Ústav jazykové a odborné přípravy, Univerzita Karlova (runs it); Národní pedagogický institut ČR (publishes it)",
+  "format": {
+    "question_count": 30,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": 300,
+    "modes": ["written"],
+    "notes": "Thirty tasks drawn from a published databank of 300."
+  },
+  "languages": ["cs"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": {
+    "amount": 5700,
+    "currency": "CZK",
+    "covers": "The Czech language examination and the Czech realia examination together."
+  },
+  "official_study_material": [
+    {
+      "title": "Databanka testových úloh z českých reálií",
+      "url": "https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB",
+      "publisher": "Národní pedagogický institut České republiky",
+      "kind": "question_bank",
+      "language": "cs",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "exam_name": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "administering_agency": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "format": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "languages": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "official_study_material": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"],
+    "fee": ["https://cestina-pro-cizince.cz/obcanstvi/?hl=en_GB"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "exemptions": "Not read.",
+    "format.pass_mark": "Not on the page read.",
+    "format.time_limit_minutes": "Not on the page read.",
+    "format.modes": "Not stated on the page read; \"written\" is an assumption."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": null
+}

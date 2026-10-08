@@ -1,0 +1,49 @@
+{
+  "iso": "CO",
+  "name": "Colombia",
+  "has_exam": true,
+  "exam_name": "Exámenes de conocimiento",
+  "administering_agency": "Ministerio de Relaciones Exteriores, with an outside body that sets the method and marking",
+  "format": null,
+  "languages": ["es"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "People over 65 are excused from the examinations.",
+    "disability": null
+  },
+  "fee": {
+    "amount": 808558,
+    "currency": "COP",
+    "covers": "The naturalization procedure as a whole, as listed by the ministry; not the examinations alone."
+  },
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.cancilleria.gov.co/atencion-y-servicio-al-ciudadano/tramites-y-servicios/nacionalidad/naturalizacion",
+      "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=286"
+    ],
+    "exam_name": [
+      "https://www.cancilleria.gov.co/atencion-y-servicio-al-ciudadano/tramites-y-servicios/nacionalidad/naturalizacion"
+    ],
+    "administering_agency": [
+      "https://www.cancilleria.gov.co/atencion-y-servicio-al-ciudadano/tramites-y-servicios/nacionalidad/naturalizacion"
+    ],
+    "languages": [
+      "https://www.cancilleria.gov.co/atencion-y-servicio-al-ciudadano/tramites-y-servicios/nacionalidad/naturalizacion"
+    ],
+    "fee": [
+      "https://www.cancilleria.gov.co/atencion-y-servicio-al-ciudadano/tramites-y-servicios/nacionalidad/naturalizacion"
+    ],
+    "exemptions.age": ["https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=286"]
+  },
+  "unverified": {
+    "format": "The ministry page says an outside body defines the parameters and method; no numbers are published on it.",
+    "official_study_material": "None found on the ministry page.",
+    "regional_variants": "None described.",
+    "exemptions.disability": "Nothing read in the law or on the ministry page."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "Covers the Constitution, national history, culture and geography of Colombia, and Spanish for those whose mother tongue it is not. People who finished secondary school or a degree in Colombia are excused. Two attempts are allowed; the date is notified a month ahead."
+}

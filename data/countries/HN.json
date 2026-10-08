@@ -1,0 +1,51 @@
+{
+  "iso": "HN",
+  "name": "Honduras",
+  "has_exam": true,
+  "exam_name": "Examen para optar a la nacionalidad hondureña",
+  "administering_agency": "Secretaría de Gobernación, Justicia y Descentralización",
+  "format": null,
+  "languages": ["es"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Temario de examen para optar a la nacionalidad hondureña",
+      "url": "https://www.sgjd.gob.hn/servicios-y-gestiones-web/requisitos/servicios-de-atencion-al-ciudadano/otros-servicios/1953-temario-de-examen-para-optar-a-la-nacionalidad-hondurena/file",
+      "publisher": "Secretaría de Gobernación, Justicia y Descentralización",
+      "kind": "other",
+      "language": "es",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.sgjd.gob.hn/servicios-y-gestiones-web/requisitos/servicios-de-atencion-al-ciudadano/otros-servicios/1953-temario-de-examen-para-optar-a-la-nacionalidad-hondurena/file"
+    ],
+    "exam_name": [
+      "https://www.sgjd.gob.hn/servicios-y-gestiones-web/requisitos/servicios-de-atencion-al-ciudadano/otros-servicios/1953-temario-de-examen-para-optar-a-la-nacionalidad-hondurena/file"
+    ],
+    "administering_agency": [
+      "https://www.sgjd.gob.hn/servicios-y-gestiones-web/requisitos/servicios-de-atencion-al-ciudadano/otros-servicios/1953-temario-de-examen-para-optar-a-la-nacionalidad-hondurena/file"
+    ],
+    "official_study_material": [
+      "https://www.sgjd.gob.hn/servicios-y-gestiones-web/requisitos/servicios-de-atencion-al-ciudadano/otros-servicios/1953-temario-de-examen-para-optar-a-la-nacionalidad-hondurena/file"
+    ]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "format": "Not published in what was found.",
+    "languages": "Assumed from the Spanish syllabus."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "The ministry’s syllabus (geography, history, the Constitution) was found by search on its site, but the file would not download here, so its content is known only from the search summary."
+}

@@ -1,0 +1,69 @@
+{
+  "iso": "AU",
+  "name": "Australia",
+  "has_exam": true,
+  "exam_name": "Australian citizenship test",
+  "administering_agency": "Department of Home Affairs",
+  "format": {
+    "question_count": 20,
+    "pass_mark": null,
+    "pass_percent": 75,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Multiple choice. Five of the 20 questions are on Australian values and all five must be answered correctly, with at least 75 per cent overall."
+  },
+  "languages": ["en"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "People aged 60 or over do not sit the test; they may be interviewed and asked to show they understand the nature of their application.",
+    "disability": "People with a permanent or enduring physical or mental incapacity may be asked to verify it; a support person and an interpreter can attend."
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Australian Citizenship: Our Common Bond (testable section)",
+      "url": "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf",
+      "publisher": "Department of Home Affairs",
+      "kind": "study_guide",
+      "language": "en",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0), excluding the Coat of Arms and third-party images",
+      "reusable": "yes"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf",
+      "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/prepare-for-test"
+    ],
+    "exam_name": [
+      "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf"
+    ],
+    "administering_agency": [
+      "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf"
+    ],
+    "format": [
+      "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf"
+    ],
+    "languages": [
+      "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/prepare-for-test"
+    ],
+    "exemptions": [
+      "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/learn-about-citizenship-interview-and-test"
+    ],
+    "official_study_material": [
+      "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/prepare-for-test",
+      "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf"
+    ]
+  },
+  "unverified": {
+    "format.time_limit_minutes": "The pages read do not state the time allowed; the page describing the test itself could not be opened.",
+    "format.question_pool_size": "The test questions are not published; only a practice test is.",
+    "fee": "No fee for the test itself is stated on the pages read.",
+    "regional_variants": "None described: one national test."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "All test questions are based on Our Common Bond, which is also published in community languages; the test itself is in English only. The department publishes a practice test, not the live question bank."
+}
