@@ -1,0 +1,20 @@
+question                               source     first   total  bytes
+4ae605ab-af81-478b-9982-a1e071c6e127  generated  2451 ms  3915 ms   585  warm-up, not counted
+4ae605ab-af81-478b-9982-a1e071c6e127  cache        64 ms    65 ms   585 (again)
+5b99262e-1c21-4bfd-8d08-666c8e7cb852  generated   466 ms  1679 ms   670
+5b99262e-1c21-4bfd-8d08-666c8e7cb852  cache        19 ms    19 ms   670 (again)
+7bb906cf-10a1-4ea1-9362-362f9fdda945  generated   462 ms  1814 ms   680
+7bb906cf-10a1-4ea1-9362-362f9fdda945  cache        31 ms    31 ms   680 (again)
+b0c46b4c-4292-41ae-ae68-9c606e26fe72  generated   645 ms  1628 ms   496
+b0c46b4c-4292-41ae-ae68-9c606e26fe72  cache        27 ms    27 ms   496 (again)
+23338ec3-3e4b-4de7-b0c7-6d56eaaa3a42  generated   533 ms  1933 ms   658
+23338ec3-3e4b-4de7-b0c7-6d56eaaa3a42  cache        27 ms    27 ms   658 (again)
+fb5b7319-ba03-4df0-b828-cab885098a5c  generated   468 ms  1765 ms   606
+fb5b7319-ba03-4df0-b828-cab885098a5c  cache        20 ms    20 ms   606 (again)
+5e789beb-3429-48a2-9383-829ee007c77b  generated   576 ms  2075 ms   799
+5e789beb-3429-48a2-9383-829ee007c77b  cache        23 ms    23 ms   799 (again)
+db382a84-1500-4a36-86e5-3399767c90ca  generated   525 ms  2344 ms   873
+db382a84-1500-4a36-86e5-3399767c90ca  cache        29 ms    29 ms   873 (again)
+
+First token, generated: median 525 ms, slowest 645 ms over 7 (budget 1000 ms).
+Repeat, from the cache: median 27 ms over 8.

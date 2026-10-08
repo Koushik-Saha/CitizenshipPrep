@@ -5,7 +5,7 @@ import { createRemoteJWKSet, jwtVerify, type JWTVerifyGetKey } from 'jose';
 // auth service's JWKS endpoint.
 
 export interface TokenVerifierOptions {
-  /** Neon Auth's base URL (NEON_AUTH_BASE_URL). Keys are read from `${baseUrl}/jwks`. */
+  /** Neon Auth's base URL (NEON_AUTH_BASE_URL). Keys are read from `jwksUrl(baseUrl)`. */
   baseUrl?: string;
   /** For tests: a key set to verify against instead of fetching one. */
   keys?: JWTVerifyGetKey;
@@ -17,10 +17,19 @@ export interface VerifiedToken {
   name: string | null;
 }
 
+/**
+ * Where Neon Auth publishes the keys its tokens are signed with. Checked
+ * against the live service: `${baseUrl}/jwks` is not there (404), and with the
+ * wrong address every token from the phone app is refused.
+ */
+export function jwksUrl(baseUrl: string): URL {
+  return new URL(`${baseUrl.replace(/\/+$/, '')}/.well-known/jwks.json`);
+}
+
 export function createTokenVerifier(options: TokenVerifierOptions) {
   const keys =
     options.keys ??
-    createRemoteJWKSet(new URL(`${options.baseUrl!.replace(/\/$/, '')}/jwks`), {
+    createRemoteJWKSet(jwksUrl(options.baseUrl!), {
       cooldownDuration: 60_000,
     });
 

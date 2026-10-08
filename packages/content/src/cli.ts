@@ -7,6 +7,7 @@ import { ExamFormatError, parseBlueprint } from '@oathly/core';
 import { createClaudeModel } from './claude';
 import { createPool } from './db';
 import { validateDataFiles, writeJsonSchemas } from './data-files';
+import { slugify } from './text';
 import { questionStats } from './question-stats';
 import { recheckSourceFiles, saveSourceFile, type SourceRecheck } from './source-files';
 import { loadEnv, repoRoot } from './env';
@@ -16,7 +17,7 @@ import { ingestSource } from './pipeline/ingest';
 import { describeNotify, notifyContentChanged } from './notify';
 import { recordAudio } from './pipeline/audio';
 import { translateQuestions } from './pipeline/translate';
-import { listDocuments, upsertCountry, upsertExamFormat } from './repository';
+import { listDocuments, upsertCountry, upsertExamFormat, upsertTopic } from './repository';
 import { getQueueCounts, getTopicCoverage } from './review';
 import { fetchSource, readSourceFile } from './source';
 import { createSpeaker, type Speaker } from './tts';
@@ -28,6 +29,10 @@ Usage: pnpm content <command> [options]
   country        Add or update a country
                  --iso US --name "United States" --languages en[,fr] [--no-exam]
                  [--lat 39.8 --lng -98.6]   (a point inside the country, for the globe)
+
+  topic          Add or rename one of the guide's own topics. Do this before drafting:
+                 drafts are filed under the topics that exist
+                 --country US --slug american-government --name "American Government" [--order 1]
 
   exam-format    Add or update an exam format for a country
                  --country US --slug civics --name "Civics test" --type written|oral|interview|language
@@ -141,6 +146,24 @@ const silentSpeaker: Speaker = {
   speak: () => Promise.reject(new Error('A dry run records nothing.')),
 };
 
+/**
+ * "--lat -35.3" as "--lat=-35.3": the argument parser takes a value that
+ * starts with a dash for another option, and half the world's coordinates do.
+ */
+function withSignedNumbers(args: readonly string[]): string[] {
+  const joined: string[] = [];
+  for (let i = 0; i < args.length; i += 1) {
+    const next = args[i + 1];
+    if (/^--[a-z-]+$/.test(args[i]!) && next !== undefined && /^-\d/.test(next)) {
+      joined.push(`${args[i]}=${next}`);
+      i += 1;
+    } else {
+      joined.push(args[i]!);
+    }
+  }
+  return joined;
+}
+
 async function main(): Promise<void> {
   const [command, ...rest] = process.argv.slice(2);
   if (!command || command === 'help' || command === '--help') {
@@ -149,7 +172,7 @@ async function main(): Promise<void> {
   }
 
   const { values } = parseArgs({
-    args: rest,
+    args: withSignedNumbers(rest),
     strict: true,
     options: {
       iso: { type: 'string' },
@@ -160,6 +183,7 @@ async function main(): Promise<void> {
       lng: { type: 'string' },
       country: { type: 'string' },
       slug: { type: 'string' },
+      order: { type: 'string' },
       type: { type: 'string' },
       'source-url': { type: 'string' },
       questions: { type: 'string' },
@@ -259,6 +283,25 @@ async function main(): Promise<void> {
         });
         console.log(`Saved country ${isoCode}.`);
         console.log(describeNotify(await notifyContentChanged({ countryCode: isoCode })));
+        break;
+      }
+
+      case 'topic': {
+        const country = countryCode(values, 'country');
+        const slug = required(values, 'slug');
+        if (slug !== slugify(slug)) {
+          throw new UsageError('--slug is lowercase words joined by hyphens.');
+        }
+        const order = optional(values, 'order');
+        if (order !== null && !/^\d+$/.test(order)) {
+          throw new UsageError("--order is a whole number: the topic's place in the guide.");
+        }
+        await upsertTopic(pool, country, {
+          slug,
+          name: required(values, 'name'),
+          ...(order === null ? {} : { sortOrder: Number(order) }),
+        });
+        console.log(`Saved topic ${country}/${slug}.`);
         break;
       }
 

@@ -1,8 +1,7 @@
 # Build checklist
 
 A phase is done only when every box under it is ticked and its proof exists: a passing test, a
-screenshot, a report file. Last checked 8 October 2026 against commit `90516f3`
-([CI run](https://github.com/Koushik-Saha/CitizenshipPrep/actions/runs/37852359185), green).
+screenshot, a report file. Last checked 8 October 2026.
 
 - `[x]` done, with the proof named
 - `[~]` partly done: what is missing is named
@@ -23,31 +22,39 @@ Two standing differences from the playbook's wording: the database is Neon, not 
 - [~] **MCP servers.** Playwright and Context7 connect. Supabase is configured but fails to connect
   (and is not the database any more). The GitHub server is present but not signed in; the `gh`
   tool is used instead.
-- [~] **Name chosen and checked.** The name is Oathly. No record in the repository of a trademark,
-  domain, store-name or social-handle check.
+- [~] **Name chosen and checked.** Checked on 8 October 2026: `docs/proof/name-check.md`. It
+  found a problem: another app, "Oathly: Habit Accountability", has been on the App Store and
+  Google Play since 14 September 2026, and oathly.com is held by a name marketplace. Trademark
+  registers were not searched. Yours to decide before store submission.
 
 ## Build phases (Section 5)
 
 - [x] **P0** `CLAUDE.md` is in the repository root (untracked, on purpose).
-- [~] **P1** `pnpm dev` runs web and Expo and both import from `packages/core`; CI is green on
-  every push to `main`. Missing: no pull request has ever been opened, so "green on a test PR" has
-  no proof.
+- [x] **P1** `pnpm dev` runs web and Expo and both import from `packages/core`. Proof of CI on a
+      pull request: [#1](https://github.com/Koushik-Saha/CitizenshipPrep/pull/1), all four jobs green.
 - [x] **P2** Logo, icons, favicon and splash exist; light and dark tokens on `/brand`. Proof:
       `admin.spec.ts`, "the brand page is accessible" (both themes).
 - [x] **P3** Proof: CI job "Migrations, RLS tests, generated types"; `db/tests/002_progress_isolation.test.sql`;
       `db/seed.sql` seeds AU, CA, DE, GB and US.
-- [~] **P4** 20 US drafts, each with its source quote, from one guide, are in the local database
-  and show in `/admin/content`. Missing: `/add-country` has not been run since it was rewritten
-  (see P21).
-- [~] **P5** One account works on web and in the phone app's browser build through the test
-  sign-in. Missing: a real sign-up by emailed code, and a sign-in on a real phone.
+- [x] **P4** 20 US drafts, each with its source quote, from one guide, are in the local database
+      and show in `/admin/content`. `/add-country` was run end to end for Australia in an empty
+      database: proof in `docs/proof/add-country-AU.md`, with the two faults the run found and fixed.
+- [x] **P5** Proved with a real account on 8 October 2026: signed up on the web by emailed code,
+      then signed in on the phone app's own sign-in screen (browser build) by a second emailed code,
+      and landed in the same account with the study country and daily goal set on the web. Proof:
+      `docs/proof/phone-sign-in-by-emailed-code.png`. The run found that the API refused every real
+      phone token (it looked for the sign-in service's keys at the wrong address); fixed, with a test
+      in `tokens.test.ts`. On a real phone: see P12.
 - [x] **P6** Proof: `packages/core` coverage is enforced at 100% (234 tests);
       `exam-format.test.ts` and `mock-exam.test.ts` against the seeded formats.
-- [~] **P7** Proof for the first half: `learner.spec.ts`, "a mock exam answered correctly is a
-  pass". Missing: no test asserts that answering makes no blocking network call.
-- [~] **P8** Proved by `ai.db.test.ts`: an explanation is generated once and reused; the tutor
-  answers from study material only and refuses the rest. Proved by CI: no secret in any client
-  bundle. Missing: first token under one second has never been measured.
+- [x] **P7** Proof: `learner.spec.ts`, "a mock exam answered correctly is a pass" and "answering
+      never waits for the network", which holds every answer on its way to the server and answers
+      three questions with nothing getting through.
+- [x] **P8** Measured on 8 October 2026 with `apps/web/scripts/perf/first-token.mjs` on eight
+      questions: first token at a median of 525 ms (slowest 645 ms); asked again, answered from the
+      cache in a median of 27 ms. Output in `docs/proof/first-token.txt`. Proved by `ai.db.test.ts`:
+      the tutor answers from study material only and refuses the rest. Proved by CI: no secret in any
+      client bundle.
 - [x] **P9** Proof: `packages/core/src/readiness.test.ts`.
 - [ ] **P10** Lighthouse mobile performance of 90 or more is enforced in CI. Not met: landing
       JavaScript is 141.5 KiB against 130; the mobile LCP limit CI can hold is 3.5 s against a target
@@ -59,11 +66,15 @@ Two standing differences from the playbook's wording: the database is Neon, not 
 - [x] **P13** Ten interface languages. Proof: `learner.spec.ts`, "the study pages work in a
       right-to-left language"; `public.spec.ts`, "pages come in the reader's language, with questions
       translated where reviewed".
-- [~] **P14** Proof for the interview: `learner.spec.ts`, "a spoken exam opens as a mock
-  interview". Audio and the offline queue have unit tests. Missing: audio played offline from a
-  downloaded pack on a device.
-- [~] **P15** Entitlement and cancellation logic is tested (`billing.db.test.ts`). Missing: a real
-  test purchase on web and on mobile; RevenueCat is not configured.
+- [x] **P14** Proof for the interview: `learner.spec.ts`, "a spoken exam opens as a mock
+      interview". Proof for offline audio: the "offline" flow in `apps/mobile/e2e/flows.web.mjs` saves
+      a pack, cuts the connection, turns audio mode on and answers ten questions with no request
+      reaching the server, then reconnects and sees the answers sent. That is the phone app in a
+      browser; on a real phone it is part of P12.
+- [~] **P15** Entitlement and cancellation logic is tested (`billing.db.test.ts`): a purchase on
+  either side unlocks the other, and a cancellation runs to the end of its period. Missing: a real
+  test purchase. That needs Stripe prices for the plans and a RevenueCat project with store
+  products, which are yours to set up with the store accounts.
 - [ ] **P16** Community is not built.
 - [x] **P17** Proof: `db/tests/004_accounts_orgs_community.test.sql` and `011_organizations.test.sql`;
       `org.spec.ts`.
@@ -72,7 +83,9 @@ Two standing differences from the playbook's wording: the database is Neon, not 
       `docs/security.md`.
 - [ ] **P20** Nothing is deployed. The production database is empty. `docs/launch.md` lists the
       steps that are yours.
-- [ ] **P21** `/add-country` has not been run end to end for a new country.
+- [~] **P21** Run end to end for Australia in an empty database (`docs/proof/add-country-AU.md`).
+  Missing: a run for a country the product does not have yet, against the real content database.
+  That needs you to supply the country's official guide.
 
 ## Content per country (Section 7)
 
