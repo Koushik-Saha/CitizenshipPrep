@@ -63,6 +63,7 @@ Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
 | AI explanations                | 20 a minute     | learner         |
 | Tutor messages                 | 10 a minute     | learner         |
 | Exam results reported          | 10 an hour      | learner         |
+| Account deletion               | 5 an hour       | learner         |
 
 The AI limits sit on top of the daily allowances each plan includes. Network
 and email addresses are counted under a keyed hash, never stored as
@@ -99,6 +100,18 @@ themselves. A refused call gets `429` with `Retry-After`. Tested in
   against a production build in this review).
 - **The publish webhook and the review pages** compare secrets in constant
   time.
+
+## Account deletion
+
+- A learner can delete their account from the website (Account) and the phone
+  app (Profile), without writing to anyone. It removes their profile and
+  everything that hangs off it in one transaction
+  (`packages/api/src/server/account.ts`, tested in `account.db.test.ts`).
+- It is refused, with nothing deleted, for an owner of an organization that
+  has members or paid seats, and for a reviewer whose verification record has
+  to be kept.
+- A request another site makes with the learner's cookie cannot delete the
+  account (tested).
 
 ## Error reporting and analytics
 
