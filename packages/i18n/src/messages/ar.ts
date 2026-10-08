@@ -21,6 +21,11 @@ export const ar: Messages = {
     breadcrumb: 'مسار التنقل',
     comingSoon: 'قريبًا',
     notAffiliated: 'Oathly تطبيق دراسة مستقل. لا يتبع أي حكومة ولا يحظى بتأييد أي حكومة.',
+    errorTitle: 'حدث خطأ ما',
+    errorBody: 'تعذّر عرض هذه الصفحة. حاول مرة أخرى، وإذا استمرت المشكلة فعُد بعد قليل.',
+    notFoundTitle: 'الصفحة غير موجودة',
+    notFoundBody: 'لا توجد صفحة في هذا العنوان. ربما نُقلت، أو كُتب الرابط بشكل خاطئ.',
+    backHome: 'الذهاب إلى الصفحة الرئيسية',
   },
 
   exam: {
@@ -286,6 +291,12 @@ export const ar: Messages = {
     addExam: 'أضف اختبارًا آخر',
     loadFailed: 'تعذّر تحميل خطة دراستك.',
     loadingPlan: 'جارٍ تحميل خطة دراستك',
+    examResultAsk: 'كيف كان اختبارك ({country})؟',
+    examResultPassed: 'نجحت',
+    examResultFailed: 'ليس هذه المرة',
+    examResultCongrats: 'تهانينا على نجاحك في الاختبار ({country}).',
+    examResultRetake: 'شكرًا لإخبارنا. واصل التدريب، وحدّد موعدك الجديد عندما تحصل عليه.',
+    examResultError: 'تعذّر الحفظ. حاول مرة أخرى.',
   },
 
   readiness: {
@@ -670,6 +681,7 @@ export const ar: Messages = {
     emailExpires: 'يعمل الرابط مرة واحدة وتنتهي صلاحيته بعد {days} يومًا.',
     emailFooter:
       'Oathly تطبيق دراسة مستقل. لا يتبع أي حكومة ولا تدعمه أي حكومة. إن لم تكن تتوقّع هذه الرسالة فيمكنك تجاهلها.',
+    inviteGoneTitle: 'الدعوة غير موجودة',
   },
 
   offline: {

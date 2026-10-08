@@ -1,4 +1,4 @@
-import type { QueuedAnswer, SyncOutcome } from '@oathly/core';
+import type { ExamOutcome, QueuedAnswer, SyncOutcome } from '@oathly/core';
 import * as z from 'zod/mini';
 
 import type { CountryFacts } from './countries';
@@ -105,6 +105,9 @@ export function createOathlyApi(options: OathlyApiOptions) {
     },
 
     dashboard: (): Promise<Dashboard> => request('/api/study/dashboard', dashboardSchema),
+    /** Says how the learner's real exam went; answers with the dashboard as it now is. */
+    reportExamResult: (countryCode: string, result: ExamOutcome): Promise<Dashboard> =>
+      request('/api/me/exam-result', dashboardSchema, post({ countryCode, result })),
     /** Picks the questions on the server and returns the new attempt's id. */
     startSession: (start: StartSessionRequest): Promise<{ attemptId: string }> =>
       request('/api/study/sessions', startedSchema, post(start)),

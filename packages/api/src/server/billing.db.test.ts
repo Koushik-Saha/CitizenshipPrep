@@ -189,7 +189,12 @@ describe.skipIf(!url)('billing against the database', () => {
     expect(await stripeCustomerFor(pool, WEB)).toBe('cus_testbillingweb');
 
     const created = stripeEvent('customer.subscription.created', subscription());
-    expect(await applyStripeEvent(pool, created, prices)).toEqual({ kind: 'applied', userId: WEB });
+    // A subscription being created is a purchase starting: an upgrade to count.
+    expect(await applyStripeEvent(pool, created, prices)).toEqual({
+      kind: 'applied',
+      userId: WEB,
+      purchase: { plan: 'pro_monthly', provider: 'stripe', countryCode: null },
+    });
     expect(await pro(WEB)).toBe(true);
     // The other learner bought nothing.
     expect(await pro(PHONE)).toBe(false);
@@ -263,7 +268,11 @@ describe.skipIf(!url)('billing against the database', () => {
       payment_intent: 'pi_test_billing_1',
       metadata: { user_id: WEB, plan: 'country_pass', country_code: COUNTRY.toLowerCase() },
     });
-    expect(await applyStripeEvent(pool, paid, prices)).toEqual({ kind: 'applied', userId: WEB });
+    expect(await applyStripeEvent(pool, paid, prices)).toEqual({
+      kind: 'applied',
+      userId: WEB,
+      purchase: { plan: 'country_pass', provider: 'stripe', countryCode: COUNTRY },
+    });
     const user = await accessUser(pool, WEB);
     const later = new Date(now + 3650 * DAY);
     expect(hasAccess(user, 'all_questions', COUNTRY, later)).toBe(true);
@@ -333,7 +342,11 @@ describe.skipIf(!url)('billing against the database', () => {
   it('turns an App Store purchase into Pro, on the web too', async () => {
     expect(await pro(PHONE)).toBe(false);
     const bought = storeEvent({});
-    expect(await applyRevenueCatEvent(pool, bought)).toEqual({ kind: 'applied', userId: PHONE });
+    expect(await applyRevenueCatEvent(pool, bought)).toEqual({
+      kind: 'applied',
+      userId: PHONE,
+      purchase: { plan: 'pro_yearly', provider: 'app_store', countryCode: null },
+    });
     // What the web app is served for this learner.
     expect((await getMe(pool, PHONE))!.entitlements).toMatchObject([
       { plan: 'pro_yearly', status: 'active', provider: 'app_store' },
@@ -374,7 +387,11 @@ describe.skipIf(!url)('billing against the database', () => {
       app_user_id: '$RCAnonymousID:abc',
       aliases: ['$RCAnonymousID:abc', PHONE],
     });
-    expect(await applyRevenueCatEvent(pool, pass)).toEqual({ kind: 'applied', userId: PHONE });
+    expect(await applyRevenueCatEvent(pool, pass)).toEqual({
+      kind: 'applied',
+      userId: PHONE,
+      purchase: { plan: 'country_pass', provider: 'play_store', countryCode: COUNTRY },
+    });
     expect(await pro(PHONE, new Date(now + 3650 * DAY))).toBe(true);
 
     const elsewhere = storeEvent({

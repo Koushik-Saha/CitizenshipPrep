@@ -21,7 +21,9 @@
     "db:test": "db/local.sh test",
     "db:types": "db/local.sh types",
     "db:deploy": "dbmate --env-file .env.local --env DATABASE_URL_UNPOOLED --migrations-dir db/migrations --migrations-table private.schema_migrations --no-dump-schema up",
-    "content": "pnpm --filter @oathly/content run --silent cli"
+    "content": "pnpm --filter @oathly/content run --silent cli",
+    "e2e": "pnpm --filter @oathly/web e2e",
+    "security:bundles": "node scripts/security/client-bundles.mjs"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",

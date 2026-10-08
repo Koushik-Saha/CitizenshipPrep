@@ -1,3 +1,4 @@
+import { idSchema } from '@oathly/api/schemas';
 import { getOrgLogo } from '@oathly/api/server';
 
 import { getDb } from '@/lib/db';
@@ -6,8 +7,8 @@ import { getDb } from '@/lib/db';
 // any logo: it is shown to people before they have joined or signed in. The
 // version in the address changes with the image, so it is cached for good.
 export async function GET(_request: Request, { params }: RouteContext<'/api/orgs/[id]/logo'>) {
-  const { id } = await params;
-  const logo = await getOrgLogo(getDb(), id);
+  const id = idSchema.safeParse((await params).id);
+  const logo = id.success ? await getOrgLogo(getDb(), id.data) : null;
   if (!logo) return new Response('Not found', { status: 404 });
   return new Response(new Uint8Array(logo.data), {
     headers: {

@@ -2,7 +2,7 @@
 -- later: a new table without RLS fails here.
 
 begin;
-select plan(37);
+select plan(40);
 
 select has_table('public', table_name, format('table %s exists', table_name))
 from unnest(array[
@@ -11,7 +11,8 @@ from unnest(array[
   'mock_exams', 'subscriptions', 'organizations', 'org_members', 'content_flags',
   'community_posts', 'community_comments', 'source_documents', 'source_passages',
   'question_reviews', 'user_settings', 'ai_explanations', 'ai_usage', 'audio_clips',
-  'billing_customers', 'billing_events', 'org_invites', 'org_logos', 'org_billing_customers'
+  'billing_customers', 'billing_events', 'org_invites', 'org_logos', 'org_billing_customers',
+  'rate_limits'
 ]) as table_name;
 
 select is_empty(
@@ -92,6 +93,34 @@ select is_empty(
     where n.nspname = 'public' and p.prosecdef
   $$,
   'no SECURITY DEFINER function is exposed through the public schema'
+);
+
+-- What a visitor with no session can reach through the Data API: published
+-- content to read, and nothing to change. A new grant fails here until it is
+-- added on purpose.
+select is_empty(
+  $$
+    select table_name, privilege_type
+    from information_schema.role_table_grants
+    where table_schema = 'public' and grantee in ('anonymous', 'PUBLIC')
+      and privilege_type <> 'SELECT'
+    union
+    select table_name, privilege_type
+    from information_schema.column_privileges
+    where table_schema = 'public' and grantee in ('anonymous', 'PUBLIC')
+      and privilege_type <> 'SELECT'
+  $$,
+  'signed-out visitors can change nothing'
+);
+
+select set_eq(
+  $$
+    select table_name::text
+    from information_schema.column_privileges
+    where table_schema = 'public' and grantee in ('anonymous', 'PUBLIC')
+  $$,
+  array['countries', 'exam_formats', 'topics', 'questions', 'question_translations'],
+  'and can read only the content tables'
 );
 
 select * from finish();

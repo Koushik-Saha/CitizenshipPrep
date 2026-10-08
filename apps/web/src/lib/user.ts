@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
 
+import { track } from './analytics';
 import { getAuth, isAuthConfigured } from './auth/server';
 import { getDb } from './db';
 import { TEST_SESSION_COOKIE, verifyTestSession } from './test-sign-in';
@@ -21,14 +22,18 @@ export async function currentUser(): Promise<SignedInUser | null> {
   await connection();
   const testUser = verifyTestSession((await cookies()).get(TEST_SESSION_COOKIE)?.value);
   if (testUser) {
-    await ensureProfile(getDb(), testUser, null);
+    if (await ensureProfile(getDb(), testUser, null))
+      track(testUser, 'signup', { platform: 'web' });
     return { userId: testUser, email: null };
   }
   if (!isAuthConfigured()) return null;
   const { data } = await getAuth().getSession();
   const user = data?.user;
   if (!user?.id) return null;
-  await ensureProfile(getDb(), user.id, user.name || null);
+  // The first sight of an account is its signup.
+  if (await ensureProfile(getDb(), user.id, user.name || null)) {
+    track(user.id, 'signup', { platform: 'web' });
+  }
   return { userId: user.id, email: user.email ?? null };
 }
 

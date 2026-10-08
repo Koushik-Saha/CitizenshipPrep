@@ -1,4 +1,5 @@
 import { reportColumns, reportRow, sortLearners, type ReportColumn } from '@oathly/api/org';
+import { idSchema } from '@oathly/api/schemas';
 import { getOrgReport, OrgError } from '@oathly/api/server';
 import { toCsv } from '@oathly/core';
 import { countryName, isUiLocale } from '@oathly/i18n';
@@ -37,7 +38,9 @@ const standingLabel = {
 export async function GET(request: Request, { params }: RouteContext<'/api/orgs/[id]/report'>) {
   const userId = await apiUserId(request);
   if (!userId) return jsonError('Sign in to continue.', 401);
-  const { id } = await params;
+  const parsed = idSchema.safeParse((await params).id);
+  if (!parsed.success) return jsonError('No such organization.', 404);
+  const id = parsed.data;
   const asked = new URL(request.url).searchParams.get('locale') ?? 'en';
   const t = translatorFor(isUiLocale(asked) ? asked : 'en');
 

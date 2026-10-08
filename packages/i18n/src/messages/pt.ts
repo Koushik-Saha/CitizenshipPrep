@@ -18,6 +18,13 @@ export const pt: Messages = {
     comingSoon: 'Em breve',
     notAffiliated:
       'O Oathly é um aplicativo de estudo independente. Não é afiliado a nenhum governo nem endossado por nenhum.',
+    errorTitle: 'Algo deu errado',
+    errorBody:
+      'Não foi possível mostrar esta página. Tente de novo e, se continuar, volte um pouco mais tarde.',
+    notFoundTitle: 'Página não encontrada',
+    notFoundBody:
+      'Não há página neste endereço. Ela pode ter sido movida, ou o link pode estar digitado errado.',
+    backHome: 'Ir para a página inicial',
   },
 
   exam: {
@@ -296,6 +303,13 @@ export const pt: Messages = {
     addExam: 'Adicionar outro exame',
     loadFailed: 'Não conseguimos carregar seu plano de estudo.',
     loadingPlan: 'Carregando seu plano de estudo',
+    examResultAsk: 'Como foi o seu teste ({country})?',
+    examResultPassed: 'Passei',
+    examResultFailed: 'Desta vez não',
+    examResultCongrats: 'Parabéns por passar no teste ({country}).',
+    examResultRetake:
+      'Obrigado por nos contar. Continue praticando e informe a nova data quando tiver.',
+    examResultError: 'Não foi possível salvar. Tente de novo.',
   },
 
   readiness: {
@@ -692,6 +706,7 @@ export const pt: Messages = {
     emailExpires: 'O link funciona uma única vez e expira em {days} dias.',
     emailFooter:
       'O Oathly é um aplicativo de estudo independente. Não é afiliado a nenhum governo nem endossado por nenhum. Se você não esperava esta mensagem, pode ignorá-la.',
+    inviteGoneTitle: 'Convite não encontrado',
   },
 
   offline: {

@@ -39,6 +39,7 @@ export default async function JoinPage({
   if (!invite || invite.expired) {
     return (
       <main className="mx-auto max-w-xl px-4 py-12 sm:py-16">
+        <h1 className="font-display mb-6 text-3xl font-semibold">{t('org.inviteGoneTitle')}</h1>
         <Notice tone="warning" role="alert">
           {t('org.errorInviteGone')}
         </Notice>

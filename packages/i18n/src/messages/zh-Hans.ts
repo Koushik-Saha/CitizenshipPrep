@@ -17,6 +17,11 @@ export const zhHans: Messages = {
     breadcrumb: '当前位置',
     comingSoon: '即将推出',
     notAffiliated: 'Oathly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。',
+    errorTitle: '出了点问题',
+    errorBody: '无法显示此页面。请重试；如果问题仍然存在，请稍后再来。',
+    notFoundTitle: '找不到页面',
+    notFoundBody: '这个地址没有页面。它可能已被移走，或者链接输入有误。',
+    backHome: '前往首页',
   },
 
   exam: {
@@ -265,6 +270,12 @@ export const zhHans: Messages = {
     addExam: '添加另一项考试',
     loadFailed: '学习计划加载失败。',
     loadingPlan: '正在加载学习计划',
+    examResultAsk: '你的{country}考试结果如何？',
+    examResultPassed: '我通过了',
+    examResultFailed: '这次没通过',
+    examResultCongrats: '恭喜你通过{country}考试。',
+    examResultRetake: '感谢告知。请继续练习，确定新的考试日期后再设置。',
+    examResultError: '保存失败，请重试。',
   },
 
   readiness: {
@@ -636,6 +647,7 @@ export const zhHans: Messages = {
     emailExpires: '链接只能使用一次，并将在 {days} 天后过期。',
     emailFooter:
       'Oathly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。如果你没有预料到这封邮件，可以忽略它。',
+    inviteGoneTitle: '找不到邀请',
   },
 
   offline: {

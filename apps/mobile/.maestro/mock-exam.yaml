@@ -6,34 +6,10 @@
 #
 # APP_ID is Expo Go: host.exp.Exponent on iOS, host.exp.exponent on Android.
 # The app must be running with a test session (see README.md), so there is no
-# sign-in to get through. Elements are found by testID, never by a country's
-# name: the flow works for whichever country the test learner studies.
+# sign-in to get through. shared/open.yaml opens the app and gets to the Study tab.
 appId: ${APP_ID}
 ---
-- launchApp:
-    appId: ${APP_ID}
-- openLink: ${APP_URL}
-
-# A brand-new test learner lands on onboarding first.
-- runFlow:
-    when:
-      visible:
-        id: 'finish-onboarding'
-    commands:
-      - tapOn:
-          id: 'country-.*'
-          index: 0
-      - scrollUntilVisible:
-          element:
-            id: 'finish-onboarding'
-          direction: DOWN
-      - tapOn:
-          id: 'finish-onboarding'
-
-- extendedWaitUntil:
-    visible:
-      id: 'practise-.*'
-    timeout: 60000
+- runFlow: shared/open.yaml
 
 - scrollUntilVisible:
     element:

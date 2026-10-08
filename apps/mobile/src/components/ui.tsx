@@ -260,13 +260,17 @@ const styles = StyleSheet.create({
 export function Card({
   children,
   style,
+  testID,
 }: {
   children: React.ReactNode;
   style?: React.ComponentProps<typeof View>['style'];
+  /** For automated tests (Maestro). */
+  testID?: string;
 }) {
   const theme = useTheme();
   return (
     <View
+      testID={testID}
       style={[
         {
           padding: theme.spacing[5],

@@ -9,3 +9,4 @@ export * from './ai';
 export * from './audio';
 export * from './billing';
 export * from './org';
+export * from './rate-limit';

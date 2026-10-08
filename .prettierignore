@@ -1,6 +1,9 @@
 pnpm-lock.yaml
 .turbo
 .next
+.next-e2e
+apps/web/e2e/results
+apps/web/e2e/report
 .expo
 dist
 coverage

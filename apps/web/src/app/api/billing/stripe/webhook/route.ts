@@ -2,6 +2,7 @@ import { applyStripeEvent, type StripeEvent } from '@oathly/api/server';
 import { revalidatePath } from 'next/cache';
 
 import { getStripe, stripePrices } from '@/lib/billing';
+import { track } from '@/lib/analytics';
 import { getDb } from '@/lib/db';
 
 // POST /api/billing/stripe/webhook: Stripe tells us what happened to a
@@ -33,6 +34,16 @@ export async function POST(request: Request) {
 
   // A failure here answers 500, and Stripe delivers the event again later.
   const outcome = await applyStripeEvent(getDb(), event, prices);
-  if (outcome.kind === 'applied') revalidatePath('/[locale]/study', 'layout');
+  if (outcome.kind === 'applied') {
+    revalidatePath('/[locale]/study', 'layout');
+    // A purchase starting, as opposed to renewing or changing, is an upgrade.
+    if (outcome.purchase && outcome.userId) {
+      track(outcome.userId, 'upgrade', {
+        plan: outcome.purchase.plan,
+        provider: outcome.purchase.provider,
+        country: outcome.purchase.countryCode,
+      });
+    }
+  }
   return Response.json({ received: true, outcome: outcome.kind });
 }

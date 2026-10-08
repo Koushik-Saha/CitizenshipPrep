@@ -3,8 +3,10 @@
 // answers mean.
 export * from './access';
 export * from './ai-limits';
+export * from './analytics';
 export * from './audio';
 export * from './exam-format';
+export * from './exam-result';
 export * from './globe';
 export { hello } from './hello';
 export * from './mastery';
@@ -14,6 +16,7 @@ export * from './org';
 export * from './practice';
 export * from './progress';
 export * from './random';
+export * from './rate-limit';
 export * from './readiness';
 export * from './scoring';
 export * from './seo';

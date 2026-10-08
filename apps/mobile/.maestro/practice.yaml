@@ -1,0 +1,51 @@
+# A practice session on a phone: from the dashboard, through every question
+# with its feedback, to the results and back.
+#
+#   maestro test .maestro/practice.yaml \
+#     -e APP_ID=host.exp.Exponent -e APP_URL=exp://<your-computer-ip>:8081
+#
+# See mock-exam.yaml for what APP_ID and the test session are.
+appId: ${APP_ID}
+---
+- runFlow: shared/open.yaml
+
+- tapOn:
+    id: 'practise-.*'
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: 'audio-mode'
+    timeout: 30000
+# A country whose exam is spoken opens practice with the question read aloud.
+# This flow answers by tapping, so it brings the written form back.
+- runFlow:
+    when:
+      visible:
+        id: 'show-question'
+    commands:
+      - tapOn:
+          id: 'audio-mode'
+- extendedWaitUntil:
+    visible:
+      id: 'question-text'
+    timeout: 30000
+
+# Practice checks each answer and shows why, then moves on.
+- repeat:
+    while:
+      notVisible:
+        id: 'results'
+    commands:
+      - tapOn:
+          id: 'option-0'
+      - tapOn:
+          id: 'check'
+      - tapOn:
+          id: 'next'
+
+- assertVisible:
+    id: 'results'
+- tapOn:
+    id: 'back-to-study'
+- assertVisible:
+    id: 'practise-.*'

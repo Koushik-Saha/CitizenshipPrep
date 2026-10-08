@@ -116,12 +116,22 @@ pnpm --filter @oathly/mobile lint
 session:
 
 ```bash
-maestro test .maestro/mock-exam.yaml \
+maestro test .maestro \
   -e APP_ID=host.exp.Exponent -e APP_URL=exp://192.168.1.20:8081
 ```
 
-(`host.exp.exponent`, lower case, on Android.) The flow starts a mock exam,
-answers every question and checks the results screen.
+(`host.exp.exponent`, lower case, on Android.) There are four flows, each
+starting from `.maestro/shared/open.yaml`, which opens the app and takes a new
+test learner through onboarding:
+
+| Flow              | What it does                                                     |
+| ----------------- | ---------------------------------------------------------------- |
+| `mock-exam.yaml`  | Starts a mock exam, answers every question, checks the results.  |
+| `practice.yaml`   | A practice session: answer, check, next, through to the results. |
+| `flashcards.yaml` | Turns each card over and rates it, through to the results.       |
+| `plans.yaml`      | Opens the plans screen from the Profile tab and comes back.      |
+
+They find elements by `testID`, never by a country's name.
 
 **In a browser.** The app also runs under `react-native-web`, which is how it
 is checked on machines without a simulator. It is the same screens and engine,
@@ -130,8 +140,14 @@ not the same rendering: gestures, haptics and performance still need a phone.
 ```bash
 pnpm --filter @oathly/mobile web:setup        # once: copies Skia's WebAssembly runtime
 EXPO_PUBLIC_API_URL=http://localhost:3000 pnpm --filter @oathly/mobile web
-pnpm --filter @oathly/mobile test:web         # the Maestro flow, with Playwright
+pnpm --filter @oathly/mobile test:web         # the same four flows, with Playwright
 ```
+
+## Error reporting
+
+Set `EXPO_PUBLIC_SENTRY_DSN` to send errors to Sentry (`src/lib/monitoring.ts`).
+Without it the SDK is never loaded. Reports carry the error and where it
+happened: no traces, no screenshots, nothing that names the learner.
 
 ## Motion and the globe
 

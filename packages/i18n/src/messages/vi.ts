@@ -18,6 +18,12 @@ export const vi: Messages = {
     comingSoon: 'Sắp ra mắt',
     notAffiliated:
       'Oathly là ứng dụng học tập độc lập. Ứng dụng không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ.',
+    errorTitle: 'Đã xảy ra lỗi',
+    errorBody: 'Không thể hiển thị trang này. Hãy thử lại, nếu vẫn lỗi thì quay lại sau ít phút.',
+    notFoundTitle: 'Không tìm thấy trang',
+    notFoundBody:
+      'Không có trang nào ở địa chỉ này. Trang có thể đã được chuyển đi, hoặc liên kết bị gõ sai.',
+    backHome: 'Về trang chủ',
   },
 
   exam: {
@@ -284,6 +290,13 @@ export const vi: Messages = {
     addExam: 'Thêm kỳ thi khác',
     loadFailed: 'Chúng tôi không tải được kế hoạch học của bạn.',
     loadingPlan: 'Đang tải kế hoạch học của bạn',
+    examResultAsk: 'Bài thi {country} của bạn thế nào?',
+    examResultPassed: 'Tôi đã đậu',
+    examResultFailed: 'Lần này chưa đậu',
+    examResultCongrats: 'Chúc mừng bạn đã đậu bài thi {country}.',
+    examResultRetake:
+      'Cảm ơn bạn đã cho biết. Hãy tiếp tục luyện tập và đặt ngày thi mới khi bạn có.',
+    examResultError: 'Không lưu được. Hãy thử lại.',
   },
 
   readiness: {
@@ -671,6 +684,7 @@ export const vi: Messages = {
     emailExpires: 'Liên kết chỉ dùng được một lần và hết hạn sau {days} ngày.',
     emailFooter:
       'Oathly là ứng dụng học tập độc lập, không liên kết với và không được chính phủ nào bảo trợ. Nếu bạn không chờ thư này, bạn có thể bỏ qua.',
+    inviteGoneTitle: 'Không tìm thấy lời mời',
   },
 
   offline: {

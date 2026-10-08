@@ -1,4 +1,4 @@
-import type { ClipPart, MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
+import type { ClipPart, ExamOutcome, MockExam, MockExamSection, QuizQuestion } from '@oathly/core';
 
 // What a study session looks like on the client: everything needed to run it
 // without another request.
@@ -154,6 +154,10 @@ export interface CountryDashboard {
   countryName: string;
   isPrimary: boolean;
   examDate: string | null;
+  /** How the real exam went, once the learner has said. */
+  examResult: ExamOutcome | null;
+  /** Whether to ask how it went: the date has come and they have not said. */
+  askExamResult: boolean;
   /** Null when no questions are published yet. */
   readiness: ReadinessView | null;
   /** Questions this learner can study: all of them, or the Free plan's sample. */

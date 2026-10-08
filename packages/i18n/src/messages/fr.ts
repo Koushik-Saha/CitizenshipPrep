@@ -18,6 +18,13 @@ export const fr: Messages = {
     comingSoon: 'Bientôt disponible',
     notAffiliated:
       'Oathly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement ni approuvée par aucun.',
+    errorTitle: 'Une erreur s’est produite',
+    errorBody:
+      'Cette page n’a pas pu s’afficher. Réessayez et, si cela continue, revenez un peu plus tard.',
+    notFoundTitle: 'Page introuvable',
+    notFoundBody:
+      'Il n’y a pas de page à cette adresse. Elle a peut-être été déplacée, ou le lien est mal saisi.',
+    backHome: 'Aller à la page d’accueil',
   },
 
   exam: {
@@ -298,6 +305,13 @@ export const fr: Messages = {
     addExam: 'Ajouter un autre examen',
     loadFailed: 'Nous n’avons pas pu charger votre plan d’étude.',
     loadingPlan: 'Chargement de votre plan d’étude',
+    examResultAsk: 'Comment s’est passé votre test ({country}) ?',
+    examResultPassed: 'J’ai réussi',
+    examResultFailed: 'Pas cette fois',
+    examResultCongrats: 'Félicitations pour votre réussite au test ({country}).',
+    examResultRetake:
+      'Merci de nous l’avoir dit. Continuez à vous entraîner et indiquez votre nouvelle date dès que vous l’avez.',
+    examResultError: 'Impossible d’enregistrer. Réessayez.',
   },
 
   readiness: {
@@ -703,6 +717,7 @@ export const fr: Messages = {
     emailExpires: 'Le lien fonctionne une seule fois et expire dans {days} jours.',
     emailFooter:
       'Oathly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement et n’est approuvée par aucun. Si vous n’attendiez pas ce message, vous pouvez l’ignorer.',
+    inviteGoneTitle: 'Invitation introuvable',
   },
 
   offline: {

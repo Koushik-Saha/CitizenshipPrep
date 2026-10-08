@@ -5,14 +5,17 @@ import {
   buildMockExam,
   buildPracticeSet,
   createRandom,
+  dayKey,
   hasAccess,
   isDue,
   isValidTimeZone,
   minutesStudiedToday,
   readinessScore,
   reviewsFromEvents,
+  shouldAskExamResult,
   studyStreak,
   topicMastery,
+  type ExamOutcome,
   type AccessUser,
   type AnswerEvent,
   type PracticeMode,
@@ -195,8 +198,11 @@ export async function getDashboard(
     name: string;
     is_primary: boolean;
     exam_date: string | null;
+    exam_result: ExamOutcome | null;
+    exam_result_at: Date | null;
   }>(
-    `select uc.country_code, c.name, uc.is_primary, to_char(uc.exam_date, 'YYYY-MM-DD') as exam_date
+    `select uc.country_code, c.name, uc.is_primary, to_char(uc.exam_date, 'YYYY-MM-DD') as exam_date,
+            uc.exam_result, uc.exam_result_at
      from public.user_countries uc
      join public.countries c on c.iso_code = uc.country_code
      where uc.user_id = $1
@@ -271,6 +277,16 @@ export async function getDashboard(
       countryName: country.name,
       isPrimary: country.is_primary,
       examDate: country.exam_date,
+      examResult: country.exam_result,
+      askExamResult: shouldAskExamResult(
+        {
+          examDate: country.exam_date,
+          examResult: country.exam_result,
+          examResultAt: country.exam_result_at?.toISOString() ?? null,
+        },
+        // The learner's own today: an exam this morning is asked about this evening.
+        dayKey(now, setting.time_zone),
+      ),
       readiness: readinessView,
       publishedQuestions: pool.length,
       totalQuestions: bank.length,
@@ -593,13 +609,18 @@ export async function loadStudySession(
   };
 }
 
+/** What finishing an attempt finished: set when it was a mock exam, and finished just now. */
+export interface CompletedAttempt {
+  mockExam: { countryCode: string } | null;
+}
+
 /** Records the end of a session. Calling it again changes nothing. */
 export async function completeAttempt(
   pool: pg.Pool,
   userId: string,
   attemptId: string,
   result: { correct: number; total: number; passed: boolean | null },
-): Promise<void> {
+): Promise<CompletedAttempt> {
   if (
     !Number.isInteger(result.correct) ||
     !Number.isInteger(result.total) ||
@@ -611,11 +632,11 @@ export async function completeAttempt(
   const client = await pool.connect();
   try {
     await client.query('begin');
-    const updated = await client.query<{ mock_exam_id: string | null }>(
+    const updated = await client.query<{ mock_exam_id: string | null; country_code: string }>(
       `update public.attempts
        set completed_at = now(), correct_count = $3, question_count = $4
        where id = $1 and user_id = $2 and completed_at is null
-       returning mock_exam_id`,
+       returning mock_exam_id, country_code`,
       [attemptId, userId, result.correct, result.total],
     );
     const mockExamId = updated.rows[0]?.mock_exam_id;
@@ -627,6 +648,9 @@ export async function completeAttempt(
       );
     }
     await client.query('commit');
+    return {
+      mockExam: mockExamId ? { countryCode: updated.rows[0]!.country_code } : null,
+    };
   } catch (error) {
     await client.query('rollback');
     throw error;

@@ -18,6 +18,13 @@ export const tl: Messages = {
     comingSoon: 'Malapit na',
     notAffiliated:
       'Ang Oathly ay isang independiyenteng app sa pag-aaral. Hindi ito kaugnay o ineendorso ng anumang gobyerno.',
+    errorTitle: 'May nangyaring mali',
+    errorBody:
+      'Hindi maipakita ang pahinang ito. Subukan muli, at kung patuloy pa rin, bumalik mamaya.',
+    notFoundTitle: 'Hindi nakita ang pahina',
+    notFoundBody:
+      'Walang pahina sa address na ito. Maaaring nailipat ito, o mali ang pagkaka-type ng link.',
+    backHome: 'Pumunta sa home page',
   },
 
   exam: {
@@ -300,6 +307,13 @@ export const tl: Messages = {
     addExam: 'Magdagdag ng isa pang pagsusulit',
     loadFailed: 'Hindi namin na-load ang iyong plano sa pag-aaral.',
     loadingPlan: 'Nilo-load ang iyong plano sa pag-aaral',
+    examResultAsk: 'Kumusta ang pagsusulit mo sa {country}?',
+    examResultPassed: 'Pumasa ako',
+    examResultFailed: 'Hindi pa ngayon',
+    examResultCongrats: 'Binabati ka namin sa pagpasa sa pagsusulit ng {country}.',
+    examResultRetake:
+      'Salamat sa pagsabi sa amin. Magpatuloy sa pagsasanay, at ilagay ang bago mong petsa kapag mayroon na.',
+    examResultError: 'Hindi namin ito na-save. Subukan muli.',
   },
 
   readiness: {
@@ -703,6 +717,7 @@ export const tl: Messages = {
     emailExpires: 'Isang beses lang gumagana ang link at mag-e-expire sa loob ng {days} araw.',
     emailFooter:
       'Ang Oathly ay isang independiyenteng app sa pag-aaral. Hindi ito kaanib ng, o ineendorso ng, anumang pamahalaan. Kung hindi mo inaasahan ang mensaheng ito, puwede mo itong balewalain.',
+    inviteGoneTitle: 'Hindi nakita ang imbitasyon',
   },
 
   offline: {

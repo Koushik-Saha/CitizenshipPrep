@@ -1,19 +1,25 @@
+import { tutorRequestSchema } from '@oathly/api/schemas';
 import { askTutor, TutorError } from '@oathly/api/server';
 
 import { getGenerator, limitMessage } from '@/lib/ai';
 import { apiUserId, jsonError } from '@/lib/api-auth';
 import { getDb } from '@/lib/db';
+import { readJson } from '@/lib/http';
+import { rateLimited } from '@/lib/rate-limit';
 
 // POST { countryCode, messages: [{ role, content }] } -> the tutor's reply, streamed.
 export async function POST(request: Request) {
   const userId = await apiUserId(request);
   if (!userId) return jsonError('Sign in to continue.', 401);
-  const body = (await request.json().catch(() => null)) as {
-    countryCode?: unknown;
-    messages?: unknown;
-  } | null;
-  if (typeof body?.countryCode !== 'string')
-    return jsonError('Send { "countryCode", "messages" }.', 400);
+  // A burst limit, on top of the plan's daily allowance.
+  const limited = await rateLimited('tutor', 'user', userId);
+  if (limited) return limited;
+  const { data: body, problem } = await readJson(
+    request,
+    tutorRequestSchema,
+    'Send { "countryCode", "messages" }.',
+  );
+  if (problem) return problem;
 
   let outcome;
   try {

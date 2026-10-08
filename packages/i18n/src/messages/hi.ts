@@ -18,6 +18,13 @@ export const hi: Messages = {
     comingSoon: 'जल्द आ रहा है',
     notAffiliated:
       'Oathly एक स्वतंत्र पढ़ाई ऐप है। यह किसी भी सरकार से जुड़ा या उसके द्वारा समर्थित नहीं है।',
+    errorTitle: 'कुछ गड़बड़ हो गई',
+    errorBody:
+      'यह पेज दिखाया नहीं जा सका। फिर कोशिश करें, और अगर ऐसा होता रहे तो थोड़ी देर बाद आएँ।',
+    notFoundTitle: 'पेज नहीं मिला',
+    notFoundBody:
+      'इस पते पर कोई पेज नहीं है। हो सकता है उसे हटाया गया हो, या लिंक गलत टाइप हुआ हो।',
+    backHome: 'होम पेज पर जाएँ',
   },
 
   exam: {
@@ -291,6 +298,12 @@ export const hi: Messages = {
     addExam: 'एक और परीक्षा जोड़ें',
     loadFailed: 'हम आपकी पढ़ाई की योजना लोड नहीं कर सके।',
     loadingPlan: 'आपकी पढ़ाई की योजना लोड हो रही है',
+    examResultAsk: 'आपकी {country} की परीक्षा कैसी रही?',
+    examResultPassed: 'मैं पास हो गया/गई',
+    examResultFailed: 'इस बार नहीं',
+    examResultCongrats: '{country} की परीक्षा पास करने पर बधाई।',
+    examResultRetake: 'बताने के लिए धन्यवाद। अभ्यास जारी रखें, और नई तारीख मिलने पर उसे सेट करें।',
+    examResultError: 'हम इसे सहेज नहीं सके। फिर कोशिश करें।',
   },
 
   readiness: {
@@ -683,6 +696,7 @@ export const hi: Messages = {
     emailExpires: 'यह लिंक एक ही बार काम करता है और {days} दिन में खत्म हो जाएगा।',
     emailFooter:
       'Oathly एक स्वतंत्र स्टडी ऐप है। यह किसी सरकार से जुड़ा या उसके द्वारा समर्थित नहीं है। अगर आपको इस संदेश की उम्मीद नहीं थी, तो इसे अनदेखा कर सकते हैं।',
+    inviteGoneTitle: 'निमंत्रण नहीं मिला',
   },
 
   offline: {

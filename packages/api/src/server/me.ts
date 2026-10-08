@@ -1,3 +1,4 @@
+import type { ExamOutcome } from '@oathly/core';
 import type pg from 'pg';
 
 import type { ExamCountry, Me } from '../me';
@@ -15,17 +16,42 @@ export class OnboardingError extends Error {
   override readonly name = 'OnboardingError';
 }
 
-/** Creates the learner's profile on first sign-in. Safe to call on every request. */
+/**
+ * Makes sure a signed-in user has a profile. True when this call created it:
+ * the moment an account begins.
+ */
 export async function ensureProfile(
   db: Db,
   userId: string,
   displayName: string | null,
-): Promise<void> {
-  await db.query(
+): Promise<boolean> {
+  const { rowCount } = await db.query(
     `insert into public.profiles (id, display_name) values ($1, $2)
      on conflict (id) do nothing`,
     [userId, displayName?.trim().slice(0, 60) || null],
   );
+  return rowCount === 1;
+}
+
+/**
+ * Records how a learner's real exam went, as they report it. False when they
+ * are not studying that country. Reporting again replaces what was said: a
+ * mis-tap, or a retake.
+ */
+export async function reportExamResult(
+  db: Db,
+  userId: string,
+  countryCode: string,
+  result: ExamOutcome,
+  now: Date = new Date(),
+): Promise<boolean> {
+  const { rowCount } = await db.query(
+    `update public.user_countries
+     set exam_result = $3, exam_result_at = $4
+     where user_id = $1 and country_code = $2`,
+    [userId, countryCode.toUpperCase(), result, now],
+  );
+  return rowCount === 1;
 }
 
 export async function getMe(db: Db, userId: string): Promise<Me | null> {

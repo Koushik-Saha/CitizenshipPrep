@@ -1,0 +1,30 @@
+# Opens the app under its test session and gets to the Study tab, taking a
+# brand-new test learner through onboarding on the way. Every flow starts here.
+#
+# Elements are found by testID, never by a country's name: the flows work for
+# whichever country the test learner studies.
+appId: ${APP_ID}
+---
+- launchApp:
+    appId: ${APP_ID}
+- openLink: ${APP_URL}
+
+- runFlow:
+    when:
+      visible:
+        id: 'finish-onboarding'
+    commands:
+      - tapOn:
+          id: 'country-.*'
+          index: 0
+      - scrollUntilVisible:
+          element:
+            id: 'finish-onboarding'
+          direction: DOWN
+      - tapOn:
+          id: 'finish-onboarding'
+
+- extendedWaitUntil:
+    visible:
+      id: 'practise-.*'
+    timeout: 60000

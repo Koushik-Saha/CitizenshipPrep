@@ -301,9 +301,22 @@ export type WebhookOutcome =
    * A subscription row was written (or already said the same or newer): a
    * learner's own, or an organization's seats.
    */
-  | { kind: 'applied'; userId: string | null; organizationId?: string }
+  | {
+      kind: 'applied';
+      userId: string | null;
+      organizationId?: string;
+      /** Set when the event is a purchase starting, not a renewal or a change: for counting upgrades. */
+      purchase?: Purchase;
+    }
   /** Seen before, or not something that changes what anyone holds. */
   | { kind: 'ignored'; reason: string };
+
+/** What was bought, without who bought it. */
+export interface Purchase {
+  plan: string;
+  provider: string;
+  countryCode: string | null;
+}
 
 const ignored = (reason: string): WebhookOutcome => ({ kind: 'ignored', reason });
 
@@ -550,12 +563,18 @@ export async function applyStripeEvent(
         cancelAtPeriodEnd: false,
         at,
       });
-      return { kind: 'applied', userId };
+      return {
+        kind: 'applied',
+        userId,
+        purchase: { plan: 'country_pass', provider: 'stripe', countryCode },
+      };
     }
 
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
+      // A subscription is created once, when it is bought.
+      const started = event.type === 'customer.subscription.created';
       const team = teamChangeFromStripeSubscription(object, prices, at);
       if (team) {
         const customer = idOf(object.customer);
@@ -569,7 +588,12 @@ export async function applyStripeEvent(
         if (!(await firstDelivery(db, 'stripe', event, userId))) return ignored('already handled');
         if (customer) await linkOrgStripeCustomer(db, organizationId, customer);
         await applyTeamSubscriptionChange(db, { ...team, organizationId });
-        return { kind: 'applied', userId, organizationId };
+        return {
+          kind: 'applied',
+          userId,
+          organizationId,
+          ...(started ? { purchase: { plan: 'team', provider: 'stripe', countryCode: null } } : {}),
+        };
       }
       const change = changeFromStripeSubscription(object, prices, at);
       if (!change) return ignored('not a plan to record');
@@ -580,7 +604,13 @@ export async function applyStripeEvent(
       if (!(await firstDelivery(db, 'stripe', event, userId))) return ignored('already handled');
       if (customerId) await linkStripeCustomer(db, userId, customerId);
       await applySubscriptionChange(db, { ...change, userId });
-      return { kind: 'applied', userId };
+      return {
+        kind: 'applied',
+        userId,
+        ...(started
+          ? { purchase: { plan: change.plan, provider: 'stripe', countryCode: change.countryCode } }
+          : {}),
+      };
     }
 
     case 'charge.refunded': {
@@ -747,7 +777,20 @@ export async function applyRevenueCatEvent(
   }
   if (!(await firstDelivery(db, 'revenuecat', event, userId))) return ignored('already handled');
   await applySubscriptionChange(db, { ...change, userId });
-  return { kind: 'applied', userId };
+  const started = event.type === 'INITIAL_PURCHASE' || event.type === 'NON_RENEWING_PURCHASE';
+  return {
+    kind: 'applied',
+    userId,
+    ...(started
+      ? {
+          purchase: {
+            plan: change.plan,
+            provider: change.provider,
+            countryCode: change.countryCode,
+          },
+        }
+      : {}),
+  };
 }
 
 /** Whether a webhook's Authorization header is the secret we gave RevenueCat. */

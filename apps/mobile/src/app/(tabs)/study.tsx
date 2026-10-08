@@ -4,7 +4,7 @@ import {
   type StartSessionRequest,
   type StudySuggestionView,
 } from '@oathly/api';
-import { useDashboard } from '@oathly/api/hooks';
+import { useDashboard, useReportExamResult } from '@oathly/api/hooks';
 import { brandingMembership, orgLogoPath } from '@oathly/api/org';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, type Translator } from '@oathly/i18n';
@@ -31,6 +31,52 @@ import { apiUrl } from '@/lib/env';
 import { useT } from '@/lib/i18n';
 import { downloadPack, startSession, useOffline } from '@/lib/offline';
 import { useSession } from '@/lib/session';
+
+/**
+ * Once the exam's date has come: asks how it went, and afterwards says what
+ * the learner told us. Nothing is shown before the date.
+ */
+function ExamResult({ country, name }: { country: CountryDashboard; name: string }) {
+  const t = useT();
+  const theme = useTheme();
+  const report = useReportExamResult();
+  const code = country.countryCode;
+  const say = (result: 'passed' | 'failed') => report.mutate({ countryCode: code, result });
+
+  if (country.askExamResult) {
+    return (
+      <Card testID={`exam-result-ask-${code}`}>
+        <View style={{ gap: theme.spacing[3] }}>
+          <Body>{t('dashboard.examResultAsk', { country: name })}</Body>
+          <Button
+            label={t('dashboard.examResultPassed')}
+            onPress={() => say('passed')}
+            busy={report.isPending}
+            testID={`exam-passed-${code}`}
+          />
+          <Button
+            label={t('dashboard.examResultFailed')}
+            variant="secondary"
+            onPress={() => say('failed')}
+            disabled={report.isPending}
+            testID={`exam-failed-${code}`}
+          />
+          {report.isError && <Message tone="error">{t('dashboard.examResultError')}</Message>}
+        </View>
+      </Card>
+    );
+  }
+  if (!country.examResult) return null;
+  return (
+    <View testID={`exam-result-${country.examResult}-${code}`}>
+      <Message tone="info">
+        {country.examResult === 'passed'
+          ? t('dashboard.examResultCongrats', { country: name })
+          : t('dashboard.examResultRetake')}
+      </Message>
+    </View>
+  );
+}
 
 function countdown(days: number | null, t: Translator): string {
   if (days === null) return t('exam.countdownNone');
@@ -154,6 +200,8 @@ function CountrySection({
         <Body muted>{countdown(daysUntilExam(country), t)}</Body>
         <Body muted>{t('dashboard.questionsReady', { count: country.publishedQuestions })}</Body>
       </View>
+
+      <ExamResult country={country} name={name} />
 
       {!country.fullAccess && country.totalQuestions > country.publishedQuestions && (
         // On the Free plan, and there is more to this country than its sample.

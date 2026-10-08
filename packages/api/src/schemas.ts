@@ -2,7 +2,7 @@
 // against these, so a server that drifts fails loudly instead of rendering
 // nonsense. The `satisfies` clauses keep each schema in step with its type.
 
-import { examBlueprintSchema } from '@oathly/core';
+import { examBlueprintSchema, examOutcomes, type QueuedAnswer } from '@oathly/core';
 import * as z from 'zod/mini';
 
 import type { CountryFacts } from './countries';
@@ -69,6 +69,9 @@ export const dashboardSchema = z.object({
       countryName: z.string(),
       isPrimary: z.boolean(),
       examDate: nullableString,
+      // Defaulted, so a dashboard a phone saved before results existed still reads.
+      examResult: z._default(z.nullable(z.enum(examOutcomes)), null),
+      askExamResult: z._default(z.boolean(), false),
       readiness: z.nullable(readinessSchema),
       publishedQuestions: z.number(),
       totalQuestions: z.number(),
@@ -207,21 +210,83 @@ export const syncOutcomeSchema = z.object({
 
 export const startedSchema = z.object({ attemptId: z.string() });
 
-// What clients send.
+// What clients send. Every request body and every id in a path is checked
+// against one of these before anything else looks at it.
+
+/**
+ * An id in a path or a body: shaped like a UUID, so it is safe to hand to
+ * Postgres as one. Any version: ids come from Postgres, from phones and from
+ * fixtures, and all that matters here is the shape.
+ */
+export const idSchema = z.guid();
+
+/** A country as clients name it: two letters, either case. */
+export const countryCodeSchema = z.string().check(z.regex(/^[A-Za-z]{2}$/));
 
 export const startSessionRequestSchema = z.union([
   z.object({
     kind: z.enum(['practice', 'flashcards']),
-    countryCode: z.string(),
-    focus: z.union([z.literal('adaptive'), z.literal('random'), z.object({ topicId: z.string() })]),
-    size: z.number(),
+    countryCode: countryCodeSchema,
+    focus: z.union([z.literal('adaptive'), z.literal('random'), z.object({ topicId: idSchema })]),
+    size: z.int().check(z.minimum(1), z.maximum(100)),
   }),
-  z.object({ kind: z.literal('mock_exam'), countryCode: z.string(), examFormatId: z.string() }),
+  z.object({
+    kind: z.literal('mock_exam'),
+    countryCode: countryCodeSchema,
+    examFormatId: idSchema,
+  }),
 ]) satisfies z.ZodMiniType<StartSessionRequest>;
 
+/**
+ * One answer from a client's queue. Checked one at a time, not as a batch: a
+ * malformed answer is refused for good while the rest are stored.
+ */
+export const queuedAnswerSchema = z.object({
+  clientEventId: z.guid({ error: 'clientEventId must be a UUID.' }),
+  attemptId: z.guid({ error: 'Unknown attempt or question.' }),
+  questionId: z.guid({ error: 'Unknown attempt or question.' }),
+  questionVersion: z
+    .int({ error: 'Invalid question version.' })
+    .check(z.minimum(1, { error: 'Invalid question version.' })),
+  selectedKeys: z
+    .array(z.string().check(z.maxLength(40)), { error: 'Invalid answer.' })
+    .check(z.maxLength(20, { error: 'Invalid answer.' })),
+  correct: z.boolean({ error: 'Invalid answer.' }),
+  timeMs: z
+    .int({ error: 'Invalid answer time.' })
+    .check(z.minimum(0, { error: 'Invalid answer time.' })),
+  answeredAt: z
+    .string({ error: 'Invalid answer timestamp.' })
+    .check(
+      z.refine((value) => !Number.isNaN(Date.parse(value)), { error: 'Invalid answer timestamp.' }),
+    ),
+}) satisfies z.ZodMiniType<QueuedAnswer>;
+
+/** The envelope answers arrive in. Each answer is then checked on its own. */
+export const answersRequestSchema = z.object({
+  answers: z.array(z.unknown()).check(z.maxLength(100)),
+});
+
+export const explainRequestSchema = z.object({ questionId: idSchema });
+
+/** The tutor's request. The conversation itself is tidied by the tutor (cleanConversation). */
+export const tutorRequestSchema = z.object({
+  countryCode: countryCodeSchema,
+  messages: z.array(z.unknown()).check(z.maxLength(200)),
+});
+
+export const timeZoneRequestSchema = z.object({
+  timeZone: z.string().check(z.minLength(1), z.maxLength(64)),
+});
+
+export const examResultRequestSchema = z.object({
+  countryCode: countryCodeSchema,
+  result: z.enum(examOutcomes),
+});
+
 export const sessionResultSchema = z.object({
-  correct: z.number(),
-  total: z.number(),
+  correct: z.int().check(z.minimum(0), z.maximum(1000)),
+  total: z.int().check(z.minimum(0), z.maximum(1000)),
   passed: z.nullable(z.boolean()),
 }) satisfies z.ZodMiniType<SessionResult>;
 
@@ -229,12 +294,12 @@ export const offlineAttemptsSchema = z.object({
   attempts: z
     .array(
       z.object({
-        attemptId: z.string(),
-        countryCode: z.string(),
+        attemptId: idSchema,
+        countryCode: countryCodeSchema,
         mode: modeSchema,
-        questionIds: z.array(z.string()),
-        examFormatId: nullableString,
-        examQuestionIds: z.nullable(z.array(z.string())),
+        questionIds: z.array(idSchema).check(z.maxLength(500)),
+        examFormatId: z.nullable(idSchema),
+        examQuestionIds: z.nullable(z.array(idSchema).check(z.maxLength(500))),
         startedAt: z.string(),
         result: z.nullable(sessionResultSchema),
       }) satisfies z.ZodMiniType<OfflineAttempt>,

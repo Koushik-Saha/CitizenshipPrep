@@ -2,7 +2,15 @@ import { QueryClient } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { OathlyApi } from './client';
-import { dashboardQuery, DASHBOARD_STALE_MS, queryKeys, sessionQuery } from './queries';
+import {
+  countriesQuery,
+  dashboardQuery,
+  DASHBOARD_STALE_MS,
+  meQuery,
+  publicCountriesQuery,
+  queryKeys,
+  sessionQuery,
+} from './queries';
 import type { Dashboard } from './study';
 
 const dashboard: Dashboard = {
@@ -47,5 +55,37 @@ describe('dashboardQuery', () => {
     await client.fetchQuery(sessionQuery(api, 'a'));
     expect(session).toHaveBeenCalledTimes(1);
     expect(queryKeys.session('a')).toEqual(['session', 'a']);
+  });
+});
+
+describe('the other queries', () => {
+  it('ask the API for what their key names, once while fresh', async () => {
+    const api = {
+      me: vi.fn(async () => ({ profile: { id: 'u' } })),
+      countries: vi.fn(async () => [{ isoCode: 'ZZ' }]),
+      publicCountries: vi.fn(async () => [{ isoCode: 'ZZ', slug: 'testland' }]),
+    };
+    const client = new QueryClient();
+    const asApi = api as unknown as OathlyApi;
+
+    await client.fetchQuery(meQuery(asApi));
+    await client.fetchQuery(meQuery(asApi));
+    expect(api.me).toHaveBeenCalledTimes(1);
+    expect(client.getQueryData(queryKeys.me)).toEqual({ profile: { id: 'u' } });
+
+    await client.fetchQuery(countriesQuery(asApi));
+    await client.fetchQuery(countriesQuery(asApi));
+    expect(api.countries).toHaveBeenCalledTimes(1);
+    expect(client.getQueryData(queryKeys.countries)).toEqual([{ isoCode: 'ZZ' }]);
+
+    await client.fetchQuery(publicCountriesQuery(asApi));
+    expect(client.getQueryData(queryKeys.publicCountries)).toEqual([
+      { isoCode: 'ZZ', slug: 'testland' },
+    ]);
+  });
+
+  it('keeps each session and each country’s pack under its own key', () => {
+    expect(queryKeys.session('a')).not.toEqual(queryKeys.session('b'));
+    expect(queryKeys.pack('ZZ')).toEqual(['pack', 'ZZ']);
   });
 });

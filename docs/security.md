@@ -1,0 +1,140 @@
+# Security checklist
+
+Reviewed 8 October 2026. Each line says what was checked, how, and where the
+check lives so it keeps being run. "Open" items at the end are known gaps, not
+oversights.
+
+## Summary
+
+| Area                                     | State                                           |
+| ---------------------------------------- | ----------------------------------------------- |
+| Row level security on every table        | Pass: 31 tables, 101 policies, tested           |
+| No secrets in client bundles             | Pass: scanned on every CI build, web and mobile |
+| Rate limiting on AI and auth endpoints   | Pass: added in this review, tested              |
+| Input validation with Zod                | Pass for the API; see "Open" for Server Actions |
+| Security headers                         | Pass: added in this review, tested              |
+| Error reporting carries no personal data | Pass: Sentry's collection switched off, checked |
+
+## Database
+
+- **RLS on every table.** `db/tests/001_structure.test.sql` fails if any table
+  in `public` has RLS off or no policy, so a new table cannot ship without it.
+- **Signed-out visitors can change nothing and read only content.** The same
+  file lists every grant to the `anonymous` role: `SELECT` on `countries`,
+  `exam_formats`, `topics`, `questions`, `question_translations`, and nothing
+  else. A new grant fails the test until it is added on purpose.
+- **A learner's progress is theirs alone**, organization admins see only their
+  own members, and members cannot see each other: `db/tests/002` to `013`
+  (262 tests in all, run in CI's database job).
+- **`SECURITY DEFINER` functions** pin their `search_path` and none is exposed
+  in `public` (tested in `001`).
+- **The server connects as the owner**, so RLS does not bind it. Every server
+  function takes a verified user id and scopes its queries to it; the
+  database-backed tests in `packages/api/src/server/*.db.test.ts` check the
+  scoping (a learner finishing another's session, reading another's report).
+- **Rate limit counters** (`rate_limits`) are granted to no client.
+
+## Secrets
+
+- **Nothing secret reaches a browser or a phone.**
+  `scripts/security/client-bundles.mjs` reads every built client file and
+  fails on the value of a server-only variable, on anything shaped like a
+  credential (Stripe, Anthropic, Resend, Neon, Sentry, Google keys, database
+  addresses with passwords, private keys), and on the _name_ of a server-only
+  variable, which only appears when server code has been bundled for the
+  client. CI runs it on the web build (built with marker values, so the check
+  is not vacuous) and on the iOS and Android bundles.
+- **Server-only variables have no public prefix.** Only `NEXT_PUBLIC_*` and
+  `EXPO_PUBLIC_*` values are inlined into client code; the only ones defined
+  are the Sentry DSN, the API origin and the Neon Auth address, all public.
+- **`.env.local` is not in git**; `.env.example` documents every variable.
+- **Invitation tokens** are stored as SHA-256 hashes; Stripe and RevenueCat
+  webhooks verify their signature or secret before anything is read.
+
+## Rate limiting
+
+Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
+(`takeRateLimit`), so they hold across server instances.
+
+| What                           | Limit           | Counted by      |
+| ------------------------------ | --------------- | --------------- |
+| Sign-in requests (`/api/auth`) | 30 in 5 minutes | network address |
+| Sign-in emails                 | 5 in 15 minutes | recipient       |
+| AI explanations                | 20 a minute     | learner         |
+| Tutor messages                 | 10 a minute     | learner         |
+| Exam results reported          | 10 an hour      | learner         |
+
+The AI limits sit on top of the daily allowances each plan includes. Network
+and email addresses are counted under a keyed hash, never stored as
+themselves. A refused call gets `429` with `Retry-After`. Tested in
+`apps/web/e2e/tests/security.spec.ts` and
+`packages/api/src/server/milestones.db.test.ts`.
+
+## Input validation
+
+- **Every API request body and every id in a path** is parsed with a Zod
+  schema (`packages/api/src/schemas.ts`) before anything else reads it.
+  Malformed input gets `400`; an id that is not an id gets `404`, where before
+  this review it reached Postgres and came back as a `500`.
+- **Answers from the offline queue** are checked one by one, so a malformed
+  answer is refused for good while the rest of the batch is stored.
+- **Starting a session from a form** goes through the same schema as the API.
+- **All SQL is parameterised.** No query is built by joining strings with
+  input.
+- **Uploaded logos** are identified by their bytes, not their name or declared
+  type, capped at 256 KB, and served with `nosniff` and a sandboxing policy.
+
+## Requests and responses
+
+- **Headers on every response** (`apps/web/next.config.ts`): a content
+  security policy (no plugins, no framing, no `<base>` or form pointed
+  elsewhere), `X-Content-Type-Options`, `X-Frame-Options: DENY`,
+  `Referrer-Policy`, `Permissions-Policy` (microphone for this site only,
+  camera and location off), and HSTS in production. `X-Powered-By` is off.
+- **Cross-site requests.** Session cookies are `SameSite=Lax`, and a request
+  that changes something with a cookie session is refused when the browser
+  says it came from another site (`isCrossSite` in `lib/api-auth.ts`).
+- **The test sign-in** exists only on a development server started with its
+  secret. A production build answers `404` even with the secret set (checked
+  against a production build in this review).
+- **The publish webhook and the review pages** compare secrets in constant
+  time.
+
+## Error reporting and analytics
+
+- **Sentry** is off without a DSN. With one, reports carry the error and
+  where it happened. Cookies, headers, query strings, request bodies and user
+  details are switched off explicitly (`lib/sentry-options.ts`): this SDK
+  version collects all of them by default. Checked by sending a request with a
+  cookie, a password in its body and an email in its query to a route that
+  throws, and reading the report: none of the three was in it.
+- **PostHog** events are sent from the server only, keyed by account id:
+  `signup`, `first_question_answered`, `mock_exam_completed`, `upgrade`,
+  `pass_reported` (and `fail_reported`). No name, email or answer is sent, and
+  nothing is added to what the browser or the phone downloads.
+
+## Open
+
+- **The content security policy allows inline scripts.** The public pages are
+  built ahead of time; a nonce per request would mean rendering every page on
+  demand. Accepted for now.
+- **The rate limiter trusts `X-Forwarded-For`.** That is right behind a host
+  that sets it (Vercel does). Behind anything else, check it cannot be forged.
+- **The phone app signs in with Neon Auth directly**, not through this site's
+  proxy, so its sign-in is limited by Neon Auth's rules, not the table above.
+- **Server Actions for organizations and content review validate by hand**
+  (tested functions in `packages/core` and `packages/api`), not with Zod.
+  Review actions are behind the reviewers' sign-in.
+- **The review pages use one shared password** (HTTP Basic). Interim.
+- **Four dependency advisories** (`pnpm audit --prod`, 2 high, 2 moderate):
+  `node-forge`, `braces`, `uuid`, `decode-uri-component`, all inside Expo's
+  build tooling, none in code that runs for a learner. Two have no fixed
+  release yet. Revisit when the Expo SDK is next upgraded.
+- **Source maps are not uploaded**, so stack traces from production are
+  minified until `SENTRY_AUTH_TOKEN` is set (web) and the Sentry build plugin
+  is added (mobile).
+- **Accessibility is checked by axe**, which finds what a machine can. A pass
+  with a screen reader on a phone has not been done.
+- **The Maestro flows have not been run on a device** (no simulator on the
+  machine they were written on). The same four flows pass against the
+  browser build (`apps/mobile/e2e/flows.web.mjs`).

@@ -1180,6 +1180,24 @@ export type Database = {
           },
         ];
       };
+      rate_limits: {
+        Row: {
+          count: number;
+          key: string;
+          window_start: string;
+        };
+        Insert: {
+          count?: number;
+          key: string;
+          window_start: string;
+        };
+        Update: {
+          count?: number;
+          key?: string;
+          window_start?: string;
+        };
+        Relationships: [];
+      };
       source_documents: {
         Row: {
           byte_size: number;
@@ -1411,6 +1429,8 @@ export type Database = {
           country_code: string;
           created_at: string;
           exam_date: string | null;
+          exam_result: string | null;
+          exam_result_at: string | null;
           is_primary: boolean;
           study_locale: string | null;
           user_id: string;
@@ -1419,6 +1439,8 @@ export type Database = {
           country_code: string;
           created_at?: string;
           exam_date?: string | null;
+          exam_result?: string | null;
+          exam_result_at?: string | null;
           is_primary?: boolean;
           study_locale?: string | null;
           user_id?: string;
@@ -1427,6 +1449,8 @@ export type Database = {
           country_code?: string;
           created_at?: string;
           exam_date?: string | null;
+          exam_result?: string | null;
+          exam_result_at?: string | null;
           is_primary?: boolean;
           study_locale?: string | null;
           user_id?: string;

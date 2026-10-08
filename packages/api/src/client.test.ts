@@ -205,4 +205,61 @@ describe('createOathlyApi', () => {
       '/api/study/dashboard',
     ]);
   });
+
+  it('reports an exam result and returns the dashboard it now gives', async () => {
+    const seen: Request[] = [];
+    const dashboard = { streakDays: 1, minutesToday: 0, dailyGoalMinutes: 15, countries: [] };
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: fakeFetch(200, dashboard, seen),
+    });
+    await expect(api.reportExamResult('ZZ', 'passed')).resolves.toEqual(dashboard);
+    expect(seen[0]!.url).toBe('https://oathly.test/api/me/exam-result');
+    expect(await seen[0]!.json()).toEqual({ countryCode: 'ZZ', result: 'passed' });
+  });
+
+  it('reads the public list of exams without a session, and says when it cannot', async () => {
+    const seen: Request[] = [];
+    const facts = [
+      {
+        isoCode: 'ZZ',
+        slug: 'testland',
+        name: 'Testland',
+        examLanguages: ['en'],
+        latitude: null,
+        longitude: null,
+        exams: [],
+        publishedQuestions: 3,
+      },
+    ];
+    const open = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      fetch: fakeFetch(200, facts, seen),
+    });
+    await expect(open.publicCountries()).resolves.toEqual(facts);
+    expect(seen[0]!.url).toBe('https://oathly.test/api/public/countries');
+    expect(seen[0]!.headers.get('authorization')).toBeNull();
+
+    const down = createOathlyApi({ baseUrl: 'https://oathly.test', fetch: fakeFetch(503, {}) });
+    await expect(down.publicCountries()).rejects.toMatchObject({ status: 503 });
+  });
+
+  it('lists exam countries, sets the time zone, and fetches a country to keep offline', async () => {
+    const seen: Request[] = [];
+    const countries = [{ isoCode: 'ZZ', name: 'Testland', examLanguages: ['en'] }];
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: fakeFetch(200, countries, seen),
+    });
+    await expect(api.countries()).resolves.toEqual(countries);
+    await api.setTimeZone('Europe/Berlin');
+    expect(seen[1]!.url).toBe('https://oathly.test/api/me/time-zone');
+    expect(await seen[1]!.json()).toEqual({ timeZone: 'Europe/Berlin' });
+    // The pack's shape is checked: a list of countries is not one.
+    await expect(api.countryPack('zz')).rejects.toThrow();
+    expect(seen[2]!.url).toBe('https://oathly.test/api/packs/zz');
+    expect(api.audioUrl('abc123')).toContain('/api/audio/abc123');
+  });
 });

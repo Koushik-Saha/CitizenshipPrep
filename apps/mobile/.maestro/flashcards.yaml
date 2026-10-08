@@ -1,0 +1,38 @@
+# Flashcards on a phone: turn each card over, say whether it was known, and
+# reach the results.
+#
+#   maestro test .maestro/flashcards.yaml \
+#     -e APP_ID=host.exp.Exponent -e APP_URL=exp://<your-computer-ip>:8081
+appId: ${APP_ID}
+---
+- runFlow: shared/open.yaml
+
+- scrollUntilVisible:
+    element:
+      id: 'flashcards-.*'
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: 'flashcards-.*'
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: 'flashcard'
+    timeout: 30000
+
+- repeat:
+    while:
+      notVisible:
+        id: 'results'
+    commands:
+      - tapOn:
+          id: 'show-answer'
+      - tapOn:
+          id: 'knew-it'
+
+- assertVisible:
+    id: 'results'
+- tapOn:
+    id: 'back-to-study'
+- assertVisible:
+    id: 'practise-.*'

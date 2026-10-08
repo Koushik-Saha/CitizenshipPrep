@@ -7,6 +7,8 @@ import {
 } from '@oathly/core';
 import type pg from 'pg';
 
+import { queuedAnswerSchema } from '../schemas';
+
 // Loads content into the quiz engine's shapes, and stores answers sent from
 // a client's offline queue.
 
@@ -84,17 +86,10 @@ export async function loadQuestionPool(db: Db, countryCode: string): Promise<Qui
   }));
 }
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-function problemWith(answer: QueuedAnswer): string | null {
-  if (!UUID.test(answer.clientEventId)) return 'clientEventId must be a UUID.';
-  if (!UUID.test(answer.attemptId) || !UUID.test(answer.questionId))
-    return 'Unknown attempt or question.';
-  if (!Number.isInteger(answer.questionVersion) || answer.questionVersion < 1)
-    return 'Invalid question version.';
-  if (!Number.isInteger(answer.timeMs) || answer.timeMs < 0) return 'Invalid answer time.';
-  if (Number.isNaN(Date.parse(answer.answeredAt))) return 'Invalid answer timestamp.';
-  return null;
+/** What is wrong with an answer as a client sent it, or null when it is well-formed. */
+function problemWith(answer: unknown): string | null {
+  const parsed = queuedAnswerSchema.safeParse(answer);
+  return parsed.success ? null : parsed.error.issues[0]!.message;
 }
 
 /**
@@ -106,19 +101,22 @@ function problemWith(answer: QueuedAnswer): string | null {
 export async function recordAnswers(
   db: Db,
   userId: string,
-  answers: readonly QueuedAnswer[],
+  answers: readonly unknown[],
 ): Promise<SyncOutcome> {
   const outcome: SyncOutcome = { accepted: [], rejected: [] };
-  for (const answer of answers) {
-    const problem = problemWith(answer);
+  for (const sent of answers) {
+    const problem = problemWith(sent);
     if (problem) {
+      // Named by whatever id it came with, so the client can drop it.
+      const id = (sent as { clientEventId?: unknown } | null)?.clientEventId;
       outcome.rejected.push({
-        clientEventId: answer.clientEventId,
+        clientEventId: typeof id === 'string' ? id : '',
         reason: problem,
         permanent: true,
       });
       continue;
     }
+    const answer = sent as QueuedAnswer;
     const { rowCount } = await db.query(
       `insert into public.answer_events
          (user_id, attempt_id, question_id, question_version, selected_answer, correct, time_ms,
@@ -158,4 +156,30 @@ export async function recordAnswers(
     }
   }
   return outcome;
+}
+
+/**
+ * recordAnswers, also saying whether these were the learner's first answers
+ * ever (and for which country), which is a moment worth counting.
+ */
+export async function recordAnswersNotingFirst(
+  db: Db,
+  userId: string,
+  answers: readonly unknown[],
+): Promise<{ outcome: SyncOutcome; firstAnswer: { countryCode: string } | null }> {
+  const before = await db.query('select 1 from public.answer_events where user_id = $1 limit 1', [
+    userId,
+  ]);
+  const outcome = await recordAnswers(db, userId, answers);
+  if (before.rowCount || outcome.accepted.length === 0) return { outcome, firstAnswer: null };
+  const { rows } = await db.query<{ country_code: string }>(
+    `select a.country_code
+     from public.answer_events e
+     join public.attempts a on a.id = e.attempt_id
+     where e.user_id = $1
+     order by e.created_at, e.id
+     limit 1`,
+    [userId],
+  );
+  return { outcome, firstAnswer: rows[0] ? { countryCode: rows[0].country_code } : null };
 }

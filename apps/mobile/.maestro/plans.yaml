@@ -1,0 +1,34 @@
+# The plans screen on a phone: opens from the Profile tab, shows the learner's
+# plan and what can be bought, and goes back. Nothing is bought.
+#
+#   maestro test .maestro/plans.yaml \
+#     -e APP_ID=host.exp.Exponent -e APP_URL=exp://<your-computer-ip>:8081
+appId: ${APP_ID}
+---
+- runFlow: shared/open.yaml
+
+- tapOn:
+    id: 'tab-profile'
+- extendedWaitUntil:
+    visible:
+      id: 'profile-plan'
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: 'open-plans'
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: 'open-plans'
+- extendedWaitUntil:
+    visible:
+      id: 'current-plan'
+    timeout: 30000
+- tapOn:
+    id: 'plans-back'
+- assertVisible:
+    id: 'profile-plan'
+- tapOn:
+    id: 'tab-study'
+- assertVisible:
+    id: 'practise-.*'

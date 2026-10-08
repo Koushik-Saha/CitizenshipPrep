@@ -1,7 +1,7 @@
 'use server';
 
-import { startMockExam, startPractice, StudyError } from '@oathly/api/server';
-import type { PracticeMode } from '@oathly/core';
+import { startSessionRequestSchema } from '@oathly/api/schemas';
+import { startSession, StudyError } from '@oathly/api/server';
 import { redirect } from 'next/navigation';
 
 import { getDb } from '@/lib/db';
@@ -29,37 +29,39 @@ async function start(work: (userId: string) => Promise<string>): Promise<StartSt
   redirect(await localizedPath(`/study/session/${attemptId}`));
 }
 
-const modes: readonly PracticeMode[] = ['random', 'adaptive', 'topic'];
+/** Starts what a form asked for, once it has been through the same check as the API's requests. */
+function startChecked(request: unknown): Promise<StartState> {
+  const parsed = startSessionRequestSchema.safeParse(request);
+  if (!parsed.success) {
+    return Promise.resolve({ error: 'That is not a session this app can start.' });
+  }
+  return start((userId) => startSession(getDb(), userId, parsed.data));
+}
 
 export async function startPracticeSession(
   _previous: StartState,
   form: FormData,
 ): Promise<StartState> {
+  // "adaptive", "random", or "topic:<id>".
   const focus = String(form.get('focus') ?? 'adaptive');
-  const mode = (modes.includes(focus as PracticeMode) ? focus : 'topic') as PracticeMode;
-  return start((userId) =>
-    startPractice(
-      getDb(),
-      userId,
-      {
-        countryCode: String(form.get('countryCode') ?? ''),
-        mode,
-        topicId: mode === 'topic' ? focus.replace(/^topic:/, '') : undefined,
-        size: Number(form.get('size') ?? 10),
-      },
-      form.get('kind') === 'flashcards' ? 'flashcards' : 'practice',
-    ),
-  );
+  return startChecked({
+    kind: form.get('kind') === 'flashcards' ? 'flashcards' : 'practice',
+    countryCode: String(form.get('countryCode') ?? ''),
+    focus:
+      focus === 'adaptive' || focus === 'random'
+        ? focus
+        : { topicId: focus.replace(/^topic:/, '') },
+    size: Number(form.get('size') ?? 10),
+  });
 }
 
 export async function startMockExamSession(
   _previous: StartState,
   form: FormData,
 ): Promise<StartState> {
-  return start((userId) =>
-    startMockExam(getDb(), userId, {
-      countryCode: String(form.get('countryCode') ?? ''),
-      examFormatId: String(form.get('examFormatId') ?? ''),
-    }),
-  );
+  return startChecked({
+    kind: 'mock_exam',
+    countryCode: String(form.get('countryCode') ?? ''),
+    examFormatId: String(form.get('examFormatId') ?? ''),
+  });
 }

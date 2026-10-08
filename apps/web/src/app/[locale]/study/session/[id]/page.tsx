@@ -1,3 +1,4 @@
+import { idSchema } from '@oathly/api/schemas';
 import { loadStudySession } from '@oathly/api/server';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -18,7 +19,9 @@ export async function generateMetadata({
 export default async function SessionPage({ params }: PageProps<'/[locale]/study/session/[id]'>) {
   const { locale } = await getT(params);
   const { user } = await requireMe(locale);
-  const session = await loadStudySession(getDb(), user.userId, (await params).id);
+  const id = idSchema.safeParse((await params).id);
+  if (!id.success) notFound();
+  const session = await loadStudySession(getDb(), user.userId, id.data);
   if (!session || session.questions.length === 0) notFound();
   return <StudySession session={session} />;
 }

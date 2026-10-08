@@ -17,7 +17,7 @@ const attempt = (n: number, overrides: Partial<OfflineAttempt> = {}): OfflineAtt
   attemptId: `0ff11e00-0000-4000-8000-00000000000${n}`,
   countryCode: 'ZZ',
   mode: 'practice',
-  questionIds: ['q1', 'q2'],
+  questionIds: ['0e5710a0-0000-4000-8000-000000000001', '0e5710a0-0000-4000-8000-000000000002'],
   examFormatId: null,
   examQuestionIds: null,
   startedAt: '2026-10-03T10:00:00.000Z',

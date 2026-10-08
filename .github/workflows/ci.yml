@@ -40,6 +40,9 @@ jobs:
           EXPO_PUBLIC_API_URL: https://oathly.invalid
           EXPO_PUBLIC_NEON_AUTH_URL: https://auth.oathly.invalid
 
+      - name: No secrets in the phone app's bundles
+        run: node scripts/security/client-bundles.mjs apps/mobile/dist
+
   database:
     name: Migrations, RLS tests, generated types
     runs-on: ubuntu-latest
@@ -62,8 +65,14 @@ jobs:
 
       - run: pnpm db:test
 
+      # With the database up, the API package is held to its coverage
+      # thresholds (packages/api/vitest.config.ts).
       - name: Content pipeline and learner data against the database
-        run: pnpm --filter @oathly/content --filter @oathly/api test
+        run: |
+          pnpm --filter @oathly/content test &
+          content=$!
+          pnpm --filter @oathly/api test:coverage
+          wait "$content"
         env:
           TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
 
@@ -78,6 +87,14 @@ jobs:
     timeout-minutes: 30
     env:
       DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
+      # Marker values, not secrets: the build runs with them set, and the check
+      # after it fails if any of them is in a file a browser downloads. Only
+      # variables that do not make the build call a service are given one.
+      ANTHROPIC_API_KEY: marker-anthropic-key-not-for-clients
+      NEON_AUTH_COOKIE_SECRET: marker-cookie-secret-not-for-clients-0000
+      REVALIDATE_SECRET: marker-revalidate-secret-not-for-clients-00
+      ADMIN_PASSWORD: marker-admin-password-not-for-clients
+      RESEND_API_KEY: marker-resend-key-not-for-clients
     steps:
       - uses: actions/checkout@v7
 
@@ -101,6 +118,9 @@ jobs:
         run: docker compose -f db/local/compose.yaml exec -T db psql -v ON_ERROR_STOP=1 -q -U postgres -d oathly < apps/web/e2e/fixture.sql
 
       - run: pnpm --filter @oathly/web build
+
+      - name: No secrets in what browsers download
+        run: node scripts/security/client-bundles.mjs apps/web/.next/static
 
       - name: Start the production server
         run: |
@@ -139,4 +159,45 @@ jobs:
         with:
           name: lighthouse-reports
           path: apps/web/lighthouse-reports
+          retention-days: 14
+
+  e2e:
+    name: Browser tests and accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Migrations and the seed, then the made-up country the tests use.
+      - run: pnpm db:start
+
+      - name: Add the test country
+        run: docker compose -f db/local/compose.yaml exec -T db psql -v ON_ERROR_STOP=1 -q -U postgres -d oathly < apps/web/e2e/fixture.sql
+
+      - run: pnpm --filter @oathly/web exec playwright install --with-deps chromium
+
+      # Playwright starts a development server of its own (the test sign-in
+      # exists only there) and runs every flow, then axe on every page in
+      # both themes: any WCAG 2.1 A or AA violation fails.
+      - name: Playwright and axe
+        run: pnpm --filter @oathly/web e2e
+        env:
+          E2E_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54329/oathly?sslmode=disable
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            apps/web/e2e/report
+            apps/web/e2e/results
           retention-days: 14

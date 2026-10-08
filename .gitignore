@@ -11,6 +11,7 @@ coverage/
 
 # next.js
 .next/
+.next-e2e/
 out/
 next-env.d.ts
 .vercel
@@ -51,6 +52,9 @@ CLAUDE.local.md
 
 # browser automation output
 .playwright-mcp/
+# Playwright end-to-end runs
+apps/web/e2e/results/
+apps/web/e2e/report/
 
 # Lighthouse CI output
 .lighthouseci/

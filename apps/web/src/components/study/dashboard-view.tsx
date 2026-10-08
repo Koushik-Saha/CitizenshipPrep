@@ -11,6 +11,7 @@ import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
 import { Badge, buttonClass, focusRing } from '@/components/ui';
 
+import { ExamResult } from './exam-result';
 import { ReadinessPanel } from './readiness-gauge';
 import { MockExamForm, PracticeForm } from './start-forms';
 import { TimeZoneSync } from './time-zone-sync';
@@ -118,6 +119,8 @@ export function DashboardView({
               {' · '}
               {t('dashboard.questionsReady', { count: country.publishedQuestions })}
             </p>
+
+            <ExamResult country={country} name={name} />
 
             {!country.fullAccess && country.totalQuestions > country.publishedQuestions && (
               // On the Free plan, and there is more to this country than its sample.

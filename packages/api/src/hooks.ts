@@ -3,6 +3,7 @@
 // React hooks over the API, for client components on the web and for the
 // mobile app. Wrap the tree in <QueryClientProvider> and <OathlyApiProvider>.
 
+import type { ExamOutcome } from '@oathly/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, createElement, useContext, type ReactNode } from 'react';
 
@@ -47,6 +48,17 @@ export function useSaveOnboarding() {
       client.setQueryData(queryKeys.me, me);
       return client.invalidateQueries({ queryKey: queryKeys.dashboard });
     },
+  });
+}
+
+/** Reports how the real exam went; the dashboard shows it at once. */
+export function useReportExamResult() {
+  const api = useOathlyApi();
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ countryCode, result }: { countryCode: string; result: ExamOutcome }) =>
+      api.reportExamResult(countryCode, result),
+    onSuccess: (dashboard) => client.setQueryData(queryKeys.dashboard, dashboard),
   });
 }
 

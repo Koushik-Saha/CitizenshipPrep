@@ -14,8 +14,13 @@ const base = process.argv[2] ?? 'http://localhost:3000';
 const KIB = 1024;
 /** The target in CLAUDE.md. Not met yet: Next 16 and React alone are about 128 KiB. */
 const TARGET = 130 * KIB;
-/** The ceiling CI enforces: today's size plus a little room. Lower it as the page gets lighter. */
-const LIMIT = 140 * KIB;
+/**
+ * The ceiling CI enforces: today's size plus a little room. Lower it as the
+ * page gets lighter. It went from 140 to 142 when every page gained an error
+ * page and a not-found page in the reader's language, and the loader for
+ * error reporting: about 1.7 KiB between them, measured one by one.
+ */
+const LIMIT = 142 * KIB;
 
 const html = await (await fetch(`${base}/`)).text();
 const tags = [...new Set(html.match(/<script[^>]*\ssrc="[^"]+\.js"[^>]*>/g) ?? [])];

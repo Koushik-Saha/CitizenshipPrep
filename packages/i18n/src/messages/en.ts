@@ -20,6 +20,13 @@ export const en = {
     comingSoon: 'Coming soon',
     notAffiliated:
       'Oathly is an independent study app. It is not affiliated with, or endorsed by, any government.',
+    errorTitle: 'Something went wrong',
+    errorBody:
+      'This page could not be shown. Try again, and if it keeps happening, come back a little later.',
+    notFoundTitle: 'Page not found',
+    notFoundBody:
+      'There is no page at this address. It may have moved, or the link may be mistyped.',
+    backHome: 'Go to the home page',
   },
 
   exam: {
@@ -299,6 +306,13 @@ export const en = {
     addExam: 'Add another exam',
     loadFailed: 'We could not load your study plan.',
     loadingPlan: 'Loading your study plan',
+    examResultAsk: 'How did your {country} test go?',
+    examResultPassed: 'I passed',
+    examResultFailed: 'Not this time',
+    examResultCongrats: 'Congratulations on passing your {country} test.',
+    examResultRetake:
+      'Thank you for telling us. Keep practising, and set your new date when you have one.',
+    examResultError: 'We could not save that. Try again.',
   },
 
   readiness: {
@@ -699,6 +713,7 @@ export const en = {
     emailExpires: 'The link works once and expires in {days} days.',
     emailFooter:
       'Oathly is an independent study app. It is not affiliated with, or endorsed by, any government. If you were not expecting this message, you can ignore it.',
+    inviteGoneTitle: 'Invitation not found',
   },
 
   offline: {
