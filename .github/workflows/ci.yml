@@ -94,7 +94,7 @@ jobs:
       NEON_AUTH_COOKIE_SECRET: marker-cookie-secret-not-for-clients-0000
       REVALIDATE_SECRET: marker-revalidate-secret-not-for-clients-00
       ADMIN_PASSWORD: marker-admin-password-not-for-clients
-      RESEND_API_KEY: marker-resend-key-not-for-clients
+      MAILTRAP_TOKEN: marker-mailtrap-token-not-for-clients
     steps:
       - uses: actions/checkout@v7
 

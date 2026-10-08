@@ -39,7 +39,7 @@ oversights.
 - **Nothing secret reaches a browser or a phone.**
   `scripts/security/client-bundles.mjs` reads every built client file and
   fails on the value of a server-only variable, on anything shaped like a
-  credential (Stripe, Anthropic, Resend, Neon, Sentry, Google keys, database
+  credential (Stripe, Anthropic, Neon, Sentry, Google keys, database
   addresses with passwords, private keys), and on the _name_ of a server-only
   variable, which only appears when server code has been bundled for the
   client. CI runs it on the web build (built with marker values, so the check

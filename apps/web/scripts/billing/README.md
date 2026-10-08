@@ -96,7 +96,7 @@ When an organization has fewer seats than learners (it shrank its
 subscription, or let it end), the learners who joined first keep theirs, the
 rest are on the Free plan, and the console says how many are over.
 
-Invitations go out by email when `RESEND_API_KEY` and `EMAIL_FROM` are set.
+Invitations go out by email when `MAILTRAP_TOKEN` and `EMAIL_FROM` are set.
 Without them the admin is shown each invitation link, once, to send
 themselves.
 

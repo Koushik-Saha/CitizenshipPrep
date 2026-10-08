@@ -50,7 +50,7 @@ would have to be rebuilt.
 | iOS                       | Apple Developer Program | 99 USD a year. Enrolment can take a day or two: start early.                                                                                                  |
 | Android                   | Google Play Console     | 25 USD once. A new personal account must run a closed test with 12 testers for 14 days before it can publish to production; internal testing is not affected. |
 | Building the apps         | Expo (EAS)              | Free tier: builds queue, which is fine                                                                                                                        |
-| Invitation email          | Resend                  | Free tier                                                                                                                                                     |
+| Invitation email          | Mailtrap                | Free tier                                                                                                                                                     |
 | Errors                    | Sentry                  | Free tier                                                                                                                                                     |
 | Analytics                 | PostHog                 | Free tier                                                                                                                                                     |
 | AI explanations and tutor | Anthropic               | Pay as you go                                                                                                                                                 |
@@ -164,10 +164,11 @@ Do this in **test mode** first, end to end, then repeat in live mode.
 
 All optional; the app runs without each.
 
-- **Resend** (organization invitations): verify your domain, create an API
-  key (`RESEND_API_KEY`), set `EMAIL_FROM` to an address on that domain, e.g.
-  `Oathly <invites@your-domain>`. Without it, admins are shown invitation
-  links to send themselves.
+- **Mailtrap** (organization invitations): verify a sending domain (Sending
+  Domains), create an API token (`MAILTRAP_TOKEN`), and set `EMAIL_FROM` to an
+  address on that domain, e.g. `Oathly <invites@your-domain>`. Without it,
+  admins are shown invitation links to send themselves. Do not set
+  `MAILTRAP_INBOX_ID` on the host: it sends everything to a test inbox.
 - **Sentry:** create a Next.js project and a React Native project. The DSN of
   the first goes in `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN`; the second in
   `EXPO_PUBLIC_SENTRY_DSN` (step 8). For readable stack traces on the web,
@@ -351,7 +352,7 @@ live needs it.
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_COUNTRY_PASS` | To sell on the web                                 | Step 5                                        |
 | `STRIPE_PRICE_ORG_SEAT`                                                                                                          | To sell seats                                      | Step 5                                        |
 | `REVENUECAT_WEBHOOK_SECRET`                                                                                                      | To sell in the apps                                | Step 8                                        |
-| `RESEND_API_KEY`, `EMAIL_FROM`                                                                                                   | To email invitations                               | Step 6                                        |
+| `MAILTRAP_TOKEN`, `EMAIL_FROM`                                                                                                   | To email invitations                               | Step 6                                        |
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                                                                                           | No                                                 | Step 6                                        |
 | `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`                                                                              | No                                                 | Step 6                                        |
 | `POSTHOG_KEY`, `POSTHOG_HOST`                                                                                                    | No                                                 | Step 6                                        |

@@ -60,7 +60,7 @@ export default defineConfig({
       ANTHROPIC_API_KEY: '',
       STRIPE_SECRET_KEY: '',
       STRIPE_WEBHOOK_SECRET: '',
-      RESEND_API_KEY: '',
+      MAILTRAP_TOKEN: '',
       SENTRY_DSN: '',
       NEXT_PUBLIC_SENTRY_DSN: '',
       POSTHOG_KEY: '',

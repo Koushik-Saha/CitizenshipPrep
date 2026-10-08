@@ -45,3 +45,64 @@ export function inviteEmail(
     ].join(''),
   };
 }
+
+// Sending it: Mailtrap's batch API, as data in and data out. The request
+// itself is made by the web app (lib/mailer.ts).
+
+export interface Mail {
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+}
+
+export interface Sender {
+  email: string;
+  name?: string;
+}
+
+/**
+ * Who email is from, as EMAIL_FROM gives it: "Oathly <invites@example.com>"
+ * or a bare address. Null when it is neither.
+ */
+export function parseSender(value: string | null | undefined): Sender | null {
+  const text = value?.trim() ?? '';
+  const named = /^(.*)<([^<>\s]+@[^<>\s]+\.[^<>\s]+)>$/.exec(text);
+  if (named) {
+    const name = named[1]!
+      .trim()
+      .replace(/^"(.*)"$/, '$1')
+      .trim();
+    return name ? { email: named[2]!, name } : { email: named[2]! };
+  }
+  return /^[^<>\s@]+@[^<>\s@]+\.[^<>\s@]+$/.test(text) ? { email: text } : null;
+}
+
+/** Mailtrap takes up to 500 messages in one request; a smaller batch fails smaller. */
+export const MAIL_BATCH = 100;
+
+/** The body of one batch request: the sender once, then each message. */
+export function mailBatchRequest(from: Sender, mails: readonly Mail[]) {
+  return {
+    base: { from, category: 'Organization invitation' },
+    requests: mails.map((mail) => ({
+      to: [{ email: mail.to }],
+      subject: mail.subject,
+      text: mail.text,
+      html: mail.html,
+    })),
+  };
+}
+
+/**
+ * Which messages of a batch Mailtrap accepted, from its answer. It answers
+ * for each message separately, so one bad address does not lose the rest.
+ * Anything unreadable counts as nothing sent.
+ */
+export function mailBatchResults(body: unknown, count: number): boolean[] {
+  const responses = (body as { responses?: unknown } | null)?.responses;
+  return Array.from({ length: count }, (_, index) => {
+    const response = Array.isArray(responses) ? (responses[index] as unknown) : null;
+    return (response as { success?: unknown } | null)?.success === true;
+  });
+}

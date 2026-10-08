@@ -125,7 +125,7 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
           </li>
           <li>Stripe: payments made on the website.</li>
           <li>Apple, Google and RevenueCat: purchases made in the phone apps.</li>
-          <li>Resend: invitation emails sent on behalf of organizations.</li>
+          <li>Mailtrap: invitation emails sent on behalf of organizations.</li>
           <li>Sentry: error reports.</li>
           <li>PostHog: usage counts.</li>
         </List>
