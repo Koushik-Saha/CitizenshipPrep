@@ -59,6 +59,12 @@ export function DashboardView({
           >
             {t('plans.title')}
           </Link>
+          <Link
+            href="/study/account"
+            className={`${focusRing} text-fg-muted hover:text-fg rounded-xs`}
+          >
+            {t('common.account')}
+          </Link>
           <LanguageMenu locale={t.locale} label={t('common.language')} path="/study" />
           <SignOutButton />
         </div>

@@ -17,6 +17,7 @@ test('every learner endpoint refuses a caller with no session', async ({ request
     ['GET', `/api/study/sessions/${randomUUID()}`],
     ['GET', '/api/packs/zz'],
     ['GET', `/api/orgs/${randomUUID()}/report`],
+    ['DELETE', '/api/me'],
     ['POST', '/api/answers', { answers: [] }],
     ['POST', '/api/explain', { questionId: randomUUID() }],
     ['POST', '/api/tutor', { countryCode: 'ZZ', messages: [] }],
@@ -170,30 +171,40 @@ test.describe('signed in', () => {
     expect(own.status()).toBe(204);
   });
 
+  test('another site cannot delete the learner’s account with their cookie', async () => {
+    const forged = await api.delete('/api/me', { headers: { origin: 'https://evil.example' } });
+    expect(forged.status()).toBe(401);
+    expect((await api.get('/api/me')).status()).toBe(200);
+  });
+
   test('AI explanations are rate limited per learner', async () => {
     // A question that does not exist is answered 404 without reaching the AI,
     // but it is still a call, and calls are what is counted: 20 a minute.
-    const statuses: number[] = [];
-    for (let i = 0; i < 22; i += 1) {
+    // Counting restarts each minute by the clock, so a run that straddles the
+    // minute gets further before it is refused; it is never refused sooner.
+    let refusedAt = 0;
+    for (let i = 1; i <= 45 && !refusedAt; i += 1) {
       const response = await api.post('/api/explain', {
         data: { questionId: randomUUID() },
         headers: json,
       });
-      statuses.push(response.status());
       if (response.status() === 429) {
+        refusedAt = i;
         expect(Number(response.headers()['retry-after'])).toBeGreaterThan(0);
         expect((await response.json()).code).toBe('RATE_LIMITED');
+      } else {
+        expect(response.status(), `call ${i}`).toBe(404);
       }
     }
-    expect(statuses.filter((status) => status === 429).length).toBeGreaterThanOrEqual(1);
-    expect(statuses.slice(0, 10).every((status) => status === 404)).toBe(true);
-    expect(statuses.at(-1)).toBe(429);
+    expect(refusedAt).toBeGreaterThanOrEqual(21);
   });
 });
 
 test('sign-in emails are rate limited per recipient and per network address', async ({
   request,
 }) => {
+  // Up to seventy requests, each of which fails upstream before it answers.
+  test.slow();
   // Sign-in points nowhere in these tests, so a request that gets through
   // fails upstream (5xx). What matters is when it stops getting through.
   const address = `203.0.113.${Math.floor(Math.random() * 250) + 1}, 10.0.0.1`;
@@ -203,21 +214,27 @@ test('sign-in emails are rate limited per recipient and per network address', as
       headers: { ...json, 'x-forwarded-for': from },
     });
 
-  // Five to one inbox, then no more: whichever address asks.
+  // Five to one inbox, then no more, whichever address asks. (Counting
+  // restarts each quarter of an hour by the clock: a run that straddles one
+  // gets a few further, never fewer.)
   const inbox = `${newLearner()}@example.test`;
-  for (let i = 0; i < 5; i += 1)
-    expect((await send(inbox)).status(), `email ${i + 1}`).not.toBe(429);
-  const sixth = await send(inbox.toUpperCase(), '198.51.100.7');
-  expect(sixth.status()).toBe(429);
-  expect(Number(sixth.headers()['retry-after'])).toBeGreaterThan(0);
+  let stoppedAt = 0;
+  for (let i = 1; i <= 11 && !stoppedAt; i += 1) {
+    const response = await send(i % 2 ? inbox : inbox.toUpperCase(), `198.51.100.${i}`);
+    if (response.status() === 429) {
+      stoppedAt = i;
+      expect(Number(response.headers()['retry-after'])).toBeGreaterThan(0);
+    }
+  }
+  expect(stoppedAt).toBeGreaterThanOrEqual(6);
 
   // Thirty from one address, to different inboxes, then no more.
   const flooding = `203.0.113.${Math.floor(Math.random() * 250) + 1}, 10.0.0.2`;
   let refusedAt = 0;
-  for (let i = 1; i <= 32 && !refusedAt; i += 1) {
+  for (let i = 1; i <= 62 && !refusedAt; i += 1) {
     if ((await send(`${newLearner()}@example.test`, flooding)).status() === 429) refusedAt = i;
   }
-  expect(refusedAt).toBe(31);
+  expect(refusedAt).toBeGreaterThanOrEqual(31);
 });
 
 test('every response carries the security headers', async ({ request }) => {

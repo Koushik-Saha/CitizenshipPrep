@@ -195,6 +195,11 @@ export default function Profile() {
         onPress={() => void session.signOut().then(() => router.replace('/'))}
         testID="sign-out"
       />
+      <LinkButton
+        label={t('profile.deleteTitle')}
+        onPress={() => router.push('/delete-account')}
+        testID="open-delete-account"
+      />
       <Body muted size="sm">
         {t('common.notAffiliated')}
       </Body>

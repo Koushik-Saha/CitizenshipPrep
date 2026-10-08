@@ -25,6 +25,10 @@ export const fr: Messages = {
     notFoundBody:
       'Il n’y a pas de page à cette adresse. Elle a peut-être été déplacée, ou le lien est mal saisi.',
     backHome: 'Aller à la page d’accueil',
+    privacy: 'Confidentialité',
+    terms: 'Conditions',
+    account: 'Compte',
+    englishOnly: 'Cette page n’existe qu’en anglais.',
   },
 
   exam: {
@@ -768,6 +772,22 @@ export const fr: Messages = {
     appLanguage: 'Langue de l’application',
     appLanguageHint:
       'La langue des boutons et des menus. La langue dans laquelle vous étudiez les questions se règle pour chaque examen.',
+    deleteTitle: 'Supprimer votre compte',
+    deleteIntro:
+      'Cela supprime votre compte et tout ce que vous avez fait dans Oathly : votre plan d’étude, vos réponses et votre progression, vos achats et vos adhésions. C’est irréversible.',
+    deleteStores:
+      'Un abonnement acheté sur l’App Store ou Google Play n’est pas résilié par la suppression du compte. Résiliez-le d’abord dans les réglages d’abonnements de votre téléphone, sinon vous continuerez à être facturé.',
+    deleteStripe: 'Un abonnement acheté sur le site est résilié au passage.',
+    deleteConfirm: 'Je comprends que c’est irréversible',
+    deleteButton: 'Supprimer mon compte',
+    deleteBlockedOrganization:
+      'Vous êtes propriétaire d’une organisation qui a des membres ou des places payantes. Retirez ses membres et résiliez ses places avant de supprimer votre compte, ou contactez-nous pour la confier à quelqu’un d’autre.',
+    deleteBlockedStaff:
+      'Ce compte a relu du contenu, et la trace de ces relectures doit être conservée. Contactez-nous pour le fermer.',
+    deleteFailed: 'Nous n’avons pas pu supprimer votre compte, et rien n’a été effacé. Réessayez.',
+    deletedTitle: 'Votre compte a été supprimé',
+    deletedBody:
+      'Tout ce que vous avez fait dans Oathly a été effacé. Vous serez toujours le bienvenu.',
   },
 
   welcome: {

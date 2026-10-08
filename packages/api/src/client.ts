@@ -30,6 +30,8 @@ export class ApiError extends Error {
   constructor(
     message: string,
     readonly status: number,
+    /** A word for why, where the server gives one, for the app to say in the reader's language. */
+    readonly reason?: string,
   ) {
     super(message);
   }
@@ -46,7 +48,7 @@ export interface OathlyApiOptions {
   fetch?: typeof fetch;
 }
 
-const errorBodySchema = z.object({ error: z.string() });
+const errorBodySchema = z.object({ error: z.string(), reason: z.optional(z.string()) });
 
 export function createOathlyApi(options: OathlyApiOptions) {
   // Looked up per call, so tests and React Native can swap the global.
@@ -70,6 +72,7 @@ export function createOathlyApi(options: OathlyApiOptions) {
       throw new ApiError(
         parsed.success ? parsed.data.error : `Request failed (${response.status}).`,
         response.status,
+        parsed.success ? parsed.data.reason : undefined,
       );
     }
     return response;
@@ -100,6 +103,13 @@ export function createOathlyApi(options: OathlyApiOptions) {
     countries: (): Promise<ExamCountry[]> => request('/api/countries', z.array(examCountrySchema)),
     saveOnboarding: (input: OnboardingInput): Promise<Me> =>
       request('/api/me/onboarding', meSchema, post(input)),
+    /**
+     * Deletes the learner's account and everything in it, for good. Fails with
+     * status 409 and a `reason` ("organization", "staff") when it cannot yet.
+     */
+    deleteAccount: async (): Promise<void> => {
+      await send('/api/me', { method: 'DELETE' });
+    },
     setTimeZone: async (timeZone: string): Promise<void> => {
       await send('/api/me/time-zone', post({ timeZone }));
     },

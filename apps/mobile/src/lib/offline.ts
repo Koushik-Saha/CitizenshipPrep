@@ -274,6 +274,21 @@ export async function removePack(countryCode: string): Promise<void> {
   set({ packs });
 }
 
+/**
+ * Removes everything the app has saved on this phone for the learner: saved
+ * countries and their audio, answers still waiting to be sent, and answers
+ * kept for offline study. For when the account is deleted.
+ */
+export async function forgetEverything(): Promise<void> {
+  clearTimeout(timer);
+  for (const countryCode of Object.keys(state.packs)) await removePack(countryCode);
+  queue = emptyQueue();
+  outbox = emptyOutbox();
+  localAnswers = [];
+  await Promise.all(Object.values(KEYS).map((key) => kv.remove(key)));
+  set({ packs: {}, syncProblem: null });
+}
+
 async function readPack(countryCode: string): Promise<CountryPack | null> {
   if (!state.packs[countryCode]) return null;
   const stored = await files.read(packFile(countryCode));

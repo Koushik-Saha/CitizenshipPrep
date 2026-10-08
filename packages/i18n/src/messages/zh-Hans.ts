@@ -22,6 +22,10 @@ export const zhHans: Messages = {
     notFoundTitle: '找不到页面',
     notFoundBody: '这个地址没有页面。它可能已被移走，或者链接输入有误。',
     backHome: '前往首页',
+    privacy: '隐私',
+    terms: '条款',
+    account: '账户',
+    englishOnly: '此页面仅提供英文版。',
   },
 
   exam: {
@@ -689,6 +693,20 @@ export const zhHans: Messages = {
     sendNow: '立即发送',
     appLanguage: '应用语言',
     appLanguageHint: '按钮和菜单的语言。学习题目所用的语言按每项考试分别设置。',
+    deleteTitle: '删除你的账户',
+    deleteIntro:
+      '这将删除你的账户以及你在 Oathly 中的一切：学习计划、答题记录和进度、购买记录以及组织成员身份。此操作无法撤销。',
+    deleteStores:
+      '在 App Store 或 Google Play 购买的订阅不会因删除账户而取消。请先在手机的订阅设置中取消，否则仍会继续扣费。',
+    deleteStripe: '在网站上购买的订阅会在此过程中一并取消。',
+    deleteConfirm: '我明白此操作无法撤销',
+    deleteButton: '删除我的账户',
+    deleteBlockedOrganization:
+      '你拥有一个仍有成员或付费席位的组织。请先移除成员并取消席位再删除账户，或联系我们将其转交他人。',
+    deleteBlockedStaff: '此账户审核过内容，相关记录必须保留。请联系我们关闭账户。',
+    deleteFailed: '我们未能删除你的账户，没有任何内容被移除。请重试。',
+    deletedTitle: '你的账户已删除',
+    deletedBody: '你在 Oathly 中的一切都已移除。随时欢迎你回来。',
   },
 
   welcome: {

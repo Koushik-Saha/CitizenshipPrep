@@ -1,7 +1,7 @@
 pnpm-lock.yaml
 .turbo
 .next
-.next-e2e
+.next-*
 apps/web/e2e/results
 apps/web/e2e/report
 .expo

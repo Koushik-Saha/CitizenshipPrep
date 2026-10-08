@@ -11,7 +11,7 @@ coverage/
 
 # next.js
 .next/
-.next-e2e/
+.next-*/
 out/
 next-env.d.ts
 .vercel
@@ -30,6 +30,8 @@ apps/mobile/android/
 *.jks
 *.p8
 *.p12
+# The Google Play service account key that `eas submit` uploads with.
+play-service-account.json
 *.key
 *.mobileprovision
 *.pem

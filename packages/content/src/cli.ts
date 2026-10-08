@@ -12,7 +12,7 @@ import { describeNotify, notifyContentChanged } from './notify';
 import { recordAudio } from './pipeline/audio';
 import { translateQuestions } from './pipeline/translate';
 import { listDocuments, upsertCountry, upsertExamFormat } from './repository';
-import { getQueueCounts } from './review';
+import { getQueueCounts, getTopicCoverage } from './review';
 import { fetchSource, readSourceFile } from './source';
 import { createSpeaker, type Speaker } from './tts';
 
@@ -51,7 +51,7 @@ Usage: pnpm content <command> [options]
                  [--prune]   (also delete clips no published question uses any more)
 
   status         Show sources and what is waiting for review
-                 [--country US]
+                 [--country US]   (with a country: also its questions by topic)
 
 Reads DATABASE_URL and ANTHROPIC_API_KEY from .env.local at the repository root.
 "audio" needs a text-to-speech service: GOOGLE_TTS_API_KEY, or TTS_PROVIDER=macos to try it
@@ -368,6 +368,20 @@ async function main(): Promise<void> {
         console.log(`Translations waiting for review: ${counts.translations}`);
         console.log(`Flagged because the source changed: ${counts.sourceChanged}`);
         console.log(`Published: ${counts.published}`);
+        if (country) {
+          // What to hold against the official guide's contents.
+          const topics = await getTopicCoverage(pool, country);
+          console.log(`By topic (${topics.length}):`);
+          for (const topic of topics) {
+            const translated =
+              topic.translatedInto.length > 0
+                ? `, translated into ${topic.translatedInto.join(', ')}`
+                : '';
+            console.log(
+              `  ${topic.name}: ${topic.waiting} waiting, ${topic.published} published${translated}`,
+            );
+          }
+        }
         break;
       }
 

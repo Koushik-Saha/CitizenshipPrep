@@ -25,6 +25,10 @@ export const tl: Messages = {
     notFoundBody:
       'Walang pahina sa address na ito. Maaaring nailipat ito, o mali ang pagkaka-type ng link.',
     backHome: 'Pumunta sa home page',
+    privacy: 'Privacy',
+    terms: 'Mga Tuntunin',
+    account: 'Account',
+    englishOnly: 'Nasa Ingles lang ang pahinang ito.',
   },
 
   exam: {
@@ -768,6 +772,22 @@ export const tl: Messages = {
     appLanguage: 'Wika ng app',
     appLanguageHint:
       'Ang wika ng mga button at menu. Ang wikang ginagamit mo sa pag-aaral ng mga tanong ay itinatakda para sa bawat pagsusulit.',
+    deleteTitle: 'Burahin ang iyong account',
+    deleteIntro:
+      'Buburahin nito ang iyong account at lahat ng ginawa mo sa Oathly: ang plano mo sa pag-aaral, mga sagot at progreso, mga binili at mga membership. Hindi na ito maibabalik.',
+    deleteStores:
+      'Ang subscription na binili sa App Store o Google Play ay hindi nakakansela kapag binura ang account. Kanselahin muna ito sa subscription settings ng iyong telepono, kung hindi ay patuloy kang sisingilin.',
+    deleteStripe: 'Ang subscription na binili sa website ay kakanselahin bilang bahagi nito.',
+    deleteConfirm: 'Nauunawaan kong hindi na ito maibabalik',
+    deleteButton: 'Burahin ang aking account',
+    deleteBlockedOrganization:
+      'May-ari ka ng organisasyong may mga miyembro o bayad na upuan. Alisin ang mga miyembro at kanselahin ang mga upuan bago burahin ang iyong account, o makipag-ugnayan sa amin para ilipat ito sa iba.',
+    deleteBlockedStaff:
+      'Nagsuri ng content ang account na ito, at kailangang itago ang talaan niyon. Makipag-ugnayan sa amin para isara ito.',
+    deleteFailed: 'Hindi namin nabura ang iyong account, at walang inalis. Subukan muli.',
+    deletedTitle: 'Nabura na ang iyong account',
+    deletedBody:
+      'Inalis na ang lahat ng ginawa mo sa Oathly. Malugod kang tatanggapin kung babalik ka.',
   },
 
   welcome: {

@@ -27,6 +27,10 @@ export const en = {
     notFoundBody:
       'There is no page at this address. It may have moved, or the link may be mistyped.',
     backHome: 'Go to the home page',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    account: 'Account',
+    englishOnly: 'This page is in English only.',
   },
 
   exam: {
@@ -762,6 +766,21 @@ export const en = {
     appLanguage: 'App language',
     appLanguageHint:
       'The language of buttons and menus. The language you study questions in is set per exam.',
+    deleteTitle: 'Delete your account',
+    deleteIntro:
+      'This removes your account and everything you have done in Oathly: your study plan, your answers and progress, your purchases and your memberships. It cannot be undone.',
+    deleteStores:
+      'A subscription bought in the App Store or on Google Play is not cancelled by deleting your account. Cancel it in your phone’s subscription settings first, or you will keep being charged.',
+    deleteStripe: 'A subscription bought on the website is cancelled as part of this.',
+    deleteConfirm: 'I understand that this cannot be undone',
+    deleteButton: 'Delete my account',
+    deleteBlockedOrganization:
+      'You own an organization that has members or paid seats. Remove its members and cancel its seats before deleting your account, or contact us to hand it to someone else.',
+    deleteBlockedStaff:
+      'This account has reviewed content, and the record of that has to be kept. Contact us to close it.',
+    deleteFailed: 'We could not delete your account, and nothing was removed. Try again.',
+    deletedTitle: 'Your account has been deleted',
+    deletedBody: 'Everything you did in Oathly has been removed. You are welcome back any time.',
   },
 
   welcome: {

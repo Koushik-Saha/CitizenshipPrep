@@ -1,0 +1,39 @@
+# Deleting the account from inside the app: the Profile tab, the warning, the
+# tick, the button, and back at the start signed out.
+#
+#   maestro test .maestro/delete-account.yaml \
+#     -e APP_ID=host.exp.Exponent -e APP_URL=exp://<your-computer-ip>:8081
+#
+# This really deletes the test learner the app is running as. Run it last, or
+# on its own: the other flows need the learner it removes.
+appId: ${APP_ID}
+tags:
+  - destructive
+---
+- runFlow: shared/open.yaml
+
+- tapOn:
+    id: 'tab-profile'
+- scrollUntilVisible:
+    element:
+      id: 'open-delete-account'
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: 'open-delete-account'
+- extendedWaitUntil:
+    visible:
+      id: 'delete-understood'
+    timeout: 30000
+- tapOn:
+    id: 'delete-understood'
+- tapOn:
+    id: 'delete-account'
+
+# A test session cannot sign out, so the app comes back as a brand-new learner
+# with nothing: onboarding, not the Study tab. A real account lands on the
+# welcome screen instead.
+- extendedWaitUntil:
+    visible:
+      id: 'finish-onboarding|get-started'
+    timeout: 60000

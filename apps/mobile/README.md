@@ -120,16 +120,17 @@ maestro test .maestro \
   -e APP_ID=host.exp.Exponent -e APP_URL=exp://192.168.1.20:8081
 ```
 
-(`host.exp.exponent`, lower case, on Android.) There are four flows, each
+(`host.exp.exponent`, lower case, on Android.) There are five flows, each
 starting from `.maestro/shared/open.yaml`, which opens the app and takes a new
 test learner through onboarding:
 
-| Flow              | What it does                                                     |
-| ----------------- | ---------------------------------------------------------------- |
-| `mock-exam.yaml`  | Starts a mock exam, answers every question, checks the results.  |
-| `practice.yaml`   | A practice session: answer, check, next, through to the results. |
-| `flashcards.yaml` | Turns each card over and rates it, through to the results.       |
-| `plans.yaml`      | Opens the plans screen from the Profile tab and comes back.      |
+| Flow                  | What it does                                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `mock-exam.yaml`      | Starts a mock exam, answers every question, checks the results.                                                                       |
+| `practice.yaml`       | A practice session: answer, check, next, through to the results.                                                                      |
+| `flashcards.yaml`     | Turns each card over and rates it, through to the results.                                                                            |
+| `plans.yaml`          | Opens the plans screen from the Profile tab and comes back.                                                                           |
+| `delete-account.yaml` | Deletes the test learner's account from the Profile tab. Tagged `destructive` and left out of `pnpm test:maestro`: run it on its own. |
 
 They find elements by `testID`, never by a country's name.
 

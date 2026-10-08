@@ -193,3 +193,26 @@ test('a session that is not the learner’s, or not a session, is not found', as
   }
   await expectAccessible(page, 'not found, signed in');
 });
+
+test('a learner deletes their account, and it is gone', async ({ page }) => {
+  await signInAndOnboard(page);
+  await page.getByRole('link', { name: t('common.account'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/account$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('common.account'));
+  await expectAccessibleInBothThemes(page, 'account');
+
+  // Nothing happens until the learner says they understand.
+  const remove = page.getByRole('button', { name: t('profile.deleteButton') });
+  await expect(remove).toBeDisabled();
+  await page.getByLabel(t('profile.deleteConfirm')).check();
+  await remove.click();
+
+  await expect(page).toHaveURL(/\/account-deleted$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('profile.deletedTitle'));
+  await expectAccessibleInBothThemes(page, 'account deleted');
+
+  // Signed out, and nothing of them is left to sign back in to.
+  await page.goto('/study');
+  await expect(page).toHaveURL(/\/sign-in$/);
+  expect((await page.request.get('/api/me')).status()).toBe(401);
+});

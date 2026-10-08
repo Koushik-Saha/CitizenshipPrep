@@ -24,6 +24,10 @@ export const vi: Messages = {
     notFoundBody:
       'Không có trang nào ở địa chỉ này. Trang có thể đã được chuyển đi, hoặc liên kết bị gõ sai.',
     backHome: 'Về trang chủ',
+    privacy: 'Quyền riêng tư',
+    terms: 'Điều khoản',
+    account: 'Tài khoản',
+    englishOnly: 'Trang này chỉ có bằng tiếng Anh.',
   },
 
   exam: {
@@ -730,6 +734,21 @@ export const vi: Messages = {
     appLanguage: 'Ngôn ngữ ứng dụng',
     appLanguageHint:
       'Ngôn ngữ của các nút và menu. Ngôn ngữ bạn dùng để học câu hỏi được đặt riêng cho từng kỳ thi.',
+    deleteTitle: 'Xóa tài khoản của bạn',
+    deleteIntro:
+      'Thao tác này xóa tài khoản và mọi thứ bạn đã làm trong Oathly: kế hoạch học, câu trả lời và tiến độ, các giao dịch mua và tư cách thành viên. Không thể hoàn tác.',
+    deleteStores:
+      'Gói đăng ký mua trên App Store hoặc Google Play không bị hủy khi bạn xóa tài khoản. Hãy hủy trước trong phần cài đặt đăng ký của điện thoại, nếu không bạn vẫn sẽ bị tính phí.',
+    deleteStripe: 'Gói đăng ký mua trên trang web sẽ được hủy trong quá trình này.',
+    deleteConfirm: 'Tôi hiểu rằng việc này không thể hoàn tác',
+    deleteButton: 'Xóa tài khoản của tôi',
+    deleteBlockedOrganization:
+      'Bạn là chủ của một tổ chức đang có thành viên hoặc chỗ trả phí. Hãy xóa thành viên và hủy các chỗ đó trước khi xóa tài khoản, hoặc liên hệ với chúng tôi để chuyển tổ chức cho người khác.',
+    deleteBlockedStaff:
+      'Tài khoản này đã duyệt nội dung, và hồ sơ đó cần được giữ lại. Hãy liên hệ với chúng tôi để đóng tài khoản.',
+    deleteFailed: 'Chúng tôi không xóa được tài khoản của bạn, và chưa có gì bị xóa. Hãy thử lại.',
+    deletedTitle: 'Tài khoản của bạn đã bị xóa',
+    deletedBody: 'Mọi thứ bạn đã làm trong Oathly đã được xóa. Bạn luôn được chào đón trở lại.',
   },
 
   welcome: {

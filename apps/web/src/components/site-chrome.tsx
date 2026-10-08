@@ -59,6 +59,13 @@ export function SiteFooter({ t }: { t: Translator }) {
           <Link href={localizePath(t.locale, '/sign-in')} className={navLink}>
             {t('common.signIn')}
           </Link>
+          {/* Rarely followed: nothing to prefetch. */}
+          <Link href={localizePath(t.locale, '/privacy')} prefetch={false} className={navLink}>
+            {t('common.privacy')}
+          </Link>
+          <Link href={localizePath(t.locale, '/terms')} prefetch={false} className={navLink}>
+            {t('common.terms')}
+          </Link>
         </nav>
       </div>
     </footer>

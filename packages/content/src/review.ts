@@ -89,6 +89,54 @@ export async function getQueueCounts(db: Db, countryCode?: string): Promise<Queu
   };
 }
 
+/** How much of one topic has been drafted, published and translated. */
+export interface TopicCoverage {
+  slug: string;
+  name: string;
+  /** Drafts and questions in review: waiting for a reviewer. */
+  waiting: number;
+  published: number;
+  /** Languages the topic's questions have any translation in, drafted or approved. */
+  translatedInto: string[];
+}
+
+/**
+ * A country's questions by topic, in the topics' own order: what a reviewer
+ * compares with the official guide's contents to see what is thin or missing.
+ * Rejected and retired questions are not counted.
+ */
+export async function getTopicCoverage(db: Db, countryCode: string): Promise<TopicCoverage[]> {
+  const { rows } = await db.query<{
+    slug: string;
+    name: string;
+    waiting: string;
+    published: string;
+    locales: string[] | null;
+  }>(
+    `select t.slug, t.name,
+            count(q.id) filter (where q.status in ('draft', 'in_review')) as waiting,
+            count(q.id) filter (where q.status = 'published') as published,
+            (select array_agg(distinct tr.locale order by tr.locale)
+             from public.question_translations tr
+             join public.questions tq on tq.id = tr.question_id
+             where tq.topic_id = t.id and tr.translated_from is not null
+               and tq.status in ('draft', 'in_review', 'published')) as locales
+     from public.topics t
+     left join public.questions q on q.topic_id = t.id
+     where t.country_code = $1
+     group by t.id
+     order by t.sort_order, t.name`,
+    [countryCode],
+  );
+  return rows.map((row) => ({
+    slug: row.slug,
+    name: row.name,
+    waiting: Number(row.waiting),
+    published: Number(row.published),
+    translatedInto: row.locales ?? [],
+  }));
+}
+
 export interface QueueQuestion {
   id: string;
   countryCode: string;

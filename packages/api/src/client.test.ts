@@ -262,4 +262,30 @@ describe('createOathlyApi', () => {
     expect(seen[2]!.url).toBe('https://oathly.test/api/packs/zz');
     expect(api.audioUrl('abc123')).toContain('/api/audio/abc123');
   });
+
+  it('deletes the account, and says why when it cannot yet', async () => {
+    const seen: Request[] = [];
+    const gone = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: async (input, init) => {
+        seen.push(new Request(input as URL, init));
+        return new Response(null, { status: 204 });
+      },
+    });
+    await expect(gone.deleteAccount()).resolves.toBeUndefined();
+    expect(seen[0]!.method).toBe('DELETE');
+    expect(seen[0]!.url).toBe('https://oathly.test/api/me');
+
+    const blocked = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: fakeFetch(409, { error: 'Not yet.', reason: 'organization' }),
+    });
+    await expect(blocked.deleteAccount()).rejects.toMatchObject({
+      status: 409,
+      reason: 'organization',
+      message: 'Not yet.',
+    });
+  });
 });

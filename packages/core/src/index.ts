@@ -2,6 +2,7 @@
 // questions, history and clock; the engine decides what to ask and what the
 // answers mean.
 export * from './access';
+export * from './account';
 export * from './ai-limits';
 export * from './analytics';
 export * from './audio';

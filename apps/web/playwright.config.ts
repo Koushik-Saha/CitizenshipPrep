@@ -17,6 +17,8 @@ process.env.E2E_ADMIN_PASSWORD ??= randomBytes(12).toString('hex');
 
 export default defineConfig({
   testDir: './e2e/tests',
+  // Visits every page once first, so no test waits on the compiler.
+  globalSetup: './e2e/global-setup.ts',
   outputDir: './e2e/results',
   // The development server compiles a page the first time it is asked for.
   timeout: 90_000,

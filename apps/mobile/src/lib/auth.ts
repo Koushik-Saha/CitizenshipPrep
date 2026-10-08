@@ -55,6 +55,20 @@ export async function verifySignInCode(email: string, otp: string): Promise<stri
   return error ? (error.message ?? 'That code did not work. Check it and try again.') : null;
 }
 
+/**
+ * Removes the sign-in account itself, after the learner's data has been
+ * deleted from Oathly. Best effort: if the sign-in service refuses, there is
+ * nothing of the learner's study left behind it either way.
+ */
+export async function deleteSignInAccount(): Promise<void> {
+  if (testSession) return;
+  try {
+    await auth().deleteUser();
+  } catch {
+    // Signing out follows whatever happened here.
+  }
+}
+
 export async function signOut(): Promise<void> {
   if (testSession) return;
   await auth().signOut();

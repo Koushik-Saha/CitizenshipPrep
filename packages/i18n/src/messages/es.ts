@@ -25,6 +25,10 @@ export const es: Messages = {
     notFoundBody:
       'No hay ninguna página en esta dirección. Puede que se haya movido o que el enlace esté mal escrito.',
     backHome: 'Ir a la página de inicio',
+    privacy: 'Privacidad',
+    terms: 'Condiciones',
+    account: 'Cuenta',
+    englishOnly: 'Esta página solo está en inglés.',
   },
 
   exam: {
@@ -754,6 +758,21 @@ export const es: Messages = {
     appLanguage: 'Idioma de la aplicación',
     appLanguageHint:
       'El idioma de los botones y menús. El idioma en el que estudias las preguntas se elige para cada examen.',
+    deleteTitle: 'Eliminar tu cuenta',
+    deleteIntro:
+      'Esto elimina tu cuenta y todo lo que has hecho en Oathly: tu plan de estudio, tus respuestas y tu progreso, tus compras y tus pertenencias a organizaciones. No se puede deshacer.',
+    deleteStores:
+      'Una suscripción comprada en el App Store o en Google Play no se cancela al eliminar tu cuenta. Cancélala antes en los ajustes de suscripciones de tu teléfono o te seguirán cobrando.',
+    deleteStripe: 'Una suscripción comprada en el sitio web se cancela como parte de este proceso.',
+    deleteConfirm: 'Entiendo que esto no se puede deshacer',
+    deleteButton: 'Eliminar mi cuenta',
+    deleteBlockedOrganization:
+      'Eres propietario de una organización que tiene miembros o plazas de pago. Quita a sus miembros y cancela sus plazas antes de eliminar tu cuenta, o escríbenos para traspasarla a otra persona.',
+    deleteBlockedStaff:
+      'Esta cuenta ha revisado contenido y hay que conservar ese registro. Escríbenos para cerrarla.',
+    deleteFailed: 'No pudimos eliminar tu cuenta y no se borró nada. Inténtalo de nuevo.',
+    deletedTitle: 'Tu cuenta ha sido eliminada',
+    deletedBody: 'Todo lo que hiciste en Oathly se ha eliminado. Puedes volver cuando quieras.',
   },
 
   welcome: {

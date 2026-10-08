@@ -53,6 +53,33 @@ test('pages come in the reader’s language, with questions translated where rev
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 });
 
+test('the privacy policy, the terms and how to delete an account are a link away', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page
+    .getByRole('contentinfo')
+    .getByRole('link', { name: t('common.privacy') })
+    .click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Privacy policy');
+  await page.getByRole('link', { name: 'how to delete your account' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Delete your Oathly account');
+  await page
+    .getByRole('contentinfo')
+    .getByRole('link', { name: t('common.terms') })
+    .click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Terms of use');
+  await expect(
+    page.getByText('not affiliated with, or endorsed by, any government', { exact: true }),
+  ).toBeVisible();
+
+  // Read from another language's address: English text, marked as English, and said to be.
+  await page.goto('/es/terms');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect(page.locator('article')).toHaveAttribute('lang', 'en');
+  await expect(page.getByText(/solo está en inglés/)).toBeVisible();
+});
+
 test('old country addresses go to the new pages, and unknown ones are not found', async ({
   page,
   request,
@@ -89,6 +116,10 @@ const publicPages = [
   ['/testland/citizenship-test', 'country test page'],
   ['/testland/citizenship-test/history', 'topic page'],
   ['/sign-in', 'sign-in'],
+  ['/privacy', 'privacy policy'],
+  ['/terms', 'terms'],
+  ['/delete-account', 'how to delete an account'],
+  ['/es/privacy', 'privacy policy, read from Spanish'],
   ['/join/not-a-real-invitation', 'invitation that is gone'],
   ['/this-page-does-not-exist', 'not found'],
   ['/ar/testland/citizenship-test', 'country test page, Arabic'],

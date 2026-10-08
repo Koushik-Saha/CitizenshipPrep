@@ -23,6 +23,8 @@ export const rateLimitRules = {
   tutor: { limit: 10, windowSeconds: 60 },
   /** Exam results reported by one learner: a correction or two, not a loop. */
   examResult: { limit: 10, windowSeconds: 60 * 60 },
+  /** Attempts to delete an account: the real one needs only one. */
+  accountDeletion: { limit: 5, windowSeconds: 60 * 60 },
 } as const satisfies Record<string, RateLimitRule>;
 
 export type RateLimitName = keyof typeof rateLimitRules;

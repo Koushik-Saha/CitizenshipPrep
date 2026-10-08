@@ -13,8 +13,10 @@
     "typecheck": "tsc --noEmit",
     "web:setup": "setup-skia-web public",
     "test:web": "node e2e/flows.web.mjs",
-    "test:maestro": "maestro test .maestro",
-    "bundle": "expo export --platform ios --platform android --output-dir dist"
+    "test:maestro": "maestro test .maestro --exclude-tags destructive",
+    "bundle": "expo export --platform ios --platform android --output-dir dist",
+    "brand:assets": "node scripts/brand-assets.mjs",
+    "store:screenshots": "node store/screenshots.mjs"
   },
   "dependencies": {
     "@neondatabase/auth": "0.5.0-beta",

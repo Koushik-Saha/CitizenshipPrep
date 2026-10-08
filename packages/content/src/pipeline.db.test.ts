@@ -14,6 +14,7 @@ import {
   ensureReviewer,
   getQuestionForReview,
   getQueueCounts,
+  getTopicCoverage,
   listQuestionQueue,
   listTranslationQueue,
   rejectQuestion,
@@ -199,6 +200,15 @@ describe.skipIf(!url)('content pipeline against the database', () => {
       sourceChanged: 0,
       published: 0,
     });
+
+    // By topic, for holding against the guide's contents: every draft is
+    // counted once, under a topic, and nothing is published or translated yet.
+    const coverage = await getTopicCoverage(pool, COUNTRY);
+    expect(coverage.length).toBeGreaterThan(0);
+    expect(coverage.reduce((sum, topic) => sum + topic.waiting, 0)).toBe(3);
+    expect(coverage.every((topic) => topic.published === 0)).toBe(true);
+    expect(coverage.every((topic) => topic.translatedInto.length === 0)).toBe(true);
+    expect(await getTopicCoverage(pool, 'QQ')).toEqual([]);
   });
 
   it('does not draft twice from passages that already have questions', async () => {
