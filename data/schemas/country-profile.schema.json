@@ -291,8 +291,8 @@
           "url": {
             "type": "string",
             "maxLength": 2000,
-            "pattern": "^https:\\/\\/",
-            "description": "An https address."
+            "pattern": "^https?:\\/\\/",
+            "description": "A web address (https, or http where the publisher offers nothing else)."
           },
           "publisher": {
             "type": "string",
@@ -369,8 +369,8 @@
         "items": {
           "type": "string",
           "maxLength": 2000,
-          "pattern": "^https:\\/\\/",
-          "description": "An https address."
+          "pattern": "^https?:\\/\\/",
+          "description": "A web address (https, or http where the publisher offers nothing else)."
         }
       },
       "description": "For each fact, the official pages it was read from: government agencies, legislation, the exam provider. Never a secondary source."
@@ -423,8 +423,8 @@
             "url": {
               "type": "string",
               "maxLength": 2000,
-              "pattern": "^https:\\/\\/",
-              "description": "An https address."
+              "pattern": "^https?:\\/\\/",
+              "description": "A web address (https, or http where the publisher offers nothing else)."
             }
           },
           "required": [

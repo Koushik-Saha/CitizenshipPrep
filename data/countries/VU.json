@@ -1,0 +1,43 @@
+{
+  "iso": "VU",
+  "name": "Vanuatu",
+  "has_exam": true,
+  "exam_name": "Bislama Test",
+  "administering_agency": "Vanuatu Citizenship Office and Commission",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": 60,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "A written test in Bislama, sat once the application is complete, for applicants on Forms A and B. A fail puts the application on hold until a second test."
+  },
+  "languages": ["bi"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://vancitizenship.gov.vu/index.php/citizenship/application-process"],
+    "exam_name": ["https://vancitizenship.gov.vu/index.php/citizenship/application-process"],
+    "administering_agency": [
+      "https://vancitizenship.gov.vu/index.php/citizenship/application-process"
+    ],
+    "format": ["https://vancitizenship.gov.vu/index.php/citizenship/application-process"],
+    "languages": ["https://vancitizenship.gov.vu/index.php/citizenship/application-process"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "A schedule of fees exists; no amount for the test was read.",
+    "exemptions": "Applies only to Forms A and B; nothing else read.",
+    "official_study_material": "None found."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "A search summary of the same page says the test covers general knowledge of Vanuatu (legal, political, historical and social); that sentence was not read directly, so its scope as a knowledge test rather than a language test is not fully confirmed."
+}

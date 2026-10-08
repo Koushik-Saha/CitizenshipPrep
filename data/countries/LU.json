@@ -1,0 +1,43 @@
+{
+  "iso": "LU",
+  "name": "Luxembourg",
+  "has_exam": true,
+  "exam_name": "Examination on the \"Vivre ensemble au Grand-Duché de Luxembourg\" course",
+  "administering_agency": null,
+  "format": null,
+  "languages": [],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": {
+    "amount": 0,
+    "currency": "EUR",
+    "covers": "The naturalization procedure, which the page says is free of charge."
+  },
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://guichet.public.lu/en/citoyens/citoyennete/nationalite-luxembourgeoise/acquisition-recouvrement/naturalisation.html"
+    ],
+    "exam_name": [
+      "https://guichet.public.lu/en/citoyens/citoyennete/nationalite-luxembourgeoise/acquisition-recouvrement/naturalisation.html"
+    ],
+    "fee": [
+      "https://guichet.public.lu/en/citoyens/citoyennete/nationalite-luxembourgeoise/acquisition-recouvrement/naturalisation.html"
+    ]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "exemptions": "The minister can grant exemptions from required documents on a reasoned request; nothing specific to the examination was read.",
+    "format": "Not on the page read.",
+    "administering_agency": "Not on the page read.",
+    "languages": "Not on the page read.",
+    "official_study_material": "Not on the page read."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "Applicants must either attend the course or pass the test on its topics; the test is one of two ways to meet the condition, not the only one. A Luxembourgish language test is required separately."
+}

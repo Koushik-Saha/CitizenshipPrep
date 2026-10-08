@@ -1,0 +1,61 @@
+{
+  "iso": "ES",
+  "name": "Spain",
+  "has_exam": true,
+  "exam_name": "Prueba de conocimientos constitucionales y socioculturales de España (CCSE)",
+  "administering_agency": "Instituto Cervantes",
+  "format": {
+    "question_count": 25,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "Five tasks, 25 questions: multiple choice with three options, and true/false. Every question comes from the preparation manual published for the year."
+  },
+  "languages": ["es"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": "The year’s questions are offered in audio for people with a visual impairment and for people who cannot read, and in sign language for deaf candidates."
+  },
+  "fee": {
+    "amount": 85,
+    "currency": "EUR",
+    "covers": "Registration for the CCSE: the examination and the certificate."
+  },
+  "official_study_material": [
+    {
+      "title": "Manual de preparación de la prueba CCSE 2026",
+      "url": "https://examenes.cervantes.es/es/ccse/preparar-prueba",
+      "publisher": "Instituto Cervantes",
+      "kind": "question_bank",
+      "language": "es",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://examenes.cervantes.es/es/ccse/examen"],
+    "exam_name": ["https://examenes.cervantes.es/es/ccse/examen"],
+    "administering_agency": ["https://examenes.cervantes.es/es/ccse/examen"],
+    "format": [
+      "https://examenes.cervantes.es/es/ccse/examen",
+      "https://examenes.cervantes.es/es/ccse/preparar-prueba"
+    ],
+    "fee": ["https://examenes.cervantes.es/es/ccse/cuanto"],
+    "official_study_material": ["https://examenes.cervantes.es/es/ccse/preparar-prueba"],
+    "languages": ["https://examenes.cervantes.es/es/ccse/examen"],
+    "exemptions.disability": ["https://examenes.cervantes.es/es/ccse/preparar-prueba"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "exemptions.age": "Not read.",
+    "format.pass_mark": "Not on the pages read. Widely reported as 15 of 25 in 45 minutes.",
+    "format.modes": "Not stated on the pages read; \"written\" is an assumption."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "The Instituto Cervantes says the contents and questions of the manual are the ones used in every sitting that year, and it has its own free official app. No licence statement was read; assume its copyright applies."
+}

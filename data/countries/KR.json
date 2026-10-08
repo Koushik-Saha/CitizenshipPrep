@@ -1,0 +1,41 @@
+{
+  "iso": "KR",
+  "name": "South Korea",
+  "has_exam": true,
+  "exam_name": "귀화용 종합평가 (KINAT)",
+  "administering_agency": "Ministry of Justice; run by the Korea Immigration Foundation (한국이민재단)",
+  "format": {
+    "question_count": 45,
+    "pass_mark": null,
+    "pass_percent": 60,
+    "time_limit_minutes": 70,
+    "question_pool_size": null,
+    "modes": ["written", "oral"],
+    "notes": "Written part, 40 items in 60 minutes: 36 multiple choice (65 points) and 4 short writing items (10 points). Oral part, 5 items in 10 minutes (25 points). 60 points of 100 to pass."
+  },
+  "languages": ["ko"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://www.kiiptest.org/guide/compre-evaluation"],
+    "exam_name": ["https://www.kiiptest.org/guide/compre-evaluation"],
+    "administering_agency": ["https://www.kiiptest.org/guide/compre-evaluation"],
+    "format": ["https://www.kiiptest.org/guide/compre-evaluation"],
+    "languages": ["https://www.kiiptest.org/guide/compre-evaluation"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "official_study_material": "Not read."
+  },
+  "confidence": "medium",
+  "recent_change": null,
+  "notes": "Read from the test provider’s guide, which sets out the permanent-residence and naturalization evaluations side by side; the table read may describe both. The nationality law itself was not read."
+}

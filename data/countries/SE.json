@@ -1,0 +1,64 @@
+{
+  "iso": "SE",
+  "name": "Sweden",
+  "has_exam": true,
+  "exam_name": "Medborgarskapsprovet",
+  "administering_agency": "Universitets- och högskolerådet (UHR); the Swedish Migration Agency assesses applications",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "In Swedish, on paper, multiple choice with one right answer. Only the part on Swedish society exists so far; the number of questions and the time for the next sitting had not been announced."
+  },
+  "languages": ["sv"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "The knowledge requirement applies to applicants aged 16 to 66.",
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Utbildningsmaterial om det svenska samhället",
+      "url": "https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/",
+      "publisher": "Universitets- och högskolerådet (UHR)",
+      "kind": "study_guide",
+      "language": "sv",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://www.migrationsverket.se/en/news-archive/news/2026-05-06-new-rules-for-swedish-citizenship-from-6-june-2026.html",
+      "https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"
+    ],
+    "exam_name": ["https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"],
+    "administering_agency": [
+      "https://www.migrationsverket.se/en/news-archive/news/2026-05-06-new-rules-for-swedish-citizenship-from-6-june-2026.html",
+      "https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"
+    ],
+    "format": ["https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"],
+    "languages": ["https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"],
+    "exemptions.age": [
+      "https://www.migrationsverket.se/en/news-archive/news/2026-05-06-new-rules-for-swedish-citizenship-from-6-june-2026.html"
+    ],
+    "official_study_material": ["https://www.uhr.se/medborgarskapsprovet/om-medborgarskapsprovet/"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions.disability": "Not read."
+  },
+  "confidence": "high",
+  "recent_change": {
+    "changed_on": "2026-06-06",
+    "summary": "New citizenship rules from 6 June 2026 make knowledge of Swedish and of Swedish society mandatory, with no transitional arrangements. The citizenship test is being introduced in steps: the first sitting on Swedish society was held in August 2026; language tests come later.",
+    "url": "https://www.migrationsverket.se/en/news-archive/news/2026-05-06-new-rules-for-swedish-citizenship-from-6-june-2026.html"
+  },
+  "notes": "The test is for people who cannot show the knowledge another way, such as school grades or Swedish for Immigrants course D."
+}

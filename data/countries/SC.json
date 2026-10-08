@@ -1,0 +1,42 @@
+{
+  "iso": "SC",
+  "name": "Seychelles",
+  "has_exam": true,
+  "exam_name": "Citizenship qualifying examination",
+  "administering_agency": "Immigration and Civil Status Department",
+  "format": {
+    "question_count": 25,
+    "pass_mark": 20,
+    "pass_percent": 80,
+    "time_limit_minutes": null,
+    "question_pool_size": 100,
+    "modes": ["written"],
+    "notes": "25 questions from a pool of 100, in one of the three national languages; 80% is needed before the citizenship application can be made."
+  },
+  "languages": ["en", "fr", "crs"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://www.ics.gov.sc/citizenship/aquisition-of-citizenship"],
+    "exam_name": ["https://www.ics.gov.sc/citizenship/aquisition-of-citizenship"],
+    "administering_agency": ["https://www.ics.gov.sc/citizenship/aquisition-of-citizenship"],
+    "format": ["https://www.ics.gov.sc/citizenship/aquisition-of-citizenship"],
+    "languages": ["https://www.ics.gov.sc/citizenship/aquisition-of-citizenship"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "official_study_material": "The pool of 100 questions is mentioned; no published copy was found.",
+    "format.modes": "Not stated; \"written\" is an assumption."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": null
+}

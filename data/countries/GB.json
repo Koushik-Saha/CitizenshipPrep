@@ -1,0 +1,57 @@
+{
+  "iso": "GB",
+  "name": "United Kingdom",
+  "has_exam": true,
+  "exam_name": "Life in the UK Test",
+  "administering_agency": "Home Office",
+  "format": {
+    "question_count": 24,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": 45,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "24 questions about British traditions and customs in 45 minutes, drawn only from the official Guide for New Residents. Booked online at least three days ahead."
+  },
+  "languages": ["en"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "People under 18 and people aged 65 or over do not need to take it.",
+    "disability": "People with a long-term physical or mental condition are exempt, with an exemption form or a doctor’s letter."
+  },
+  "fee": {
+    "amount": 50,
+    "currency": "GBP",
+    "covers": "One booking of the test."
+  },
+  "official_study_material": [
+    {
+      "title": "Life in the United Kingdom: A Guide for New Residents",
+      "url": "https://www.gov.uk/life-in-the-uk-test",
+      "publisher": "Sold through the official Life in the UK Test shop",
+      "kind": "study_guide",
+      "language": "en",
+      "license": "A book on sale (also eBook and audio); Crown copyright, not offered under an open licence on the page read",
+      "reusable": "no"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://www.gov.uk/life-in-the-uk-test"],
+    "exam_name": ["https://www.gov.uk/life-in-the-uk-test"],
+    "format": ["https://www.gov.uk/life-in-the-uk-test"],
+    "fee": ["https://www.gov.uk/life-in-the-uk-test"],
+    "exemptions": ["https://www.gov.uk/life-in-the-uk-test"],
+    "official_study_material": ["https://www.gov.uk/life-in-the-uk-test"],
+    "languages": ["https://www.gov.uk/life-in-the-uk-test"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "administering_agency": "The page is the government booking service; the department is not named in the lines read.",
+    "format.pass_mark": "Not in the lines read. Widely reported as 75%.",
+    "format.modes": "Not stated in the lines read; \"computer\" is an assumption."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "The questions are not published; only the handbook and paid official practice material are."
+}

@@ -72,7 +72,7 @@
             "url": {
               "type": "string",
               "maxLength": 2000,
-              "pattern": "^https:\\/\\/",
+              "pattern": "^https?:\\/\\/",
               "description": "Where that document is published."
             },
             "section_or_page": {
@@ -261,7 +261,7 @@
             "url": {
               "type": "string",
               "maxLength": 2000,
-              "pattern": "^https:\\/\\/",
+              "pattern": "^https?:\\/\\/",
               "description": "Where that document is published."
             },
             "section_or_page": {
@@ -450,7 +450,7 @@
             "url": {
               "type": "string",
               "maxLength": 2000,
-              "pattern": "^https:\\/\\/",
+              "pattern": "^https?:\\/\\/",
               "description": "Where that document is published."
             },
             "section_or_page": {
@@ -644,7 +644,7 @@
             "url": {
               "type": "string",
               "maxLength": 2000,
-              "pattern": "^https:\\/\\/",
+              "pattern": "^https?:\\/\\/",
               "description": "Where that document is published."
             },
             "section_or_page": {

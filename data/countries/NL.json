@@ -1,0 +1,62 @@
+{
+  "iso": "NL",
+  "name": "Netherlands",
+  "has_exam": true,
+  "exam_name": "Inburgeringsexamen: Kennis van de Nederlandse Maatschappij (KNM)",
+  "administering_agency": "Dienst Uitvoering Onderwijs (DUO)",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": 45,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Taken on a computer; questions are grouped by theme, such as living, or work and income. It is one part of the civic integration examination, alongside the language parts."
+  },
+  "languages": ["nl"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Oefenexamens inburgering",
+      "url": "https://www.inburgeren.nl/examen-doen/oefenen.jsp",
+      "publisher": "Dienst Uitvoering Onderwijs (DUO)",
+      "kind": "practice_test",
+      "language": "nl",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://inburgeren.nl/en/taking-the-integration-exam/content-knowledge-exams.jsp"
+    ],
+    "exam_name": [
+      "https://inburgeren.nl/en/taking-the-integration-exam/content-knowledge-exams.jsp"
+    ],
+    "administering_agency": [
+      "https://inburgeren.nl/en/taking-the-integration-exam/content-knowledge-exams.jsp"
+    ],
+    "format": ["https://inburgeren.nl/en/taking-the-integration-exam/content-knowledge-exams.jsp"],
+    "official_study_material": ["https://www.inburgeren.nl/examen-doen/oefenen.jsp"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Reported by the same site as 50 euros for this part; the figure was not read directly.",
+    "exemptions": "Not read.",
+    "languages": "Assumed Dutch; not stated on the page read.",
+    "format.question_count": "Not stated on the page read."
+  },
+  "confidence": "high",
+  "recent_change": {
+    "changed_on": "2025-07-01",
+    "summary": "The attainment targets of the KNM examination were renewed, with more attention to women’s self-determination and knowledge of the Holocaust.",
+    "url": "https://www.rijksoverheid.nl/actueel/nieuws/2025/06/30/inburgeringsexamen-vernieuwd-extra-aandacht-voor-zelfbeschikking-vrouwen-en-kennis-holocaust"
+  },
+  "notes": "Naturalization requires the civic integration diploma; the immigration service’s own page on that could not be opened here. The change date comes from the government news item’s title and a search summary."
+}

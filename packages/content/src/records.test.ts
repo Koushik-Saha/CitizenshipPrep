@@ -211,12 +211,14 @@ describe('questionRecordSchema', () => {
     expect(problemsWith({ verified_at: '2026-10-08T12:00:00Z' })).toHaveLength(1);
   });
 
-  it('keeps a region inside its country, and sources on https', () => {
+  it('keeps a region inside its country, and sources on the web', () => {
     expect(problemsWith({ region: 'ZZ-N' })).toEqual([]);
     expect(problemsWith({ region: 'DE-BY' })).toEqual(["region: The region must be one of ZZ's."]);
-    expect(
-      problemsWith({ source: { ...question.source, url: 'http://example.test/guide' } }),
-    ).toHaveLength(1);
+    const withUrl = (url: string) => problemsWith({ source: { ...question.source, url } });
+    // Some governments publish only on plain http; a source is cited where it is.
+    expect(withUrl('http://example.test/guide')).toEqual([]);
+    expect(withUrl('ftp://example.test/guide')).toHaveLength(1);
+    expect(withUrl('example.test/guide')).not.toEqual([]);
   });
 
   it('refuses fields it does not know', () => {
@@ -242,7 +244,7 @@ describe('countryProfileSchema', () => {
       profileProblems({ citations: { ...profile.citations, population: ['https://x.test'] } }),
     ).not.toEqual([]);
     expect(
-      profileProblems({ citations: { ...profile.citations, fee: ['http://example.test/fee'] } }),
+      profileProblems({ citations: { ...profile.citations, fee: ['mailto:fees@example.test'] } }),
     ).not.toEqual([]);
   });
 
@@ -409,6 +411,13 @@ describe('validateDataFiles', () => {
     expect(validateDataFiles(dir).problems).toContain(
       'countries/_index.csv: ZZ: has a profile but no line in the index',
     );
+  });
+});
+
+describe('the data folder in this repository', () => {
+  it('is valid: every profile, the index and every question file', () => {
+    // The same check as `pnpm content validate`.
+    expect(validateDataFiles(path.join(repoRoot, 'data')).problems).toEqual([]);
   });
 });
 

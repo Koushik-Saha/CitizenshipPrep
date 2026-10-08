@@ -1,0 +1,46 @@
+{
+  "iso": "RU",
+  "name": "Russia",
+  "has_exam": true,
+  "exam_name": "Экзамен по истории России и основам законодательства Российской Федерации для целей приобретения гражданства Российской Федерации",
+  "administering_agency": "State institutions designated under Government Decree No. 1136",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": 90,
+    "question_pool_size": null,
+    "modes": ["written", "computer"],
+    "notes": "A written test of up to 90 minutes, which may use computers. A separate Russian language examination, oral and written, also lasts up to 90 minutes."
+  },
+  "languages": ["ru"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["http://government.ru/docs/all/160407/"],
+    "exam_name": ["http://government.ru/docs/all/160407/"],
+    "format": ["http://government.ru/docs/all/160407/"],
+    "languages": ["http://government.ru/docs/all/160407/"]
+  },
+  "unverified": {
+    "administering_agency": "The decree says state institutions hold the examinations; the list was not read.",
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "official_study_material": "None found.",
+    "format.pass_mark": "Not read in the decree."
+  },
+  "confidence": "high",
+  "recent_change": {
+    "changed_on": "2025-07-31",
+    "summary": "Government Decree No. 1136 approved a new regulation on two separate examinations for citizenship: Russian language, and history of Russia with basics of legislation.",
+    "url": "http://publication.pravo.gov.ru/document/0001202508010019"
+  },
+  "notes": null
+}

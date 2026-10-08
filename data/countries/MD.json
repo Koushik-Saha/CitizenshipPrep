@@ -1,0 +1,50 @@
+{
+  "iso": "MD",
+  "name": "Moldova",
+  "has_exam": true,
+  "exam_name": "Examen de evaluare a gradului de cunoaștere a prevederilor Constituției Republicii Moldova",
+  "administering_agency": "Ministerul Educației și Cercetării (examination commission)",
+  "format": {
+    "question_count": null,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["written"],
+    "notes": "A multiple-choice test written and approved by the ministry, sat before the examination commission on the same day as the state-language examination."
+  },
+  "languages": ["ro"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://mec.gov.md/en/content/examene-de-evaluare-nivelului-de-cunoastere-limbii-de-stat-pentru-straini",
+      "https://www.asp.gov.md/ro/servicii/persoane-fizice/cetatenie/173"
+    ],
+    "exam_name": [
+      "https://mec.gov.md/en/content/examene-de-evaluare-nivelului-de-cunoastere-limbii-de-stat-pentru-straini"
+    ],
+    "administering_agency": [
+      "https://mec.gov.md/en/content/examene-de-evaluare-nivelului-de-cunoastere-limbii-de-stat-pentru-straini"
+    ],
+    "format": [
+      "https://mec.gov.md/en/content/examene-de-evaluare-nivelului-de-cunoastere-limbii-de-stat-pentru-straini"
+    ]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "official_study_material": "None found.",
+    "languages": "Assumed to be the state language."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "A search of the official legal register lists a 2025 law (LP253/2025) alongside the citizenship law; whether it changes these rules was not checked."
+}

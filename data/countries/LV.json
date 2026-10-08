@@ -1,0 +1,42 @@
+{
+  "iso": "LV",
+  "name": "Latvia",
+  "has_exam": true,
+  "exam_name": "Test of knowledge of the basic principles of the Constitution, the text of the national anthem, and the basics of the history and culture of Latvia",
+  "administering_agency": "Office of Citizenship and Migration Affairs (PMLP)",
+  "format": {
+    "question_count": 18,
+    "pass_mark": null,
+    "pass_percent": null,
+    "time_limit_minutes": null,
+    "question_pool_size": null,
+    "modes": ["written", "oral", "computer"],
+    "notes": "Taken orally or in writing, and can be taken online. In writing: 18 questions (10 on history and culture, 8 on the Constitution) and writing out the anthem. Orally: one question on the Constitution, one on history and culture, and reciting the anthem. Each part is marked separately and all must be passed."
+  },
+  "languages": ["lv"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "People aged 65 or over have relief from testing.",
+    "disability": "Group I disabled people, group II with progressive mental illness, and group II or III with deafness are exempt from both examinations; other reliefs depend on the disability."
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"],
+    "exam_name": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"],
+    "administering_agency": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"],
+    "format": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"],
+    "languages": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"],
+    "exemptions": ["https://www.pmlp.gov.lv/en/examinations-determined-citizenship-law"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "official_study_material": "A study aid by J. Taurēns is named by the office in a search summary; its page was not read.",
+    "format.pass_mark": "Not on the page read."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "A Latvian language test is required as well. No more than three attempts within one application."
+}

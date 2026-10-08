@@ -1,0 +1,53 @@
+{
+  "iso": "NO",
+  "name": "Norway",
+  "has_exam": true,
+  "exam_name": "Statsborgerprøven",
+  "administering_agency": "Direktoratet for høyere utdanning og kompetanse (HK-dir)",
+  "format": {
+    "question_count": 36,
+    "pass_mark": 24,
+    "pass_percent": null,
+    "time_limit_minutes": 60,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Three answers per question, one right. Reported: only 32 of the 36 count, because four are new questions on trial. In Bokmål or Nynorsk, at language level A2."
+  },
+  "languages": ["nb", "nn"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://prove.hkdir.no/en/norwegian-citizenship-test/read-about-the-test-citizenship-test"
+    ],
+    "exam_name": [
+      "https://prove.hkdir.no/en/norwegian-citizenship-test/read-about-the-test-citizenship-test"
+    ],
+    "administering_agency": [
+      "https://prove.hkdir.no/en/norwegian-citizenship-test/read-about-the-test-citizenship-test"
+    ],
+    "format": [
+      "https://prove.hkdir.no/en/norwegian-citizenship-test/read-about-the-test-citizenship-test"
+    ],
+    "languages": [
+      "https://prove.hkdir.no/en/norwegian-citizenship-test/read-about-the-test-citizenship-test"
+    ]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "official_study_material": "Not read.",
+    "format.modes": "Not stated in the lines read; \"computer\" is an assumption.",
+    "format.pass_mark": "The 36 and 24 come from a search summary of this same page; the lines read directly give the 60 minutes and the language."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "Applicants may instead pass the social studies test (samfunnskunnskapsprøven) taken in Norwegian."
+}

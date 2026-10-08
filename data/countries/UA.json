@@ -1,0 +1,60 @@
+{
+  "iso": "UA",
+  "name": "Ukraine",
+  "has_exam": true,
+  "exam_name": "Іспити з основ Конституції України та історії України",
+  "administering_agency": "Науково-методичний центр вищої та фахової передвищої освіти (Ministry of Education and Science)",
+  "format": {
+    "question_count": 45,
+    "pass_mark": 35,
+    "pass_percent": null,
+    "time_limit_minutes": 90,
+    "question_pool_size": 350,
+    "modes": ["computer"],
+    "notes": "Two examinations in one session, 45 minutes each: 20 tasks on the basics of the Constitution (15 needed) and 25 on the history of Ukraine (20 needed). The published bank has 350 questions: 160 on the Constitution and 190 on history."
+  },
+  "languages": ["uk"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": null,
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "База тестових завдань до іспитів з основ Конституції України та історії України (350 питань)",
+      "url": "https://dmsu.gov.ua/news/dms/17814.html",
+      "publisher": "Міністерство освіти і науки України",
+      "kind": "question_bank",
+      "language": "uk",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": [
+      "https://dmsu.gov.ua/news/dms/17814.html",
+      "https://zakon.rada.gov.ua/laws/show/620-2024-%D0%BF"
+    ],
+    "exam_name": ["https://zakon.rada.gov.ua/laws/show/620-2024-%D0%BF"],
+    "administering_agency": ["https://dmsu.gov.ua/news/dms/17814.html"],
+    "format": ["https://dmsu.gov.ua/news/dms/17814.html"],
+    "official_study_material": ["https://dmsu.gov.ua/news/dms/17814.html"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "exemptions": "Not read.",
+    "languages": "Assumed Ukrainian; a state-language requirement is separate.",
+    "format.modes": "Applicants register through an electronic cabinet; how the test is sat was not read. \"computer\" is an assumption.",
+    "format.pass_mark": "The task counts and pass marks come from a search summary of the migration service’s notice; the lines read directly confirm the 350-question bank and its split."
+  },
+  "confidence": "high",
+  "recent_change": {
+    "changed_on": "2025-02-03",
+    "summary": "The migration service set out the new examination rules in a notice of 3 February 2025: programmes approved by a ministry order of 2 October 2024, under Cabinet resolution 620 of 2024, with a bank of 350 test questions.",
+    "url": "https://dmsu.gov.ua/news/dms/17814.html"
+  },
+  "notes": null
+}

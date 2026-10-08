@@ -1,0 +1,46 @@
+{
+  "iso": "MX",
+  "name": "Mexico",
+  "has_exam": true,
+  "exam_name": "Examen de historia y cultura de México",
+  "administering_agency": "Secretaría de Relaciones Exteriores",
+  "format": null,
+  "languages": ["es"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "Minors and people over 60 only have to show that they speak Spanish.",
+    "disability": null
+  },
+  "fee": null,
+  "official_study_material": [
+    {
+      "title": "Guía de estudios para el examen de naturalización (2023)",
+      "url": "https://portales.sre.gob.mx/tramites-dgaj/phocadownload/naturalizacion/2023/guia-estudios-2023.pdf",
+      "publisher": "Secretaría de Relaciones Exteriores",
+      "kind": "study_guide",
+      "language": "es",
+      "license": null,
+      "reusable": "unclear"
+    }
+  ],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://sre.gob.mx/carta-de-naturalizacion-por-residencia"],
+    "exam_name": ["https://sre.gob.mx/carta-de-naturalizacion-por-residencia"],
+    "administering_agency": ["https://sre.gob.mx/carta-de-naturalizacion-por-residencia"],
+    "official_study_material": [
+      "https://portales.sre.gob.mx/tramites-dgaj/phocadownload/naturalizacion/2023/guia-estudios-2023.pdf"
+    ],
+    "languages": ["https://sre.gob.mx/carta-de-naturalizacion-por-residencia"],
+    "exemptions.age": ["https://sre.gob.mx/carta-de-naturalizacion-por-residencia"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "Not read.",
+    "format": "The ministry page read gives no numbers. Widely reported as 10 questions with 8 needed; not confirmed here.",
+    "exemptions.disability": "Nothing read."
+  },
+  "confidence": "high",
+  "recent_change": null,
+  "notes": "Refugees recognised by the interior ministry also only have to show Spanish. After a fail the applicant waits at least fifteen working days to apply and sit again."
+}

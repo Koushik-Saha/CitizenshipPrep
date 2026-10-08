@@ -1,0 +1,45 @@
+{
+  "iso": "KZ",
+  "name": "Kazakhstan",
+  "has_exam": true,
+  "exam_name": "Тестирование по определению объема знаний государственного языка на элементарном уровне, основ Конституции Республики Казахстан, а также истории Казахстана",
+  "administering_agency": "Национальный центр тестирования (Ministry of Science and Higher Education)",
+  "format": {
+    "question_count": 100,
+    "pass_mark": 50,
+    "pass_percent": null,
+    "time_limit_minutes": 130,
+    "question_pool_size": null,
+    "modes": ["computer"],
+    "notes": "Three blocks: Kazakh language 30 (15 listening, 15 reading), basics of the Constitution 40, history of Kazakhstan 30. One right answer of four, one point each. At least 50 points overall, with a minimum in each block. 30 extra minutes for people with a disability."
+  },
+  "languages": ["kk", "ru"],
+  "regional_variants": [],
+  "exemptions": {
+    "age": "The rules do not apply to minors.",
+    "disability": "The rules do not apply to people without legal capacity; people with a disability get 30 extra minutes."
+  },
+  "fee": null,
+  "official_study_material": [],
+  "last_researched_at": "2026-10-08T00:00:00Z",
+  "citations": {
+    "has_exam": ["https://adilet.zan.kz/rus/docs/V2600037844"],
+    "exam_name": ["https://adilet.zan.kz/rus/docs/V2600037844"],
+    "administering_agency": ["https://adilet.zan.kz/rus/docs/V2600037844"],
+    "format": ["https://adilet.zan.kz/rus/docs/V2600037844"],
+    "exemptions": ["https://adilet.zan.kz/rus/docs/V2600037844"]
+  },
+  "unverified": {
+    "regional_variants": "None described: one national test.",
+    "fee": "A payment receipt is required to register; the amount is not in the rules.",
+    "official_study_material": "None found.",
+    "languages": "Reported by a search summary of the same rules: the language block in Kazakh, the other two in Kazakh or Russian. The sentence itself was not read."
+  },
+  "confidence": "high",
+  "recent_change": {
+    "changed_on": "2026-01-12",
+    "summary": "New rules for the test were approved by the Minister of Science and Higher Education (registered as V2600037844); the scope of knowledge was set by an order of 8 October 2024. The test requirement itself is recent.",
+    "url": "https://adilet.zan.kz/rus/docs/V2600037844"
+  },
+  "notes": null
+}

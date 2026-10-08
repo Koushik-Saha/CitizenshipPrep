@@ -31,11 +31,13 @@ const regionCode = z
   .regex(/^[A-Z]{2}-[A-Z0-9]{1,3}$/)
   .describe('ISO 3166-2 subdivision code: a state, canton or Land.');
 
-const httpsUrl = z
+// Not https only: some governments still publish law on plain http
+// (government.ru, npc.gov.cn), and a source is cited where it really is.
+const webUrl = z
   .url()
-  .regex(/^https:\/\//)
+  .regex(/^https?:\/\//)
   .max(2000)
-  .describe('An https address.');
+  .describe('A web address (https, or http where the publisher offers nothing else).');
 
 const timestamp = z.iso
   .datetime({ offset: true })
@@ -92,7 +94,7 @@ export const questionOrigins = ['official', 'original'] as const;
 const questionSource = z
   .strictObject({
     title: text(300).describe('The document the question is drawn from.'),
-    url: httpsUrl.describe('Where that document is published.'),
+    url: webUrl.describe('Where that document is published.'),
     section_or_page: text(200).describe(
       'Where in it: a section heading, a page, a question number.',
     ),
@@ -290,7 +292,7 @@ const examFormat = z
 
 const studyMaterial = z.strictObject({
   title: text(300),
-  url: httpsUrl,
+  url: webUrl,
   publisher: text(200),
   kind: z.enum(materialKinds),
   language: languageTag,
@@ -358,7 +360,7 @@ export const countryProfileSchema = z
 
     // How far to trust it, and what it rests on.
     citations: z
-      .record(fieldPath, z.array(httpsUrl).min(1).max(10))
+      .record(fieldPath, z.array(webUrl).min(1).max(10))
       .describe(
         'For each fact, the official pages it was read from: government agencies, legislation, the exam provider. Never a secondary source.',
       ),
@@ -370,7 +372,7 @@ export const countryProfileSchema = z
       .strictObject({
         changed_on: z.iso.date().nullable().describe('When the change took effect, if stated.'),
         summary: text(1000),
-        url: httpsUrl,
+        url: webUrl,
       })
       .nullable()
       .describe('A change to the rules in the two years before the research, or null.'),
