@@ -48,14 +48,26 @@ const images = [
   ['favicon.png', 96, svg(mark({ ring: WHITE, line: GOLD, share: 0.7 }), NAVY)],
 ];
 
+// The website's own icons, in the Next.js app folder, where their file names
+// are what puts them in every page's <head>.
+const web = path.resolve(out, '../../../web/src/app');
+const webImages = [
+  ['icon.png', 96, svg(mark({ ring: WHITE, line: GOLD, share: 0.7 }), NAVY)],
+  ['apple-icon.png', 180, svg(mark({ ring: WHITE, line: GOLD, share: 0.62 }), NAVY)],
+];
+
 const browser = await chromium.launch();
-for (const [name, size, source] of images) {
+const all = [
+  ...images.map((image) => [out, ...image]),
+  ...webImages.map((image) => [web, ...image]),
+];
+for (const [folder, name, size, source] of all) {
   const page = await browser.newPage({ viewport: { width: size, height: size } });
   await page.setContent(
     `<style>html,body{margin:0;background:transparent}svg{display:block;width:${size}px;height:${size}px}</style>${source}`,
   );
-  await page.screenshot({ path: path.join(out, name), omitBackground: true });
+  await page.screenshot({ path: path.join(folder, name), omitBackground: true });
   await page.close();
-  console.log(`${name}  ${size}x${size}`);
+  console.log(`${path.relative(process.cwd(), path.join(folder, name))}  ${size}x${size}`);
 }
 await browser.close();

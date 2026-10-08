@@ -255,9 +255,17 @@ test('every response carries the security headers', async ({ request }) => {
 test('no page breaks its own content security policy', async ({ page }) => {
   const violations: string[] = [];
   page.on('console', (message) => {
-    if (/Content Security Policy|Refused to/i.test(message.text())) violations.push(message.text());
+    if (/Content Security Policy|Refused to|Couldn't load/i.test(message.text())) {
+      violations.push(message.text());
+    }
   });
-  for (const path of ['/', '/countries', '/testland/citizenship-test', '/sign-in']) {
+  // The landing page's globe arrives after the page is idle and loads a
+  // model, textures, a worker and WebAssembly: wait for it, since it is the
+  // part most likely to ask for something the policy forgot.
+  await page.goto('/');
+  await expect(page.locator('canvas')).toBeAttached({ timeout: 60_000 });
+  await page.waitForTimeout(4000);
+  for (const path of ['/countries', '/testland/citizenship-test', '/sign-in']) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   }

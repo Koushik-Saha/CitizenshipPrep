@@ -27,7 +27,9 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
   // The sign-in service, error reporting and payments are called over HTTPS.
-  `connect-src 'self' https:${isDev ? ' ws: http://localhost:*' : ''}`,
+  // "blob:" is the globe again: its model carries its textures inside it, and
+  // the loader reads each one back out through a blob address.
+  `connect-src 'self' https: blob:${isDev ? ' ws: http://localhost:*' : ''}`,
   "media-src 'self' blob: data:",
   "worker-src 'self' blob:",
   "object-src 'none'",
