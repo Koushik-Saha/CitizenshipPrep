@@ -71,3 +71,19 @@ export async function expectAccessibleInBothThemes(page: Page, name: string): Pr
   }
   await page.emulateMedia({ colorScheme: 'light' });
 }
+
+/**
+ * Signs in to the reviewers' pages through their own sign-in form. Each call
+ * comes from a made-up network address of its own: tries at the password are
+ * limited per address, and the tests must not use up each other's.
+ */
+export async function signInAsReviewer(page: Page, next = '/admin/content'): Promise<void> {
+  const address = `192.0.2.${1 + Math.floor(Math.random() * 250)}, 10.1.${Math.floor(Math.random() * 250)}.1`;
+  await page.context().setExtraHTTPHeaders({ 'x-forwarded-for': address });
+  await page.goto(next);
+  await expect(page).toHaveURL(/\/admin\/sign-in/);
+  await page.getByLabel('Username').fill(process.env.E2E_ADMIN_USERNAME!);
+  await page.getByLabel('Password').fill(process.env.E2E_ADMIN_PASSWORD!);
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page).not.toHaveURL(/\/admin\/sign-in/);
+}

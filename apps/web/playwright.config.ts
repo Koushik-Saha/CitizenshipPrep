@@ -2,6 +2,8 @@ import { randomBytes } from 'node:crypto';
 
 import { defineConfig, devices } from '@playwright/test';
 
+import { e2eDatabaseUrl } from './e2e/database';
+
 // End-to-end checks: a real browser against a development server and a
 // scratch database with made-up content (see e2e/README.md). Nothing here
 // touches real questions, a real inbox, the AI, or a payment provider.
@@ -46,9 +48,7 @@ export default defineConfig({
       PORT: String(port),
       // Its own build directory: see distDir in next.config.ts.
       NEXT_DIST_DIR: '.next-e2e',
-      DATABASE_URL:
-        process.env.E2E_DATABASE_URL ??
-        'postgres://postgres:postgres@127.0.0.1:54329/oathly_e2e?sslmode=disable',
+      DATABASE_URL: e2eDatabaseUrl,
       TEST_SIGN_IN_SECRET: process.env.TEST_SIGN_IN_SECRET,
       ADMIN_USERNAME: process.env.E2E_ADMIN_USERNAME,
       ADMIN_PASSWORD: process.env.E2E_ADMIN_PASSWORD,

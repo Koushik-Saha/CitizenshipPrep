@@ -8,13 +8,13 @@ approves it, which records who verified it and when.
 
 ## The pipeline
 
-| Step | Command                      | What happens                                                                                                         |
-| ---- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| 1    | `pnpm content ingest`        | Fetches a guide (PDF, web page or file), stores it as hashed passages                                                |
-| 2, 3 | `pnpm content draft`         | Claude drafts questions passage by passage; each must quote the passage; saved as `draft`                            |
-| 4, 5 | `/admin/content`             | A reviewer reads each draft beside its passage, then approves (publishes), edits or rejects                          |
-| 6    | `pnpm content translate`     | Drafts translations of published questions; these are reviewed in the admin UI too                                   |
-|      | `pnpm content check-sources` | Re-fetches and re-hashes every guide; flags questions whose passage is gone. Runs monthly in CI (`source-check.yml`) |
+| Step | Command                      | What happens                                                                                                                  |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `pnpm content ingest`        | Fetches a guide (PDF, web page or file), stores it as hashed passages                                                         |
+| 2, 3 | `pnpm content draft`         | Claude drafts questions passage by passage; each must quote the passage; saved as `draft`                                     |
+| 4, 5 | `/admin/content`             | A reviewer reads each draft beside its passage, then approves (publishes), edits or rejects, one at a time or several at once |
+| 6    | `pnpm content translate`     | Drafts translations of published questions; these are reviewed in the admin UI too                                            |
+|      | `pnpm content check-sources` | Re-fetches and re-hashes every guide; flags questions whose passage is gone. Runs monthly in CI (`source-check.yml`)          |
 
 `pnpm content help` lists every option; `pnpm content status` shows what is waiting.
 
@@ -34,8 +34,8 @@ approves it, which records who verified it and when.
 
 - `DATABASE_URL`: the pipeline connects as the database owner. Server-side only.
 - `ANTHROPIC_API_KEY`: for `draft` and `translate`.
-- `ADMIN_USERNAME`, `ADMIN_PASSWORD`: the interim sign-in for `/admin`. It is one shared account
-  over HTTP Basic auth, to be replaced when real sign-in exists.
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD`: the reviewers' sign-in at `/admin/sign-in`. It is one
+  shared account, to be replaced by per-person reviewer accounts.
 
 Drafting uses `claude-opus-5-5`. A run of 20 questions makes about seven requests.
 

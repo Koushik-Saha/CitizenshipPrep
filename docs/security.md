@@ -56,14 +56,15 @@ oversights.
 Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
 (`takeRateLimit`), so they hold across server instances.
 
-| What                           | Limit           | Counted by      |
-| ------------------------------ | --------------- | --------------- |
-| Sign-in requests (`/api/auth`) | 30 in 5 minutes | network address |
-| Sign-in emails                 | 5 in 15 minutes | recipient       |
-| AI explanations                | 20 a minute     | learner         |
-| Tutor messages                 | 10 a minute     | learner         |
-| Exam results reported          | 10 an hour      | learner         |
-| Account deletion               | 5 an hour       | learner         |
+| What                           | Limit            | Counted by      |
+| ------------------------------ | ---------------- | --------------- |
+| Sign-in requests (`/api/auth`) | 30 in 5 minutes  | network address |
+| Sign-in emails                 | 5 in 15 minutes  | recipient       |
+| AI explanations                | 20 a minute      | learner         |
+| Tutor messages                 | 10 a minute      | learner         |
+| Exam results reported          | 10 an hour       | learner         |
+| Account deletion               | 5 an hour        | learner         |
+| Reviewer sign-in attempts      | 10 in 15 minutes | network address |
 
 The AI limits sit on top of the daily allowances each plan includes. Network
 and email addresses are counted under a keyed hash, never stored as
@@ -138,7 +139,10 @@ themselves. A refused call gets `429` with `Retry-After`. Tested in
 - **Server Actions for organizations and content review validate by hand**
   (tested functions in `packages/core` and `packages/api`), not with Zod.
   Review actions are behind the reviewers' sign-in.
-- **The review pages use one shared password** (HTTP Basic). Interim.
+- **The review pages use one shared account** (`ADMIN_USERNAME`,
+  `ADMIN_PASSWORD`), entered on their own sign-in page and kept in a signed,
+  HTTP-only cookie for twelve hours. Guesses are limited to ten in fifteen
+  minutes per network address. Per-person reviewer accounts would be better.
 - **Four dependency advisories** (`pnpm audit --prod`, 2 high, 2 moderate):
   `node-forge`, `braces`, `uuid`, `decode-uri-component`, all inside Expo's
   build tooling, none in code that runs for a learner. Two have no fixed

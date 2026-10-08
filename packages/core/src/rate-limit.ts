@@ -23,6 +23,8 @@ export const rateLimitRules = {
   tutor: { limit: 10, windowSeconds: 60 },
   /** Exam results reported by one learner: a correction or two, not a loop. */
   examResult: { limit: 10, windowSeconds: 60 * 60 },
+  /** Tries at the reviewers' password from one network address. */
+  adminSignIn: { limit: 10, windowSeconds: 15 * 60 },
   /** Attempts to delete an account: the real one needs only one. */
   accountDeletion: { limit: 5, windowSeconds: 60 * 60 },
 } as const satisfies Record<string, RateLimitRule>;

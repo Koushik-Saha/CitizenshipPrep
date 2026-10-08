@@ -1,42 +1,40 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
+import {
+  adminAccount,
+  createAdminSession,
+  isAdminLogin,
+  verifyAdminSession,
+  ADMIN_SESSION_HOURS,
+} from '@oathly/api/admin-session';
 
-// Interim sign-in for the admin area, until an auth provider is wired in:
-// one account, defined by ADMIN_USERNAME and ADMIN_PASSWORD, checked with HTTP
-// Basic auth. With either variable unset the admin area does not exist.
+// Sign-in for the reviewers' area: one account, defined by ADMIN_USERNAME and
+// ADMIN_PASSWORD on the server, entered on /admin/sign-in and remembered in a
+// signed cookie. With either variable unset the admin area does not exist.
+// The rules are in @oathly/api (admin-session.ts); this reads the environment.
 
-const MIN_PASSWORD_LENGTH = 12;
+export const ADMIN_SESSION_COOKIE = 'oathly_admin';
 
-interface AdminAccount {
-  username: string;
-  password: string;
-}
-
-function configuredAccount(): AdminAccount | null {
-  const username = process.env.ADMIN_USERNAME?.trim();
-  const password = process.env.ADMIN_PASSWORD;
-  if (!username || !password || password.length < MIN_PASSWORD_LENGTH) return null;
-  return { username, password };
-}
+const account = () => adminAccount(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
 
 export function isAdminConfigured(): boolean {
-  return configuredAccount() !== null;
+  return account() !== null;
 }
 
-// Comparing hashes keeps the comparison constant-time whatever the lengths.
-function sameSecret(a: string, b: string): boolean {
-  const digest = (value: string) => createHash('sha256').update(value).digest();
-  return timingSafeEqual(digest(a), digest(b));
+/** The reviewer a session cookie belongs to, or null. */
+export function verifyAdminCookie(value: string | null | undefined): string | null {
+  return verifyAdminSession(account(), value);
 }
 
-/** The signed-in admin's username, or null if the header does not match the account. */
-export function verifyBasicAuth(header: string | null): string | null {
-  const account = configuredAccount();
-  if (!account || !header?.startsWith('Basic ')) return null;
-  const decoded = Buffer.from(header.slice('Basic '.length), 'base64').toString('utf8');
-  const separator = decoded.indexOf(':');
-  if (separator < 0) return null;
-  const username = decoded.slice(0, separator);
-  const password = decoded.slice(separator + 1);
-  const matches = sameSecret(username, account.username) && sameSecret(password, account.password);
-  return matches ? account.username : null;
+/** A new session if these are the account's username and password, or null. */
+export function signInAdmin(username: string, password: string): string | null {
+  const admin = account();
+  return admin && isAdminLogin(admin, username, password) ? createAdminSession(admin) : null;
 }
+
+/** How the session cookie is set: readable by the server only, and only under /admin. */
+export const adminCookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production',
+  path: '/admin',
+  maxAge: ADMIN_SESSION_HOURS * 60 * 60,
+} as const;

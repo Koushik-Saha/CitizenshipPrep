@@ -153,11 +153,35 @@ export interface QueueQuestion {
 
 export type QuestionQueue = 'pending' | 'source-changed';
 
+/** Which flagged questions to show. */
+export const queueFlags = ['duplicate', 'no-source', 'has-source'] as const;
+export type QueueFlag = (typeof queueFlags)[number];
+
+/** Narrows a queue. Everything is optional; a string is a country, as it used to be. */
+export interface QueueFilters {
+  countryCode?: string;
+  /** Words to find in the question's text. */
+  search?: string;
+  /** A topic's slug, within the country. */
+  topic?: string;
+  flag?: QueueFlag;
+}
+
+const asFilters = (filters: QueueFilters | string | undefined): QueueFilters =>
+  typeof filters === 'string' ? { countryCode: filters } : (filters ?? {});
+
+/** A search as a LIKE pattern: what was typed, found anywhere, taken literally. */
+const likePattern = (search: string | undefined) => {
+  const text = search?.trim();
+  return text ? `%${text.replace(/[\\%_]/g, (char) => `\\${char}`)}%` : null;
+};
+
 export async function listQuestionQueue(
   db: Db,
   queue: QuestionQueue,
-  countryCode?: string,
+  filters?: QueueFilters | string,
 ): Promise<QueueQuestion[]> {
+  const { countryCode, search, topic, flag } = asFilters(filters);
   const { rows } = await db.query<{
     id: string;
     country_code: string;
@@ -190,9 +214,17 @@ export async function listQuestionQueue(
              when 'pending' then q.status in ('draft', 'in_review')
              else q.source_changed_at is not null and q.status in ('draft', 'in_review', 'published')
            end
+       and ($3::text is null or wording.text ilike $3)
+       and ($4::text is null or topic.slug = $4)
+       and case $5::text
+             when 'duplicate' then q.duplicate_of is not null
+             when 'no-source' then q.source_passage_id is null
+             when 'has-source' then q.source_passage_id is not null
+             else true
+           end
      order by q.country_code, q.created_at, q.id
      limit 500`,
-    [queue, countryCode ?? null],
+    [queue, countryCode ?? null, likePattern(search), topic ?? null, flag ?? null],
   );
   return rows.map((row) => ({
     id: row.id,
@@ -220,8 +252,10 @@ export interface QueueTranslation {
 
 export async function listTranslationQueue(
   db: Db,
-  countryCode?: string,
+  filters?: (Pick<QueueFilters, 'countryCode' | 'search'> & { locale?: string }) | string,
 ): Promise<QueueTranslation[]> {
+  const narrowed = typeof filters === 'string' ? { countryCode: filters } : (filters ?? {});
+  const { countryCode, search, locale } = narrowed;
   const { rows } = await db.query<{
     question_id: string;
     country_code: string;
@@ -238,9 +272,11 @@ export async function listTranslationQueue(
        on original.question_id = t.question_id and original.locale = t.translated_from
      where t.status = 'draft' and t.translated_from is not null and q.status = 'published'
        and ($1::text is null or q.country_code = $1)
+       and ($2::text is null or t.text ilike $2 or original.text ilike $2)
+       and ($3::text is null or t.locale = $3)
      order by q.country_code, t.locale, t.created_at
      limit 500`,
-    [countryCode ?? null],
+    [countryCode ?? null, likePattern(search), locale ?? null],
   );
   return rows.map((row) => ({
     questionId: row.question_id,
@@ -250,6 +286,30 @@ export async function listTranslationQueue(
     text: row.text,
     originalText: row.original_text,
   }));
+}
+
+/** A country's topics, for narrowing its queue. */
+export async function listReviewTopics(
+  db: Db,
+  countryCode: string,
+): Promise<{ slug: string; name: string }[]> {
+  const { rows } = await db.query<{ slug: string; name: string }>(
+    'select slug, name from public.topics where country_code = $1 order by sort_order, name',
+    [countryCode],
+  );
+  return rows;
+}
+
+/** The languages that have translations waiting, for narrowing that queue. */
+export async function listPendingTranslationLocales(db: Db): Promise<string[]> {
+  const { rows } = await db.query<{ locale: string }>(
+    `select distinct t.locale
+     from public.question_translations t
+     join public.questions q on q.id = t.question_id
+     where t.status = 'draft' and t.translated_from is not null and q.status = 'published'
+     order by t.locale`,
+  );
+  return rows.map((row) => row.locale);
 }
 
 export async function listReviewCountries(db: Db): Promise<{ isoCode: string; name: string }[]> {
@@ -726,6 +786,116 @@ export async function rejectTranslation(
       action: 'translation_rejected',
       locale,
       note,
+    });
+  });
+}
+
+// --- Many at once ----------------------------------------------------------------------
+
+/** The most one bulk decision covers: more than a reviewer can honestly have read is too many. */
+export const BULK_LIMIT = 200;
+
+export const bulkQuestionActions = ['approve', 'reject', 'reverify', 'retire'] as const;
+export type BulkQuestionAction = (typeof bulkQuestionActions)[number];
+
+export const bulkTranslationActions = ['approve', 'reject'] as const;
+export type BulkTranslationAction = (typeof bulkTranslationActions)[number];
+
+/** What a bulk decision came to: how many went through, and which did not and why. */
+export interface BulkOutcome {
+  done: number;
+  failed: { id: string; reason: string }[];
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function checkBulk(count: number, action: string, note: string) {
+  if (count === 0) throw new ReviewError('Select at least one.');
+  if (count > BULK_LIMIT) throw new ReviewError(`Select at most ${BULK_LIMIT} at a time.`);
+  if ((action === 'reject' || action === 'retire') && !note.trim()) {
+    throw new ReviewError(
+      action === 'reject' ? 'Say why they are rejected.' : 'Say why they are retired.',
+    );
+  }
+}
+
+/** Runs one decision per item, each on its own: one that cannot go through does not stop the rest. */
+async function eachOnItsOwn(
+  ids: readonly string[],
+  decide: (id: string) => Promise<void>,
+): Promise<BulkOutcome> {
+  const outcome: BulkOutcome = { done: 0, failed: [] };
+  for (const id of ids) {
+    try {
+      await decide(id);
+      outcome.done += 1;
+    } catch (error) {
+      if (!(error instanceof ReviewError)) throw error;
+      outcome.failed.push({ id, reason: error.message });
+    }
+  }
+  return outcome;
+}
+
+/**
+ * The same decision on several questions: approve (publish as drafted),
+ * reject, confirm after a source change, or retire. Each is recorded as the
+ * reviewer's own decision, exactly as if made one at a time, so approving in
+ * bulk is still the reviewer saying they have checked each one.
+ */
+export async function reviewQuestionsInBulk(
+  pool: pg.Pool,
+  reviewerId: string,
+  action: BulkQuestionAction,
+  questionIds: readonly string[],
+  note = '',
+): Promise<BulkOutcome> {
+  const ids = [...new Set(questionIds)];
+  checkBulk(ids.length, action, note);
+  return eachOnItsOwn(ids, async (id) => {
+    if (!UUID.test(id)) throw new ReviewError('Not a question.');
+    if (action === 'approve') await approveQuestion(pool, id, reviewerId);
+    else if (action === 'reject') await rejectQuestion(pool, id, reviewerId, note);
+    else if (action === 'reverify') await reverifyQuestion(pool, id, reviewerId, note || undefined);
+    else await retireQuestion(pool, id, reviewerId, note);
+  });
+}
+
+/**
+ * The same decision on several translations, each named "questionId:locale":
+ * approve as drafted, or reject (which removes the draft).
+ */
+export async function reviewTranslationsInBulk(
+  pool: pg.Pool,
+  reviewerId: string,
+  action: BulkTranslationAction,
+  keys: readonly string[],
+  note = '',
+): Promise<BulkOutcome> {
+  const unique = [...new Set(keys)];
+  checkBulk(unique.length, action, note);
+  return eachOnItsOwn(unique, async (key) => {
+    const separator = key.indexOf(':');
+    const questionId = key.slice(0, separator);
+    const locale = key.slice(separator + 1);
+    if (separator < 0 || !UUID.test(questionId) || !locale) {
+      throw new ReviewError('Not a translation.');
+    }
+    if (action === 'reject') {
+      await rejectTranslation(pool, questionId, locale, reviewerId, note);
+      return;
+    }
+    await withTransaction(pool, async (db) => {
+      await assertStaff(db, reviewerId);
+      const approved = await db.query(
+        `update public.question_translations
+         set status = 'approved', reviewed_by = $3, reviewed_at = now()
+         where question_id = $1 and locale = $2 and translated_from is not null
+           and status = 'draft'`,
+        [questionId, locale, reviewerId],
+      );
+      if (!approved.rowCount) throw new ReviewError('That translation is not waiting for review.');
+      await recordDecision(db, { questionId, reviewerId, action: 'translation_approved', locale });
     });
   });
 }

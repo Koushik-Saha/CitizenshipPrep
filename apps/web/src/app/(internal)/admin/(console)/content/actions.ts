@@ -3,12 +3,17 @@
 import {
   approveQuestion,
   approveTranslation,
+  bulkQuestionActions,
+  bulkTranslationActions,
   rejectQuestion,
   rejectTranslation,
   retireQuestion,
   reverifyQuestion,
   ReviewError,
+  reviewQuestionsInBulk,
+  reviewTranslationsInBulk,
   saveQuestionEdits,
+  type BulkOutcome,
   type QuestionEdits,
   type TranslationEdits,
 } from '@oathly/content/review';
@@ -121,4 +126,77 @@ export async function rejectTranslated(id: string, locale: string, form: FormDat
     rejectTranslation(getDb(), id, locale, reviewerId, text(form, 'note')),
   );
   finish(problem, translationPath(id, locale), '/admin/content?view=translations&done=rejected');
+}
+
+// --- Several at once -----------------------------------------------------------
+
+/** The queue as it was filtered, to come back to: only its own query string is kept. */
+function queueUrl(form: FormData, extra: Record<string, string>): string {
+  const query = new URLSearchParams(text(form, 'back'));
+  for (const name of ['done', 'count', 'failed', 'why', 'problem']) query.delete(name);
+  for (const [name, value] of Object.entries(extra)) query.set(name, value);
+  return `/admin/content?${query}`;
+}
+
+/**
+ * One decision on everything ticked in the queue. Approving in bulk still
+ * means the reviewer has checked each one: the form asks them to say so, and
+ * nothing is approved unless they have.
+ */
+async function decideInBulk(
+  form: FormData,
+  actions: readonly string[],
+  decide: (reviewerId: string, action: string, ids: string[], note: string) => Promise<BulkOutcome>,
+): Promise<never> {
+  const reviewer = await requireReviewer();
+  const action = text(form, 'decision');
+  const ids = form.getAll('ids').map(String);
+  let outcome: BulkOutcome;
+  try {
+    if (!actions.includes(action)) throw new ReviewError('Choose what to do with them.');
+    if (action === 'approve' && form.get('checked') !== 'on') {
+      throw new ReviewError(
+        'Tick the box to confirm you have checked each one against its source.',
+      );
+    }
+    outcome = await decide(reviewer.id, action, ids, text(form, 'note'));
+  } catch (error) {
+    if (!(error instanceof ReviewError)) throw error;
+    redirect(queueUrl(form, { problem: error.message }));
+  }
+  revalidatePath('/admin/content', 'layout');
+  if (outcome.done > 0) revalidatePublicContent();
+  redirect(
+    queueUrl(form, {
+      done: action,
+      count: String(outcome.done),
+      ...(outcome.failed.length > 0
+        ? { failed: String(outcome.failed.length), why: outcome.failed[0]!.reason }
+        : {}),
+    }),
+  );
+}
+
+export async function decideQuestions(form: FormData) {
+  await decideInBulk(form, bulkQuestionActions, (reviewerId, action, ids, note) =>
+    reviewQuestionsInBulk(
+      getDb(),
+      reviewerId,
+      action as (typeof bulkQuestionActions)[number],
+      ids,
+      note,
+    ),
+  );
+}
+
+export async function decideTranslations(form: FormData) {
+  await decideInBulk(form, bulkTranslationActions, (reviewerId, action, ids, note) =>
+    reviewTranslationsInBulk(
+      getDb(),
+      reviewerId,
+      action as (typeof bulkTranslationActions)[number],
+      ids,
+      note,
+    ),
+  );
 }

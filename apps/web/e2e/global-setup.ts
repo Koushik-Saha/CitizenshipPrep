@@ -1,5 +1,7 @@
 import { request, type FullConfig } from '@playwright/test';
 
+import { resetReviewQueue } from './database';
+
 // The development server compiles a page the first time it is asked for,
 // which on a busy machine takes longer than a test should wait. This asks for
 // every page once, one at a time, before any test starts, so the tests
@@ -18,6 +20,7 @@ const publicPages = [
   '/join/not-a-real-invitation',
   '/this-page-does-not-exist',
   '/brand',
+  '/admin/sign-in',
   '/sitemap.xml',
   '/api/public/countries',
 ];
@@ -35,6 +38,9 @@ const learnerPages = [
 ];
 
 export default async function globalSetup(config: FullConfig) {
+  // Something for the reviewers' pages to review.
+  await resetReviewQueue();
+
   const baseURL = config.projects[0]!.use.baseURL!;
   const api = await request.newContext({ baseURL, timeout: 180_000 });
   const visit = async (path: string) => {

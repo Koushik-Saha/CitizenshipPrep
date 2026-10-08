@@ -7,20 +7,30 @@ import {
 } from '@oathly/i18n';
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { isAdminConfigured, verifyBasicAuth } from './lib/admin-credentials';
+import {
+  ADMIN_SESSION_COOKIE,
+  isAdminConfigured,
+  verifyAdminCookie,
+} from './lib/admin-credentials';
 import { getAuth, isAuthConfigured } from './lib/auth/server';
 import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from './lib/locale-cookie';
 import { TEST_SESSION_COOKIE, verifyTestSession } from './lib/test-sign-in';
 
-// /admin: the interim reviewer sign-in. Pages and Server Actions check again
-// with requireReviewer().
+// /admin: the reviewers' area. Without a session, every page of it leads to
+// its sign-in page. Pages and Server Actions check again with requireReviewer().
 function adminGuard(request: NextRequest) {
   if (!isAdminConfigured()) return new NextResponse('Not found', { status: 404 });
-  if (verifyBasicAuth(request.headers.get('authorization'))) return NextResponse.next();
-  return new NextResponse('Sign in to review content.', {
-    status: 401,
-    headers: { 'WWW-Authenticate': 'Basic realm="Oathly admin", charset="UTF-8"' },
-  });
+  const { pathname, search } = request.nextUrl;
+  if (pathname === '/admin/sign-in') return NextResponse.next();
+  if (verifyAdminCookie(request.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
+    return NextResponse.next();
+  }
+  const signIn = new URL('/admin/sign-in', request.url);
+  // Back to the page that was asked for, once signed in.
+  if (request.method === 'GET' && pathname !== '/admin') {
+    signIn.searchParams.set('next', pathname + search);
+  }
+  return NextResponse.redirect(signIn);
 }
 
 /** Pages only a signed-in learner sees, without their language prefix. */
