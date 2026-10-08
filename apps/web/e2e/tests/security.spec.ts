@@ -209,8 +209,8 @@ test('sign-in emails are rate limited per recipient and per network address', as
   // fails upstream (5xx). What matters is when it stops getting through.
   const address = `203.0.113.${Math.floor(Math.random() * 250) + 1}, 10.0.0.1`;
   const send = (email: string, from = address) =>
-    request.post('/api/auth/sign-in/magic-link', {
-      data: { email, callbackURL: '/welcome' },
+    request.post('/api/auth/email-otp/send-verification-otp', {
+      data: { email, type: 'sign-in' },
       headers: { ...json, 'x-forwarded-for': from },
     });
 
@@ -227,6 +227,14 @@ test('sign-in emails are rate limited per recipient and per network address', as
     }
   }
   expect(stoppedAt).toBeGreaterThanOrEqual(6);
+
+  // Typing a code in names the address too, but sends nothing: it is not
+  // counted against the inbox, or nobody could sign in twice in a row.
+  const typed = await request.post('/api/auth/sign-in/email-otp', {
+    data: { email: inbox, otp: '000000' },
+    headers: { ...json, 'x-forwarded-for': '198.51.100.200' },
+  });
+  expect(typed.status()).not.toBe(429);
 
   // Thirty from one address, to different inboxes, then no more.
   const flooding = `203.0.113.${Math.floor(Math.random() * 250) + 1}, 10.0.0.2`;

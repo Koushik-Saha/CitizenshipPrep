@@ -234,14 +234,10 @@ export const es: Messages = {
       '¿Es tu primera vez? Al iniciar sesión se crea tu cuenta. Tu progreso se guarda en ella, así que puedes continuar desde el teléfono u otro ordenador.',
     notConfigured: 'El inicio de sesión aún no está configurado en este servidor.',
     email: 'Correo electrónico',
-    sendLink: 'Envíame un enlace para entrar',
     or: 'o',
     google: 'Continuar con Google',
-    sentTitle: 'Revisa tu correo',
-    sentBody:
-      'Hemos enviado un enlace para entrar a {email}. Funciona una sola vez y caduca pronto. Puedes cerrar esta pestaña.',
     differentEmail: 'Usar otro correo',
-    sendFailed: 'No hemos podido enviar el enlace. Inténtalo de nuevo.',
+    sendFailed: 'No hemos podido enviar el código. Inténtalo de nuevo.',
     googleFailed: 'No se pudo iniciar sesión con Google. Inténtalo de nuevo.',
     introMobile:
       '¿Es tu primera vez? Al iniciar sesión se crea tu cuenta. Usa el mismo correo que en la web y tu progreso te acompañará.',

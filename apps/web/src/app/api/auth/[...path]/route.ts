@@ -13,10 +13,14 @@ export function GET(request: Request, context: Context) {
   return getAuth().handler().GET(request, context);
 }
 
-/** The address a sign-in email would go to, if this request sends one. */
+/**
+ * The address a sign-in email would go to, if this request sends one: asking
+ * for a code, a link or a password reset. Typing a code in is not one, though
+ * it names the address too.
+ */
 async function recipientOf(request: Request, path: string[]): Promise<string | null> {
-  const sends = path.some((part) => /magic-link|send|forget-password|email-otp/.test(part));
-  if (!sends || path.includes('verify')) return null;
+  const last = path.at(-1) ?? '';
+  if (!/^send-|magic-link|forget-password|request-password-reset/.test(last)) return null;
   const body: unknown = await request
     .clone()
     .json()

@@ -102,9 +102,10 @@ would have to be rebuilt.
    `EXPO_PUBLIC_NEON_AUTH_URL` in the phone app (the same value).
 3. Under trusted domains, add `https://<your-domain>`. The phone app presents
    the website's origin, so this covers it too.
-4. Turn on the sign-in methods the apps use: **email link** (website),
-   **email code** (phone app), and **Google** if you want it (it needs your
-   own Google OAuth client for production).
+4. Turn on the sign-in methods the apps use: **email code** (one-time
+   password; the website and the phone app both use it), and **Google** if
+   you want it (it needs your own Google OAuth client for production). Neon
+   Auth has no "email link" method; the apps do not use one.
 5. Generate the cookie secret: `openssl rand -base64 36`. This is
    `NEON_AUTH_COOKIE_SECRET`.
 6. **Check that deleting an account deletes the sign-in too.** The apps

@@ -236,14 +236,10 @@ export const fr: Messages = {
       'Nouveau ici ? La connexion crée votre compte. Votre progression y est enregistrée : vous pouvez continuer depuis votre téléphone ou un autre ordinateur.',
     notConfigured: 'La connexion n’est pas encore configurée sur ce serveur.',
     email: 'E-mail',
-    sendLink: 'M’envoyer un lien de connexion',
     or: 'ou',
     google: 'Continuer avec Google',
-    sentTitle: 'Consultez vos e-mails',
-    sentBody:
-      'Nous avons envoyé un lien de connexion à {email}. Il ne fonctionne qu’une fois et expire bientôt. Vous pouvez fermer cet onglet.',
     differentEmail: 'Utiliser une autre adresse',
-    sendFailed: 'Nous n’avons pas pu envoyer le lien. Réessayez.',
+    sendFailed: 'Nous n’avons pas pu envoyer le code. Réessayez.',
     googleFailed: 'La connexion avec Google a échoué. Réessayez.',
     introMobile:
       'Nouveau ici ? La connexion crée votre compte. Utilisez la même adresse que sur le web et votre progression vous suit.',

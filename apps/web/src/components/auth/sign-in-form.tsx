@@ -11,7 +11,8 @@ import { loadAuthClient } from '@/lib/auth/load-client';
 type State =
   | { step: 'ready' }
   | { step: 'sending' }
-  | { step: 'sent'; email: string }
+  /** A code has been emailed: waiting for it to be typed in. */
+  | { step: 'code'; email: string; problem: string | null; checking: boolean }
   | { step: 'error'; message: string };
 
 /**
@@ -28,7 +29,7 @@ function useCallbackUrl(): string {
       : country
         ? `/welcome?country=${country}`
         : '/welcome';
-  // In the language being read, so the link in the email comes back in it.
+  // In the language being read.
   return useLocalePath()(path);
 }
 
@@ -56,22 +57,43 @@ export function ContinueIfSignedIn() {
   return null;
 }
 
-/** Render inside <Suspense>: it reads ?country= from the query string. */
+/**
+ * Sign-in by a code sent to an email address, or with Google. A code rather
+ * than a link: it is what the sign-in service offers, it is what the phone
+ * app uses, and it works when the email is read on another device.
+ *
+ * Render inside <Suspense>: it reads ?country= from the query string.
+ */
 export function SignInForm() {
   const t = useT();
   const callbackUrl = useCallbackUrl();
   const [state, setState] = useState<State>({ step: 'ready' });
 
-  async function sendLink(form: FormData) {
+  async function sendCode(form: FormData) {
     const email = String(form.get('email') ?? '').trim();
     setState({ step: 'sending' });
     const authClient = await loadAuthClient();
-    const { error } = await authClient.signIn.magicLink({ email, callbackURL: callbackUrl });
+    const { error } = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
     setState(
       error
         ? { step: 'error', message: error.message ?? t('auth.sendFailed') }
-        : { step: 'sent', email },
+        : { step: 'code', email, problem: null, checking: false },
     );
+  }
+
+  async function checkCode(form: FormData) {
+    if (state.step !== 'code') return;
+    const { email } = state;
+    const otp = String(form.get('code') ?? '').replace(/\s/g, '');
+    setState({ step: 'code', email, problem: null, checking: true });
+    const authClient = await loadAuthClient();
+    const { error } = await authClient.signIn.emailOtp({ email, otp });
+    if (error) {
+      setState({ step: 'code', email, problem: t('auth.codeFailed'), checking: false });
+      return;
+    }
+    // A full load, so every page sees the new session from its first byte.
+    window.location.assign(callbackUrl);
   }
 
   async function continueWithGoogle() {
@@ -84,19 +106,42 @@ export function SignInForm() {
     if (error) setState({ step: 'error', message: error.message ?? t('auth.googleFailed') });
   }
 
-  if (state.step === 'sent') {
+  if (state.step === 'code') {
     return (
-      <div role="status" className="space-y-3">
-        <h2 className="font-display text-xl font-medium">{t('auth.sentTitle')}</h2>
-        <p>{t('auth.sentBody', { email: state.email })}</p>
+      <form action={checkCode} className="space-y-4">
+        <p role="status">{t('auth.codeSent', { email: state.email })}</p>
+        {state.problem && (
+          <Notice tone="error" role="alert">
+            {state.problem}
+          </Notice>
+        )}
+        <div>
+          <label htmlFor="code" className={labelClass}>
+            {t('auth.code')}
+          </label>
+          <input
+            id="code"
+            name="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            pattern="[0-9 ]*"
+            maxLength={8}
+            required
+            autoFocus
+            className={`${fieldClass} font-mono text-lg tracking-widest`}
+          />
+        </div>
+        <button type="submit" disabled={state.checking} className={`${buttonClass.primary} w-full`}>
+          {t('auth.verifyCode')}
+        </button>
         <button
           type="button"
           onClick={() => setState({ step: 'ready' })}
-          className={buttonClass.secondary}
+          className={`${buttonClass.secondary} w-full`}
         >
           {t('auth.differentEmail')}
         </button>
-      </div>
+      </form>
     );
   }
 
@@ -110,7 +155,7 @@ export function SignInForm() {
       )}
       {/* The auth client downloads as soon as someone starts using the form. */}
       <form
-        action={sendLink}
+        action={sendCode}
         onFocus={() => void loadAuthClient()}
         onPointerEnter={() => void loadAuthClient()}
         className="space-y-3"
@@ -129,7 +174,7 @@ export function SignInForm() {
           />
         </div>
         <button type="submit" disabled={busy} className={`${buttonClass.primary} w-full`}>
-          {t('auth.sendLink')}
+          {t('auth.sendCode')}
         </button>
       </form>
       <div className="text-fg-muted flex items-center gap-3 text-sm" aria-hidden="true">

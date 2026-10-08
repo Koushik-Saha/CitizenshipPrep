@@ -237,14 +237,10 @@ export const tl: Messages = {
       'Bago ka rito? Gagawa ng account mo ang pag-sign in. Doon nase-save ang iyong progreso, kaya maipagpapatuloy mo ito sa telepono o sa ibang computer.',
     notConfigured: 'Hindi pa naka-set up ang pag-sign in sa server na ito.',
     email: 'Email',
-    sendLink: 'I-email sa akin ang link sa pag-sign in',
     or: 'o',
     google: 'Magpatuloy gamit ang Google',
-    sentTitle: 'Tingnan ang iyong email',
-    sentBody:
-      'Nagpadala kami ng link sa pag-sign in sa {email}. Isang beses lang itong gagana at malapit nang mag-expire. Maaari mo nang isara ang tab na ito.',
     differentEmail: 'Gumamit ng ibang email',
-    sendFailed: 'Hindi namin naipadala ang link. Subukan ulit.',
+    sendFailed: 'Hindi namin naipadala ang code. Subukan ulit.',
     googleFailed: 'Hindi natuloy ang pag-sign in sa Google. Subukan ulit.',
     introMobile:
       'Bago ka rito? Gagawa ng account mo ang pag-sign in. Gamitin ang parehong email na gamit mo sa web at susunod sa iyo ang iyong progreso.',

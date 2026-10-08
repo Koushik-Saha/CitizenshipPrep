@@ -222,14 +222,10 @@ export const vi: Messages = {
       'Bạn mới đến? Đăng nhập sẽ tạo tài khoản cho bạn. Tiến độ được lưu vào tài khoản, nên bạn có thể tiếp tục trên điện thoại hoặc máy tính khác.',
     notConfigured: 'Tính năng đăng nhập chưa được thiết lập trên máy chủ này.',
     email: 'Email',
-    sendLink: 'Gửi liên kết đăng nhập qua email',
     or: 'hoặc',
     google: 'Tiếp tục với Google',
-    sentTitle: 'Hãy kiểm tra email',
-    sentBody:
-      'Chúng tôi đã gửi liên kết đăng nhập đến {email}. Liên kết chỉ dùng được một lần và sẽ sớm hết hạn. Bạn có thể đóng thẻ này.',
     differentEmail: 'Dùng email khác',
-    sendFailed: 'Chúng tôi không gửi được liên kết. Hãy thử lại.',
+    sendFailed: 'Chúng tôi không gửi được mã. Hãy thử lại.',
     googleFailed: 'Đăng nhập bằng Google không thành công. Hãy thử lại.',
     introMobile:
       'Bạn mới đến? Đăng nhập sẽ tạo tài khoản cho bạn. Hãy dùng cùng email như trên web để tiến độ đi theo bạn.',

@@ -234,14 +234,10 @@ export const pt: Messages = {
       'Primeira vez aqui? Ao entrar, sua conta é criada. Seu progresso fica salvo nela, então você pode continuar pelo celular ou em outro computador.',
     notConfigured: 'O acesso ainda não está configurado neste servidor.',
     email: 'E-mail',
-    sendLink: 'Enviar um link de acesso',
     or: 'ou',
     google: 'Continuar com o Google',
-    sentTitle: 'Confira seu e-mail',
-    sentBody:
-      'Enviamos um link de acesso para {email}. Ele funciona uma única vez e expira em breve. Você pode fechar esta aba.',
     differentEmail: 'Usar outro e-mail',
-    sendFailed: 'Não conseguimos enviar o link. Tente de novo.',
+    sendFailed: 'Não conseguimos enviar o código. Tente de novo.',
     googleFailed: 'O acesso com o Google falhou. Tente de novo.',
     introMobile:
       'Primeira vez aqui? Ao entrar, sua conta é criada. Use o mesmo e-mail da web e seu progresso acompanha você.',

@@ -236,16 +236,12 @@ export const en = {
       'New here? Signing in creates your account. Your progress is saved to it, so you can carry on from your phone or another computer.',
     notConfigured: 'Sign-in is not set up on this server yet.',
     email: 'Email',
-    sendLink: 'Email me a sign-in link',
     or: 'or',
     google: 'Continue with Google',
-    sentTitle: 'Check your email',
-    sentBody:
-      'We sent a sign-in link to {email}. It works once and expires soon. You can close this tab.',
     differentEmail: 'Use a different email',
-    sendFailed: 'We could not send the link. Try again.',
+    sendFailed: 'We could not send the code. Try again.',
     googleFailed: 'Google sign-in failed. Try again.',
-    // Mobile signs in with an emailed code instead of a link.
+    // Sign-in is by an emailed code, on the website and in the phone app.
     introMobile:
       'New here? Signing in creates your account. Use the same email as on the web and your progress follows you.',
     emailRequired: 'Enter your email address.',
