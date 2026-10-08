@@ -30,9 +30,8 @@ Two standing differences from the playbook's wording: the database is Neon, not 
 ## Build phases (Section 5)
 
 - [x] **P0** `CLAUDE.md` is in the repository root (untracked, on purpose).
-- [~] **P1** `pnpm dev` runs web and Expo and both import from `packages/core`; CI is green on
-  every push to `main`. Missing: no pull request has ever been opened, so "green on a test PR" has
-  no proof.
+- [x] **P1** `pnpm dev` runs web and Expo and both import from `packages/core`. Proof of CI on a
+      pull request: [#1](https://github.com/Koushik-Saha/CitizenshipPrep/pull/1), all four jobs green.
 - [x] **P2** Logo, icons, favicon and splash exist; light and dark tokens on `/brand`. Proof:
       `admin.spec.ts`, "the brand page is accessible" (both themes).
 - [x] **P3** Proof: CI job "Migrations, RLS tests, generated types"; `db/tests/002_progress_isolation.test.sql`;
