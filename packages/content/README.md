@@ -41,24 +41,44 @@ Drafting uses `claude-opus-5-5`. A run of 20 questions makes about seven request
 
 ## Research and draft files
 
-Before anything reaches the database, countries are researched and questions drafted as files in
+Before anything reaches the database, a country is researched and its content written as files in
 `data/` at the repository root.
 
-| Path                          | What it holds                                                       |
-| ----------------------------- | ------------------------------------------------------------------- |
-| `data/countries/<ISO>.json`   | A `CountryProfile`: one country's test, with a source for each fact |
-| `data/countries/_index.csv`   | Every country researched, one line each, test or no test            |
-| `data/questions/<ISO>/*.json` | `QuestionRecord`s: one, or a list, per file                         |
-| `data/schemas/*.schema.json`  | JSON Schema for both, generated                                     |
+| Path                                      | What it holds                                                         |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| `data/countries/<ISO>.json`               | A `CountryProfile`: one country's test, with a source for each fact   |
+| `data/countries/_index.csv`               | Every country researched, one line each, test or no test              |
+| `data/sources/<ISO>/sources.json`         | The official material found: address, licence, SHA-256 of each copy   |
+| `data/sources/<ISO>/topic_map.md`         | The official topics and the share of the exam each one is             |
+| `data/questions/<ISO>/official*.json`     | The government's own questions, where the licence allows copying them |
+| `data/questions/<ISO>/original_*.json`    | Questions written from the official material, one file per topic      |
+| `data/questions/<ISO>/review.csv`         | A fact-checker's verdict on each question                             |
+| `data/questions/<ISO>/i18n/<locale>.json` | Translations, each beside its original                                |
+| `data/content/<ISO>/`                     | Flashcards, glossary, exam-day guide, eligibility FAQ, page drafts    |
+| `data/schemas/*.schema.json`              | JSON Schema for the JSON files above, generated                       |
 
-The Zod schemas in `src/records.ts` are the definition. `pnpm content schemas` writes the JSON
-Schema files from them, and a test fails if the two are out of step. `pnpm content validate` checks
-every file in `data/`; it needs no database. Validate with it rather than with the JSON Schema
-alone: a JSON Schema cannot say that an answer points at one of its own options, that an
-explanation is two to four sentences, or that every fact in a profile is cited or explained.
+The Zod schemas in `src/records.ts` and `src/pack.ts` are the definition. `pnpm content schemas`
+writes the JSON Schema files from them, and a test fails if the two are out of step.
+`pnpm content validate` checks every file in `data/`; it needs no database, and the test suite runs
+it on the repository's own data. Validate with it rather than with the JSON Schema alone: a JSON
+Schema cannot say that an answer points at one of its own options, that every fact in a profile is
+cited, or that an official question comes from a source whose licence allows copying it.
 
-A question in a file is always `status: "draft"` with `verified_at: null`. Review and publishing
-happen in the app, never in a file.
+Three more commands work on these files:
+
+- `pnpm content source-file --country <ISO> --url <address>` downloads one official document into
+  `data/sources/<ISO>/` and prints its SHA-256 and size for `sources.json`.
+- `pnpm content source-check [--country <ISO>]` downloads every recorded source again and says
+  which have changed, keeping a changed one beside the old as `<file>.new`.
+- `pnpm content question-stats --country <ISO>` counts a country's questions by topic, difficulty,
+  type and style, and lists questions worded alike.
+
+The downloaded documents themselves are not committed (see `.gitignore`): most are not ours to
+redistribute, and this repository is public. Their manifest records where each came from and its
+hash, so a copy can be fetched again and checked.
+
+A question in a file is `draft` or `needs_review`, never published, with `verified_at: null`.
+Review and publishing happen in the app.
 
 ## Tests
 

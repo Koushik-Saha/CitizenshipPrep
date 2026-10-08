@@ -14,36 +14,36 @@ import { z } from 'zod';
 // --- Small pieces --------------------------------------------------------------
 
 /** ISO 3166-1 alpha-2, upper case: "US". */
-const countryIso = z
+export const countryIso = z
   .string()
   .regex(/^[A-Z]{2}$/)
   .describe('ISO 3166-1 alpha-2 country code, upper case.');
 
 /** A BCP 47 language tag: "en", "pt-BR", "zh-Hans". */
-const languageTag = z
+export const languageTag = z
   .string()
   .regex(/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/)
   .describe('BCP 47 language tag.');
 
 /** ISO 3166-2: the country, a hyphen, the subdivision. "DE-BY". */
-const regionCode = z
+export const regionCode = z
   .string()
   .regex(/^[A-Z]{2}-[A-Z0-9]{1,3}$/)
   .describe('ISO 3166-2 subdivision code: a state, canton or Land.');
 
 // Not https only: some governments still publish law on plain http
 // (government.ru, npc.gov.cn), and a source is cited where it really is.
-const webUrl = z
+export const webUrl = z
   .url()
   .regex(/^https?:\/\//)
   .max(2000)
   .describe('A web address (https, or http where the publisher offers nothing else).');
 
-const timestamp = z.iso
+export const timestamp = z.iso
   .datetime({ offset: true })
   .describe('ISO 8601 date and time with a time zone, e.g. 2026-10-08T12:00:00Z.');
 
-const text = (max: number, min = 1) => z.string().trim().min(min).max(max);
+export const text = (max: number, min = 1) => z.string().trim().min(min).max(max);
 
 // --- Counting, for the rules a JSON Schema cannot hold ---------------------------
 
@@ -90,6 +90,10 @@ export const questionTypes = [
   'free_response',
 ] as const;
 export const questionOrigins = ['official', 'original'] as const;
+/** How a question is put, beyond its type: for mixing kinds and counting them. */
+export const questionStyles = ['standard', 'which_is_not', 'scenario', 'interview'] as const;
+/** In a file a question is a draft, or a draft whose source has changed under it. Never published. */
+export const fileStatuses = ['draft', 'needs_review'] as const;
 
 const questionSource = z
   .strictObject({
@@ -140,9 +144,26 @@ const questionBase = {
     .describe(
       'The state, canton or Land it is asked in, where the exam varies by region; otherwise null.',
     ),
+  official_number: text(40)
+    .nullable()
+    .describe(
+      'The number the official catalogue gives the question, exactly as printed; null when it has none, and always null for our own questions.',
+    ),
+  style: z
+    .enum(questionStyles)
+    .describe(
+      '"which_is_not" asks for the one false option; "scenario" sets a short situation; "interview" is asked aloud, for oral exams.',
+    ),
+  needs_freshness_check: z
+    .boolean()
+    .describe(
+      'True when the answer is a fact that changes (an officeholder, a figure) and must be rechecked against the source.',
+    ),
   status: z
-    .literal('draft')
-    .describe('A record in a file is always a draft: review happens in the app.'),
+    .enum(fileStatuses)
+    .describe(
+      '"draft", or "needs_review" once its source has changed. Never published in a file: a reviewer publishes in the app.',
+    ),
   created_at: timestamp,
   verified_at: z.null().describe('Always null in a file: only a reviewer sets it, in the app.'),
 };
@@ -199,6 +220,18 @@ export const questionRecordSchema = z
         ['explanation'],
         `The explanation has ${sentences} sentence(s); it needs two to four.`,
       );
+    }
+    if (record.origin === 'original') {
+      if (record.official_number !== null) {
+        problem(['official_number'], 'Only an official question has an official number.');
+      }
+      // One unambiguous right answer: a question of ours never has several.
+      if (record.type === 'multi_select') {
+        problem(['type'], 'A question of our own has exactly one right answer.');
+      }
+    }
+    if (record.style === 'interview' && record.type !== 'free_response') {
+      problem(['style'], 'An interview question is answered aloud: its type is free_response.');
     }
     if (record.region && !record.region.startsWith(`${record.country_iso}-`)) {
       problem(['region'], `The region must be one of ${record.country_iso}'s.`);
@@ -422,20 +455,6 @@ export const countryProfileSchema = z
   });
 
 export type CountryProfile = z.infer<typeof countryProfileSchema>;
-
-// --- JSON Schema ------------------------------------------------------------------
-
-/** The JSON Schema files, by file name, as generated from the schemas above. */
-export function jsonSchemas(): Record<string, unknown> {
-  const generate = (schema: z.ZodType, file: string) => ({
-    ...z.toJSONSchema(schema, { target: 'draft-2020-12' }),
-    $id: file,
-  });
-  return {
-    'question.schema.json': generate(questionRecordSchema, 'question.schema.json'),
-    'country-profile.schema.json': generate(countryProfileSchema, 'country-profile.schema.json'),
-  };
-}
 
 /** A schema's complaints about a value, one per line, each saying where. Empty when it is valid. */
 export function recordProblems(schema: z.ZodType, value: unknown): string[] {

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "term": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "definition": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 800
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+      "description": "BCP 47 language tag."
+    },
+    "topic": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^https?:\\/\\/",
+          "description": "A web address (https, or http where the publisher offers nothing else)."
+        },
+        "section_or_page": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "url",
+        "section_or_page"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "term",
+    "definition",
+    "language",
+    "topic",
+    "source"
+  ],
+  "additionalProperties": false,
+  "title": "Glossary entry",
+  "description": "A term from the official material and what it means.",
+  "$id": "glossary-entry.schema.json"
+}

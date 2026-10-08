@@ -10,7 +10,7 @@ export interface LoadedSource {
   mediaType: MediaType;
 }
 
-function detectMediaType(bytes: Uint8Array, hint: string): MediaType {
+export function detectMediaType(bytes: Uint8Array, hint: string): MediaType {
   const head = new TextDecoder('latin1').decode(bytes.subarray(0, 512)).trimStart();
   if (head.startsWith('%PDF-')) return 'application/pdf';
   if (/^<!doctype html|^<html/i.test(head) || hint.includes('html')) return 'text/html';

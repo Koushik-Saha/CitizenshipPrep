@@ -1,3 +1,4 @@
+import { existsSync, readdirSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
@@ -6,6 +7,8 @@ import { ExamFormatError, parseBlueprint } from '@oathly/core';
 import { createClaudeModel } from './claude';
 import { createPool } from './db';
 import { validateDataFiles, writeJsonSchemas } from './data-files';
+import { questionStats } from './question-stats';
+import { recheckSourceFiles, saveSourceFile, type SourceRecheck } from './source-files';
 import { loadEnv, repoRoot } from './env';
 import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
@@ -53,6 +56,18 @@ Usage: pnpm content <command> [options]
                  [--prune]   (also delete clips no published question uses any more)
 
   schemas        Write the JSON Schema files for data/ (data/schemas), from the Zod schemas
+
+  source-file    Download one official document into data/sources/<ISO>/ and print its
+                 SHA-256, size and file name for sources.json
+                   --country --url [--name file.pdf]
+
+  source-check   Download every source in sources.json again and say which have changed.
+                 A changed one is saved beside the old as <file>.new
+                   [--country]
+
+  question-stats Count a country's question files by topic, difficulty, type and style,
+                 and list questions worded alike
+                   --country
 
   validate       Check every file in data/ against its schema: country profiles, their
                  index, and question files. Needs no database
@@ -175,10 +190,46 @@ async function main(): Promise<void> {
     for (const file of writeJsonSchemas(dataDir)) console.log(`Wrote ${relative(repoRoot, file)}`);
     return;
   }
+  if (command === 'source-file') {
+    const saved = await saveSourceFile(
+      dataDir,
+      countryCode(values, 'country'),
+      required(values, 'url'),
+      {
+        name: optional(values, 'name'),
+      },
+    );
+    // What sources.json records about the copy: paste it into the entry.
+    console.log(JSON.stringify(saved, null, 2));
+    return;
+  }
+  if (command === 'source-check') {
+    const only = optional(values, 'country')?.toUpperCase();
+    const folder = resolve(dataDir, 'sources');
+    const countries = (existsSync(folder) ? readdirSync(folder) : [])
+      .filter((name) => /^[A-Z]{2}$/.test(name) && (!only || name === only))
+      .sort();
+    const changed: SourceRecheck[] = [];
+    for (const iso of countries) {
+      for (const check of await recheckSourceFiles(dataDir, iso)) {
+        console.log(`${check.iso}  ${check.result.padEnd(14)} ${check.id}  ${check.detail}`);
+        if (check.result !== 'same') changed.push(check);
+      }
+    }
+    console.log(
+      `${countries.length} pack(s) checked; ${changed.length} source(s) not confirmed the same.`,
+    );
+    if (changed.length > 0) console.log(JSON.stringify(changed, null, 2));
+    return;
+  }
+  if (command === 'question-stats') {
+    console.log(JSON.stringify(questionStats(dataDir, countryCode(values, 'country')), null, 2));
+    return;
+  }
   if (command === 'validate') {
     const report = validateDataFiles(dataDir);
     console.log(
-      `${report.profiles} country profile(s), ${report.indexRows} index line(s), ${report.questions} question(s).`,
+      `${report.profiles} country profile(s), ${report.indexRows} index line(s), ${report.sources} source(s), ${report.questions} question(s), ${report.reviewed} reviewed, ${report.translations} translation(s), ${report.flashcards} flashcard(s).`,
     );
     if (report.problems.length === 0) {
       console.log('All valid.');

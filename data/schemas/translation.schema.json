@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "question"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$",
+          "description": "The id of the question or flashcard translated."
+        },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+          "description": "BCP 47 language tag."
+        },
+        "source_language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+          "description": "The language of the original, kept beside the translation."
+        },
+        "untranslated_terms": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "term": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "The original term, which stays in the translation in square brackets."
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 400,
+                "description": "Why it has no direct translation."
+              }
+            },
+            "required": [
+              "term",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "type": "string",
+          "const": "needs_native_review",
+          "description": "A translation waits for a native speaker."
+        },
+        "translated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+          "description": "ISO 8601 date and time with a time zone, e.g. 2026-10-08T12:00:00Z."
+        },
+        "original": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 1500
+            },
+            "options": {
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 450
+              }
+            },
+            "answers": {
+              "minItems": 1,
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 450
+              },
+              "description": "The right option or options, or the accepted answers."
+            },
+            "explanation": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "question",
+            "options",
+            "answers",
+            "explanation"
+          ],
+          "additionalProperties": false
+        },
+        "translation": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 1500
+            },
+            "options": {
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 450
+              }
+            },
+            "answers": {
+              "minItems": 1,
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 450
+              },
+              "description": "The right option or options, or the accepted answers."
+            },
+            "explanation": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "question",
+            "options",
+            "answers",
+            "explanation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "locale",
+        "source_language",
+        "untranslated_terms",
+        "status",
+        "translated_at",
+        "original",
+        "translation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "flashcard"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$",
+          "description": "The id of the question or flashcard translated."
+        },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+          "description": "BCP 47 language tag."
+        },
+        "source_language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+          "description": "The language of the original, kept beside the translation."
+        },
+        "untranslated_terms": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "term": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "The original term, which stays in the translation in square brackets."
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 400,
+                "description": "Why it has no direct translation."
+              }
+            },
+            "required": [
+              "term",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "type": "string",
+          "const": "needs_native_review",
+          "description": "A translation waits for a native speaker."
+        },
+        "translated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+          "description": "ISO 8601 date and time with a time zone, e.g. 2026-10-08T12:00:00Z."
+        },
+        "original": {
+          "type": "object",
+          "properties": {
+            "front": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 450
+            },
+            "back": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 900
+            }
+          },
+          "required": [
+            "front",
+            "back"
+          ],
+          "additionalProperties": false
+        },
+        "translation": {
+          "type": "object",
+          "properties": {
+            "front": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 450
+            },
+            "back": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 900
+            }
+          },
+          "required": [
+            "front",
+            "back"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "locale",
+        "source_language",
+        "untranslated_terms",
+        "status",
+        "translated_at",
+        "original",
+        "translation"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "title": "Translation",
+  "description": "A question or flashcard in another language, with the original beside it.",
+  "$id": "translation.schema.json"
+}

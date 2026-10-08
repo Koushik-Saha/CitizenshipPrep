@@ -132,10 +132,40 @@
           ],
           "description": "The state, canton or Land it is asked in, where the exam varies by region; otherwise null."
         },
+        "official_number": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The number the official catalogue gives the question, exactly as printed; null when it has none, and always null for our own questions."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "which_is_not",
+            "scenario",
+            "interview"
+          ],
+          "description": "\"which_is_not\" asks for the one false option; \"scenario\" sets a short situation; \"interview\" is asked aloud, for oral exams."
+        },
+        "needs_freshness_check": {
+          "type": "boolean",
+          "description": "True when the answer is a fact that changes (an officeholder, a figure) and must be rechecked against the source."
+        },
         "status": {
           "type": "string",
-          "const": "draft",
-          "description": "A record in a file is always a draft: review happens in the app."
+          "enum": [
+            "draft",
+            "needs_review"
+          ],
+          "description": "\"draft\", or \"needs_review\" once its source has changed. Never published in a file: a reviewer publishes in the app."
         },
         "created_at": {
           "type": "string",
@@ -181,6 +211,9 @@
         "source",
         "origin",
         "region",
+        "official_number",
+        "style",
+        "needs_freshness_check",
         "status",
         "created_at",
         "verified_at",
@@ -321,10 +354,40 @@
           ],
           "description": "The state, canton or Land it is asked in, where the exam varies by region; otherwise null."
         },
+        "official_number": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The number the official catalogue gives the question, exactly as printed; null when it has none, and always null for our own questions."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "which_is_not",
+            "scenario",
+            "interview"
+          ],
+          "description": "\"which_is_not\" asks for the one false option; \"scenario\" sets a short situation; \"interview\" is asked aloud, for oral exams."
+        },
+        "needs_freshness_check": {
+          "type": "boolean",
+          "description": "True when the answer is a fact that changes (an officeholder, a figure) and must be rechecked against the source."
+        },
         "status": {
           "type": "string",
-          "const": "draft",
-          "description": "A record in a file is always a draft: review happens in the app."
+          "enum": [
+            "draft",
+            "needs_review"
+          ],
+          "description": "\"draft\", or \"needs_review\" once its source has changed. Never published in a file: a reviewer publishes in the app."
         },
         "created_at": {
           "type": "string",
@@ -370,6 +433,9 @@
         "source",
         "origin",
         "region",
+        "official_number",
+        "style",
+        "needs_freshness_check",
         "status",
         "created_at",
         "verified_at",
@@ -510,10 +576,40 @@
           ],
           "description": "The state, canton or Land it is asked in, where the exam varies by region; otherwise null."
         },
+        "official_number": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The number the official catalogue gives the question, exactly as printed; null when it has none, and always null for our own questions."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "which_is_not",
+            "scenario",
+            "interview"
+          ],
+          "description": "\"which_is_not\" asks for the one false option; \"scenario\" sets a short situation; \"interview\" is asked aloud, for oral exams."
+        },
+        "needs_freshness_check": {
+          "type": "boolean",
+          "description": "True when the answer is a fact that changes (an officeholder, a figure) and must be rechecked against the source."
+        },
         "status": {
           "type": "string",
-          "const": "draft",
-          "description": "A record in a file is always a draft: review happens in the app."
+          "enum": [
+            "draft",
+            "needs_review"
+          ],
+          "description": "\"draft\", or \"needs_review\" once its source has changed. Never published in a file: a reviewer publishes in the app."
         },
         "created_at": {
           "type": "string",
@@ -564,6 +660,9 @@
         "source",
         "origin",
         "region",
+        "official_number",
+        "style",
+        "needs_freshness_check",
         "status",
         "created_at",
         "verified_at",
@@ -704,10 +803,40 @@
           ],
           "description": "The state, canton or Land it is asked in, where the exam varies by region; otherwise null."
         },
+        "official_number": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The number the official catalogue gives the question, exactly as printed; null when it has none, and always null for our own questions."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "which_is_not",
+            "scenario",
+            "interview"
+          ],
+          "description": "\"which_is_not\" asks for the one false option; \"scenario\" sets a short situation; \"interview\" is asked aloud, for oral exams."
+        },
+        "needs_freshness_check": {
+          "type": "boolean",
+          "description": "True when the answer is a fact that changes (an officeholder, a figure) and must be rechecked against the source."
+        },
         "status": {
           "type": "string",
-          "const": "draft",
-          "description": "A record in a file is always a draft: review happens in the app."
+          "enum": [
+            "draft",
+            "needs_review"
+          ],
+          "description": "\"draft\", or \"needs_review\" once its source has changed. Never published in a file: a reviewer publishes in the app."
         },
         "created_at": {
           "type": "string",
@@ -758,6 +887,9 @@
         "source",
         "origin",
         "region",
+        "official_number",
+        "style",
+        "needs_freshness_check",
         "status",
         "created_at",
         "verified_at",

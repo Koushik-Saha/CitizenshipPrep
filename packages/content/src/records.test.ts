@@ -38,6 +38,9 @@ const question = {
     license: 'public-domain',
   },
   origin: 'original',
+  official_number: null,
+  style: 'standard',
+  needs_freshness_check: false,
   region: null,
   status: 'draft',
   created_at: '2026-10-08T12:00:00Z',
@@ -134,6 +137,7 @@ describe('questionRecordSchema', () => {
       recordProblems(questionRecordSchema, {
         ...rest,
         type: 'multi_select',
+        origin: 'official',
         correct_answers: ['One', 'Two'],
       }),
     ).toEqual([]);
@@ -169,6 +173,7 @@ describe('questionRecordSchema', () => {
       recordProblems(questionRecordSchema, {
         ...rest,
         type: 'multi_select',
+        origin: 'official',
         correct_answers: ['One', 'Five'],
       }),
     ).toEqual(['correct_answers.1: A right answer must be one of the options, word for word.']);
@@ -219,6 +224,25 @@ describe('questionRecordSchema', () => {
     expect(withUrl('http://example.test/guide')).toEqual([]);
     expect(withUrl('ftp://example.test/guide')).toHaveLength(1);
     expect(withUrl('example.test/guide')).not.toEqual([]);
+  });
+
+  it('keeps official numbers, several answers and published status for where they belong', () => {
+    expect(problemsWith({ official_number: '12' })).toEqual([
+      'official_number: Only an official question has an official number.',
+    ]);
+    expect(problemsWith({ origin: 'official', official_number: '12' })).toEqual([]);
+    const rest = without(question, 'correct_option_index');
+    const several = { ...rest, type: 'multi_select', correct_answers: ['One', 'Two'] };
+    expect(recordProblems(questionRecordSchema, several)).toEqual([
+      'type: A question of our own has exactly one right answer.',
+    ]);
+    expect(recordProblems(questionRecordSchema, { ...several, origin: 'official' })).toEqual([]);
+    expect(problemsWith({ style: 'interview' })).toEqual([
+      'style: An interview question is answered aloud: its type is free_response.',
+    ]);
+    // A changed source sends a question back for review; nothing in a file is published.
+    expect(problemsWith({ status: 'needs_review' })).toEqual([]);
+    expect(problemsWith({ needs_freshness_check: 'yes' })).toHaveLength(1);
   });
 
   it('refuses fields it does not know', () => {
@@ -296,7 +320,7 @@ describe('the JSON Schema files', () => {
     expect(q.oneOf).toHaveLength(4);
     for (const variant of q.oneOf) {
       expect(variant.additionalProperties).toBe(false);
-      expect(variant.properties.status.const).toBe('draft');
+      expect(variant.properties.status.enum).toEqual(['draft', 'needs_review']);
       expect(variant.properties.verified_at.type).toBe('null');
       // One way of giving the answer, never both.
       expect(
@@ -334,7 +358,7 @@ describe('validateDataFiles', () => {
   };
 
   it('passes a folder that is in order, and an empty one', () => {
-    expect(validateDataFiles(path.join(tmpdir(), 'oathly-no-such-folder'))).toEqual({
+    expect(validateDataFiles(path.join(tmpdir(), 'oathly-no-such-folder'))).toMatchObject({
       profiles: 0,
       indexRows: 0,
       questions: 0,
@@ -344,7 +368,7 @@ describe('validateDataFiles', () => {
     writeFileSync(path.join(dir, 'countries/ZZ.json'), JSON.stringify(profile));
     index(dir, zz, { iso: 'ZY', name: 'Otherland', has_test: 'no', confidence: 'high' });
     writeFileSync(path.join(dir, 'questions/ZZ/government.json'), JSON.stringify([question]));
-    expect(validateDataFiles(dir)).toEqual({
+    expect(validateDataFiles(dir)).toMatchObject({
       profiles: 1,
       indexRows: 2,
       questions: 1,
