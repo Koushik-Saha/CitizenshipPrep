@@ -8,6 +8,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./db": "./src/db.ts",
+    "./records": "./src/records.ts",
     "./review": "./src/review.ts",
     "./text": "./src/text.ts"
   },

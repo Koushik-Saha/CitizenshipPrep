@@ -1,10 +1,12 @@
+import { relative, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
 import { ExamFormatError, parseBlueprint } from '@oathly/core';
 
 import { createClaudeModel } from './claude';
 import { createPool } from './db';
-import { loadEnv } from './env';
+import { validateDataFiles, writeJsonSchemas } from './data-files';
+import { loadEnv, repoRoot } from './env';
 import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
 import { ingestSource } from './pipeline/ingest';
@@ -49,6 +51,11 @@ Usage: pnpm content <command> [options]
                  what is missing, so it is safe to run again after publishing or translating
                  [--country US] [--locales es,bn] [--limit 500] [--dry-run]
                  [--prune]   (also delete clips no published question uses any more)
+
+  schemas        Write the JSON Schema files for data/ (data/schemas), from the Zod schemas
+
+  validate       Check every file in data/ against its schema: country profiles, their
+                 index, and question files. Needs no database
 
   status         Show sources and what is waiting for review
                  [--country US]   (with a country: also its questions by topic)
@@ -161,6 +168,27 @@ async function main(): Promise<void> {
       prune: { type: 'boolean' },
     },
   });
+
+  // The data folder's own commands: no database, no keys.
+  const dataDir = resolve(repoRoot, 'data');
+  if (command === 'schemas') {
+    for (const file of writeJsonSchemas(dataDir)) console.log(`Wrote ${relative(repoRoot, file)}`);
+    return;
+  }
+  if (command === 'validate') {
+    const report = validateDataFiles(dataDir);
+    console.log(
+      `${report.profiles} country profile(s), ${report.indexRows} index line(s), ${report.questions} question(s).`,
+    );
+    if (report.problems.length === 0) {
+      console.log('All valid.');
+      return;
+    }
+    for (const problem of report.problems) console.error(`  ${problem}`);
+    console.error(`${report.problems.length} problem(s).`);
+    process.exitCode = 1;
+    return;
+  }
 
   loadEnv();
   const pool = createPool();

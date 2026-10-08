@@ -3,6 +3,7 @@
 //
 // Server-side only. Everything here talks to the database as its owner.
 export * from './claude';
+export * from './data-files';
 export * from './db';
 export * from './duplicates';
 export * from './pipeline/audio';
@@ -10,6 +11,7 @@ export * from './pipeline/check-sources';
 export * from './pipeline/draft';
 export * from './pipeline/ingest';
 export * from './pipeline/translate';
+export * from './records';
 export * from './repository';
 export * from './review';
 export * from './schemas';

@@ -17,6 +17,9 @@ apps/web/CLAUDE.md
 packages/tokens/theme.css
 .playwright-mcp
 
+# Generated from the Zod schemas by `pnpm content schemas`
+data/schemas
+
 # Vendored KTX2 transcoder (copied from three by apps/web/scripts/globe)
 apps/web/public/globe/basis
 .lighthouseci

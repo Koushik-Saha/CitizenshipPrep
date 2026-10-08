@@ -1,0 +1,479 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "iso": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 country code, upper case."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "The country's name in English."
+    },
+    "has_exam": {
+      "type": "boolean",
+      "description": "Whether naturalization requires a test of civics, knowledge of society or integration, separate from any language test."
+    },
+    "exam_name": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "What the country calls the test."
+    },
+    "administering_agency": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The body that sets or runs it."
+    },
+    "format": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "question_count": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Questions asked in one sitting."
+            },
+            "pass_mark": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Correct answers needed to pass, as a number of questions."
+            },
+            "pass_percent": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The pass mark as a percentage, where that is how it is published."
+            },
+            "time_limit_minutes": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "question_pool_size": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "How many published questions the exam draws from, where there is such a list."
+            },
+            "modes": {
+              "minItems": 1,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "written",
+                  "oral",
+                  "computer"
+                ]
+              },
+              "description": "How it is taken: on paper, aloud with an examiner, or on a computer."
+            },
+            "notes": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Rules the numbers cannot hold."
+            }
+          },
+          "required": [
+            "question_count",
+            "pass_mark",
+            "pass_percent",
+            "time_limit_minutes",
+            "question_pool_size",
+            "modes",
+            "notes"
+          ],
+          "additionalProperties": false,
+          "description": "The exam as sat. A number the source does not fix is null."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "languages": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+        "description": "BCP 47 language tag."
+      },
+      "description": "The languages the test can be taken in."
+    },
+    "regional_variants": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+            "description": "ISO 3166-2 subdivision code: a state, canton or Land."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What differs there."
+          }
+        },
+        "required": [
+          "region",
+          "name",
+          "note"
+        ],
+        "additionalProperties": false
+      },
+      "description": "States, cantons or Länder whose test differs. Empty when it is the same everywhere."
+    },
+    "exemptions": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Who is excused or treated differently by age."
+        },
+        "disability": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "What is provided for disability or illness."
+        }
+      },
+      "required": [
+        "age",
+        "disability"
+      ],
+      "additionalProperties": false,
+      "description": "Who does not have to take it, or takes it differently."
+    },
+    "fee": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$",
+              "description": "ISO 4217 currency code."
+            },
+            "covers": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "What the fee pays for: the test alone, or the whole application."
+            }
+          },
+          "required": [
+            "amount",
+            "currency",
+            "covers"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The fee, where one is published."
+    },
+    "official_study_material": {
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2000,
+            "pattern": "^https:\\/\\/",
+            "description": "An https address."
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "study_guide",
+              "question_bank",
+              "practice_test",
+              "legislation",
+              "other"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+            "description": "BCP 47 language tag."
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The licence or copyright statement as published; null if none could be found."
+          },
+          "reusable": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unclear"
+            ],
+            "description": "Whether the licence lets its questions or text be reused in an app."
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "publisher",
+          "kind",
+          "language",
+          "license",
+          "reusable"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "last_researched_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+      "description": "ISO 8601 date and time with a time zone, e.g. 2026-10-08T12:00:00Z."
+    },
+    "citations": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^(?:has_exam|exam_name|administering_agency|format|languages|regional_variants|exemptions|fee|official_study_material)(?:\\.[a-z_]+)?$",
+        "description": "A field of the profile, or one part of it: \"fee\", \"format.pass_mark\"."
+      },
+      "additionalProperties": {
+        "minItems": 1,
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^https:\\/\\/",
+          "description": "An https address."
+        }
+      },
+      "description": "For each fact, the official pages it was read from: government agencies, legislation, the exam provider. Never a secondary source."
+    },
+    "unverified": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^(?:has_exam|exam_name|administering_agency|format|languages|regional_variants|exemptions|fee|official_study_material)(?:\\.[a-z_]+)?$",
+        "description": "A field of the profile, or one part of it: \"fee\", \"format.pass_mark\"."
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "description": "For each fact left empty because no official source could confirm it: why."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "recent_change": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "changed_on": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "When the change took effect, if stated."
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "url": {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https:\\/\\/",
+              "description": "An https address."
+            }
+          },
+          "required": [
+            "changed_on",
+            "summary",
+            "url"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "A change to the rules in the two years before the research, or null."
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "iso",
+    "name",
+    "has_exam",
+    "exam_name",
+    "administering_agency",
+    "format",
+    "languages",
+    "regional_variants",
+    "exemptions",
+    "fee",
+    "official_study_material",
+    "last_researched_at",
+    "citations",
+    "unverified",
+    "confidence",
+    "recent_change",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "title": "Country profile",
+  "description": "What a country requires of people naturalizing, by way of a civics, knowledge-of-society or integration test, with the official source of every fact. Validate with the Zod schema: it also checks that every fact is cited or explained.",
+  "$id": "country-profile.schema.json"
+}

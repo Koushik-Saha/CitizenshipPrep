@@ -39,6 +39,27 @@ approves it, which records who verified it and when.
 
 Drafting uses `claude-opus-5-5`. A run of 20 questions makes about seven requests.
 
+## Research and draft files
+
+Before anything reaches the database, countries are researched and questions drafted as files in
+`data/` at the repository root.
+
+| Path                          | What it holds                                                       |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `data/countries/<ISO>.json`   | A `CountryProfile`: one country's test, with a source for each fact |
+| `data/countries/_index.csv`   | Every country researched, one line each, test or no test            |
+| `data/questions/<ISO>/*.json` | `QuestionRecord`s: one, or a list, per file                         |
+| `data/schemas/*.schema.json`  | JSON Schema for both, generated                                     |
+
+The Zod schemas in `src/records.ts` are the definition. `pnpm content schemas` writes the JSON
+Schema files from them, and a test fails if the two are out of step. `pnpm content validate` checks
+every file in `data/`; it needs no database. Validate with it rather than with the JSON Schema
+alone: a JSON Schema cannot say that an answer points at one of its own options, that an
+explanation is two to four sentences, or that every fact in a profile is cited or explained.
+
+A question in a file is always `status: "draft"` with `verified_at: null`. Review and publishing
+happen in the app, never in a file.
+
 ## Tests
 
 `pnpm --filter @oathly/content test` runs the unit tests. With `TEST_DATABASE_URL` pointing at the
