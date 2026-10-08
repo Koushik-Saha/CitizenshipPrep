@@ -130,6 +130,30 @@ export async function ensureTopic(
   return rows[0]!.id;
 }
 
+/**
+ * Adds one of a guide's own topics, or renames and reorders it. Enter the
+ * official topics before drafting: drafts are filed under the topics that
+ * exist, and an exam format's sections name topics by slug.
+ */
+export async function upsertTopic(
+  db: Db,
+  countryCode: string,
+  topic: { slug: string; name: string; sortOrder?: number },
+): Promise<string> {
+  const { rows } = await db.query<{ id: string }>(
+    `insert into public.topics (country_code, slug, name, sort_order)
+     values ($1, $2, $3,
+             coalesce($4, (select coalesce(max(sort_order), 0) + 1
+                           from public.topics where country_code = $1)))
+     on conflict (country_code, slug) do update
+       set name = excluded.name,
+           sort_order = coalesce($4, public.topics.sort_order)
+     returning id`,
+    [countryCode, topic.slug, topic.name, topic.sortOrder ?? null],
+  );
+  return rows[0]!.id;
+}
+
 // --- Sources -----------------------------------------------------------------
 
 export interface SourceDocument {

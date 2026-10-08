@@ -83,6 +83,52 @@ const flows = {
       await byId('knew-it').click();
     });
   },
+  // No Maestro twin: a saved pack, the connection cut, questions read aloud, then back online.
+  offline: async () => {
+    const save = byPrefix('save-offline-').first();
+    await save.scrollIntoViewIfNeeded();
+    await save.click();
+    // Saved once the button offers to update the pack instead.
+    await page.waitForFunction(
+      () =>
+        /update/i.test(document.querySelector('[data-testid^="save-offline-"]')?.textContent ?? ''),
+      null,
+      { timeout: 120_000 },
+    );
+
+    let reached = 0;
+    const count = (request) => {
+      if (new URL(request.url()).pathname.startsWith('/api/')) reached += 1;
+    };
+    await page.context().setOffline(true);
+    page.on('requestfinished', count);
+
+    await byPrefix('practise-').first().click();
+    // Audio mode on, with no connection: each question is read aloud from the
+    // saved clip or in the device's own voice, and can be heard again.
+    await byId('audio-mode').waitFor({ timeout: 30_000 });
+    if (!(await byId('audio-replay').count())) await byId('audio-mode').click();
+    await byId('audio-replay').waitFor({ timeout: 30_000 });
+    await byId('audio-replay').click();
+    await byId('question-text').waitFor({ timeout: 30_000 });
+    try {
+      const ended = await untilResults(async () => {
+        await byId('option-0').click();
+        await byId('check').click();
+        await byId('next').click();
+      });
+      if (reached > 0) throw new Error(`${reached} request(s) reached the server while offline.`);
+      // The answers given offline are waiting to be sent.
+      await byId('offline-banner').waitFor({ timeout: 30_000 });
+      await page.context().setOffline(false);
+      // The connection returns: they are sent, and the notice goes.
+      await byId('offline-banner').waitFor({ state: 'detached', timeout: 60_000 });
+      return ended;
+    } finally {
+      page.off('requestfinished', count);
+      await page.context().setOffline(false);
+    }
+  },
   // plans.yaml
   plans: async () => {
     await byId('tab-profile').click();

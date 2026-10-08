@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Route, type Page } from '@playwright/test';
 
 import {
   daysFromNow,
@@ -82,6 +82,55 @@ test('a practice session checks each answer and ends with results', async ({ pag
     .first()
     .click();
   await expect(page).toHaveURL(/\/study$/);
+});
+
+test('answering never waits for the network', async ({ page }) => {
+  await signInAndOnboard(page);
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\/[0-9a-f-]{36}$/);
+
+  // Hold every answer on its way to the server, as a dead connection would,
+  // and count what the server has been allowed to hear.
+  const held: Route[] = [];
+  let holding = true;
+  let reached = 0;
+  await page.route('**/api/answers', (route) => {
+    if (holding) held.push(route);
+    else void route.continue();
+  });
+  page.on('requestfinished', (request) => {
+    if (request.method() !== 'GET' && new URL(request.url()).pathname.startsWith('/api/')) {
+      reached += 1;
+    }
+  });
+
+  // Three questions answered, checked and moved on from, with nothing getting through.
+  for (let i = 0; i < 3; i += 1) {
+    await option(page, await rightAnswer(page)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    await expect(page.getByText(t('session.correct')).first()).toBeVisible();
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+  }
+  await expect.poll(() => held.length, 'answers are sent in the background').toBeGreaterThan(0);
+  expect(reached, 'nothing was waited for').toBe(0);
+
+  // The connection comes back: what was held is delivered and the session can finish.
+  holding = false;
+  await Promise.all(held.map((route) => route.continue()));
+  for (let i = 0; ; i += 1) {
+    await option(page, await rightAnswer(page)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    await expect(page.getByText(t('session.correct')).first()).toBeVisible();
+    const last = page.getByRole('button', { name: t('session.seeResults'), exact: true });
+    if (await last.isVisible()) {
+      await last.click();
+      break;
+    }
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+    expect(i, 'the session ends').toBeLessThan(40);
+  }
+  await expect(page.getByRole('heading', { level: 1, name: t('results.complete') })).toBeVisible();
+  expect(reached, 'the held answers arrived').toBeGreaterThan(0);
 });
 
 test('a mock exam answered correctly is a pass', async ({ page }) => {

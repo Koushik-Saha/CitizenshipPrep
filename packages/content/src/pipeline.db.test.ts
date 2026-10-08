@@ -7,7 +7,7 @@ import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
 import { ingestSource } from './pipeline/ingest';
 import { translateQuestions } from './pipeline/translate';
-import { upsertCountry } from './repository';
+import { listTopics, upsertCountry, upsertTopic } from './repository';
 import {
   approveQuestion,
   approveTranslation,
@@ -126,6 +126,33 @@ describe.skipIf(!url)('content pipeline against the database', () => {
   afterAll(async () => {
     await cleanUp();
     await pool.end();
+  });
+
+  it('files drafts under the official topics entered beforehand', async () => {
+    const first = await upsertTopic(pool, COUNTRY, {
+      slug: 'values',
+      name: 'Values',
+      sortOrder: 4,
+    });
+    await upsertTopic(pool, COUNTRY, { slug: 'history', name: 'History' });
+    // Saved again: renamed and kept in place, not duplicated.
+    expect(await upsertTopic(pool, COUNTRY, { slug: 'values', name: 'Testland values' })).toBe(
+      first,
+    );
+    const { rows } = await pool.query<{ slug: string; name: string; sort_order: number }>(
+      'select slug, name, sort_order from public.topics where country_code = $1 order by sort_order',
+      [COUNTRY],
+    );
+    expect(rows).toEqual([
+      { slug: 'values', name: 'Testland values', sort_order: 4 },
+      { slug: 'history', name: 'History', sort_order: 5 },
+    ]);
+    // What drafting is shown, and so what it files under.
+    expect((await listTopics(pool, COUNTRY)).map((topic) => topic.slug)).toEqual([
+      'values',
+      'history',
+    ]);
+    await pool.query('delete from public.topics where country_code = $1', [COUNTRY]);
   });
 
   it('keeps a country’s coordinates when it is saved again without them', async () => {

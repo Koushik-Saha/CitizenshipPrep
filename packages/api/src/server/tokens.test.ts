@@ -1,7 +1,7 @@
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from 'jose';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { bearerToken, createTokenVerifier } from './tokens';
+import { bearerToken, createTokenVerifier, jwksUrl } from './tokens';
 
 describe('createTokenVerifier', () => {
   let sign: (claims: Record<string, unknown>, expiresIn?: string) => Promise<string>;
@@ -42,6 +42,14 @@ describe('createTokenVerifier', () => {
     await expect(verify(await sign({}))).resolves.toBeNull();
     await expect(verify('not-a-jwt')).resolves.toBeNull();
     await expect(verify(null)).resolves.toBeNull();
+  });
+});
+
+describe('jwksUrl', () => {
+  it('is where Neon Auth publishes its keys, whatever the base address ends with', () => {
+    const expected = 'https://auth.example.test/neondb/auth/.well-known/jwks.json';
+    expect(jwksUrl('https://auth.example.test/neondb/auth').href).toBe(expected);
+    expect(jwksUrl('https://auth.example.test/neondb/auth/').href).toBe(expected);
   });
 });
 

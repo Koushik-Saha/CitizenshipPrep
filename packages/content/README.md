@@ -10,6 +10,7 @@ approves it, which records who verified it and when.
 
 | Step | Command                      | What happens                                                                                                                  |
 | ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 0    | `pnpm content topic`         | Enters the guide's own topics first, so drafts are filed under them and an exam's sections can name them                      |
 | 1    | `pnpm content ingest`        | Fetches a guide (PDF, web page or file), stores it as hashed passages                                                         |
 | 2, 3 | `pnpm content draft`         | Claude drafts questions passage by passage; each must quote the passage; saved as `draft`                                     |
 | 4, 5 | `/admin/content`             | A reviewer reads each draft beside its passage, then approves (publishes), edits or rejects, one at a time or several at once |
