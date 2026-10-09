@@ -79,7 +79,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "On what date did the First Fleet arrive from Great Britain?",
-    "options": ["26 January 1851", "26 January 1788", "25 April 1915", "1 January 1901"],
+    "options": [
+      "26 January 1851",
+      "26 January 1788",
+      "25 April 1915",
+      "1 January 1901"
+    ],
     "correct_option_index": 1,
     "explanation": "European settlement began when the First Fleet arrived on 26 January 1788. That date is now marked each year as Australia Day.",
     "source": {
@@ -109,7 +114,12 @@
     "difficulty": 4,
     "language": "en",
     "question": "How many ships made up the First Fleet?",
-    "options": ["9", "26", "7", "11"],
+    "options": [
+      "9",
+      "26",
+      "7",
+      "11"
+    ],
     "correct_option_index": 3,
     "explanation": "The booklet describes the First Fleet as the first 11 convict ships sent from Great Britain. They arrived on 26 January 1788.",
     "source": {
@@ -174,7 +184,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "In what year did the gold rush begin in New South Wales and Victoria?",
-    "options": ["1851", "1901", "1788", "1915"],
+    "options": [
+      "1851",
+      "1901",
+      "1788",
+      "1915"
+    ],
     "correct_option_index": 0,
     "explanation": "Gold was discovered in 1851 and people came from all around the world. In ten years Australia’s population more than doubled.",
     "source": {
@@ -239,7 +254,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "In what year were the separate colonies united into the Commonwealth of Australia?",
-    "options": ["1851", "1901", "1967", "1788"],
+    "options": [
+      "1851",
+      "1901",
+      "1967",
+      "1788"
+    ],
     "correct_option_index": 1,
     "explanation": "In 1901 the colonies became a federation of states. The national parliament, government and High Court were set up under the new Constitution.",
     "source": {
@@ -374,7 +394,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "What is the capital city of Australia?",
-    "options": ["Sydney", "Canberra", "Brisbane", "Melbourne"],
+    "options": [
+      "Sydney",
+      "Canberra",
+      "Brisbane",
+      "Melbourne"
+    ],
     "correct_option_index": 1,
     "explanation": "Canberra is the national capital, in the Australian Capital Territory. Sydney is the largest city, but it is the capital of New South Wales.",
     "source": {
@@ -404,7 +429,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "Which is the largest state in Australia?",
-    "options": ["Victoria", "Western Australia", "Queensland", "New South Wales"],
+    "options": [
+      "Victoria",
+      "Western Australia",
+      "Queensland",
+      "New South Wales"
+    ],
     "correct_option_index": 1,
     "explanation": "Western Australia is the largest state, and Queensland the second largest. Perth is the capital of Western Australia.",
     "source": {
@@ -434,7 +464,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "Which is the smallest state in Australia?",
-    "options": ["Queensland", "South Australia", "Tasmania", "Victoria"],
+    "options": [
+      "Queensland",
+      "South Australia",
+      "Tasmania",
+      "Victoria"
+    ],
     "correct_option_index": 2,
     "explanation": "Tasmania is the smallest state and is separated from the mainland by the Bass Strait. Victoria is the smallest of the mainland states.",
     "source": {
@@ -464,7 +499,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "Which was the first colony established by the British?",
-    "options": ["New South Wales", "Victoria", "Tasmania", "Queensland"],
+    "options": [
+      "New South Wales",
+      "Victoria",
+      "Tasmania",
+      "Queensland"
+    ],
     "correct_option_index": 0,
     "explanation": "New South Wales was the first British colony. Its capital, Sydney, is the nation’s largest city.",
     "source": {
@@ -494,7 +534,12 @@
     "difficulty": 4,
     "language": "en",
     "question": "The Great Barrier Reef runs along the eastern coast of which state?",
-    "options": ["Queensland", "Western Australia", "New South Wales", "Tasmania"],
+    "options": [
+      "Queensland",
+      "Western Australia",
+      "New South Wales",
+      "Tasmania"
+    ],
     "correct_option_index": 0,
     "explanation": "Queensland is the second largest state and its capital is Brisbane. The Torres Strait Islands lie to its north and the Great Barrier Reef runs along its eastern coast.",
     "source": {
@@ -524,7 +569,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "Uluru is an icon of which part of Australia?",
-    "options": ["Western Australia", "Queensland", "The Northern Territory", "South Australia"],
+    "options": [
+      "Western Australia",
+      "Queensland",
+      "The Northern Territory",
+      "South Australia"
+    ],
     "correct_option_index": 2,
     "explanation": "The Northern Territory has a tropical north and dry red desert in the south. Its icons include Uluru, Kata Tjuta and Kings Canyon.",
     "source": {
@@ -554,7 +604,10 @@
     "difficulty": 3,
     "language": "en",
     "question": "Anyone can deliver an Acknowledgement of Country.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 0,
     "explanation": "A Welcome to Country is performed by an Aboriginal or Torres Strait Islander custodian of the local region. An Acknowledgement of Country can be given by anyone, usually the chair of a meeting.",
     "source": {
@@ -584,7 +637,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "On what date is Australia Day celebrated each year?",
-    "options": ["1 January", "26 January", "25 April", "11 November"],
+    "options": [
+      "1 January",
+      "26 January",
+      "25 April",
+      "11 November"
+    ],
     "correct_option_index": 1,
     "explanation": "Australia Day is a public holiday in every state and territory. It is the anniversary of the arrival of the First Fleet in 1788.",
     "source": {
@@ -614,7 +672,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "On what date is Anzac Day commemorated each year?",
-    "options": ["26 January", "25 April", "1 January", "11 November"],
+    "options": [
+      "26 January",
+      "25 April",
+      "1 January",
+      "11 November"
+    ],
     "correct_option_index": 1,
     "explanation": "Anzac Day is a solemn day of remembrance. It honours all Australians who served and died in wars, conflicts and peacekeeping operations.",
     "source": {
@@ -644,7 +707,12 @@
     "difficulty": 4,
     "language": "en",
     "question": "Anzac Day is named after the Australian and New Zealand Army Corps. Where did it land on 25 April 1915?",
-    "options": ["Gallipoli", "Normandy", "Kokoda", "Tobruk"],
+    "options": [
+      "Gallipoli",
+      "Normandy",
+      "Kokoda",
+      "Tobruk"
+    ],
     "correct_option_index": 0,
     "explanation": "During World War I the Australian and New Zealand Army Corps landed at Gallipoli in Türkiye. Anzac Day is held on the anniversary of that landing.",
     "source": {
@@ -674,7 +742,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "How many points does the Commonwealth Star on the Australian National Flag have?",
-    "options": ["Five", "Eight", "Six", "Seven"],
+    "options": [
+      "Five",
+      "Eight",
+      "Six",
+      "Seven"
+    ],
     "correct_option_index": 3,
     "explanation": "The Commonwealth Star sits under the Union Jack on the flag. Six of its points stand for the six states and one for the territories.",
     "source": {
@@ -704,7 +777,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "On the Australian Aboriginal Flag, what does the yellow circle represent?",
-    "options": ["Gold", "The moon", "The desert", "The sun"],
+    "options": [
+      "Gold",
+      "The moon",
+      "The desert",
+      "The sun"
+    ],
     "correct_option_index": 3,
     "explanation": "The Aboriginal Flag is black, red and yellow. Black represents the Aboriginal peoples, red the earth, and the yellow circle the sun.",
     "source": {
@@ -769,7 +847,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "What is Australia’s national flower?",
-    "options": ["The waratah", "The golden wattle", "The eucalyptus blossom", "The kangaroo paw"],
+    "options": [
+      "The waratah",
+      "The golden wattle",
+      "The eucalyptus blossom",
+      "The kangaroo paw"
+    ],
     "correct_option_index": 1,
     "explanation": "The golden wattle is a small tree that grows mainly in south-eastern Australia. Its green and gold are also the national colours.",
     "source": {
@@ -799,7 +882,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "What are Australia’s national colours?",
-    "options": ["Blue and gold", "Green and gold", "Blue, white and red", "Black, red and yellow"],
+    "options": [
+      "Blue and gold",
+      "Green and gold",
+      "Blue, white and red",
+      "Black, red and yellow"
+    ],
     "correct_option_index": 1,
     "explanation": "Green and gold are the colours of the golden wattle. The uniforms of national sports teams are usually in these colours.",
     "source": {

@@ -1,0 +1,160 @@
+{
+  "iso": "CA",
+  "researched_at": "2026-10-09T00:00:00Z",
+  "sources": [
+    {
+      "id": "discover-canada",
+      "kind": "study_guide",
+      "title": "Discover Canada: The Rights and Responsibilities of Citizenship",
+      "url": "https://www.canada.ca/content/dam/ircc/migration/ircc/english/pdf/pub/discover.pdf",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "publication_date": null,
+      "version": "Ci1-11/2021E-PDF, ISBN 978-0-660-39273-8",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "discover-canada.pdf",
+      "sha256": "b4ab29dd766a22f709bbaa02e008c053e1636b8e459b02bd8a186bd546f1057d",
+      "text_sha256": "16392b9b4045d221af0e08432e431c4a7b8efa23fa0090a4c403a6a65ee31de3",
+      "bytes": 11543125,
+      "retrieved_at": "2026-10-09T19:53:36.827Z",
+      "notes": "68 pages. The only official study guide. The copyright line reads \"© Her Majesty the Queen in Right of Canada, represented by the Minister of Citizenship and Immigration Canada, 2021\", but the text is older: it names Queen Elizabeth II, 308 electoral districts and the G8. No day or month of publication is printed. Canada.ca allows reproduction for non-commercial purposes without permission, and requires written permission for commercial redistribution. Oathly is a paid app, so nothing is copied from it."
+    },
+    {
+      "id": "study-questions",
+      "kind": "practice_test",
+      "title": "Discover Canada: Study Questions",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada/read-online/study-questions.html",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "study-questions.html",
+      "sha256": "e6cf88fed81e647fce9e20cf00f41f8f131084745fb0b40c9a84b4b3fe48bd37",
+      "text_sha256": "ec1b222f372139474f376b9c6bcf982a64731a89c970250c8e767488fbf13b25",
+      "bytes": 31219,
+      "retrieved_at": "2026-10-09T19:53:39.394Z",
+      "notes": "The guide's own sample questions, the same ones printed on pages 52 and 53 of the PDF: a few with answers, the rest as prompts. \"The questions below are similar to the questions that are found on the citizenship test.\" Canada.ca allows reproduction for non-commercial purposes without permission, and requires written permission for commercial redistribution. Oathly is a paid app, so nothing is copied from it."
+    },
+    {
+      "id": "study-for-the-test",
+      "kind": "format_page",
+      "title": "Citizenship test: Study for the test",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test/study.html",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "study-for-the-test.html",
+      "sha256": "c1a3cb81cb722d7d62758f5f1fb9f4f9f3b53e66d8ceeec053a2fc0a896a82e5",
+      "text_sha256": "3ea1f9625569eafc6ba10e46032a755822ee0a4ed98206fe0255e26a65eb622c",
+      "bytes": 23906,
+      "retrieved_at": "2026-10-09T20:00:42.571Z",
+      "notes": "The format: 20 questions, multiple choice or true or false, in English or French, 45 minutes, 15 of 20 to pass, three chances. Lists what the test covers. Page dated 2026-03-31. Canada.ca allows reproduction for non-commercial purposes without permission, and requires written permission for commercial redistribution. Oathly is a paid app, so nothing is copied from it."
+    },
+    {
+      "id": "citizenship-test",
+      "kind": "format_page",
+      "title": "Citizenship test",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/test.html",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "citizenship-test.html",
+      "sha256": "c1348546502994326be647495418251ae6d93cd309db1c80c0c9a89f685c5687",
+      "text_sha256": "55c0cfcdc41030486b6038977c50917495afa86ebf6f8be76085cec7d8ad61ff",
+      "bytes": 21816,
+      "retrieved_at": "2026-10-09T19:53:38.501Z",
+      "notes": "The index of the test pages. The address asked for, .../become-canadian-citizen/citizenship-test.html, redirects here. Canada.ca allows reproduction for non-commercial purposes without permission, and requires written permission for commercial redistribution. Oathly is a paid app, so nothing is copied from it."
+    },
+    {
+      "id": "discover-canada-page",
+      "kind": "other",
+      "title": "Study Guide – Discover Canada – The Rights and Responsibilities of Citizenship",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada.html",
+      "publisher": "Immigration, Refugees and Citizenship Canada",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "discover-canada-page.html",
+      "sha256": "89865bb91550606a48782e4b7d1c32186a6c883b58af660d8642ec17adc0447c",
+      "text_sha256": "1ff9727beab9c8e554ae1b361a3c1d9a8b2f548dd2b0f04abcbffc83f5e84e9e",
+      "bytes": 26739,
+      "retrieved_at": "2026-10-09T19:53:37.512Z",
+      "notes": "Where the guide is published, to read, to listen to or to download. Warns that other study material is used at the applicant's own risk. Canada.ca allows reproduction for non-commercial purposes without permission, and requires written permission for commercial redistribution. Oathly is a paid app, so nothing is copied from it."
+    },
+    {
+      "id": "terms",
+      "kind": "other",
+      "title": "Terms and conditions",
+      "url": "https://www.canada.ca/en/transparency/terms.html",
+      "publisher": "Government of Canada",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "not_allowed",
+        "text": "Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator.",
+        "url": "https://www.canada.ca/en/transparency/terms.html"
+      },
+      "file": "terms.html",
+      "sha256": "a734d55b1869c6726f1f4957f7ee78c75b4a5796c9e15ebc920d554684193cd8",
+      "text_sha256": "00560b2f696df264df448b9e38c9a38e70258716a51d72be38fa7e84c8e7923d",
+      "bytes": 35434,
+      "retrieved_at": "2026-10-09T19:53:40.089Z",
+      "notes": "The Government of Canada's terms for Canada.ca, under \"Ownership and usage of content provided on this site\". The wording every licence in this pack rests on."
+    }
+  ],
+  "not_found": [
+    {
+      "kind": "question_bank",
+      "searched": "IRCC publishes no list of the test's questions. \"Study for the test\" says only \"We base all the test questions on information found in the study guide\", and links the guide and its sample study questions."
+    },
+    {
+      "kind": "interview_questions",
+      "searched": "\"Study for the test\" says a citizenship officer notes how well an applicant communicates if they are invited to an interview, but no list of interview questions is published there or on the test index page."
+    }
+  ]
+}

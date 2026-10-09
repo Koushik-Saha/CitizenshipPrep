@@ -44,7 +44,10 @@
     "difficulty": 2,
     "language": "en",
     "question": "Voting in Australian elections is by secret ballot.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 0,
     "explanation": "A secret ballot means you are free and safe to vote for any candidate. Nobody is allowed to know how you voted unless you choose to tell them.",
     "source": {
@@ -109,7 +112,10 @@
     "difficulty": 3,
     "language": "en",
     "question": "Political parties can influence the decisions of the Australian Electoral Commission.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "The AEC is independent of the government. Neither political parties nor people in government can influence its decisions.",
     "source": {
@@ -349,7 +355,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "Who has the power to interpret and apply the law?",
-    "options": ["The police", "The Governor-General", "Judges", "Government ministers"],
+    "options": [
+      "The police",
+      "The Governor-General",
+      "Judges",
+      "Government ministers"
+    ],
     "correct_option_index": 2,
     "explanation": "This is judicial power. Courts and judges are independent of parliament and government.",
     "source": {
@@ -554,7 +565,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "What is the leader of a state government called?",
-    "options": ["The Chief Minister", "The Governor", "The Premier", "The Mayor"],
+    "options": [
+      "The Chief Minister",
+      "The Governor",
+      "The Premier",
+      "The Mayor"
+    ],
     "correct_option_index": 2,
     "explanation": "Each state has a Premier who leads its government. The Governor of a state represents the King.",
     "source": {
@@ -654,7 +670,12 @@
     "difficulty": 4,
     "language": "en",
     "question": "According to the booklet, how many senators are there in total?",
-    "options": ["12", "226", "76", "150"],
+    "options": [
+      "12",
+      "226",
+      "76",
+      "150"
+    ],
     "correct_option_index": 2,
     "explanation": "Each state elects 12 senators, and the Australian Capital Territory and the Northern Territory elect two each. That makes 76.",
     "source": {
@@ -684,7 +705,12 @@
     "difficulty": 4,
     "language": "en",
     "question": "How many senators represent each state in the Senate?",
-    "options": ["2", "10", "12", "76"],
+    "options": [
+      "2",
+      "10",
+      "12",
+      "76"
+    ],
     "correct_option_index": 2,
     "explanation": "All states are equally represented in the Senate regardless of their size or population. Each elects 12 senators, and the two mainland territories elect two each.",
     "source": {
@@ -924,7 +950,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "What are members of parliament called if they do not belong to any political party?",
-    "options": ["Ministers", "Independents", "The Opposition", "Senators"],
+    "options": [
+      "Ministers",
+      "Independents",
+      "The Opposition",
+      "Senators"
+    ],
     "correct_option_index": 1,
     "explanation": "Most parliamentarians belong to a political party. Those who do not are called independents.",
     "source": {
@@ -1024,7 +1055,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "What is a proposal for a new law called?",
-    "options": ["A portfolio", "A referendum", "A Bill", "An Act"],
+    "options": [
+      "A portfolio",
+      "A referendum",
+      "A Bill",
+      "An Act"
+    ],
     "correct_option_index": 2,
     "explanation": "A member of parliament who wants a new law, or a change to one, introduces a Bill. Both Houses consider, debate and vote on it.",
     "source": {
@@ -1054,7 +1090,10 @@
     "difficulty": 3,
     "language": "en",
     "question": "The government can remove a judge from their job if it disagrees with the judge’s decision.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "Judges and magistrates are appointed by the government but are independent. No one can tell them what to decide.",
     "source": {
@@ -1084,7 +1123,12 @@
     "difficulty": 3,
     "language": "en",
     "question": "In a criminal trial, if the jury finds a person guilty, who decides the penalty?",
-    "options": ["The jury", "A government minister", "The judge", "The police"],
+    "options": [
+      "The jury",
+      "A government minister",
+      "The judge",
+      "The police"
+    ],
     "correct_option_index": 2,
     "explanation": "The jury’s role is to decide whether a person is innocent or guilty. The judge explains the law to the jury and decides the penalty.",
     "source": {
@@ -1149,7 +1193,10 @@
     "difficulty": 2,
     "language": "en",
     "question": "It is a crime to offer a bribe to a police officer in Australia.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 0,
     "explanation": "The police are independent of the government and protect life and property. Bribing the police is a serious crime, and so is even offering a bribe.",
     "source": {

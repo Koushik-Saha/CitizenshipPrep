@@ -79,7 +79,10 @@
     "difficulty": 2,
     "language": "en",
     "question": "A religious leader in Australia does not have to obey a law that goes against their religion.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "Under the Rule of Law everyone must obey Australia’s laws. That includes government, community and religious leaders, business people and the police.",
     "source": {
@@ -179,7 +182,10 @@
     "difficulty": 2,
     "language": "en",
     "question": "In Australia a person can be forced to join a trade union.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "Freedom of association includes the freedom not to join. Nobody can be forced into joining an organisation.",
     "source": {
@@ -279,7 +285,10 @@
     "difficulty": 2,
     "language": "en",
     "question": "Australia has an official national religion.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "People in Australia are free to follow any religion they choose, or none. The government is secular and has no official religion.",
     "source": {
@@ -414,7 +423,12 @@
     "difficulty": 2,
     "language": "en",
     "question": "From what age must Australian citizens vote in federal and state or territory elections?",
-    "options": ["18", "25", "21", "16"],
+    "options": [
+      "18",
+      "25",
+      "21",
+      "16"
+    ],
     "correct_option_index": 0,
     "explanation": "Voting is a responsibility, right and privilege for citizens aged 18 or over. It is compulsory in federal and state or territory elections.",
     "source": {
@@ -479,7 +493,10 @@
     "difficulty": 4,
     "language": "en",
     "question": "In some states it may not be compulsory to vote in local government elections.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 0,
     "explanation": "Voting is compulsory in federal and state or territory elections. Local government elections are the exception in some states.",
     "source": {
@@ -544,7 +561,10 @@
     "difficulty": 3,
     "language": "en",
     "question": "Service in the Australian Defence Force is compulsory for all citizens.",
-    "options": ["True", "False"],
+    "options": [
+      "True",
+      "False"
+    ],
     "correct_option_index": 1,
     "explanation": "Serving in the Defence Force is voluntary. Citizens do have a responsibility to defend Australia should the need arise.",
     "source": {
