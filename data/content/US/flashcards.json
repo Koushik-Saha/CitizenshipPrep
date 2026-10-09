@@ -1,0 +1,3516 @@
+[
+  {
+    "id": "0841cae9-3bf7-5ae4-95b7-470d7b1c7d98",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What is the form of government of the United States?",
+    "back": "Republic; Constitution-based federal republic; Representative democracy",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 1, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0afde868-593d-5a9c-993e-f794de0a7d5a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What is the supreme law of the land?",
+    "back": "(U.S.) Constitution",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 2, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7c5597d7-969f-5295-a6e9-5dd3421b09d7",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Name one thing the U.S. Constitution does.",
+    "back": "Forms the government; Defines powers of government; Defines the parts of government (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 3, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "fc20da47-edcd-5c49-a477-7b2333cc2ac6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "The U.S. Constitution starts with the words “We the People.” What does “We the People” mean?",
+    "back": "Self-government; Popular sovereignty; Consent of the governed (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 4, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "56c30581-c000-5e97-9197-37345a3e93a6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "How are changes made to the U.S. Constitution?",
+    "back": "Amendments; The amendment process",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 5, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a1934f8-4aba-5a91-b703-522d92ec7848",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What does the Bill of Rights protect?",
+    "back": "(The basic) rights of Americans; (The basic) rights of people living in the United States",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 6, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c99f5cdf-ae23-5e45-bfdb-6ff7576e53ba",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "How many amendments does the U.S. Constitution have?",
+    "back": "Twenty-seven (27)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 7, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "90b86c88-f3e9-5b17-9441-04887d5b8ea8",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Why is the Declaration of Independence important?",
+    "back": "It says America is free from British control.; It says all people are created equal.; It identifies inherent rights. (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 8, page 2"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c5f6c50c-c861-571a-b57c-d6f7e1027971",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What founding document said the American colonies were free from Britain?",
+    "back": "Declaration of Independence",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 9, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1fe2771d-b88f-55dc-9773-ccbf0e44f2eb",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Name two important ideas from the Declaration of Independence and the U.S. Constitution.",
+    "back": "Equality; Liberty; Social contract (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 10, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "598b49b3-d414-5481-841d-e2b68bf7a2d9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "The words “Life, Liberty, and the pursuit of Happiness” are in what founding document?",
+    "back": "Declaration of Independence",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 11, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1689621b-765f-5e49-bfe3-61d11b0e3513",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What is the economic system of the United States?",
+    "back": "Capitalism; Free market economy",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 12, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "012be2c1-edc4-532b-9432-bc499a628a05",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What is the rule of law?",
+    "back": "Everyone must follow the law.; Leaders must obey the law.; Government must obey the law. (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 13, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a6f8640-fee4-565b-ba0a-8ee391972315",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Many documents influenced the U.S. Constitution. Name one.",
+    "back": "Declaration of Independence; Articles of Confederation; Federalist Papers (any one of 8 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 14, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f6f3ca91-f489-52f1-80c6-2c9ca77d20a9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "There are three branches of government. Why?",
+    "back": "So one part does not become too powerful; Checks and balances; Separation of powers",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 15, page 3"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "682436a0-e853-512f-bcfe-3dc690cc8196",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name the three branches of government.",
+    "back": "Legislative, executive, and judicial; Congress, president, and the courts",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 16, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e7b1feb2-b54c-5088-9e38-fbe9fbce5c22",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "The President of the United States is in charge of which branch of government?",
+    "back": "Executive branch",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 17, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "edd35b9e-7092-5b46-b5a4-27d8346eee45",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What part of the federal government writes laws?",
+    "back": "(U.S.) Congress; (U.S. or national) legislature; Legislative branch",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 18, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "32049635-cab7-5d6c-ace5-cce1637698c6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What are the two parts of the U.S. Congress?",
+    "back": "Senate and House (of Representatives)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 19, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "abbfe9f1-67da-5918-9723-17d6ee8ee12c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name one power of the U.S. Congress.",
+    "back": "Writes laws; Declares war; Makes the federal budget",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 20, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "057157fd-4936-5937-b4c0-0a575edf487f",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many U.S. senators are there?",
+    "back": "One hundred (100)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 21, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0d9b34d9-a68b-583f-9b27-69b5eb69e31d",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How long is a term for a U.S. senator?",
+    "back": "Six (6) years",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 22, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "700ffedf-3e99-5308-b1dc-95dac3245d65",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who is one of your state’s U.S. senators now?",
+    "back": "Answers will vary. [District of Columbia residents and residents of U.S. territories should answer that D.C. (or the territory where the applicant lives) has no U.S. senators.]",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 23, page 4"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "57256baa-4705-5d10-9307-99cc6ba74d80",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many voting members are in the House of Representatives?",
+    "back": "Four hundred thirty-five (435)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 24, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a5c860dd-90af-5612-a0fd-57ba444db7c8",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How long is a term for a member of the House of Representatives?",
+    "back": "Two (2) years",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 25, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1a1cb6e7-becb-578d-8e2f-063bbd8e87b0",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Why do U.S. representatives serve shorter terms than U.S. senators?",
+    "back": "To more closely follow public opinion",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 26, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "836ac70d-0145-5ccc-acf3-2e07f031a6c6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many senators does each state have?",
+    "back": "Two (2)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 27, page 4"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4b11057f-b8f8-5ba4-a481-5813e15ad4ba",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Why does each state have two senators?",
+    "back": "Equal representation (for small states); The Great Compromise (Connecticut Compromise)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 28, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "110bf9ae-f077-5b70-b077-81b38bbcd754",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name your U.S. representative.",
+    "back": "Answers will vary. [Residents of territories with nonvoting Delegates or Resident Commissioners may provide the name of that Delegate or Commissioner. Also acceptable is any statement that the territory has no (voting) representatives in Congress.]",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 29, page 5"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "6e07e332-72be-5de5-ac5b-abad91b962d3",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the name of the Speaker of the House of Representatives now?",
+    "back": "Visit uscis.gov/citizenship/testupdates for the name of the Speaker of the House of Representatives.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 30, page 5"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "37de3810-a24c-599b-94b1-556b608680a7",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who does a U.S. senator represent?",
+    "back": "Citizens of their state; People of their state",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 31, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e95efb7a-7766-54ae-9e81-20fb885e94e6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who elects U.S. senators?",
+    "back": "Citizens from their state",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 32, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "9d5058b9-5d58-591a-8539-03cf84539a6f",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who does a member of the House of Representatives represent?",
+    "back": "Citizens in their (congressional) district; Citizens in their district; People from their (congressional) district (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 33, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "60159a2d-db2a-5721-93a6-a75fbcc1dcbc",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who elects members of the House of Representatives?",
+    "back": "Citizens from their (congressional) district",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 34, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d9a6416c-5fbf-57a7-a5ae-cd84b1b9bc26",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Some states have more representatives than other states. Why?",
+    "back": "(Because of) the state’s population; (Because) they have more people; (Because) some states have more people",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 35, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "29d48a0a-b611-5c5d-979d-6794c0b901e7",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "The President of the United States is elected for how many years?",
+    "back": "Four (4) years",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 36, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "56c8bc14-2037-5060-859d-743f3871cfc5",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "The President of the United States can serve only two terms. Why?",
+    "back": "(Because of) the 22nd Amendment; To keep the president from becoming too powerful",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 37, page 5"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3d43a716-fc00-5201-b6b4-3d70953de8f7",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the name of the President of the United States now?",
+    "back": "Visit uscis.gov/citizenship/testupdates for the name of the President of the United States.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 38, page 5"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "36725d8b-04d9-507f-82a8-057c36cb564a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the name of the Vice President of the United States now?",
+    "back": "Visit uscis.gov/citizenship/testupdates for the name of the Vice President of the United States.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 39, page 6"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "53d83860-dca3-5200-a72f-aface3fcec2b",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "If the president can no longer serve, who becomes president?",
+    "back": "The Vice President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 40, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "45ba4fff-3dd1-560b-be07-a8a552ed4099",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name one power of the president.",
+    "back": "Signs bills into law; Vetoes bills; Enforces laws (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 41, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "79ebef94-81a9-5e90-ad65-d54f0cc1fde0",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who is Commander in Chief of the U.S. military?",
+    "back": "The President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 42, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8f44105b-f27f-54de-b74d-443c6548e99a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who signs bills to become laws?",
+    "back": "The President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 43, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a70ab24-4348-5316-a34a-b1fff68f6113",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who vetoes bills?",
+    "back": "The President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 44, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a548d8ea-5807-5a43-9402-8eabe270b52a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who appoints federal judges?",
+    "back": "The President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 45, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2eafc44f-caf2-5e70-a97c-96dcdf6cabd9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "The executive branch has many parts. Name one.",
+    "back": "President (of the United States); Cabinet; Federal departments and agencies",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 46, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4e8ea24b-7b93-58f6-89aa-4cd43d122f95",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What does the President’s Cabinet do?",
+    "back": "Advises the President (of the United States)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 47, page 6"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "aff89e0f-c4dc-57e0-b18f-e5a76641d2e7",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What are two Cabinet-level positions?",
+    "back": "Attorney General; Secretary of Agriculture; Secretary of Commerce (any one of 22 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 48, page 7"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0d9797e9-ecb3-5cd2-85da-735639240e6c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Why is the Electoral College important?",
+    "back": "It decides who is elected president.; It provides a compromise between the popular election of the president and congressional selection.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 49, page 7"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6f4c5baf-bf59-5a4f-b835-b6a165d9f7df",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is one part of the judicial branch?",
+    "back": "Supreme Court; Federal Courts",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 50, page 7"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "10516696-ae1a-57db-b354-78235e7e21ed",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What does the judicial branch do?",
+    "back": "Reviews laws; Explains laws; Resolves disputes (disagreements) about the law (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 51, page 7"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "309d8cd5-7826-52cb-8b10-8bab31547edf",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the highest court in the United States?",
+    "back": "Supreme Court",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 52, page 7"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "72784770-5be5-539f-928f-13c442382547",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many seats are on the Supreme Court?",
+    "back": "Nine (9)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 53, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "315efa58-3a5d-5254-ab5b-5600f51ac1ff",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many Supreme Court justices are usually needed to decide a case?",
+    "back": "Five (5)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 54, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "294eb9ac-73f4-5231-933e-1fac629bfb51",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How long do Supreme Court justices serve?",
+    "back": "(For) life; Lifetime appointment; (Until) retirement",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 55, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a2a81769-88c9-59a4-a4de-e03b1cad82a0",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Supreme Court justices serve for life. Why?",
+    "back": "To be independent (of politics); To limit outside (political) influence",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 56, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "dab78725-a0e5-5cae-9029-8a475c7ed54f",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who is the Chief Justice of the United States now?",
+    "back": "Visit uscis.gov/citizenship/testupdates for the name of the Chief Justice of the United States.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 57, page 8"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "80cf25c7-1c6d-5965-a532-c52734c8d953",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name one power that is only for the federal government.",
+    "back": "Print paper money; Mint coins; Declare war (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 58, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "440ab6f3-8575-5bd3-abdf-5982aa6edbec",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Name one power that is only for the states.",
+    "back": "Provide schooling and education; Provide protection (police); Provide safety (fire departments) (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 59, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "96707aea-784f-5839-8452-d409bbee4344",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the purpose of the 10th Amendment?",
+    "back": "(It states that the) powers not given to the federal government belong to the states or to the people.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 60, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f105d417-72e3-58b4-8241-cf05d7745433",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who is the governor of your state now?",
+    "back": "Answers will vary. [District of Columbia residents should answer that D.C. does not have a governor.]",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 61, page 8"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "b3f8b7b7-4b85-529f-aaf0-f381efc2c36e",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the capital of your state?",
+    "back": "Answers will vary. [District of Columbia residents should answer that D.C. is not a state and does not have a capital. Residents of U.S. territories should name the capital of the territory.]",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 62, page 8"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "65116f7c-9e86-5c71-a8a4-2aca6f2b1b2d",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "There are four amendments to the U.S. Constitution about who can vote. Describe one of them.",
+    "back": "Citizens eighteen (18) and older (can vote).; You don’t have to pay (a poll tax) to vote.; Any citizen can vote. (Women and men can vote.) (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 63, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7363626b-d367-55b6-91ef-e7986ea845e8",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Who can vote in federal elections, run for federal office, and serve on a jury in the United States?",
+    "back": "Citizens; Citizens of the United States; U.S. citizens",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 64, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1ae28771-8172-5fd6-b2de-f56ab7b8a465",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "What are three rights of everyone living in the United States?",
+    "back": "Freedom of expression; Freedom of speech; Freedom of assembly (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 65, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c4a57bb6-5e41-57bf-ad20-7c60bc2d7595",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "What do we show loyalty to when we say the Pledge of Allegiance?",
+    "back": "The United States; The flag",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 66, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b1b1e197-c4e8-59da-8125-6c4fc2cf896b",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Name two promises that new citizens make in the Oath of Allegiance.",
+    "back": "Give up loyalty to other countries; Defend the (U.S.) Constitution; Obey the laws of the United States (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 67, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "493815ab-ac14-5d07-9e79-bb99b31f2949",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "How can people become United States citizens?",
+    "back": "Be born in the United States, under the conditions set by the 14th Amendment; Naturalize; Derive citizenship (under conditions set by Congress)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 68, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d59f917c-76f5-5e56-8c3d-9f4777f2bcab",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "What are two examples of civic participation in the United States?",
+    "back": "Vote; Run for office; Join a political party (any one of 10 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 69, page 10"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c2e6e100-8a45-550c-b460-403d8062c4ca",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "What is one way Americans can serve their country?",
+    "back": "Vote; Pay taxes; Obey the law (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 70, page 10"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ecbf6bd8-cc33-5b2f-b4d6-07258fc275da",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Why is it important to pay federal taxes?",
+    "back": "Required by law; All people pay to fund the federal government; Required by the (U.S.) Constitution (16th Amendment) (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 71, page 10"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7e664689-514e-5245-b860-46d9c1b03779",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "It is important for all men age 18 through 25 to register for the Selective Service. Name one reason why.",
+    "back": "Required by law; Civic duty; Makes the draft fair, if needed",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 72, page 10"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d6467e97-b210-5321-9ca4-8bb453a5100b",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "The colonists came to America for many reasons. Name one.",
+    "back": "Freedom; Political liberty; Religious freedom (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 73, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e9932af2-1a32-5b92-837c-2bc1fcc1b376",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Who lived in America before the Europeans arrived?",
+    "back": "American Indians; Native Americans",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 74, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "debcd2f1-a2cc-511b-83d0-f601958e8990",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What group of people was taken and sold as slaves?",
+    "back": "Africans; People from Africa",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 75, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "757347ba-3cfb-560a-ace2-02e09c9cd11c",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What war did the Americans fight to win independence from Britain?",
+    "back": "American Revolution; The (American) Revolutionary War; War for (American) Independence",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 76, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "05ff762b-c199-5acf-bf0f-11dc688efd9f",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Name one reason why the Americans declared independence from Britain.",
+    "back": "High taxes; Taxation without representation; British soldiers stayed in Americans’ houses (boarding, quartering) (any one of 10 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 77, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "85c4ead1-88dd-55bc-aabb-872561da81f1",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Who wrote the Declaration of Independence?",
+    "back": "(Thomas) Jefferson",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 78, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4ec48eb3-78f8-5b2f-847c-f491ae81aa6a",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "When was the Declaration of Independence adopted?",
+    "back": "July 4, 1776",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 79, page 11"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "06495acb-37e6-52c5-bfe7-a50ede6da938",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "The American Revolution had many important events. Name one.",
+    "back": "(Battle of) Bunker Hill; Declaration of Independence; Washington Crossing the Delaware (Battle of Trenton) (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 80, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "511fb1ac-937a-5653-bcd4-d8c72ff4012b",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "There were 13 original states. Name five.",
+    "back": "New Hampshire; Massachusetts; Rhode Island (any one of 13 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 81, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "eece99e0-f78a-536a-b64b-0aee10b24056",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What founding document was written in 1787?",
+    "back": "(U.S.) Constitution",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 82, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f8468487-c881-5892-9f53-a9304470d2e0",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "The Federalist Papers supported the passage of the U.S. Constitution. Name one of the writers.",
+    "back": "(James) Madison; (Alexander) Hamilton; (John) Jay (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 83, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "bbb642af-af39-5122-bc53-08862436d818",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Why were the Federalist Papers important?",
+    "back": "They helped people understand the (U.S.) Constitution.; They supported passing the (U.S.) Constitution.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 84, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "17479db0-d7f7-5807-98e3-6858e3ead945",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Benjamin Franklin is famous for many things. Name one.",
+    "back": "Founded the first free public libraries; First Postmaster General of the United States; Helped write the Declaration of Independence (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 85, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c4299d14-1baa-5221-92d1-7b66b7294fa6",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "George Washington is famous for many things. Name one.",
+    "back": "“Father of Our Country”; First president of the United States; General of the Continental Army (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 86, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0e183126-68c9-5566-a2c5-df176ee994dd",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Thomas Jefferson is famous for many things. Name one.",
+    "back": "Writer of the Declaration of Independence; Third president of the United States; Doubled the size of the United States (Louisiana Purchase) (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 87, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "857470be-ef00-55b7-ae49-f6069b6989e6",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "James Madison is famous for many things. Name one.",
+    "back": "“Father of the Constitution”; Fourth president of the United States; President during the War of 1812 (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 88, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2f99adc2-6bb5-536f-b663-b11ef4494525",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Alexander Hamilton is famous for many things. Name one.",
+    "back": "First Secretary of the Treasury; One of the writers of the Federalist Papers; Helped establish the First Bank of the United States (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 89, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a6ab62b0-e722-5a35-a5e9-30b53fb6723c",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What territory did the United States buy from France in 1803?",
+    "back": "Louisiana Territory; Louisiana",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 90, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "894a101d-95c5-53fc-98a2-03e4768300d8",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Name one war fought by the United States in the 1800s.",
+    "back": "War of 1812; Mexican-American War; Civil War (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 91, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "5164ee55-1e40-56a9-93c1-cdddb56733f5",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Name the U.S. war between the North and the South.",
+    "back": "The Civil War",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 92, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3cc127e9-a3be-510f-bea0-d09d17c7fa58",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "The Civil War had many important events. Name one.",
+    "back": "(Battle of) Fort Sumter; Emancipation Proclamation; (Battle of) Vicksburg (any one of 8 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 93, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ce95d3a1-5b3d-58dc-ad57-f9c7f370f27f",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Abraham Lincoln is famous for many things. Name one.",
+    "back": "Freed the slaves (Emancipation Proclamation); Saved (or preserved) the Union; Led the United States during the Civil War (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 94, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "efad360f-f46e-5632-a70b-05c1c1526633",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What did the Emancipation Proclamation do?",
+    "back": "Freed the slaves; Freed slaves in the Confederacy; Freed slaves in the Confederate states (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 95, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b623117e-84c3-5b03-b610-3138460da974",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What U.S. war ended slavery?",
+    "back": "The Civil War",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 96, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a870d8f6-099a-5619-9554-7f9ae1be7c91",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What amendment says all persons born or naturalized in the United States, and subject to the jurisdiction thereof, are U.S. citizens?",
+    "back": "14th Amendment",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 97, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1c1b7e6b-74ea-5c10-8643-f7ba12e40977",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "When did all men get the right to vote?",
+    "back": "After the Civil War; During Reconstruction; (With the) 15th Amendment (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 98, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c1fa2fe1-1fef-5e7f-9b6e-3ca618806194",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Name one leader of the women’s rights movement in the 1800s.",
+    "back": "Susan B. Anthony; Elizabeth Cady Stanton; Sojourner Truth (any one of 6 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 99, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "9811e33b-0fef-5db6-ab54-f2a90eaf2036",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Name one war fought by the United States in the 1900s.",
+    "back": "World War I; World War II; Korean War (any one of 5 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 100, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2eeedbda-8206-551f-b893-2615f9f88569",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Why did the United States enter World War I?",
+    "back": "Because Germany attacked U.S. (civilian) ships; To support the Allied Powers (England, France, Italy, and Russia); To oppose the Central Powers (Germany, Austria-Hungary, the Ottoman Empire, and Bulgaria)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 101, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a3f1362-1a81-5c6b-bfea-f84a1c76e0f2",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "When did all women get the right to vote?",
+    "back": "1920; After World War I; (With the) 19th Amendment",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 102, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6cc7bae6-58e4-5ecf-8306-f0a433c9cd74",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What was the Great Depression?",
+    "back": "Longest economic recession in modern history",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 103, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "caa42daf-91a3-5612-b9c3-1a441a52c103",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "When did the Great Depression start?",
+    "back": "The Great Crash (1929); Stock market crash of 1929",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 104, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7a0f5c45-e770-50ae-912a-e1a78a989eaa",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Who was president during the Great Depression and World War II?",
+    "back": "(Franklin) Roosevelt",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 105, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ecb132d3-e7ef-5abd-94e1-9763926cd8e0",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Why did the United States enter World War II?",
+    "back": "(Bombing of) Pearl Harbor; Japanese attacked Pearl Harbor; To support the Allied Powers (England, France, and Russia) (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 106, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7f5b2e21-e6c9-5ba7-a1c1-acd9e876f85e",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Dwight Eisenhower is famous for many things. Name one.",
+    "back": "General during World War II; President at the end of (during) the Korean War; 34th president of the United States (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 107, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b160b44e-d806-5cfc-9da1-fcc17877f457",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Who was the United States’ main rival during the Cold War?",
+    "back": "Soviet Union; USSR; Russia",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 108, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "936f1714-a206-5a52-9429-e1696b6609cb",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "During the Cold War, what was one main concern of the United States?",
+    "back": "Communism; Nuclear war",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 109, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c4356fab-a4c7-5e66-8916-0862b4a4b34d",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Why did the United States enter the Korean War?",
+    "back": "To stop the spread of communism",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 110, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "49889662-9cc2-503b-968b-e9e26a687745",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Why did the United States enter the Vietnam War?",
+    "back": "To stop the spread of communism",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 111, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "99832bf7-8a08-5b6d-8834-5cbfe378470e",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What did the civil rights movement do?",
+    "back": "Fought to end racial discrimination",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 112, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "34dfa3fd-76d9-5bd4-a451-c6c2d1b78fd9",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Martin Luther King, Jr. is famous for many things. Name one.",
+    "back": "Fought for civil rights; Worked for equality for all Americans; Worked to ensure that people would “not be judged by the color of their skin, but by the content of their character”",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 113, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1b58d6a4-de39-5aa4-ad97-3121738e40fe",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Why did the United States enter the Persian Gulf War?",
+    "back": "To force the Iraqi military from Kuwait",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 114, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d416fd32-f133-5f26-bd10-bff6739b76a8",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What major event happened on September 11, 2001 in the United States?",
+    "back": "Terrorists attacked the United States; Terrorists took over two planes and crashed them into the World Trade Center in New York City; Terrorists took over a plane and crashed into the Pentagon in Arlington, Virginia (any one of 4 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 115, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e4209a5c-106e-52fa-b9b8-772b87a5cc90",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Name one U.S. military conflict after the September 11, 2001 attacks.",
+    "back": "(Global) War on Terror; War in Afghanistan; War in Iraq",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 116, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "105ac402-dd6f-5eea-a993-73226cc98edc",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Name one American Indian tribe in the United States.",
+    "back": "Apache; Blackfeet; Cayuga (any one of 25 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 117, page 17"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "eb3e4051-a97b-5d89-a823-7c70033fa4c8",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Name one example of an American innovation.",
+    "back": "Light bulb; Automobile (cars, internal combustion engine); Skyscrapers (any one of 7 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 118, page 17"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d45faa6f-d674-5668-ad86-f3012551d0e7",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "What is the capital of the United States?",
+    "back": "Washington, D.C.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 119, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3258d825-7c4c-52b6-8e24-901570ab7158",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Where is the Statue of Liberty?",
+    "back": "New York (Harbor); Liberty Island [Also acceptable are New Jersey, near New York City, and on the Hudson (River).]",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 120, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "9d4c0ce9-3702-5a9f-920b-4fdc533f1c23",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Why does the flag have 13 stripes?",
+    "back": "(Because there were) 13 original colonies; (Because the stripes) represent the original colonies",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 121, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "83dbfd06-e208-53ab-9f0c-dbd9788c3226",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Why does the flag have 50 stars?",
+    "back": "(Because there is) one star for each state; (Because) each star represents a state; (Because there are) 50 states",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 122, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a7b6fcf-704c-5437-838f-607becdb0fa4",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "What is the name of the national anthem?",
+    "back": "The Star-Spangled Banner",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 123, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e349efdd-d029-54da-9f39-1cd8234ce572",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "The Nation’s first motto was “E Pluribus Unum.” What does that mean?",
+    "back": "Out of many, one; We all become one",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 124, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2ac4d360-bc36-52f9-8106-b181ca32bbb4",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What is Independence Day?",
+    "back": "A holiday to celebrate U.S. independence (from Britain); The country’s birthday",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 125, page 19"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "11c53b2d-f289-5436-a8c4-1141ff6b6c64",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "Name three national U.S. holidays.",
+    "back": "New Year’s Day; Martin Luther King, Jr. Day; Presidents Day (Washington’s Birthday) (any one of 11 accepted answers)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 126, page 19"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d34bbec7-4b9a-5653-965c-5783fd73ff98",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What is Memorial Day?",
+    "back": "A holiday to honor soldiers who died in military service",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 127, page 19"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "08701d1c-f41d-5a2f-9163-baa7ddb379b5",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What is Veterans Day?",
+    "back": "A holiday to honor people in the (U.S.) military; A holiday to honor people who have served (in the U.S. military)",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "section_or_page": "Question 128, page 19"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a646548-90dc-5cf3-b76c-2950b78b229c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "In which year was the U.S. Constitution written?",
+    "back": "1787. The Constitution was written in 1787, during the period called the Founding Era. It is the oldest written constitution in the world.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "14f25512-b736-50ec-b4ab-e2cae15e6eaf",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "In which city did the Founders meet to write the Constitution?",
+    "back": "Philadelphia. Leaders such as George Washington, Benjamin Franklin, James Madison and Alexander Hamilton came to Philadelphia, Pennsylvania, in 1787. Their meeting is called the Constitutional Convention.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b9a1145c-0be8-595f-9ecc-d1fefd1b058c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What is the opening part of the Constitution called?",
+    "back": "The Preamble. The beginning of the Constitution is the Preamble. It explains why the Founders wrote the Constitution and says the people will govern themselves.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 9"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "18c53a7b-f40a-53cb-b0fc-c635c5489778",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "When it was written in 1787, the Constitution had a Preamble and how many sections?",
+    "back": "Seven. The original Constitution had a Preamble and seven sections. The 27 amendments added since then are listed after those seven sections.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 8"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "28191935-972e-5aee-b467-c1290670c10b",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What share of the states must approve an amendment before it is added to the Constitution?",
+    "back": "Three-fourths. An amendment is a change to the Constitution. It is added only when three-fourths of the states approve it, which keeps changes rare.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "27bfbfcf-4aab-512c-a40e-d95968b33789",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "With 50 states today, how many must approve an amendment for it to be added?",
+    "back": "38. Three-fourths of 50 is 37.5, so 38 states are needed. Only 27 amendments have ever been added.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 15"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2e64999f-59cb-5015-885a-3f804eaed534",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What are the first ten amendments to the Constitution called?",
+    "back": "The Bill of Rights. The Founders added ten amendments listing the rights of people living in the United States. Together they are called the Bill of Rights.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "21c5a897-c216-5c63-8b2a-6144cae0f306",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "How many of the 13 original states had to approve the Constitution before it became the law of the land?",
+    "back": "Nine. The seventh section of the Constitution said nine of the 13 states had to approve it. All 13 had done so by 1790.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "51c3e406-7732-54f0-a587-b3d019efad6d",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Which state became the ninth to approve the Constitution, in 1788?",
+    "back": "New Hampshire. New Hampshire was the ninth state to approve, which met the number the Constitution required. Rhode Island was the last of the 13, in 1790.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 16"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "18d179eb-8e99-59d5-8323-5a63b496449c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "What does the judicial branch do with federal laws?",
+    "back": "It reviews them. Each branch has its own power. Congress makes federal laws, the executive branch enforces them, and the judicial branch reviews them.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6282f0f2-2fff-5009-9c81-285d03efca3e",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "Which branch of government enforces federal laws?",
+    "back": "The executive branch. The executive branch, led by the President, enforces the laws that Congress makes. The courts then review them.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 12"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1501362b-e076-5e46-9ed4-3eac83604558",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "In a market economy, as the study guide describes it, who controls the economy?",
+    "back": "Not the government: people are free to start businesses. The United States has a capitalist, or market, economy. The government does not control it, and people are free to start a business and make money.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 63"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6678d2e5-2003-570f-8251-383e3789a9d9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "According to the Declaration of Independence, everyone has the right to life, liberty and what else?",
+    "back": "The pursuit of happiness. Thomas Jefferson wrote that everyone has the right to life, liberty and the pursuit of happiness. These three are among the best-known words of the Declaration.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 49"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ecad5217-1cdd-5fd2-b991-0f95da1438a4",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "A: Principles of American Government",
+    "language": "en",
+    "front": "How many years after the Declaration of Independence was the Constitution written?",
+    "back": "Eleven. The Declaration was adopted in 1776 and the Constitution was written in 1787. In between, the country won its independence and found it needed a new government.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 52"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "40e314a1-a8c1-56fe-a9ba-344b3227e148",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is another name for the legislative branch?",
+    "back": "Congress. The legislative branch is the U.S. Congress. The Constitution gives it the power to make federal laws.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "44ae4c56-6481-56cc-8b9f-23a1154a9ec5",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How old must a person be to be elected to the House of Representatives?",
+    "back": "At least 25. A member of the House must be at least 25 and live in the state where the district is. The Senate asks for 30.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 20"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e4241367-3f12-5f54-95ac-11b01a2c9225",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How old must a person be to be elected to the U.S. Senate?",
+    "back": "At least 30. A senator must be at least 30 and live in the state they represent. That is five years older than the minimum for the House.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 20"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "92c3f999-7579-545c-912f-96953db49ff9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "According to the study guide, how many voting members does California have in the House of Representatives?",
+    "back": "52. California has the most people of any state, so it has the most voting members in the House. The number can change after a census.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 19"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "9c77e625-fd4c-564f-be03-5092c3a145c1",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Which state has only one voting member in the House because it has the fewest people?",
+    "back": "Wyoming. Seats in the House follow population. Wyoming, the state with the fewest people, has a single voting member.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 19"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "f4f05ed5-2872-516f-bf85-dd553583a2f3",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is a bill?",
+    "back": "A proposal for a new law. When members of Congress want a new law, they write a bill. It becomes law only after both parts of Congress pass it and the President signs it.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 22"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e3f92c00-c33c-521a-9900-f80fa3bd6c10",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "If all 435 voting members are present, how many votes does a bill need to pass the House?",
+    "back": "218. A bill needs a majority, which means more than half. Half of 435 is 217.5, so 218 votes are needed.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 22"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7d2f548e-1ab9-5eb6-a75f-642dd5a3fd64",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many senators must vote for most bills to pass the Senate, when all 100 vote?",
+    "back": "51. A majority of the 100 senators is 51. The same idea applies in the House, where the majority is 218.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 22"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b94a47f0-51c9-552c-b685-80a839612c59",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the leader of the House of Representatives called?",
+    "back": "The Speaker of the House. The House chooses a leader called the Speaker. The Speaker is also next in line for the presidency after the Vice President.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 20"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "5950243b-3029-5acb-967b-dfbbf32764c9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What do the 435 voting members of the House each come from?",
+    "back": "A congressional district. Each state is divided into congressional districts. Each district elects one person to serve in the House.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 19"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "744bb63e-4c23-5029-bca4-c10a0a04b5cb",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Why does the first section of the Constitution describe Congress?",
+    "back": "The Founders thought making laws the most important power. The Founders believed the power to make laws was the most important power in government. So they described Congress first.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 18"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "49b1b6fd-5cd6-5571-a708-4fe9e2739e70",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What title do most leaders of the executive departments hold?",
+    "back": "Secretary. Most executive departments are led by a Secretary, such as the Secretary of Homeland Security. The Department of Justice is the exception.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 24"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e6c779ab-3c17-5b2d-8b5b-563f948016e2",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the leader of the Department of Justice called?",
+    "back": "The Attorney General. The head of the Department of Justice is not called a Secretary. The title is Attorney General, and it is a Cabinet-level position.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 25"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "beedf8bd-edc6-5064-8e82-b8f3fe1f0292",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "U.S. Citizenship and Immigration Services (USCIS) is part of which executive department?",
+    "back": "The Department of Homeland Security. Each executive department has many smaller agencies. USCIS, which handles naturalization, belongs to the Department of Homeland Security.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 25"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c9e01d4b-01e3-5bbe-b1d4-23ba620ece7e",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "The Federal Bureau of Investigation (FBI) is part of which department?",
+    "back": "The Department of Justice. The FBI is one of the agencies inside the Department of Justice. That department is led by the Attorney General.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 25"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "776aa472-7d8f-5913-a032-4df17cb30d35",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What does it mean that the President is Commander in Chief?",
+    "back": "The President is in charge of everyone serving in the military. Commander in Chief is the President's role over the Armed Forces. Everyone serving in the U.S. military is under the President's charge.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 26"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "eedcee25-9ada-5ebb-83af-3ae4f800e6ec",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many branches do the U.S. Armed Forces have, according to the study guide?",
+    "back": "Six. The guide says there are six branches of the Armed Forces. The President is in charge of all of them as Commander in Chief.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 26"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "62e38551-187b-57da-b5f2-888487d25d4d",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "In which month do citizens vote for President?",
+    "back": "November. Presidential elections are held in November. The President is then elected for four years.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 26"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c93213a1-81b4-5aa9-b60b-37113e69c3ab",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What are the two major political parties in the United States today?",
+    "back": "The Democratic Party and the Republican Party. A person running for President is nominated by a political party. The two major parties today are the Democratic Party and the Republican Party.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 26"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "9009a759-8ca6-50d5-9599-493791f82cd1",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Besides advising the President, what position does the Vice President hold in Congress?",
+    "back": "President of the Senate. The Vice President works in the executive branch but is also the President of the Senate. The Vice President is a member of the Cabinet too.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 27"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "fa1b2cb2-c6f6-5edd-853b-273184b3575a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who must approve a person the President nominates to be a federal judge?",
+    "back": "The U.S. Senate. The President nominates federal judges, and the Senate must approve them. Because more than one branch takes part, this is an example of the separation of powers.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 29"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0abc4b98-2e9f-5c3f-b1f1-649c0b53ff26",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What are the federal courts below the Supreme Court sometimes called?",
+    "back": "Lower federal courts. The judicial branch is the Supreme Court and the other federal courts. Those other courts are sometimes called lower federal courts.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 29"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "074a159c-8ad6-52e1-b55a-060e29557e3c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many U.S. District Courts are shown in the study guide's chart of the federal court system?",
+    "back": "94. The federal court system has one Supreme Court, 13 circuits of the Court of Appeals and 94 district courts. Cases usually begin in a district court.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 30"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8bea6242-ca5a-5cf1-981a-01d295f66b2b",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many circuits does the U.S. Court of Appeals have in the study guide's chart?",
+    "back": "13. Between the 94 district courts and the one Supreme Court sits the Court of Appeals, in 13 circuits. Nine is the number of Supreme Court justices, not of circuits.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 30"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c2aad92e-7136-5b3a-9547-d7570615bb93",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "When can a federal court review a law?",
+    "back": "Only when a legal case about it is before the court. Courts do not review laws on their own. Someone has to bring a legal case that the court has the authority to hear.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 31"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8ab57c3e-37a3-5860-b46f-b8d49ae842cd",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is another word for a judge on the Supreme Court?",
+    "back": "Justice. Supreme Court judges are called justices. One of them is the Chief Justice of the United States.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 31"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "2abb918a-2383-5af9-a8a4-d027a83af8c1",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Can any other court change a decision of the Supreme Court?",
+    "back": "No. The Supreme Court is the highest court, so its decisions are final. No other court in the United States can change them.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 31"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "41865721-1c49-5fed-afe8-63b5e5e5851f",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is a treaty?",
+    "back": "An agreement between two or more countries. Making treaties is a power of the federal government. Treaties can end wars or set up cooperation on matters such as trade.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6cf98073-243e-5543-8aa0-072b976a04f6",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Who has the power to print the money used in the United States?",
+    "back": "Only the U.S. government. Printing money is one of the powers the Constitution gives to the federal government. States cannot print their own dollars.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a226c610-210e-5007-ae98-b4dfa6c1a114",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What is the person in charge of a state's executive branch called?",
+    "back": "A governor. Each state has its own three branches. The head of a state's executive branch is its governor.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3d825939-6fc1-5758-9859-aa3992a8471c",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Which section of the Constitution explains how new states can join the United States?",
+    "back": "The fourth section. The fourth section covers the states: how their governments are set up and how new states join. The first three sections set up the federal branches.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 14"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "64e17f4f-2eaa-5ac3-b403-ec9c3ed68f7a",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How does a person come to run for President, according to the study guide?",
+    "back": "They are nominated by a political party. People who run for President are nominated by a political party. The two major parties today are the Democratic and Republican parties.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 3, page 26"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8bb93ee3-4d2b-57f2-a5ed-1e0751150b59",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What happens to a bill right after both parts of Congress pass it?",
+    "back": "It is sent to the President. A bill passed by the House and the Senate goes to the President. The President either signs it into law or vetoes it.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 22"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6ddcb356-65f2-5f8c-b634-c5544c2d5039",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "In the study guide, what does the word “veto” mean?",
+    "back": "The President did not sign the bill. A veto is the President's refusal to sign a bill. The bill then fails unless Congress votes to override the veto.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 22"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e863fcdc-62aa-5007-8ddf-a26c50c48910",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "What do the justices write when a majority of them vote the same way on a case?",
+    "back": "A decision that explains their reasons. After hearing a case the justices meet, discuss it and vote. The majority then writes a decision explaining its reasons.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 4, page 31"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ae79700f-4797-5ad6-ac50-1b6570f20c33",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "How many voting members represent a state in the Senate if the state is very small?",
+    "back": "Two, the same as every other state. Every state has two senators regardless of size. Only the House gives larger states more members.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 2, page 20"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b349efd7-446f-5b46-ba9a-c7eb8a8d4281",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "B: System of Government",
+    "language": "en",
+    "front": "Which of these does the study guide give as an example of the federal government's power to protect the people?",
+    "back": "Creating an army to defend the nation. The Constitution lets the federal government create an army and declare war if the country is attacked or threatened. Schools and fire departments are state powers.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 1, page 13"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1fbc75c2-1541-52f9-bf63-e7bbba2053c3",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "How many rights or freedoms are listed in the First Amendment?",
+    "back": "Five. The First Amendment lists five freedoms: speech, religion, assembly, the press, and petitioning the government. They belong to everyone living in the United States.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 34"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a4ed3ea4-1070-5880-ae23-67a44705bb29",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Which amendment says a person accused of breaking the law has the right to a trial with a jury?",
+    "back": "The Sixth Amendment. The Bill of Rights lists more than the First Amendment freedoms. The Sixth Amendment protects people accused of a crime, including the right to a jury that decides guilt or innocence.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 34"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1d6ed96e-28b3-5165-8a94-620ab5713af2",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "What is the last day each year to send in federal income tax forms?",
+    "back": "April 15. Everyone living in the United States must pay income taxes. A federal income tax form is due each year by April 15.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 35"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "82d879d8-ffde-52f1-8c87-d6f4dd12626b",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Which amendment, added in 1971, says citizens 18 and older can vote?",
+    "back": "The 26th Amendment. Four amendments are about who can vote. The most recent, the 26th in 1971, set the voting age at 18.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 35"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1dffb4f8-c1c6-5e22-9fd6-664298535cd9",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "Which amendment, added in 1964, says you do not have to pay a poll tax to vote?",
+    "back": "The 24th Amendment. A poll tax was a charge for voting. The 24th Amendment ended it in 1964.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 35"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "82dec40f-dcd4-5eae-900d-178498808096",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "At what moment does an applicant for naturalization become a U.S. citizen?",
+    "back": "When they take the Oath of Allegiance at the ceremony. Passing the test and interview is not the last step. Applicants become citizens when they raise their right hand and say the Oath of Allegiance at the naturalization ceremony.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 36"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "ed0ecd12-aa84-59b6-8275-e8336c62a927",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "How old must a person be to become a naturalized U.S. citizen?",
+    "back": "18. Being 18 is the first requirement the study guide lists. The others include being a lawful permanent resident and passing the naturalization test and interview.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 36"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8c659d23-6267-561f-ac78-6581bc31c201",
+    "country_iso": "US",
+    "topic": "American Government",
+    "subtopic": "C: Rights and Responsibilities",
+    "language": "en",
+    "front": "According to the study guide, between which ages must men register for the Selective Service?",
+    "back": "18 and 26. Men who are citizens or legal residents must register for the Selective Service. The duty applies between the ages of 18 and 26.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 35"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "43e6e224-275b-5c28-a593-b3588fbeb26d",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What was the first permanent English settlement in North America, created in 1607?",
+    "back": "Jamestown. England created Jamestown in 1607, which began the Colonial Period. More settlements followed and became the colony of Virginia.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 44"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b6f79510-39ec-5c15-8d64-a61bfbdac92f",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Which European country was the first to send ships across the Atlantic Ocean?",
+    "back": "Spain. In the 1400s some European countries built ships that could cross the ocean, and Spain went first. England, France and Portugal created colonies later.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 43"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b47164c4-cee5-514e-8b38-d26ddf09efec",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In what year did the Pilgrims create the colony of Massachusetts?",
+    "back": "1620. The Pilgrims were English colonists who came in 1620. Many of them came to North America for religious freedom.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 46"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e445430c-c20d-52fb-9cc7-469c6d344f7f",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In what year was the first group of enslaved Africans brought to Jamestown?",
+    "back": "1619. Colonists wanted more workers for their farms, and enslaved people were brought from Africa by force. The first group arrived at Jamestown in 1619.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 45"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6e670b8b-47e2-5985-9ace-e71a19776f14",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Which crops did the Jamestown colonists grow and sell to England?",
+    "back": "Tobacco and later cotton. After hard first years, the colonists moved to new areas and grew tobacco, and later cotton. They made a lot of money selling these crops to England.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 45"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4a6fe647-b228-5487-b519-54056be069e5",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In 1707 England and Scotland became one country. What was it called?",
+    "back": "Great Britain. England and Scotland are both on the island of Britain. After they joined in 1707, the 13 colonies were part of Great Britain.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 46"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d0d91d50-ebf1-524e-a5eb-a1e8c4fac26b",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In which years did the American Revolutionary War start and end?",
+    "back": "1775 and 1783. The war began in 1775. It ended in 1783, when Great Britain signed a treaty agreeing that the United States was an independent country.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 47"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "b0d15c61-fa72-517e-b045-4d6d4ab4c485",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Who was named general of the colonial army during the American Revolutionary War?",
+    "back": "George Washington. When the colonists created an army, George Washington was named its general. This is one reason he is called the Father of Our Country.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 48"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d3aadf73-0e25-522a-a6b8-0595eaf437be",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Where did the British Army surrender in 1781?",
+    "back": "At Yorktown, Virginia. The fighting stopped in 1781 when the British surrendered at the Battle of Yorktown. The war did not officially end until the treaty of 1783.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 50"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "5738597f-8a27-54b5-b8c8-291f6750f6fc",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What did the colonists mean by “taxation without representation”?",
+    "back": "Britain raised their taxes without letting their representatives vote on it. In the 1760s Britain raised taxes on the colonies to help pay for a war. The colonists thought it unfair that their representatives had no vote on those taxes.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 48"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7f942af3-663e-50a6-a02b-a5692075d6e1",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What was a colonial congress?",
+    "back": "A legislative branch that made laws for a colony. Each of the 13 colonies had its own colonial congress to make its laws. Britain later made these congresses illegal, which angered the colonists.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 47"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0a0a3862-e4af-5228-810d-45bb922bbf66",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In which colony did colonists begin fighting the British in 1775?",
+    "back": "Massachusetts. The fighting started in Massachusetts in 1775. Soon all 13 colonies were fighting Great Britain.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 48"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a0e636aa-2eb2-5289-be83-85daae4bdde6",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Who negotiated the treaty with Great Britain in 1783 as a diplomat?",
+    "back": "Benjamin Franklin. A diplomat travels to other countries to represent the United States. Benjamin Franklin negotiated the treaty in which Britain accepted American independence.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 50"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f1681121-1789-5d58-a693-55766396f072",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "With what name did the writers of the Federalist Papers sign their essays?",
+    "back": "Publius. James Madison, Alexander Hamilton and John Jay wrote the essays. All three signed them with the single name Publius.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 34"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8c10acf5-c984-550f-a2df-99193c71e457",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "How many essays made up the Federalist Papers?",
+    "back": "85. The Federalist Papers were 85 essays about the Constitution. They were printed in newspapers between October 1787 and May 1788.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 33"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c233d1c3-9f3b-5ac7-9baa-144165490b27",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "Why did many people dislike the Constitution in 1787?",
+    "back": "It did not include a list of rights. Many people would not support a Constitution with no list of rights. Its supporters agreed to add one, and the Bill of Rights followed in 1791.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 5, page 33"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a5d78bfe-0569-5705-b2f0-50aa90217382",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "In which years did George Washington serve as President?",
+    "back": "1789 to 1797. When the new government was created under the Constitution, George Washington was elected the first President. He served from 1789 to 1797.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 53"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7fa73c6e-54f1-5711-be77-b1939d881523",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "For about how long had Native Americans lived in the Americas before Europeans arrived?",
+    "back": "Around 20,000 years. Native Americans had lived in North and South America for around 20,000 years. There were many tribes, each with its own culture, language and government.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 7, page 43"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a7761ab3-a379-554b-8d53-a7bde88fb40a",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "A: Colonial Period and Independence",
+    "language": "en",
+    "front": "What did the 13 original colonies become when the Declaration of Independence was adopted?",
+    "back": "The 13 original states. By adopting the Declaration of Independence the colonists created the United States of America. Each colony became a state.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 8, page 49"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4a10624c-518a-546e-b69d-40994bec317f",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Why did France sell the Louisiana Territory to the United States in 1803?",
+    "back": "France needed money to pay for wars in Europe. France was fighting wars in Europe and needed money. The sale gave the United States the land between the Mississippi River and the Rocky Mountains.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 54"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "892a2c40-0be2-5fd9-8c6a-e2ce254c98a4",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What was the “Trail of Tears”?",
+    "back": "The forced move of five Native American nations, on which thousands died. Between the 1830s and 1850s the Cherokee, Muscogee, Seminole, Chickasaw and Choctaw were forced from their homeland. Thousands died of disease and starvation on the journey.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 55"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c5084a09-efb8-5c4d-9159-0ba5ae433b19",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "When Texas joined the United States in 1845, which state in order did it become?",
+    "back": "The 28th. Texas had been part of Mexico until 1836, and then its own country until 1845. It joined the United States as the 28th state.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 56"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1c0a09a8-00cd-5520-9dde-b8871dbf6752",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "With which country did the United States go to war in 1846 over Texas and land in the southwest?",
+    "back": "Mexico. This was the Mexican-American War, which the United States won in 1848. Mexico then agreed that Texas was part of the United States and sold its southwestern land.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 56"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "df1b329c-637a-541d-bf62-78974f1c8af3",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Which was the first state bordering the Pacific Ocean to join the United States?",
+    "back": "California. California joined in 1850 as the 31st state. With it the country reached from the Atlantic to the Pacific.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 57"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "047b6fb8-9f6c-586e-bea4-87b1a400c71d",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What did the eleven Southern states that left the United States in 1861 call their country?",
+    "back": "The Confederate States of America. The Civil War began after eleven Southern states left and tried to form their own country. The Northern states were still called the United States of America.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 59"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f3efa733-5669-5227-8d83-b0e4cdd6fffd",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What is Frederick Douglass known for?",
+    "back": "Escaping slavery and becoming a civil rights leader who spoke and wrote against it. Frederick Douglass escaped from slavery. He became famous for speeches and books about ending slavery and protecting civil rights for all people.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 59"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "df17f761-875c-596a-a4f3-85adced0ea90",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What happened to Abraham Lincoln a few days after the South surrendered?",
+    "back": "He was assassinated. The South surrendered in April 1865, ending the Civil War. A few days later Lincoln was assassinated, which means murdered for political reasons.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 60"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6c6da5c5-9b2d-54a7-9def-e47eeffcaf0a",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "Which amendment, added on December 6, 1865, says slavery is illegal in the United States?",
+    "back": "The 13th Amendment. After the Civil War the Constitution was changed to end slavery for good. The 13th Amendment did that in December 1865.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 61"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "a786451d-37e2-539a-83cb-94613fb4e835",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "What happened on June 19, 1865, the day remembered as Juneteenth?",
+    "back": "Enslaved people in Galveston, Texas, learned they were free. The people enslaved in Galveston, Texas, were the last to learn that the war was over and they were free. Juneteenth is now a national holiday marking the end of slavery.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 61"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6e73ec48-bec3-555c-b26e-2064abde7023",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "B: 1800s",
+    "language": "en",
+    "front": "When did the South surrender, ending the Civil War?",
+    "back": "April 1865. The Civil War was fought from 1861 to 1865. The North won when the South surrendered in April 1865.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 10, page 60"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "6004f664-fb1a-560f-87c0-c5f6c62847ee",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What was World War I called when it started?",
+    "back": "The Great War. The war that began in Europe in 1914 was first called the Great War. It is called World War I today.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 63"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7447cae6-4733-52c9-b92b-172fb045ae98",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "In what year did the United States join World War I?",
+    "back": "1917. The war ran from 1914 to 1918, but the United States did not join until 1917. It fought until the war ended on November 11, 1918.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 63"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "e50ea105-8c65-5fc6-b53a-eae1409253bb",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Who was President of the United States during World War I?",
+    "back": "Woodrow Wilson. Woodrow Wilson was the 28th President, in office from 1913 to 1921. He led the country through World War I.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 63"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "afc7f4fb-2fc5-5fab-a7ae-3ef9c4c90556",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "How many times was Franklin Roosevelt elected President?",
+    "back": "Four. Roosevelt was the longest-serving President, in office from 1933 until he died in 1945. The 22nd Amendment later limited a person to being elected twice.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 64"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4878b5ff-fce2-57a1-ad96-4a16b14ddb53",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What event started World War II in 1939?",
+    "back": "Germany attacked Poland. World War II began in Europe in 1939 when Germany attacked Poland. The United States entered two years later, after Pearl Harbor.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 64"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8d4857d4-73fd-5d7a-b217-45400649aa76",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Where is Pearl Harbor, the naval base Japan attacked on December 7, 1941?",
+    "back": "Hawaii. Pearl Harbor is a U.S. naval base in Hawaii. The attack led the United States to enter World War II.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 64"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "d86f83fe-54c5-53f6-82cd-a7ed2d3ec718",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What was the Soviet Union?",
+    "back": "Russia and the nearby countries it controlled. Russia controlled many nearby countries, and together they were called the Soviet Union. It was the rival of the United States in the Cold War.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f06e5179-e6d4-505a-9f4c-159b1e0f0de2",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "How was the Cold War mostly carried on?",
+    "back": "With diplomats, spies, information and threats rather than battles between the two sides. American and Soviet soldiers did not fight each other in battles. Each side used diplomats and spies, and built large armies in case war came.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "64d4bdb7-8913-566b-bbe3-7eb0ec8de019",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Which country was the first to send a satellite into space, in 1957?",
+    "back": "The Soviet Union. During the Cold War both sides tried to send rockets into space. The Soviet Union launched the first satellite in 1957, and the United States landed the first person on the moon in 1969.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "f464e0bc-ce1d-5851-b230-cabab4bb06e7",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "When and how did the Cold War end?",
+    "back": "In 1991, when the Soviet Union collapsed. The Cold War lasted from after World War II until 1991. It ended when the Soviet Union collapsed.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8597ba06-700d-550d-a6f4-63231a71bbc0",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What does the Civil Rights Act of 1964 make illegal?",
+    "back": "Discrimination based on race, religion, sex or national origin. The civil rights movement convinced Congress to pass two major laws. The first, in 1964, made it illegal to discriminate on these grounds.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 66"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "0cdf52da-0f98-5dd5-8a91-c9d0d1cae6e0",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What does the Voting Rights Act of 1965 say?",
+    "back": "States cannot deny people the right to vote based on their race. Some state laws had made it hard for people to vote because of their race. The Voting Rights Act of 1965 says states cannot do that.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 66"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "c83c461a-078f-5b85-b0f4-4b57aa236212",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Cesar Chavez and Dolores Huerta were civil rights leaders from which community?",
+    "back": "The Latino American community. Many communities helped lead the fight for civil rights. Cesar Chavez and Dolores Huerta were leaders from the Latino American community.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 66"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "96835170-1e7d-5253-845d-a14bc503e684",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Where did the fourth hijacked plane crash on September 11, 2001, after its passengers fought the terrorists?",
+    "back": "Shanksville, Pennsylvania. Two planes hit the World Trade Center and one hit the Pentagon. The passengers on the fourth plane fought back, and it crashed in Shanksville, Pennsylvania.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 67"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "5b575ea8-e9b8-55f0-80fb-8f64546410f9",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "What happened to banks, businesses and jobs during the Great Depression?",
+    "back": "Banks and businesses closed, and many people could not find work. The Great Depression was the worst time for the economy in American history. Many people lost their jobs, their homes and their money.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 63"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1441be22-63e1-5cbb-8a83-d0d3969e5c09",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "In what year did the United States become the first country to land a person on the moon?",
+    "back": "1969. The space race was part of the Cold War. The Soviet Union launched the first satellite in 1957, and the United States reached the moon in 1969.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "21b8393a-f365-5d6c-a95a-c9ccdd990344",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "In which years did Dwight Eisenhower serve as President?",
+    "back": "1953 to 1961. Eisenhower had been a general in World War II. He became the 34th President in 1953, during the Cold War, and served until 1961.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 11, page 65"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "51bf821e-6964-50d9-87d9-42e84abbdf03",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "About how many American Indian tribes are there in the United States today, according to the study guide?",
+    "back": "Over 500. Native Americans are also called American Indians. The guide says there are over 500 tribes today, and lists some of them, such as the Cherokee and the Navajo.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 9, page 55"
+    },
+    "needs_freshness_check": true
+  },
+  {
+    "id": "1713e046-2406-525d-959b-6da4e735fc40",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Between which two Alabama cities did Martin Luther King, Jr., and other leaders organize a march for voting rights in 1965?",
+    "back": "Selma and Montgomery. The march from Selma to Montgomery supported voting rights for all citizens. Soon after it, Congress passed the Voting Rights Act of 1965.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 72"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4ddf7a5e-93aa-5e9c-b945-03c4a3cddbe1",
+    "country_iso": "US",
+    "topic": "American History",
+    "subtopic": "C: Recent American History and Other Important Historical Information",
+    "language": "en",
+    "front": "Which award did Martin Luther King, Jr., receive in 1964?",
+    "back": "The Nobel Prize for Peace. King led peaceful protests against racial discrimination. He was awarded the Nobel Prize for Peace in 1964.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 72"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "1f3437d5-fbd8-548e-9ddc-0c5424bed8f8",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Which country gave the Statue of Liberty to the United States, in 1886?",
+    "back": "France. France gave the statue as a symbol of friendship. It has become a symbol of freedom and democracy.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 69"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3d4493e1-88d7-5564-8004-c638cf41f92c",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "What date is on the tablet the Statue of Liberty holds in her left hand?",
+    "back": "July 4, 1776. The statue holds a torch in her right hand and a tablet in her left. The tablet carries the date the Declaration of Independence was adopted.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 69"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "648bfaea-d8d0-5ab3-b2d7-e8d2c3f52b47",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "On the American flag, what is red a symbol for?",
+    "back": "Bravery. Each color of the flag has a meaning. Red stands for bravery, white for purity and blue for justice.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 71"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "dfc00f03-9ce6-5a0a-8976-a66260fe73e3",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "On the American flag, what is blue a symbol for?",
+    "back": "Justice. Red stands for bravery and white for purity. Blue is the symbol for justice.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 71"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "216d8305-7370-594b-8b77-e44a8c8233bf",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Who wrote “The Star-Spangled Banner”?",
+    "back": "Francis Scott Key. Francis Scott Key wrote it after seeing the American flag still flying following a battle in the War of 1812. It became the national anthem.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 72"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "dc0f21dd-20ba-522a-a5be-4216aebbe278",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "What was Ellis Island?",
+    "back": "An immigration station in New York Harbor. Ellis Island began receiving immigrants in 1892. Over the next 62 years more than 12 million people arrived through it.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 70"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "4ac50698-ce91-5d63-b1bc-0ccb7114cb9d",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "Angel Island was an immigration station for people who had crossed which ocean?",
+    "back": "The Pacific Ocean. Angel Island was on the West Coast. Between 1910 and 1940 it processed nearly a million immigrants who had crossed the Pacific.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 70"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "04d32323-2de1-5af2-9c4d-25cf97e8a5b5",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "A: Symbols",
+    "language": "en",
+    "front": "What do the letters “D.C.” in Washington, D.C., stand for?",
+    "back": "District of Columbia. The capital is named after George Washington. It is a district controlled by the federal government, between Maryland and Virginia, and is not part of any state.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 6, page 41"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "8fcc30b1-dc58-5b25-a427-741ef2382e0c",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "On which day is Martin Luther King, Jr. Day celebrated?",
+    "back": "The third Monday in January. The holiday honors the life and work of the civil rights leader. It falls on the third Monday in January each year.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 72"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "620147fa-cdae-5147-a7f7-368b84c76346",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "Why is Presidents' Day celebrated on the third Monday in February?",
+    "back": "It falls between the birthdays of Washington and Lincoln. George Washington was born on February 22 and Abraham Lincoln on February 12. The holiday honors both, on a Monday between the two dates.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 73"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "7cf2f802-fc8d-5457-949e-57599ba9137c",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What was Memorial Day originally called?",
+    "back": "Decoration Day. The name came from decorating graves with flowers, wreaths and flags. The day became widely observed soon after the Civil War.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 73"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "cb717c8c-fb7b-5d64-8cba-cd0b841f1c31",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What was Veterans Day originally called?",
+    "back": "Armistice Day. It first marked the end of World War I on November 11, 1918. In 1954 Congress renamed it Veterans Day to honor everyone who has served.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 75"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "663aceab-6f5c-5737-908c-567bf116223a",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "What does Thanksgiving celebrate?",
+    "back": "A harvest meal shared by Native Americans and English colonists in 1621. Thanksgiving is on the fourth Thursday in November. It recalls a harvest feast in 1621 in what became Massachusetts.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 75"
+    },
+    "needs_freshness_check": false
+  },
+  {
+    "id": "3d1c5b4e-f97a-5a5d-8cae-68d18ce2691c",
+    "country_iso": "US",
+    "topic": "Symbols and Holidays",
+    "subtopic": "B: Holidays",
+    "language": "en",
+    "front": "Which Native American tribe gathered with the English colonists for the harvest feast of 1621?",
+    "back": "The Wampanoag. The colonists were trying to create a colony in Massachusetts. The Wampanoag gathered with them in the fall for a harvest feast.",
+    "source": {
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "section_or_page": "Chapter 12, page 75"
+    },
+    "needs_freshness_check": false
+  }
+]
