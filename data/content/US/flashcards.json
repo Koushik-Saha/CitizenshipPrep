@@ -1854,7 +1854,7 @@
     "subtopic": "A: Principles of American Government",
     "language": "en",
     "front": "What share of the states must approve an amendment before it is added to the Constitution?",
-    "back": "Three-fourths. An amendment is a change to the Constitution. It is added only when three-fourths of the states approve it, which keeps changes rare.",
+    "back": "Three-fourths. An amendment is a change to the Constitution. It is added only when three-fourths of the states approve it, which today means 38 of the 50.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 1, page 15"
@@ -1966,7 +1966,7 @@
     "subtopic": "A: Principles of American Government",
     "language": "en",
     "front": "According to the Declaration of Independence, everyone has the right to life, liberty and what else?",
-    "back": "The pursuit of happiness. Thomas Jefferson wrote that everyone has the right to life, liberty and the pursuit of happiness. These three are among the best-known words of the Declaration.",
+    "back": "The pursuit of happiness. Thomas Jefferson wrote that everyone has the right to life, liberty and the pursuit of happiness. He wrote it in the Declaration of Independence, adopted on July 4, 1776.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 8, page 49"
@@ -2036,7 +2036,7 @@
     "subtopic": "B: System of Government",
     "language": "en",
     "front": "According to the study guide, how many voting members does California have in the House of Representatives?",
-    "back": "52. California has the most people of any state, so it has the most voting members in the House. The number can change after a census.",
+    "back": "52. California has the most people of any state, so it has the most voting members in the House. States that have more people have more representatives.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 2, page 19"
@@ -2106,7 +2106,7 @@
     "subtopic": "B: System of Government",
     "language": "en",
     "front": "What is the leader of the House of Representatives called?",
-    "back": "The Speaker of the House. The House chooses a leader called the Speaker. The Speaker is also next in line for the presidency after the Vice President.",
+    "back": "The Speaker of the House. The leader of the House is called the Speaker. The Speaker is also next in line for the presidency after the Vice President.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 2, page 20"
@@ -2176,7 +2176,7 @@
     "subtopic": "B: System of Government",
     "language": "en",
     "front": "U.S. Citizenship and Immigration Services (USCIS) is part of which executive department?",
-    "back": "The Department of Homeland Security. Each executive department has many smaller agencies. USCIS, which handles naturalization, belongs to the Department of Homeland Security.",
+    "back": "The Department of Homeland Security. Each executive department has many smaller agencies. USCIS is one of them, and it belongs to the Department of Homeland Security.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 3, page 25"
@@ -2302,7 +2302,7 @@
     "subtopic": "B: System of Government",
     "language": "en",
     "front": "How many U.S. District Courts are shown in the study guide's chart of the federal court system?",
-    "back": "94. The federal court system has one Supreme Court, 13 circuits of the Court of Appeals and 94 district courts. Cases usually begin in a district court.",
+    "back": "94. The guide's chart shows one Supreme Court, 13 circuits of the Court of Appeals and 94 district courts. The Supreme Court is the highest of them.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 4, page 30"
@@ -2474,20 +2474,6 @@
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 4, page 31"
-    },
-    "needs_freshness_check": false
-  },
-  {
-    "id": "ae79700f-4797-5ad6-ac50-1b6570f20c33",
-    "country_iso": "US",
-    "topic": "American Government",
-    "subtopic": "B: System of Government",
-    "language": "en",
-    "front": "How many voting members represent a state in the Senate if the state is very small?",
-    "back": "Two, the same as every other state. Every state has two senators regardless of size. Only the House gives larger states more members.",
-    "source": {
-      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
-      "section_or_page": "Chapter 2, page 20"
     },
     "needs_freshness_check": false
   },
@@ -3380,7 +3366,7 @@
     "subtopic": "A: Symbols",
     "language": "en",
     "front": "Who wrote “The Star-Spangled Banner”?",
-    "back": "Francis Scott Key. Francis Scott Key wrote it after seeing the American flag still flying following a battle in the War of 1812. It became the national anthem.",
+    "back": "Francis Scott Key. Francis Scott Key wrote it about seeing the American flag after a battle during the War of 1812. It is the national anthem.",
     "source": {
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 12, page 72"

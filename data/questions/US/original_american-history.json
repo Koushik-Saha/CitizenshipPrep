@@ -616,12 +616,12 @@
     "question": "Which of these was NOT one of the 13 original colonies?",
     "options": ["Delaware", "Rhode Island", "Florida", "Georgia"],
     "correct_option_index": 2,
-    "explanation": "The 13 colonies ran from New Hampshire in the north to Georgia in the south. Florida was not one of them.",
+    "explanation": "The study guide lists the 13 colonies by name, among them Georgia, Delaware and Rhode Island. Florida is not on the list.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 7, page 46",
-      "quote_under_25_words": "● Georgia",
+      "quote_under_25_words": "They created 13 colonies on the East Coast of North America.",
       "publisher": "U.S. Citizenship and Immigration Services",
       "license": "Public domain (17 U.S.C. 105)"
     },

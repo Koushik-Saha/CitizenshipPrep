@@ -166,7 +166,7 @@
     "question": "What share of the states must approve an amendment before it is added to the Constitution?",
     "options": ["Two-thirds", "One-half", "Three-fourths", "All of them"],
     "correct_option_index": 2,
-    "explanation": "An amendment is a change to the Constitution. It is added only when three-fourths of the states approve it, which keeps changes rare.",
+    "explanation": "An amendment is a change to the Constitution. It is added only when three-fourths of the states approve it, which today means 38 of the 50.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -356,7 +356,7 @@
       "The Military Branch"
     ],
     "correct_option_index": 3,
-    "explanation": "The three branches are the legislative, the executive and the judicial. The military is part of the executive branch, under the President as Commander in Chief.",
+    "explanation": "The three branches are the legislative, the executive and the judicial. The military is led by the President, who is in charge of the executive branch, as Commander in Chief.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -521,7 +521,7 @@
     "question": "According to the Declaration of Independence, everyone has the right to life, liberty and what else?",
     "options": ["A free education", "A trial by jury", "The pursuit of happiness", "Property"],
     "correct_option_index": 2,
-    "explanation": "Thomas Jefferson wrote that everyone has the right to life, liberty and the pursuit of happiness. These three are among the best-known words of the Declaration.",
+    "explanation": "Thomas Jefferson wrote that everyone has the right to life, liberty and the pursuit of happiness. He wrote it in the Declaration of Independence, adopted on July 4, 1776.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -701,7 +701,7 @@
     "question": "According to the study guide, how many voting members does California have in the House of Representatives?",
     "options": ["38", "2", "100", "52"],
     "correct_option_index": 3,
-    "explanation": "California has the most people of any state, so it has the most voting members in the House. The number can change after a census.",
+    "explanation": "California has the most people of any state, so it has the most voting members in the House. States that have more people have more representatives.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -956,7 +956,7 @@
       "The Chief Justice"
     ],
     "correct_option_index": 2,
-    "explanation": "The House chooses a leader called the Speaker. The Speaker is also next in line for the presidency after the Vice President.",
+    "explanation": "The leader of the House is called the Speaker. The Speaker is also next in line for the presidency after the Vice President.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -1156,7 +1156,7 @@
       "The Department of Justice"
     ],
     "correct_option_index": 1,
-    "explanation": "Each executive department has many smaller agencies. USCIS, which handles naturalization, belongs to the Department of Homeland Security.",
+    "explanation": "Each executive department has many smaller agencies. USCIS is one of them, and it belongs to the Department of Homeland Security.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -1581,7 +1581,7 @@
     "question": "How many U.S. District Courts are shown in the study guide's chart of the federal court system?",
     "options": ["100", "94", "50", "13"],
     "correct_option_index": 1,
-    "explanation": "The federal court system has one Supreme Court, 13 circuits of the Court of Appeals and 94 district courts. Cases usually begin in a district court.",
+    "explanation": "The guide's chart shows one Supreme Court, 13 circuits of the Court of Appeals and 94 district courts. The Supreme Court is the highest of them.",
     "source": {
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
@@ -1716,7 +1716,7 @@
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 4, page 31",
-      "quote_under_25_words": "Leading the other Supreme Court justices in choosing which cases to hear.",
+      "quote_under_25_words": "The Chief Justice has many duties.",
       "publisher": "U.S. Citizenship and Immigration Services",
       "license": "Public domain (17 U.S.C. 105)"
     },
@@ -2321,7 +2321,7 @@
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 5, page 34",
-      "quote_under_25_words": "To petition (write to) the government",
+      "quote_under_25_words": "The Sixth Amendment says that a person accused of breaking the law has the right to a trial with a jury",
       "publisher": "U.S. Citizenship and Immigration Services",
       "license": "Public domain (17 U.S.C. 105)"
     },
@@ -2526,7 +2526,7 @@
       "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
       "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
       "section_or_page": "Chapter 5, page 36",
-      "quote_under_25_words": "give up loyalty to other countries",
+      "quote_under_25_words": "The promises that applicants make when they become a United States citizen are to:",
       "publisher": "U.S. Citizenship and Immigration Services",
       "license": "Public domain (17 U.S.C. 105)"
     },
