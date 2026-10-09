@@ -1,11 +1,20 @@
 import {
-  BULK_LIMIT,
   getQueueCounts,
   listPendingTranslationLocales,
-  listQuestionQueue,
+  pageQuestionQueue,
+  pageTranslationQueue,
+  PAGE_SIZES,
+  queueLevels,
+  queueOrigins,
+  queueSorts,
+  queueTypes,
+  type QueueLevel,
+  type QueueOrigin,
+  type QueuePage,
+  type QueueSort,
+  type QueueType,
   listReviewCountries,
   listReviewTopics,
-  listTranslationQueue,
   queueFlags,
   type QueueFlag,
   type QueueQuestion,
@@ -25,8 +34,34 @@ type View = (typeof views)[number];
 
 const flagLabels: Record<QueueFlag, string> = {
   duplicate: 'Possible duplicates',
-  'no-source': 'No stored passage',
-  'has-source': 'Has a stored passage',
+  'no-source': 'No source to check against',
+  'has-source': 'Has a source to check against',
+  freshness: 'Answer changes over time',
+};
+
+const originLabels: Record<QueueOrigin, string> = {
+  official: 'Official questions',
+  original: 'Written by Oathly',
+  pipeline: 'Drafted from a guide',
+};
+
+const levelLabels: Record<QueueLevel, string> = {
+  easy: 'Easy (1 to 2)',
+  medium: 'Medium (3)',
+  hard: 'Hard (4 to 5)',
+};
+
+const typeLabels: Record<QueueType, string> = {
+  multiple_choice: 'Multiple choice',
+  multi_select: 'Several answers',
+  true_false: 'True or false',
+  free_response: 'Spoken answer',
+};
+
+const sortLabels: Record<QueueSort, string> = {
+  oldest: 'Oldest first',
+  newest: 'Newest first',
+  number: 'Official number',
 };
 
 /** What a decision came to, for the notice at the top: "approve" with a count is a bulk one. */
@@ -72,6 +107,13 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
   const topic = single(params.topic) || undefined;
   const locale = single(params.locale) || undefined;
   const flag = queueFlags.find((candidate) => candidate === single(params.flag));
+  const origin = queueOrigins.find((candidate) => candidate === single(params.origin));
+  const level = queueLevels.find((candidate) => candidate === single(params.level));
+  const type = queueTypes.find((candidate) => candidate === single(params.type));
+  const sort = queueSorts.find((candidate) => candidate === single(params.sort));
+  const per = PAGE_SIZES.find((candidate) => String(candidate) === single(params.per));
+  const pageNumber = Number(single(params.page) ?? 1);
+  const paging = { page: Number.isInteger(pageNumber) ? pageNumber : 1, pageSize: per };
   const count = single(params.count);
   const done = doneMessage(single(params.done), count === undefined ? null : Number(count));
   const failed = Number(single(params.failed) ?? 0);
@@ -91,7 +133,12 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
     q: search,
     topic: view === 'translations' ? undefined : topic,
     flag: view === 'translations' ? undefined : flag,
+    origin: view === 'translations' ? undefined : origin,
+    level: view === 'translations' ? undefined : level,
+    type: view === 'translations' ? undefined : type,
+    sort: view === 'translations' ? undefined : sort,
     locale: view === 'translations' ? locale : undefined,
+    per: per ? String(per) : undefined,
   };
   const href = (changes: Record<string, string | undefined>) => {
     const query = new URLSearchParams();
@@ -124,6 +171,15 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
       : []),
     ...(filters.flag
       ? [{ label: flagLabels[filters.flag], clear: href({ flag: undefined }) }]
+      : []),
+    ...(filters.origin
+      ? [{ label: originLabels[filters.origin], clear: href({ origin: undefined }) }]
+      : []),
+    ...(filters.level
+      ? [{ label: levelLabels[filters.level], clear: href({ level: undefined }) }]
+      : []),
+    ...(filters.type
+      ? [{ label: typeLabels[filters.type], clear: href({ type: undefined }) }]
       : []),
     ...(filters.locale
       ? [{ label: languageName(filters.locale, 'en'), clear: href({ locale: undefined }) }]
@@ -260,6 +316,56 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
                 ))}
               </select>
             )}
+            {view !== 'translations' && (
+              <>
+                <select
+                  name="origin"
+                  defaultValue={origin ?? ''}
+                  aria-label="Where the wording comes from"
+                  className={pill}
+                >
+                  <option value="">Any origin</option>
+                  {queueOrigins.map((entry) => (
+                    <option key={entry} value={entry}>
+                      {originLabels[entry]}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="level"
+                  defaultValue={level ?? ''}
+                  aria-label="Difficulty"
+                  className={pill}
+                >
+                  <option value="">Any difficulty</option>
+                  {queueLevels.map((entry) => (
+                    <option key={entry} value={entry}>
+                      {levelLabels[entry]}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="type"
+                  defaultValue={type ?? ''}
+                  aria-label="Kind of question"
+                  className={pill}
+                >
+                  <option value="">Any kind</option>
+                  {queueTypes.map((entry) => (
+                    <option key={entry} value={entry}>
+                      {typeLabels[entry]}
+                    </option>
+                  ))}
+                </select>
+                <select name="sort" defaultValue={sort ?? ''} aria-label="Order" className={pill}>
+                  {queueSorts.map((entry) => (
+                    <option key={entry} value={entry === 'oldest' ? '' : entry}>
+                      {sortLabels[entry]}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
             {view === 'translations' && locales.length > 0 && (
               <select
                 name="locale"
@@ -275,6 +381,18 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
                 ))}
               </select>
             )}
+            <select
+              name="per"
+              defaultValue={per ? String(per) : ''}
+              aria-label="How many on a page"
+              className={pill}
+            >
+              {PAGE_SIZES.map((size) => (
+                <option key={size} value={size === 50 ? '' : size}>
+                  {size} a page
+                </option>
+              ))}
+            </select>
             {/* Without JavaScript the filters need a button; with it they apply themselves. */}
             <noscript>
               <button type="submit" className={buttonClass.secondary}>
@@ -317,28 +435,26 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
       <div className="mt-6">
         {view === 'translations' ? (
           <TranslationList
-            translations={await listTranslationQueue(db, {
-              countryCode: country,
-              search,
-              locale,
-            })}
+            result={await pageTranslationQueue(
+              db,
+              { countryCode: country, search, locale },
+              paging,
+            )}
             back={back}
+            pageHref={(page) => href({ page: page > 1 ? String(page) : undefined })}
             filtered={chips.length > 0}
           />
         ) : (
           <QuestionList
             queue={view === 'source' ? 'source-changed' : 'pending'}
-            questions={await listQuestionQueue(
+            result={await pageQuestionQueue(
               db,
               view === 'source' ? 'source-changed' : 'pending',
-              {
-                countryCode: country,
-                search,
-                topic,
-                flag,
-              },
+              { countryCode: country, search, topic, flag, origin, level, type, sort },
+              paging,
             )}
             back={back}
+            pageHref={(page) => href({ page: page > 1 ? String(page) : undefined })}
             filtered={chips.length > 0}
           />
         )}
@@ -410,17 +526,90 @@ const rowLink = `${focusRing} hover:bg-surface-sunken block flex-1 rounded-xs py
 const rowBox = 'flex items-start gap-3 ps-4 sm:ps-5';
 const tick = 'accent-primary mt-4 size-4 shrink-0';
 
+/** "51 to 100 of 279", and the way to the other pages. Nothing when it all fits on one. */
+function Pages({
+  result,
+  pageHref,
+  noun,
+}: {
+  result: QueuePage<unknown>;
+  pageHref: (page: number) => string;
+  noun: string;
+}) {
+  const { page, pages, pageSize, total, items } = result;
+  const first = (page - 1) * pageSize + 1;
+  // The first and last page, the one shown and its neighbours; gaps are left as gaps.
+  const shown = [...new Set([1, page - 1, page, page + 1, pages])]
+    .filter((candidate) => candidate >= 1 && candidate <= pages)
+    .sort((a, b) => a - b);
+  const step = `${focusRing} border-border-strong hover:bg-surface-sunken inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-3 text-sm font-medium`;
+  const off =
+    'text-fg-subtle border-border inline-flex h-9 items-center rounded-md border px-3 text-sm';
+  return (
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <p className="text-fg-muted text-sm" data-testid="page-summary">
+        {first} to {first + items.length - 1} of {total} {noun}
+        {total === 1 ? '' : 's'}
+      </p>
+      {pages > 1 && (
+        <nav aria-label="Pages" className="flex flex-wrap items-center gap-1.5">
+          {page > 1 ? (
+            <Link href={pageHref(page - 1)} rel="prev" className={step}>
+              Previous
+            </Link>
+          ) : (
+            <span className={off}>Previous</span>
+          )}
+          {shown.map((candidate, index) => (
+            <span key={candidate} className="flex items-center gap-1.5">
+              {index > 0 && candidate - shown[index - 1]! > 1 && (
+                <span aria-hidden="true" className="text-fg-subtle px-1">
+                  …
+                </span>
+              )}
+              {candidate === page ? (
+                <span
+                  aria-current="page"
+                  className="bg-primary text-on-primary inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm font-semibold"
+                >
+                  <span className="sr-only">Page </span>
+                  {candidate}
+                </span>
+              ) : (
+                <Link href={pageHref(candidate)} className={step}>
+                  <span className="sr-only">Page </span>
+                  {candidate}
+                </Link>
+              )}
+            </span>
+          ))}
+          {page < pages ? (
+            <Link href={pageHref(page + 1)} rel="next" className={step}>
+              Next
+            </Link>
+          ) : (
+            <span className={off}>Next</span>
+          )}
+        </nav>
+      )}
+    </div>
+  );
+}
+
 function QuestionList({
   queue,
-  questions,
+  result,
   back,
+  pageHref,
   filtered,
 }: {
   queue: 'pending' | 'source-changed';
-  questions: QueueQuestion[];
+  result: QueuePage<QueueQuestion>;
   back: string;
+  pageHref: (page: number) => string;
   filtered: boolean;
 }) {
+  const questions = result.items;
   if (questions.length === 0) {
     return (
       <Empty>
@@ -473,30 +662,42 @@ function QuestionList({
                   <span>{question.countryCode}</span>
                   <span>{question.topic}</span>
                   <span>Difficulty {question.difficulty}</span>
+                  <span>{typeLabels[question.type as QueueType] ?? question.type}</span>
                   <StatusBadge status={question.status} />
+                  {question.origin === 'official' && (
+                    <Badge tone="success">
+                      Official{question.officialNumber ? ` no. ${question.officialNumber}` : ''}
+                    </Badge>
+                  )}
+                  {question.origin === 'original' && <Badge>Written by Oathly</Badge>}
+                  {question.sourceLocator && <span>{question.sourceLocator}</span>}
+                  {question.needsFreshnessCheck && <Badge tone="warning">Answer changes</Badge>}
                   {question.isPossibleDuplicate && <Badge tone="warning">Possible duplicate</Badge>}
                   {question.sourceChanged && <Badge tone="warning">Source changed</Badge>}
-                  {!question.hasSource && <Badge tone="warning">No stored passage</Badge>}
+                  {!question.hasSource && <Badge tone="warning">No source to check</Badge>}
                 </span>
               </Link>
             </li>
           ))}
         </ul>
       </BulkSelection>
-      {questions.length >= 500 && <ListLimit />}
+      <Pages result={result} pageHref={pageHref} noun="question" />
     </form>
   );
 }
 
 function TranslationList({
-  translations,
+  result,
   back,
+  pageHref,
   filtered,
 }: {
-  translations: QueueTranslation[];
+  result: QueuePage<QueueTranslation>;
   back: string;
+  pageHref: (page: number) => string;
   filtered: boolean;
 }) {
+  const translations = result.items;
   if (translations.length === 0) {
     return (
       <Empty>
@@ -558,16 +759,7 @@ function TranslationList({
           ))}
         </ul>
       </BulkSelection>
-      {translations.length >= 500 && <ListLimit />}
+      <Pages result={result} pageHref={pageHref} noun="translation" />
     </form>
-  );
-}
-
-function ListLimit() {
-  return (
-    <p className="text-fg-muted mt-3 text-sm">
-      Showing the first 500. Narrow the list with the filters to see the rest. A bulk decision
-      covers at most {BULK_LIMIT} at a time.
-    </p>
   );
 }

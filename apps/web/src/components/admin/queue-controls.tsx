@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 // The interactive parts of the review queue: filters that apply as they are
@@ -26,6 +26,21 @@ export function FilterForm({ children }: { children: React.ReactNode }) {
     router.replace(`/admin/content?${query}`, { scroll: false });
   };
   useEffect(() => () => clearTimeout(timer.current), []);
+
+  // The address is what is in force. When it changes by another route (a
+  // filter's chip is removed, "Clear all", the back button), the menus and the
+  // search box follow it; otherwise the next change would bring the old
+  // filter back. The field being typed in is left alone.
+  const params = useSearchParams();
+  useEffect(() => {
+    for (const control of form.current?.elements ?? []) {
+      if (!(control instanceof HTMLSelectElement || control instanceof HTMLInputElement)) continue;
+      if (!control.name || control.type === 'hidden' || control === document.activeElement)
+        continue;
+      const value = params.get(control.name) ?? '';
+      if (control.value !== value) control.value = value;
+    }
+  }, [params]);
 
   return (
     <form

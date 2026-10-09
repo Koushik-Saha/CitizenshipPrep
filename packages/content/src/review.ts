@@ -149,13 +149,69 @@ export interface QueueQuestion {
   isPossibleDuplicate: boolean;
   sourceChanged: boolean;
   createdAt: Date;
+  type: string;
+  /** "official": the government's own wording. "original": ours. Null: drafted by the pipeline. */
+  origin: 'official' | 'original' | null;
+  officialNumber: string | null;
+  /** Where in the source the answer is, for a question loaded from a file. */
+  sourceLocator: string | null;
+  needsFreshnessCheck: boolean;
 }
 
 export type QuestionQueue = 'pending' | 'source-changed';
 
 /** Which flagged questions to show. */
-export const queueFlags = ['duplicate', 'no-source', 'has-source'] as const;
+export const queueFlags = ['duplicate', 'no-source', 'has-source', 'freshness'] as const;
 export type QueueFlag = (typeof queueFlags)[number];
+
+/** Where a question's wording comes from. "pipeline" is one drafted from a stored guide. */
+export const queueOrigins = ['official', 'original', 'pipeline'] as const;
+export type QueueOrigin = (typeof queueOrigins)[number];
+
+/** Difficulty in the three bands targets are set in: 1-2, 3, 4-5. */
+export const queueLevels = ['easy', 'medium', 'hard'] as const;
+export type QueueLevel = (typeof queueLevels)[number];
+
+export const queueTypes = [
+  'multiple_choice',
+  'multi_select',
+  'true_false',
+  'free_response',
+] as const;
+export type QueueType = (typeof queueTypes)[number];
+
+/** The order of a queue. "number" follows the official catalogue's numbering. */
+export const queueSorts = ['oldest', 'newest', 'number'] as const;
+export type QueueSort = (typeof queueSorts)[number];
+
+export const PAGE_SIZES = [25, 50, 100] as const;
+export const DEFAULT_PAGE_SIZE = 50;
+
+/** One page of a queue, and how many there are in all. */
+export interface QueuePage<T> {
+  items: T[];
+  total: number;
+  /** The page shown, from 1. Asking beyond the last page gives the last. */
+  page: number;
+  pageSize: number;
+  pages: number;
+}
+
+export interface Paging {
+  page?: number;
+  pageSize?: number;
+}
+
+/** A page request made safe: a whole number within range, a size from the list. */
+function paging(request: Paging | undefined, total: number) {
+  const pageSize = (PAGE_SIZES as readonly number[]).includes(request?.pageSize ?? NaN)
+    ? request!.pageSize!
+    : DEFAULT_PAGE_SIZE;
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const asked = Number.isInteger(request?.page) ? request!.page! : 1;
+  const page = Math.min(Math.max(1, asked), pages);
+  return { page, pageSize, pages, offset: (page - 1) * pageSize };
+}
 
 /** Narrows a queue. Everything is optional; a string is a country, as it used to be. */
 export interface QueueFilters {
@@ -165,6 +221,10 @@ export interface QueueFilters {
   /** A topic's slug, within the country. */
   topic?: string;
   flag?: QueueFlag;
+  origin?: QueueOrigin;
+  level?: QueueLevel;
+  type?: QueueType;
+  sort?: QueueSort;
 }
 
 const asFilters = (filters: QueueFilters | string | undefined): QueueFilters =>
@@ -176,31 +236,7 @@ const likePattern = (search: string | undefined) => {
   return text ? `%${text.replace(/[\\%_]/g, (char) => `\\${char}`)}%` : null;
 };
 
-export async function listQuestionQueue(
-  db: Db,
-  queue: QuestionQueue,
-  filters?: QueueFilters | string,
-): Promise<QueueQuestion[]> {
-  const { countryCode, search, topic, flag } = asFilters(filters);
-  const { rows } = await db.query<{
-    id: string;
-    country_code: string;
-    status: string;
-    topic: string;
-    difficulty: number;
-    text: string;
-    locale: string;
-    has_source: boolean;
-    is_possible_duplicate: boolean;
-    source_changed: boolean;
-    created_at: Date;
-  }>(
-    `select q.id, q.country_code, q.status::text, topic.name as topic, q.difficulty,
-            wording.text, wording.locale,
-            q.source_passage_id is not null as has_source,
-            q.duplicate_of is not null as is_possible_duplicate,
-            q.source_changed_at is not null as source_changed,
-            q.created_at
+const QUESTION_QUEUE_FROM = `
      from public.questions q
      join public.topics topic on topic.id = q.topic_id
      join lateral (
@@ -218,27 +254,126 @@ export async function listQuestionQueue(
        and ($4::text is null or topic.slug = $4)
        and case $5::text
              when 'duplicate' then q.duplicate_of is not null
-             when 'no-source' then q.source_passage_id is null
-             when 'has-source' then q.source_passage_id is not null
+             when 'no-source' then q.source_passage_id is null and q.source_locator is null
+             when 'has-source' then q.source_passage_id is not null or q.source_locator is not null
+             when 'freshness' then q.needs_freshness_check
              else true
            end
-     order by q.country_code, q.created_at, q.id
-     limit 500`,
-    [queue, countryCode ?? null, likePattern(search), topic ?? null, flag ?? null],
+       and case $6::text
+             when 'official' then q.origin = 'official'
+             when 'original' then q.origin = 'original'
+             when 'pipeline' then q.origin is null
+             else true
+           end
+       and case $7::text
+             when 'easy' then q.difficulty <= 2
+             when 'medium' then q.difficulty = 3
+             when 'hard' then q.difficulty >= 4
+             else true
+           end
+       and ($8::text is null or q.type::text = $8)`;
+
+// Official numbers are "1" to "128": ordered as numbers, with anything else after them.
+const QUESTION_QUEUE_ORDER: Record<QueueSort, string> = {
+  oldest: 'q.country_code, q.created_at, q.id',
+  newest: 'q.created_at desc, q.id',
+  number: `q.country_code,
+           case when q.official_number ~ '^[0-9]+$' then q.official_number::int end nulls last,
+           q.official_number nulls last, q.created_at, q.id`,
+};
+
+/**
+ * One page of a question queue, narrowed by the filters, and the number of
+ * questions the filters leave in all.
+ */
+export async function pageQuestionQueue(
+  db: Db,
+  queue: QuestionQueue,
+  filters?: QueueFilters | string,
+  request?: Paging,
+): Promise<QueuePage<QueueQuestion>> {
+  const { countryCode, search, topic, flag, origin, level, type, sort } = asFilters(filters);
+  const params = [
+    queue,
+    countryCode ?? null,
+    likePattern(search),
+    topic ?? null,
+    flag ?? null,
+    origin ?? null,
+    level ?? null,
+    type ?? null,
+  ];
+  const { rows: counted } = await db.query<{ total: number }>(
+    `select count(*)::int as total ${QUESTION_QUEUE_FROM}`,
+    params,
   );
-  return rows.map((row) => ({
-    id: row.id,
-    countryCode: row.country_code,
-    status: row.status,
-    topic: row.topic,
-    difficulty: row.difficulty,
-    text: row.text,
-    locale: row.locale,
-    hasSource: row.has_source,
-    isPossibleDuplicate: row.is_possible_duplicate,
-    sourceChanged: row.source_changed,
-    createdAt: row.created_at,
-  }));
+  const total = counted[0]!.total;
+  const { page, pageSize, pages, offset } = paging(request, total);
+  const { rows } = await db.query<{
+    id: string;
+    country_code: string;
+    status: string;
+    topic: string;
+    difficulty: number;
+    text: string;
+    locale: string;
+    has_source: boolean;
+    is_possible_duplicate: boolean;
+    source_changed: boolean;
+    created_at: Date;
+    type: string;
+    origin: 'official' | 'original' | null;
+    official_number: string | null;
+    source_locator: string | null;
+    needs_freshness_check: boolean;
+  }>(
+    `select q.id, q.country_code, q.status::text, topic.name as topic, q.difficulty,
+            wording.text, wording.locale,
+            (q.source_passage_id is not null or q.source_locator is not null) as has_source,
+            q.duplicate_of is not null as is_possible_duplicate,
+            q.source_changed_at is not null as source_changed,
+            q.created_at, q.type::text, q.origin, q.official_number, q.source_locator,
+            q.needs_freshness_check
+     ${QUESTION_QUEUE_FROM}
+     order by ${QUESTION_QUEUE_ORDER[sort ?? 'oldest']}
+     limit $9 offset $10`,
+    [...params, pageSize, offset],
+  );
+  return {
+    total,
+    page,
+    pageSize,
+    pages,
+    items: rows.map((row) => ({
+      id: row.id,
+      countryCode: row.country_code,
+      status: row.status,
+      topic: row.topic,
+      difficulty: row.difficulty,
+      text: row.text,
+      locale: row.locale,
+      hasSource: row.has_source,
+      isPossibleDuplicate: row.is_possible_duplicate,
+      sourceChanged: row.source_changed,
+      createdAt: row.created_at,
+      type: row.type,
+      origin: row.origin,
+      officialNumber: row.official_number,
+      sourceLocator: row.source_locator,
+      needsFreshnessCheck: row.needs_freshness_check,
+    })),
+  };
+}
+
+/** A queue's questions, up to the largest page: for callers that want a plain list. */
+export async function listQuestionQueue(
+  db: Db,
+  queue: QuestionQueue,
+  filters?: QueueFilters | string,
+): Promise<QueueQuestion[]> {
+  return (
+    await pageQuestionQueue(db, queue, filters, { pageSize: PAGE_SIZES[PAGE_SIZES.length - 1] })
+  ).items;
 }
 
 export interface QueueTranslation {
@@ -250,12 +385,37 @@ export interface QueueTranslation {
   originalText: string;
 }
 
-export async function listTranslationQueue(
+const TRANSLATION_QUEUE_FROM = `
+     from public.question_translations t
+     join public.questions q on q.id = t.question_id
+     join public.question_translations original
+       on original.question_id = t.question_id and original.locale = t.translated_from
+     where t.status = 'draft' and t.translated_from is not null and q.status = 'published'
+       and ($1::text is null or q.country_code = $1)
+       and ($2::text is null or t.text ilike $2 or original.text ilike $2)
+       and ($3::text is null or t.locale = $3)`;
+
+type TranslationFilters =
+  (Pick<QueueFilters, 'countryCode' | 'search'> & { locale?: string }) | string;
+
+/** One page of the draft translations of published questions, and how many there are in all. */
+export async function pageTranslationQueue(
   db: Db,
-  filters?: (Pick<QueueFilters, 'countryCode' | 'search'> & { locale?: string }) | string,
-): Promise<QueueTranslation[]> {
+  filters?: TranslationFilters,
+  request?: Paging,
+): Promise<QueuePage<QueueTranslation>> {
   const narrowed = typeof filters === 'string' ? { countryCode: filters } : (filters ?? {});
-  const { countryCode, search, locale } = narrowed;
+  const params = [
+    narrowed.countryCode ?? null,
+    likePattern(narrowed.search),
+    narrowed.locale ?? null,
+  ];
+  const { rows: counted } = await db.query<{ total: number }>(
+    `select count(*)::int as total ${TRANSLATION_QUEUE_FROM}`,
+    params,
+  );
+  const total = counted[0]!.total;
+  const { page, pageSize, pages, offset } = paging(request, total);
   const { rows } = await db.query<{
     question_id: string;
     country_code: string;
@@ -266,26 +426,33 @@ export async function listTranslationQueue(
   }>(
     `select t.question_id, q.country_code, t.locale, t.translated_from, t.text,
             original.text as original_text
-     from public.question_translations t
-     join public.questions q on q.id = t.question_id
-     join public.question_translations original
-       on original.question_id = t.question_id and original.locale = t.translated_from
-     where t.status = 'draft' and t.translated_from is not null and q.status = 'published'
-       and ($1::text is null or q.country_code = $1)
-       and ($2::text is null or t.text ilike $2 or original.text ilike $2)
-       and ($3::text is null or t.locale = $3)
-     order by q.country_code, t.locale, t.created_at
-     limit 500`,
-    [countryCode ?? null, likePattern(search), locale ?? null],
+     ${TRANSLATION_QUEUE_FROM}
+     order by q.country_code, t.locale, t.created_at, t.question_id
+     limit $4 offset $5`,
+    [...params, pageSize, offset],
   );
-  return rows.map((row) => ({
-    questionId: row.question_id,
-    countryCode: row.country_code,
-    locale: row.locale,
-    translatedFrom: row.translated_from,
-    text: row.text,
-    originalText: row.original_text,
-  }));
+  return {
+    total,
+    page,
+    pageSize,
+    pages,
+    items: rows.map((row) => ({
+      questionId: row.question_id,
+      countryCode: row.country_code,
+      locale: row.locale,
+      translatedFrom: row.translated_from,
+      text: row.text,
+      originalText: row.original_text,
+    })),
+  };
+}
+
+export async function listTranslationQueue(
+  db: Db,
+  filters?: TranslationFilters,
+): Promise<QueueTranslation[]> {
+  return (await pageTranslationQueue(db, filters, { pageSize: PAGE_SIZES[PAGE_SIZES.length - 1] }))
+    .items;
 }
 
 /** A country's topics, for narrowing its queue. */
@@ -349,6 +516,11 @@ export interface QuestionForReview {
   correctKeys: string[];
   sourceUrl: string;
   sourceQuote: string | null;
+  /** For a question loaded from a file: where in the source its answer is. */
+  sourceLocator: string | null;
+  origin: 'official' | 'original' | null;
+  officialNumber: string | null;
+  needsFreshnessCheck: boolean;
   draftedByModel: string | null;
   sourceChangedAt: Date | null;
   lastVerifiedAt: Date | null;
@@ -380,6 +552,10 @@ export async function getQuestionForReview(db: Db, id: string): Promise<Question
     correct_answer: { keys: string[] };
     source_url: string;
     source_quote: string | null;
+    source_locator: string | null;
+    origin: 'official' | 'original' | null;
+    official_number: string | null;
+    needs_freshness_check: boolean;
     drafted_by_model: string | null;
     source_changed_at: Date | null;
     last_verified_at: Date | null;
@@ -393,6 +569,7 @@ export async function getQuestionForReview(db: Db, id: string): Promise<Question
   }>(
     `select q.id, q.country_code, country.name as country_name, q.status::text, q.version,
             q.topic_id, q.difficulty, q.correct_answer, q.source_url, q.source_quote,
+            q.source_locator, q.origin, q.official_number, q.needs_freshness_check,
             q.drafted_by_model, q.source_changed_at, q.last_verified_at,
             verifier.display_name as verified_by, q.duplicate_of,
             passage.heading as passage_heading, passage.text as passage_text,
@@ -479,6 +656,10 @@ export async function getQuestionForReview(db: Db, id: string): Promise<Question
     correctKeys: row.correct_answer.keys,
     sourceUrl: row.source_url,
     sourceQuote: row.source_quote,
+    sourceLocator: row.source_locator,
+    origin: row.origin,
+    officialNumber: row.official_number,
+    needsFreshnessCheck: row.needs_freshness_check,
     draftedByModel: row.drafted_by_model,
     sourceChangedAt: row.source_changed_at,
     lastVerifiedAt: row.last_verified_at,

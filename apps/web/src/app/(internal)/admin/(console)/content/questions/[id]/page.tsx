@@ -371,6 +371,40 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
               </p>
             )}
           </>
+        ) : question.sourceLocator || question.sourceQuote ? (
+          // Loaded from a file: the source is a document outside the app, cited by place.
+          <dl className="space-y-3 text-sm">
+            {question.origin && (
+              <div>
+                <dt className="text-fg-muted">Wording</dt>
+                <dd className="font-medium">
+                  {question.origin === 'official'
+                    ? `The official question${question.officialNumber ? `, no. ${question.officialNumber}` : ''}, copied word for word`
+                    : 'Written by Oathly from the official material'}
+                </dd>
+              </div>
+            )}
+            {question.sourceLocator && (
+              <div>
+                <dt className="text-fg-muted">Where to look</dt>
+                <dd className="font-medium">{question.sourceLocator}</dd>
+              </div>
+            )}
+            {question.sourceQuote && (
+              <div>
+                <dt className="text-fg-muted">The words it rests on</dt>
+                <dd className="font-medium">“{question.sourceQuote}”</dd>
+              </div>
+            )}
+            {question.needsFreshnessCheck && (
+              <div>
+                <dt className="text-fg-muted">Before approving</dt>
+                <dd className="font-medium">
+                  The answer changes over time (an officeholder or a figure). Check it is current.
+                </dd>
+              </div>
+            )}
+          </dl>
         ) : (
           <p className="text-fg-muted text-sm">
             No passage is stored for this question. Check it against the source document itself.

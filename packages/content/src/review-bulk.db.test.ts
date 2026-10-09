@@ -6,6 +6,7 @@ import {
   ensureReviewer,
   listPendingTranslationLocales,
   listQuestionQueue,
+  pageQuestionQueue,
   listReviewTopics,
   listTranslationQueue,
   ReviewError,
@@ -120,6 +121,91 @@ describe.skipIf(!url)('the review queue: filters and bulk decisions', () => {
       { slug: 'history', name: 'History' },
       { slug: 'rights', name: 'Rights and duties' },
     ]);
+  });
+
+  it('pages through a queue, and narrows it by origin, difficulty, kind and freshness', async () => {
+    // A second set, loaded as if from files: twelve official questions and one of our own.
+    const { rows: topicRows } = await pool.query<{ id: string }>(
+      `select id from public.topics where country_code = $1 and slug = 'history'`,
+      [COUNTRY],
+    );
+    const extra: string[] = [];
+    for (let n = 1; n <= 13; n += 1) {
+      const official = n <= 12;
+      const { rows } = await pool.query<{ id: string }>(
+        `insert into public.questions
+           (country_code, topic_id, difficulty, type, correct_answer, source_url, status, origin,
+            official_number, source_locator, needs_freshness_check)
+         values ($1, $2, $3, $4, '{"keys": ["a"]}', 'https://example.org/list', 'in_review', $5,
+                 $6, $7, $8)
+         returning id`,
+        [
+          COUNTRY,
+          topicRows[0]!.id,
+          official ? 3 : 5,
+          official ? 'free_response' : 'true_false',
+          official ? 'official' : 'original',
+          official ? String(13 - n) : null,
+          `Question ${n}, page 2`,
+          n === 1,
+        ],
+      );
+      extra.push(rows[0]!.id);
+      await pool.query(
+        `insert into public.question_translations (question_id, locale, text, options, status)
+         values ($1, 'en', $2, '[{"key":"a","text":"A"}]', 'draft')`,
+        [rows[0]!.id, `Paged question ${String(n).padStart(2, '0')}`],
+      );
+    }
+    try {
+      const page = (
+        filters: Parameters<typeof pageQuestionQueue>[2],
+        paging?: Parameters<typeof pageQuestionQueue>[3],
+      ) => pageQuestionQueue(pool, 'pending', filters, paging);
+
+      const first = await page({ countryCode: COUNTRY }, { pageSize: 25 });
+      expect(first).toMatchObject({ total: 17, page: 1, pageSize: 25, pages: 1 });
+      expect(first.items).toHaveLength(17);
+      // A size that is not offered falls back to the usual one, and a page past the end is the last.
+      expect(await page({ countryCode: COUNTRY }, { pageSize: 7, page: 9 })).toMatchObject({
+        pageSize: 50,
+        page: 1,
+        pages: 1,
+      });
+      expect((await page({ countryCode: COUNTRY }, { page: -3 })).page).toBe(1);
+
+      // The filters narrow the total as well as the page.
+      const official = await page({ countryCode: COUNTRY, origin: 'official' });
+      expect(official.total).toBe(12);
+      expect(official.items[0]).toMatchObject({
+        origin: 'official',
+        type: 'free_response',
+        sourceLocator: 'Question 1, page 2',
+        hasSource: true,
+        needsFreshnessCheck: true,
+      });
+      expect((await page({ countryCode: COUNTRY, origin: 'original' })).total).toBe(1);
+      expect((await page({ countryCode: COUNTRY, origin: 'pipeline' })).total).toBe(4);
+      expect((await page({ countryCode: COUNTRY, level: 'easy' })).total).toBe(4);
+      expect((await page({ countryCode: COUNTRY, level: 'medium' })).total).toBe(12);
+      expect((await page({ countryCode: COUNTRY, level: 'hard' })).total).toBe(1);
+      expect((await page({ countryCode: COUNTRY, type: 'true_false' })).total).toBe(1);
+      expect((await page({ countryCode: COUNTRY, flag: 'freshness' })).total).toBe(1);
+      // A place in a document counts as a source to check against.
+      expect((await page({ countryCode: COUNTRY, flag: 'has-source' })).total).toBe(13);
+      expect((await page({ countryCode: COUNTRY, flag: 'no-source' })).total).toBe(4);
+
+      // Official numbers sort as numbers: 1, 2, ... 12, not 1, 10, 11.
+      const byNumber = await page({ countryCode: COUNTRY, origin: 'official', sort: 'number' });
+      expect(byNumber.items.map((question) => question.officialNumber)).toEqual(
+        Array.from({ length: 12 }, (_, i) => String(i + 1)),
+      );
+      const newest = await page({ countryCode: COUNTRY, sort: 'newest' });
+      expect(newest.items[0]!.text).toBe('Paged question 13');
+      expect(newest.items.at(-1)!.text).toBe('What is the capital of Bulkland?');
+    } finally {
+      await pool.query('delete from public.questions where id = any($1)', [extra]);
+    }
   });
 
   it('refuses a bulk decision with nothing selected, too much selected, or no reason given', async () => {

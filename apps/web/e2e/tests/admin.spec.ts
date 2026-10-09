@@ -98,6 +98,61 @@ test('the queue narrows by country, words and topic', async ({ page }) => {
   await expect(page).toHaveURL(/\/admin\/content\?view=questions$/);
 });
 
+test('a long queue is paged, and the filters keep their place', async ({ page }) => {
+  test.slow();
+  // Thirty of this test's own, found by a tag nothing else has.
+  const tag = `paged ${Math.random().toString(36).slice(2, 8)}`;
+  await addQuestionsToReview(
+    Array.from({ length: 30 }, (_, i) => 101 + i),
+    tag,
+  );
+  await signInAsReviewer(
+    page,
+    `/admin/content?view=questions&country=ZZ&per=25&q=${encodeURIComponent(tag)}`,
+  );
+  const summary = page.getByTestId('page-summary');
+  await expect(summary).toHaveText('1 to 25 of 30 questions');
+  await expect(page.locator('input[name="ids"]')).toHaveCount(25);
+  const pages = page.getByRole('navigation', { name: 'Pages' });
+  await expect(pages.locator('[aria-current="page"]')).toHaveText('Page 1');
+  await expectAccessibleInBothThemes(page, 'review queue, paged');
+
+  await pages.getByRole('link', { name: 'Next' }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(summary).toHaveText('26 to 30 of 30 questions');
+  await expect(page.locator('input[name="ids"]')).toHaveCount(5);
+  // The search and the page size came along.
+  await expect(page).toHaveURL(/per=25/);
+  await expect(page.getByLabel('Search questions')).toHaveValue(tag);
+
+  // Changing a filter starts again from the first page.
+  await page.getByLabel('Order').selectOption({ label: 'Newest first' });
+  await expect(page).toHaveURL(/sort=newest/);
+  await expect(page).not.toHaveURL(/page=2/);
+  await expect(summary).toHaveText('1 to 25 of 30 questions');
+
+  // These were drafted in the test, not loaded from a file: none is an official question.
+  const origin = page.getByLabel('Where the wording comes from');
+  await origin.selectOption({ label: 'Official questions' });
+  await expect(page.getByText('Nothing matches these filters.')).toBeVisible();
+  // Taking the filter off by its chip resets its menu too, so the next change does not bring it back.
+  await page.getByRole('link', { name: /Official questions/ }).click();
+  await expect(page).not.toHaveURL(/origin=/);
+  await expect(origin).toHaveValue('');
+  await page.getByLabel('Kind of question').selectOption({ label: 'Multiple choice' });
+  await expect(page).toHaveURL(/type=multiple_choice/);
+  await page.getByLabel('Difficulty').selectOption({ label: 'Easy (1 to 2)' });
+  await expect(page).toHaveURL(/level=easy/);
+  await expect(page).not.toHaveURL(/origin=/);
+  await expect(summary).toHaveText('1 to 25 of 30 questions');
+
+  // A page past the end shows the last one.
+  await page.goto(
+    `/admin/content?view=questions&country=ZZ&per=25&page=99&q=${encodeURIComponent(tag)}`,
+  );
+  await expect(summary).toHaveText('26 to 30 of 30 questions');
+});
+
 test('several questions are approved or rejected at once', async ({ page }) => {
   // Four of this test's own, found by a tag nothing else has.
   const tag = `set ${Math.random().toString(36).slice(2, 8)}`;
