@@ -1,0 +1,236 @@
+{
+  "iso": "GB",
+  "researched_at": "2026-10-09T00:00:00Z",
+  "sources": [
+    {
+      "id": "handbook",
+      "kind": "study_guide",
+      "title": "Life in the United Kingdom: A Guide for New Residents",
+      "url": "https://www.officiallifeintheuk.co.uk/shop",
+      "publisher": "Home Office (sold through the official Life in the UK Test shop)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "reuse_unclear",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": null,
+        "url": null
+      },
+      "file": null,
+      "sha256": null,
+      "text_sha256": null,
+      "bytes": null,
+      "retrieved_at": "2026-10-09T19:50:00.000Z",
+      "notes": "The only text the test is based on. It is sold as a book, an eBook and in audio; no free official copy is published, so there is no downloaded copy. It was not bought and not read: its edition, contents and licence terms are not recorded here, and no question in this pack is taken from it."
+    },
+    {
+      "id": "life-in-the-uk-test",
+      "kind": "format_page",
+      "title": "Life in the UK Test",
+      "url": "https://www.gov.uk/life-in-the-uk-test",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "life-in-the-uk-test.html",
+      "sha256": "ee6db9cb2d05001532d7f38adbae2f2bedb8d6394d13fc710d16d60ba53660da",
+      "text_sha256": "1fa9248d738dc4e2ec1cacee51306bd72a0e7f12b8b0261cf8e89510a3f5e4fb",
+      "bytes": 65939,
+      "retrieved_at": "2026-10-09T20:12:47.710Z",
+      "notes": "The whole guide (printable version): booking, the format (45 minutes, 24 questions, 75% to pass, £50), who does not need to take it. Says \"You’ll only be tested on information from the official Guide for New Residents.\""
+    },
+    {
+      "id": "how-government-works",
+      "kind": "other",
+      "title": "How government works",
+      "url": "https://www.gov.uk/government/how-government-works",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "how-government-works.html",
+      "sha256": "b38e67118f4b1ced97b9233fa698df8f667d133875b25636d47be93c84098a64",
+      "text_sha256": "e602c1c9d4cce6e127d3e9a58657a3957aa2e4f2ea2e08d28db77c1984ba67f0",
+      "bytes": 81654,
+      "retrieved_at": "2026-10-09T20:12:11.729Z",
+      "notes": "Who runs government, the Civil Service, legislation, devolved and local government, Parliament. It names the Prime Minister of the day and counts ministers: no question rests on those."
+    },
+    {
+      "id": "elections-in-the-uk",
+      "kind": "other",
+      "title": "Types of election, referendums, and who can vote",
+      "url": "https://www.gov.uk/elections-in-the-uk",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "elections-in-the-uk.html",
+      "sha256": "2deace58422cd4f5791cb03a254eaf80e8ecf922c0f04f95d876460a2dbbff7b",
+      "text_sha256": "85ed0a262a381c9f2f5a87d6962db7e896faabe08aa2dee13c8b307c2557186f",
+      "bytes": 74288,
+      "retrieved_at": "2026-10-09T20:12:45.590Z",
+      "notes": "The printable version of the whole guide. Its section on the Senedd is not used: the numbers there may predate the changes to the Senedd made for the 2026 election."
+    },
+    {
+      "id": "jury-service",
+      "kind": "other",
+      "title": "Jury service",
+      "url": "https://www.gov.uk/jury-service",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "jury-service.html",
+      "sha256": "5423d4c43ee2aec1dde81bddeb67762570e8ca0f1b71c7c7a77b21d0cefd7501",
+      "text_sha256": "7757ecf9eec64a39b57ed9f8d408e9b11bff2cd835b4a62ed76c49113bff740c",
+      "bytes": 88643,
+      "retrieved_at": "2026-10-09T20:12:46.597Z",
+      "notes": "The printable version of the whole guide. It covers England and Wales; it says Scotland and Northern Ireland have different rules."
+    },
+    {
+      "id": "how-your-council-works",
+      "kind": "other",
+      "title": "Understand how your council works",
+      "url": "https://www.gov.uk/understand-how-your-council-works",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "how-your-council-works.html",
+      "sha256": "0e78cbc14883c59d84500cb0f2c3ec317629a324a5abf4cdee937961ad7bb442",
+      "text_sha256": "06a1b6a609b02a955583b307d1f508048d032230792d98847613da61bbbeb4d1",
+      "bytes": 81492,
+      "retrieved_at": "2026-10-09T20:12:48.822Z",
+      "notes": "Types of council in England."
+    },
+    {
+      "id": "bank-holidays",
+      "kind": "other",
+      "title": "UK bank holidays",
+      "url": "https://www.gov.uk/bank-holidays",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "bank-holidays.html",
+      "sha256": "b7f3fa80b9e576dd1ed7fef67f20c5caf29278808bd1de17c6a53de776ae610b",
+      "text_sha256": "6df6d090e0b486575f624745a3bd62d2fb2c82ec117361fd9a808af15f0d6a77",
+      "bytes": 175926,
+      "retrieved_at": "2026-10-09T20:12:15.198Z",
+      "notes": "Lists for England and Wales, Scotland and Northern Ireland. The dates change each year; only which nation has which holiday is used."
+    },
+    {
+      "id": "govuk-terms",
+      "kind": "other",
+      "title": "Terms and conditions",
+      "url": "https://www.gov.uk/help/terms-conditions",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "Most content on GOV.UK is subject to Crown copyright protection and is published under the Open Government Licence (OGL), which also sets out which content is exempt.",
+        "url": "https://www.gov.uk/help/terms-conditions"
+      },
+      "file": "govuk-terms.html",
+      "sha256": "cc7ec3fd03dffde69ba9f5cad2e5b0a70d2dc9527b7e20123a4a17309e772427",
+      "text_sha256": "db3c534ae1baf319159478b837f97e49ec6c51d63681ea313192717b429dac18",
+      "bytes": 80784,
+      "retrieved_at": "2026-10-09T20:12:16.861Z",
+      "notes": "GOV.UK’s terms: the wording the licence of every GOV.UK page in this pack rests on."
+    },
+    {
+      "id": "ogl-v3",
+      "kind": "other",
+      "title": "Open Government Licence for public sector information, version 3.0",
+      "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "publisher": "The National Archives",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "Open Government Licence v3.0",
+        "commercial_use": "allowed",
+        "text": "exploit the Information commercially and non-commercially for example, by combining it with other Information, or by including it in your own product or application.",
+        "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+      },
+      "file": "open-government-licence-v3.html",
+      "sha256": "f5b2b9f2af63647cde889fa6c3508f5705925295b74912c68caa28dd37e64aa5",
+      "text_sha256": "4fbd104c11c5ac2342548075961a9721ca9e9c4986c27e16d356e493b57b20be",
+      "bytes": 10450,
+      "retrieved_at": "2026-10-09T20:12:15.914Z",
+      "notes": "The licence itself. It allows commercial use and requires the attribution \"Contains public sector information licensed under the Open Government Licence v3.0.\""
+    }
+  ],
+  "not_found": [
+    {
+      "kind": "question_bank",
+      "searched": "No list of test questions is published. The Life in the UK Test guide on GOV.UK says only that the 24 questions are based on the Life in the UK handbook."
+    },
+    {
+      "kind": "practice_test",
+      "searched": "The GOV.UK guide mentions an e-learning subscription and an official practice app, both from the official shop. No free official practice test is published on GOV.UK."
+    },
+    {
+      "kind": "interview_questions",
+      "searched": "The test is taken on a computer at a test centre; the GOV.UK guide describes no interview and lists no interview questions."
+    }
+  ]
+}
