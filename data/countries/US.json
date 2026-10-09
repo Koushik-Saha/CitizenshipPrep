@@ -22,16 +22,25 @@
   "fee": null,
   "official_study_material": [
     {
-      "title": "128 Civics Test Questions and Answers (M-1778)",
+      "title": "128 Civics Questions and Answers (2025 version), M-1778",
       "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
       "publisher": "U.S. Citizenship and Immigration Services",
       "kind": "question_bank",
       "language": "en",
-      "license": null,
-      "reusable": "unclear"
+      "license": "Public domain: a work of the United States Government (17 U.S.C. 105)",
+      "reusable": "yes"
+    },
+    {
+      "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide (M-1175)",
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "kind": "study_guide",
+      "language": "en",
+      "license": "Public domain: a work of the United States Government (17 U.S.C. 105); its pictures are credited to others and are not covered",
+      "reusable": "yes"
     }
   ],
-  "last_researched_at": "2026-10-08T00:00:00Z",
+  "last_researched_at": "2026-10-09T00:00:00Z",
   "citations": {
     "has_exam": [
       "https://www.uscis.gov/citizenship-resource-center/naturalization-test-and-study-resources/2025-civics-test",
@@ -51,7 +60,9 @@
     ],
     "exemptions": ["https://www.uscis.gov/citizenship/exceptions-and-accommodations"],
     "official_study_material": [
-      "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf"
+      "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "https://www.copyright.gov/title17/92chap1.html"
     ]
   },
   "unverified": {
@@ -64,5 +75,5 @@
     "summary": "The 2025 civics test replaced the 2008 one for applications filed on or after 20 October 2025: 128 questions on the list, up to 20 asked, 12 needed.",
     "url": "https://www.uscis.gov/citizenship-resource-center/naturalization-test-and-study-resources/2025-civics-test"
   },
-  "notes": "The whole question list is published by the agency. Works of the United States government are generally in the public domain, but the agency’s own copyright page could not be opened here, so the licence is left unconfirmed. A separate English test (reading, writing, speaking) is part of the same interview."
+  "notes": "The whole question list is published by the agency, with a study guide. Both are works of the United States Government, which 17 U.S.C. 105 leaves outside copyright; the guide's pictures are credited to others and are not covered. A separate English test (reading, writing, speaking) is part of the same interview. Source pack: data/sources/US."
 }

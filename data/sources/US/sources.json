@@ -1,0 +1,208 @@
+{
+  "iso": "US",
+  "researched_at": "2026-10-09T00:00:00Z",
+  "sources": [
+    {
+      "id": "civics-questions-2025",
+      "kind": "question_bank",
+      "title": "128 Civics Questions and Answers (2025 version)",
+      "url": "https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "publication_date": null,
+      "version": "M-1778 (09/25)",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "2025-Civics-Test-128-Questions-and-Answers.pdf",
+      "sha256": "f280608c0fb6dc1eba344b4746a7ba52d02fe411fba30cedd4371819f0abe11c",
+      "text_sha256": "a319e44341a262978f042c03a0c074c90ae21166d9d11f080b0932fb7b7a1751",
+      "bytes": 224823,
+      "retrieved_at": "2026-10-09T01:20:50.547Z",
+      "notes": "The document carries no licence notice. Classified under 17 U.S.C. 105(a): it is a work of the United States Government. The cover gives only a month (09/25), so no exact publication date is recorded. Questions marked with an asterisk are the 20 for applicants aged 65 or over with 20 years of residence."
+    },
+    {
+      "id": "study-guide-2025",
+      "kind": "study_guide",
+      "title": "One Nation, One People: The USCIS 2025 Civics Test Study Guide",
+      "url": "https://www.uscis.gov/sites/default/files/document/brochures/USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "publication_date": null,
+      "version": "M-1175, 2025 version",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "USCIS-2025-Civics-Test-Study-Guide.pdf",
+      "sha256": "a4b3fbb094d719f728117bc349370ae9ed03569f82b0aa637caf113161b2832c",
+      "text_sha256": "ff595ea527778cf2cfbeb090e9cbc3c9a84b51b3850c8fd32f8bc41e77b5afa5",
+      "bytes": 40809399,
+      "retrieved_at": "2026-10-09T01:20:53.015Z",
+      "notes": "The text is a work of the United States Government and is classified under 17 U.S.C. 105(a). Many of its pictures are credited to others (\"Courtesy of the Library of Congress\", named photographers and museums): the classification is for the text only, and no image from it should be reused without checking its own credit. No publication date is printed."
+    },
+    {
+      "id": "civics-test-2025-page",
+      "kind": "format_page",
+      "title": "2025 Civics Test",
+      "url": "https://www.uscis.gov/citizenship-resource-center/naturalization-test-and-study-resources/2025-civics-test",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "publication_date": "2025-09-17",
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "2025-civics-test.html",
+      "sha256": "d5f189ca923242d2ae644a3045ef83c278389e6bee6a20d6fcc1fe825d82895f",
+      "text_sha256": "0de7c715ea93c0d6955a934e6beb92fbfe3c1edf1e8bb6a7507adba8e59e28d1",
+      "bytes": 82341,
+      "retrieved_at": "2026-10-09T01:20:53.725Z",
+      "notes": "States the format: oral, 20 questions from the list of 128, 12 correct to pass, stopped at 12 correct or 9 incorrect; for Form N-400 filed on or after 20 October 2025. \"Last Reviewed/Updated: 09/17/2025\"."
+    },
+    {
+      "id": "test-updates",
+      "kind": "other",
+      "title": "Check for Test Updates",
+      "url": "https://www.uscis.gov/citizenship/find-study-materials-and-resources/check-for-test-updates",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "publication_date": "2025-09-18",
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "check-for-test-updates.html",
+      "sha256": "916fa63fa3237429c34d2f1365e2994b76e80149e12cca83a5298cf00bf15d67",
+      "text_sha256": "c035ab9cf206e5eb75297cb92fb01dd673b5f7ff2e732a5e77a4608b08af48d1",
+      "bytes": 86657,
+      "retrieved_at": "2026-10-09T01:20:54.485Z",
+      "notes": "Lists the questions whose answers change with elections and appointments (senators, representative, President, Vice President, Governor, Speaker, Chief Justice, party of the President). The page to recheck for freshness."
+    },
+    {
+      "id": "federal-register-notice",
+      "kind": "legislation",
+      "title": "Implementation of 2025 Naturalization Civics Test (90 FR 45047)",
+      "url": "https://www.federalregister.gov/public-inspection/2025-18050/implementation-of-2025-naturalization-civics-test",
+      "publisher": "Department of Homeland Security, U.S. Citizenship and Immigration Services",
+      "publication_date": "2025-09-18",
+      "version": "Document 2025-18050",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "federal-register-2025-18050.html",
+      "sha256": "9aaff9c4a3d02da2a87080af74ce5385c8fa45f5ae2ae057108bad8d2ce60bad",
+      "text_sha256": "1b5846a88ce3e1ea100a4c164c121811936a84ab76e6978b8ed03c3ca0ae68c7",
+      "bytes": 120367,
+      "retrieved_at": "2026-10-09T01:20:55.991Z",
+      "notes": "The notice that puts the 2025 test in place; effective 18 September 2025. The address is the public-inspection link USCIS gives, which now shows the published notice."
+    },
+    {
+      "id": "cfr-312-2",
+      "kind": "legislation",
+      "title": "8 CFR 312.2: Knowledge of history and government of the United States",
+      "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-01-01/title-8.xml?part=312&section=312.2",
+      "publisher": "Office of the Federal Register (eCFR)",
+      "publication_date": null,
+      "version": "As in force on 2026-01-01",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "8-cfr-312.2.xml",
+      "sha256": "ce2b51a1f3a89e1451e6a92bd91af93ca7442b89c15e27c0fa24941530136f63",
+      "text_sha256": "b895f471245b1d5eed6dabc0a15c937d5a4cc14c9afd86073ed240a9085766b6",
+      "bytes": 5939,
+      "retrieved_at": "2026-10-09T01:20:56.915Z",
+      "notes": "The regulation that requires the examination. Downloaded from the eCFR as XML for the date shown."
+    },
+    {
+      "id": "copyright-statute",
+      "kind": "legislation",
+      "title": "17 U.S.C. chapter 1 (section 105: United States Government works)",
+      "url": "https://www.copyright.gov/title17/92chap1.html",
+      "publisher": "U.S. Copyright Office",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "17-usc-chapter-1.html",
+      "sha256": "97999d678e2877c8142da81a0dce819b210e9f92aa5a405d130bf2f2e50c7d75",
+      "text_sha256": "219514ff71bebf467cda0437c2415e317985de76a3ed82c0753e3ec8391df069",
+      "bytes": 675161,
+      "retrieved_at": "2026-10-09T01:20:57.846Z",
+      "notes": "The statute the public-domain classification of the USCIS documents rests on. Kept so the wording relied on can be checked."
+    },
+    {
+      "id": "study-materials-page",
+      "kind": "other",
+      "title": "Study for the Test",
+      "url": "https://www.uscis.gov/citizenship/find-study-materials-and-resources/study-for-the-test",
+      "publisher": "U.S. Citizenship and Immigration Services",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Copyright protection under this title is not available for any work of the United States Government, but the United States Government is not precluded from receiving and holding copyrights transferred to it by assignment, bequest, or otherwise.",
+        "url": "https://www.copyright.gov/title17/92chap1.html"
+      },
+      "file": "study-for-the-test.html",
+      "sha256": "2973aae438946d2c60d337d7a573aaf85ffedcd58ef7c828716e670a84522e98",
+      "text_sha256": "8071f36b2399be1c42e166b9aa3b688a3d8f6d01db63619251b7201cc19801b2",
+      "bytes": 99417,
+      "retrieved_at": "2026-10-09T01:20:58.513Z",
+      "notes": "The index of every USCIS study resource, including the 2008-test materials and the English reading and writing vocabulary lists, which were not downloaded: they are for the English test, not the civics test."
+    }
+  ],
+  "not_found": [
+    {
+      "kind": "practice_test",
+      "searched": "The 2025 Civics Test page links only the question list and the study guide. The Study for the Test index lists \"Interactive Practice Tests\" as a type of resource, but no practice test for the 2025 version was found on either page."
+    },
+    {
+      "kind": "interview_questions",
+      "searched": "There is no separate list of sample interview questions for civics: the test is itself asked aloud at the interview, and the 128-question list is what the officer asks from. USCIS also publishes English reading and writing vocabulary lists for the English test, noted under the Study for the Test page."
+    }
+  ]
+}
