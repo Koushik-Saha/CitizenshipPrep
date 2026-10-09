@@ -11,6 +11,7 @@ import { slugify } from './text';
 import { questionStats } from './question-stats';
 import { recheckSourceFiles, saveSourceFile, type SourceRecheck } from './source-files';
 import { loadEnv, repoRoot } from './env';
+import { importQuestionFiles } from './pipeline/import-files';
 import { checkSources } from './pipeline/check-sources';
 import { draftQuestions } from './pipeline/draft';
 import { ingestSource } from './pipeline/ingest';
@@ -33,6 +34,11 @@ Usage: pnpm content <command> [options]
   topic          Add or rename one of the guide's own topics. Do this before drafting:
                  drafts are filed under the topics that exist
                  --country US --slug american-government --name "American Government" [--order 1]
+
+  import-questions  Load data/questions/<ISO>/ into the review queue. Only questions the
+                 fact-check passed (review.csv) are loaded, as in_review: a reviewer
+                 publishes them at /admin/content. Safe to run again
+                 --country US [--dry-run]
 
   exam-format    Add or update an exam format for a country
                  --country US --slug civics --name "Civics test" --type written|oral|interview|language
@@ -244,6 +250,10 @@ async function main(): Promise<void> {
       `${countries.length} pack(s) checked; ${changed.length} source(s) not confirmed the same.`,
     );
     if (changed.length > 0) console.log(JSON.stringify(changed, null, 2));
+    // A scheduled run should fail when a source has changed or gone, so someone looks.
+    if (changed.some((check) => check.result === 'changed' || check.result === 'unreachable')) {
+      process.exitCode = 1;
+    }
     return;
   }
   if (command === 'question-stats') {
@@ -302,6 +312,26 @@ async function main(): Promise<void> {
           ...(order === null ? {} : { sortOrder: Number(order) }),
         });
         console.log(`Saved topic ${country}/${slug}.`);
+        break;
+      }
+
+      case 'import-questions': {
+        const country = countryCode(values, 'country');
+        const dryRun = Boolean(values['dry-run']);
+        const outcome = await importQuestionFiles(pool, dataDir, country, { dryRun });
+        console.log(
+          `${dryRun ? 'Would add' : 'Added'} ${outcome.added} question(s) to the review queue, ` +
+            `${dryRun ? 'would update' : 'updated'} ${outcome.updated} already waiting, skipped ${outcome.skipped.length}.`,
+        );
+        const reasons = new Map<string, number>();
+        for (const { reason } of outcome.skipped)
+          reasons.set(reason, (reasons.get(reason) ?? 0) + 1);
+        for (const [reason, count] of reasons) console.log(`  skipped ${count}: ${reason}`);
+        if (!dryRun) {
+          console.log(
+            `They are waiting at /admin/content?country=${country}. Nothing is published.`,
+          );
+        }
         break;
       }
 

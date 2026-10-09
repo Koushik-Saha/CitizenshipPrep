@@ -134,3 +134,36 @@ for (const [path, name] of publicPages) {
     await expectAccessibleInBothThemes(page, name);
   });
 }
+
+test('without WebGL the landing page keeps its poster and loads no 3D', async ({ page }) => {
+  // A browser with no WebGL at all: no context to be had, and no sign of support.
+  await page.addInitScript(() => {
+    // @ts-expect-error removing it is the point
+    delete window.WebGL2RenderingContext;
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind: string, ...rest: unknown[]) {
+      if (kind.includes('webgl')) return null;
+      // @ts-expect-error passing the call through unchanged
+      return original.call(this, kind, ...rest);
+    } as typeof original;
+  });
+  const scripts: string[] = [];
+  page.on('requestfinished', (request) => scripts.push(new URL(request.url()).pathname));
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('landing.heroTitle'));
+  const poster = page.locator('img[src*="globe"]').first();
+  await expect(poster).toBeVisible();
+  expect(
+    await poster.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
+  ).toBe(true);
+
+  // Longer than the page waits before it would start the 3D: it never does.
+  await page.waitForTimeout(7000);
+  await expect(page.locator('canvas')).toHaveCount(0);
+  await expect(poster).toBeVisible();
+  expect(scripts.filter((path) => /\.(glb|ktx2|wasm)$/.test(path))).toEqual([]);
+  expect(errors).toEqual([]);
+});

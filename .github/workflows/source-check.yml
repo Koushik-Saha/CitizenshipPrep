@@ -1,5 +1,7 @@
 name: Source check
 
+# Two checks, monthly. The second (packs) covers the files in data/sources/.
+#
 # Re-fetches every stored study guide, re-hashes it, and flags the questions
 # whose cited passage is no longer there. Flagged questions show up under
 # "Source changed" at /admin/content. The run fails if a source cannot be
@@ -36,3 +38,32 @@ jobs:
             exit 0
           fi
           pnpm content check-sources | tee -a "$GITHUB_STEP_SUMMARY"
+
+  packs:
+    # The official documents recorded for each country in data/sources/: each is
+    # downloaded again and compared with its recorded hash. Needs no database.
+    # The run fails if one has changed or cannot be reached; /check-freshness
+    # then works out which questions are affected.
+    name: Re-download source packs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check source packs
+        run: |
+          if ! ls data/sources/*/sources.json >/dev/null 2>&1; then
+            echo "::notice::No country has a source pack yet."
+            exit 0
+          fi
+          set -o pipefail
+          pnpm content source-check | tee -a "$GITHUB_STEP_SUMMARY"

@@ -9,6 +9,7 @@ export * from './duplicates';
 export * from './pipeline/audio';
 export * from './pipeline/check-sources';
 export * from './pipeline/draft';
+export * from './pipeline/import-files';
 export * from './pipeline/ingest';
 export * from './pack';
 export * from './pipeline/translate';

@@ -65,6 +65,11 @@ it on the repository's own data. Validate with it rather than with the JSON Sche
 Schema cannot say that an answer points at one of its own options, that every fact in a profile is
 cited, or that an official question comes from a source whose licence allows copying it.
 
+`pnpm content import-questions --country <ISO>` is how a question written as a file reaches the
+app: it loads the ones the fact-check passed into the review queue as `in_review`, where a
+reviewer approves them like any other. It never publishes, it can be run again, and it leaves alone
+any question a reviewer has already decided.
+
 Three more commands work on these files:
 
 - `pnpm content source-file --country <ISO> --url <address>` downloads one official document into
