@@ -44,10 +44,7 @@
     "difficulty": 2,
     "language": "en",
     "question": "You should follow the law even if no one is watching.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "Commitment to the Rule of Law is an Australian value. Everybody should obey the law at all times, or face penalties.",
     "source": {
@@ -77,10 +74,7 @@
     "difficulty": 2,
     "language": "en",
     "question": "Australian laws apply only to Australian citizens.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 1,
     "explanation": "The law applies to everyone who is in Australia. Whatever your background or culture, you must follow Australian laws.",
     "source": {
@@ -110,12 +104,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Who determines Australia’s laws?",
-    "options": [
-      "Religious leaders",
-      "The King",
-      "The police",
-      "Parliaments elected by the people"
-    ],
+    "options": ["Religious leaders", "The King", "The police", "Parliaments elected by the people"],
     "correct_option_index": 3,
     "explanation": "Australia is a parliamentary democracy. Because citizens vote for the people who sit in parliament, they are involved in how the country is governed.",
     "source": {
@@ -145,12 +134,7 @@
     "difficulty": 2,
     "language": "en",
     "question": "Under the Rule of Law, who is above the law?",
-    "options": [
-      "Religious leaders",
-      "The police",
-      "No person or group",
-      "The Prime Minister"
-    ],
+    "options": ["Religious leaders", "The police", "No person or group", "The Prime Minister"],
     "correct_option_index": 2,
     "explanation": "All Australians are equal in relation to the law. Laws and legal systems protect everyone and apply to everyone.",
     "source": {
@@ -180,10 +164,7 @@
     "difficulty": 2,
     "language": "en",
     "question": "Voting is compulsory in Australia.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "Compulsory voting shows how important taking part in elections is. The power of the government comes from the people who vote.",
     "source": {
@@ -248,10 +229,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Freedom of speech means it is acceptable to promote violence against a group of people because of their religion.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 1,
     "explanation": "People may express their ideas freely so long as it is within the law. Promoting violence against a person or group is against Australian values and the law.",
     "source": {
@@ -281,10 +259,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Newspapers, television and radio outlets have the same freedom of speech as individuals.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "People are free to say and write what they think about any topic. The booklet says the news media have the same freedom.",
     "source": {
@@ -349,10 +324,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Religious laws have legal status in Australia.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 1,
     "explanation": "People are free to follow any religion, but religious practices must not break Australian laws. Australian law must be followed by everyone, even where it differs from religious laws.",
     "source": {
@@ -417,10 +389,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Under Australian law, two men or two women can marry each other.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "Australian society values the equal rights of all people, regardless of gender or sexual orientation. Two people can marry each other under the law.",
     "source": {
@@ -520,10 +489,7 @@
     "difficulty": 2,
     "language": "en",
     "question": "Physical violence against a spouse or partner is a criminal offence in Australia.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "Men and women are protected by the law from intimidation and violence. Violence against a spouse or partner is never acceptable.",
     "source": {
@@ -658,10 +624,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "Verbal abuse is legal in Australia as long as there is no physical violence.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 1,
     "explanation": "Individuals must respect the freedom and dignity of others. Violence of any kind, including verbal and physical abuse, is illegal.",
     "source": {
@@ -901,10 +864,7 @@
     "difficulty": 3,
     "language": "en",
     "question": "An Australian citizen who is also a citizen of another country must still follow all Australian laws while in Australia.",
-    "options": [
-      "True",
-      "False"
-    ],
+    "options": ["True", "False"],
     "correct_option_index": 0,
     "explanation": "Dual citizenship does not change this. Some Australian laws must be followed by Australian citizens even when they are overseas.",
     "source": {
