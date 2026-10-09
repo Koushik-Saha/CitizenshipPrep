@@ -22,6 +22,20 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
           >
             Oathly content review
           </Link>
+          <nav aria-label="Sections" className="flex gap-4 text-sm font-medium">
+            <Link
+              href="/admin/content"
+              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Questions
+            </Link>
+            <Link
+              href="/admin/community"
+              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Community
+            </Link>
+          </nav>
           <div className="flex items-center gap-4 text-sm">
             <p className="text-fg-muted">
               Signed in as <span className="text-fg font-medium">{reviewer.displayName}</span>

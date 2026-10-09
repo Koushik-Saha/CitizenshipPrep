@@ -25,6 +25,14 @@ export const rateLimitRules = {
   examResult: { limit: 10, windowSeconds: 60 * 60 },
   /** Tries at the reviewers' password from one network address. */
   adminSignIn: { limit: 10, windowSeconds: 15 * 60 },
+  /** Posts one learner starts in the study groups. */
+  communityPost: { limit: 5, windowSeconds: 60 * 60 },
+  /** Comments one learner writes. */
+  communityComment: { limit: 20, windowSeconds: 60 * 60 },
+  /** Upvotes given or taken back by one learner. */
+  communityVote: { limit: 60, windowSeconds: 60 },
+  /** Reports made by one learner: enough to flag a bad thread, not to bury a group. */
+  communityReport: { limit: 10, windowSeconds: 60 * 60 },
   /** Attempts to delete an account: the real one needs only one. */
   accountDeletion: { limit: 5, windowSeconds: 60 * 60 },
 } as const satisfies Record<string, RateLimitRule>;

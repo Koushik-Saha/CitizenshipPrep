@@ -59,6 +59,13 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
             explanations you ask for. Do not put anything personal in them.
           </li>
           <li>
+            <strong>What you write in study groups.</strong> Your posts, comments and the posts you
+            mark as helpful. Other learners studying the same country can read your posts and
+            comments, with your name if you have set one. Each is checked automatically for abuse,
+            advertising and requests for legal advice before it is shown, and may be read by a
+            moderator.
+          </li>
+          <li>
             <strong>Purchases.</strong> Which plan you hold, when it renews or ends, and the
             reference our payment provider or your phone&apos;s store gives us for it. We never see
             or store your card details.
@@ -139,10 +146,10 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
       <Section title="How long we keep it">
         <p>
           For as long as you have an account. When you delete your account, your profile, study
-          plan, answers, progress, memberships and purchase records here are deleted at once.
-          Backups that still hold them expire within 30 days. Our payment providers keep their own
-          records of payments for as long as tax and accounting law requires. Error reports are kept
-          for up to 90 days.
+          plan, answers, progress, study-group posts and comments, memberships and purchase records
+          here are deleted at once. Backups that still hold them expire within 30 days. Our payment
+          providers keep their own records of payments for as long as tax and accounting law
+          requires. Error reports are kept for up to 90 days.
         </p>
       </Section>
 

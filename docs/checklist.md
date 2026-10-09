@@ -56,9 +56,10 @@ Two standing differences from the playbook's wording: the database is Neon, not 
       the tutor answers from study material only and refuses the rest. Proved by CI: no secret in any
       client bundle.
 - [x] **P9** Proof: `packages/core/src/readiness.test.ts`.
-- [ ] **P10** Lighthouse mobile performance of 90 or more is enforced in CI. Not met: landing
-      JavaScript is 141.5 KiB against 130; the mobile LCP limit CI can hold is 3.5 s against a target
-      of 1.5 s. Not proved: the poster with WebGL off.
+- [~] **P10** Lighthouse mobile performance of 90 or more is enforced in CI. The poster with
+  WebGL off is proved by `public.spec.ts`, "without WebGL the landing page keeps its poster and
+  loads no 3D". Not met: landing JavaScript is 141.5 KiB against 130 (the framework alone is about
+  128), and the mobile LCP limit CI can hold is 3.5 s against a target of 1.5 s.
 - [x] **P11** Proof: CI job "Performance budgets" runs the JavaScript budget, Lighthouse for
       mobile and desktop, and `navigation.mjs`, which fails at 100 ms. The numbers are in each run's
       log and its `lighthouse-reports` artifact, not in a file in the repository.
@@ -75,7 +76,11 @@ Two standing differences from the playbook's wording: the database is Neon, not 
   either side unlocks the other, and a cancellation runs to the end of its period. Missing: a real
   test purchase. That needs Stripe prices for the plans and a RevenueCat project with store
   products, which are yours to set up with the store accounts.
-- [ ] **P16** Community is not built.
+- [x] **P16** Study groups per country on the web: posts, tips and "I passed" stories, comments,
+      upvotes, reports, screening before posting, a moderators' queue at `/admin/community`. Proof of
+      the check: `community.spec.ts`, "a post about the writer's own case is hidden until a moderator
+      has reviewed it"; `db/tests/014_community_groups.test.sql`; `community.db.test.ts`. Not in the
+      phone app yet.
 - [x] **P17** Proof: `db/tests/004_accounts_orgs_community.test.sql` and `011_organizations.test.sql`;
       `org.spec.ts`.
 - [x] **P18** Proof: `public.spec.ts`; Lighthouse SEO of 100 is enforced in CI.
@@ -144,12 +149,12 @@ with the reason. The R1 column gives the confidence and how many facts are still
 | United States (US)      | high, 2 open   |            |             |             |               |            |               |              |                     |
 | Vanuatu (VU)            | medium, 4 open |            |             |             |               |            |               |              |                     |
 
-- **R8** The monthly scheduled task that exists (`.github/workflows/source-check.yml`) rechecks
-  study guides stored in the database. It does not yet run over `data/sources/`, and no country has
-  a pack there.
-- **Published by review** Nothing is published in the production database. There is not yet a way
-  to load `data/questions/` files into the review queue, so this box cannot be ticked for any
-  country until that exists.
+- **R8** The monthly scheduled task (`.github/workflows/source-check.yml`) now also downloads
+  every document recorded in `data/sources/` again and fails if one has changed. No country has a
+  pack there yet.
+- **Published by review** `pnpm content import-questions` loads fact-checked question files into
+  the review queue, where a reviewer publishes them. Nothing is published in the production
+  database yet.
 
 ## Launch (Section 6)
 

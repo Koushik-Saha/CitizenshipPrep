@@ -63,9 +63,14 @@ export async function expectAccessible(page: Page, name: string): Promise<void> 
 export async function expectAccessibleInBothThemes(page: Page, name: string): Promise<void> {
   for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme });
-    // Colours fade from one theme to the other: measure them once they have arrived.
+    // Colours fade from one theme to the other: measure them once they have
+    // arrived. A fade that starts inside a closed <details> is dropped by the
+    // browser without ever finishing, so the wait is bounded.
     await page.evaluate(() =>
-      Promise.allSettled(document.getAnimations().map((animation) => animation.finished)),
+      Promise.race([
+        Promise.allSettled(document.getAnimations().map((animation) => animation.finished)),
+        new Promise((resolve) => setTimeout(resolve, 1500)),
+      ]),
     );
     await expectAccessible(page, `${name} (${scheme})`);
   }

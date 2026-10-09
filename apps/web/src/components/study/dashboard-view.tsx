@@ -168,6 +168,12 @@ export function DashboardView({
                   >
                     {t('dashboard.askTutor', { country: name })}
                   </Link>
+                  <Link
+                    href={`/study/community?country=${country.countryCode}`}
+                    className={`${buttonClass.secondary} mt-3 w-full`}
+                  >
+                    {t('dashboard.studyGroup', { country: name })}
+                  </Link>
                 </div>
               </div>
             )}

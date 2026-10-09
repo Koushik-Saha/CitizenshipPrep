@@ -2,7 +2,7 @@
 -- later: a new table without RLS fails here.
 
 begin;
-select plan(40);
+select plan(42);
 
 select has_table('public', table_name, format('table %s exists', table_name))
 from unnest(array[
@@ -12,7 +12,7 @@ from unnest(array[
   'community_posts', 'community_comments', 'source_documents', 'source_passages',
   'question_reviews', 'user_settings', 'ai_explanations', 'ai_usage', 'audio_clips',
   'billing_customers', 'billing_events', 'org_invites', 'org_logos', 'org_billing_customers',
-  'rate_limits'
+  'rate_limits', 'community_votes', 'community_reports'
 ]) as table_name;
 
 select is_empty(

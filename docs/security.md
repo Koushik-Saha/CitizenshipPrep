@@ -51,6 +51,21 @@ oversights.
 - **Invitation tokens** are stored as SHA-256 hashes; Stripe and RevenueCat
   webhooks verify their signature or secret before anything is read.
 
+## Study groups
+
+- **Nothing a learner writes is shown unscreened.** A post or comment is read by the model for
+  abuse, spam and requests for legal advice before it is stored as visible; the text is passed as
+  data to classify, and only a strict JSON verdict is accepted back. If the model cannot be
+  asked, the post is held. A post written straight to the table by a signed-in client is held by
+  a trigger.
+- **A held post is hidden** from everyone but its writer and staff until a moderator decides, by
+  Row Level Security as well as by the queries. Three reports from different learners hide a
+  visible post the same way.
+- **No legal advice.** A post about the writer's own immigration case is always held and is
+  shown, once approved, with a notice to see a licensed attorney.
+- A server with no model configured screens by built-in rules only. Production must have
+  `ANTHROPIC_API_KEY` set.
+
 ## Rate limiting
 
 Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
@@ -65,6 +80,10 @@ Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
 | Exam results reported          | 10 an hour       | learner         |
 | Account deletion               | 5 an hour        | learner         |
 | Reviewer sign-in attempts      | 10 in 15 minutes | network address |
+| Study-group posts              | 5 an hour        | learner         |
+| Study-group comments           | 20 an hour       | learner         |
+| Study-group upvotes            | 60 a minute      | learner         |
+| Study-group reports            | 10 an hour       | learner         |
 
 The AI limits sit on top of the daily allowances each plan includes. Network
 and email addresses are counted under a keyed hash, never stored as

@@ -31,6 +31,8 @@ const learnerPages = [
   '/study/plans',
   '/study/account',
   '/study/tutor/zz',
+  '/study/community',
+  '/study/community/00000000-0000-4000-8000-000000000000',
   '/org',
   '/onboarding',
   '/api/study/dashboard',
@@ -84,5 +86,6 @@ export default async function globalSetup(config: FullConfig) {
   await visit('/api/countries');
   await visit('/api/packs/zz');
   await visit('/admin/content');
+  await visit('/admin/community');
   await api.dispose();
 }

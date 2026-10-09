@@ -330,30 +330,39 @@ export type Database = {
           author_id: string;
           body: string;
           created_at: string;
+          held_for: string[];
           id: string;
           is_hidden: boolean;
           parent_comment_id: string | null;
           post_id: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
           updated_at: string;
         };
         Insert: {
           author_id?: string;
           body: string;
           created_at?: string;
+          held_for?: string[];
           id?: string;
           is_hidden?: boolean;
           parent_comment_id?: string | null;
           post_id: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
           updated_at?: string;
         };
         Update: {
           author_id?: string;
           body?: string;
           created_at?: string;
+          held_for?: string[];
           id?: string;
           is_hidden?: boolean;
           parent_comment_id?: string | null;
           post_id?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
           updated_at?: string;
         };
         Relationships: [
@@ -378,6 +387,13 @@ export type Database = {
             referencedRelation: 'community_posts';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'community_comments_reviewed_by_fkey';
+            columns: ['reviewed_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
         ];
       };
       community_posts: {
@@ -386,8 +402,14 @@ export type Database = {
           body: string;
           country_code: string | null;
           created_at: string;
+          exam_date: string | null;
+          held_for: string[];
           id: string;
           is_hidden: boolean;
+          kind: Database['public']['Enums']['post_kind'];
+          legal_notice: boolean;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
           title: string;
           updated_at: string;
         };
@@ -396,8 +418,14 @@ export type Database = {
           body: string;
           country_code?: string | null;
           created_at?: string;
+          exam_date?: string | null;
+          held_for?: string[];
           id?: string;
           is_hidden?: boolean;
+          kind?: Database['public']['Enums']['post_kind'];
+          legal_notice?: boolean;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
           title: string;
           updated_at?: string;
         };
@@ -406,8 +434,14 @@ export type Database = {
           body?: string;
           country_code?: string | null;
           created_at?: string;
+          exam_date?: string | null;
+          held_for?: string[];
           id?: string;
           is_hidden?: boolean;
+          kind?: Database['public']['Enums']['post_kind'];
+          legal_notice?: boolean;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
           title?: string;
           updated_at?: string;
         };
@@ -425,6 +459,114 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'countries';
             referencedColumns: ['iso_code'];
+          },
+          {
+            foreignKeyName: 'community_posts_reviewed_by_fkey';
+            columns: ['reviewed_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      community_reports: {
+        Row: {
+          comment_id: string | null;
+          created_at: string;
+          details: string | null;
+          id: string;
+          post_id: string | null;
+          reason: Database['public']['Enums']['report_reason'];
+          reporter_id: string;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database['public']['Enums']['flag_status'];
+        };
+        Insert: {
+          comment_id?: string | null;
+          created_at?: string;
+          details?: string | null;
+          id?: string;
+          post_id?: string | null;
+          reason: Database['public']['Enums']['report_reason'];
+          reporter_id?: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database['public']['Enums']['flag_status'];
+        };
+        Update: {
+          comment_id?: string | null;
+          created_at?: string;
+          details?: string | null;
+          id?: string;
+          post_id?: string | null;
+          reason?: Database['public']['Enums']['report_reason'];
+          reporter_id?: string;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          status?: Database['public']['Enums']['flag_status'];
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'community_reports_comment_id_fkey';
+            columns: ['comment_id'];
+            isOneToOne: false;
+            referencedRelation: 'community_comments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'community_reports_post_id_fkey';
+            columns: ['post_id'];
+            isOneToOne: false;
+            referencedRelation: 'community_posts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'community_reports_reporter_id_fkey';
+            columns: ['reporter_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'community_reports_resolved_by_fkey';
+            columns: ['resolved_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      community_votes: {
+        Row: {
+          created_at: string;
+          post_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          post_id: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          post_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'community_votes_post_id_fkey';
+            columns: ['post_id'];
+            isOneToOne: false;
+            referencedRelation: 'community_posts';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'community_votes_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
         ];
       };
@@ -1571,8 +1713,10 @@ export type Database = {
       flag_status: 'open' | 'resolved' | 'dismissed';
       org_kind: 'law_firm' | 'school' | 'nonprofit' | 'other';
       org_role: 'owner' | 'admin' | 'member';
+      post_kind: 'discussion' | 'tip' | 'story';
       question_status: 'draft' | 'in_review' | 'published' | 'retired' | 'rejected';
       question_type: 'multiple_choice' | 'multi_select' | 'true_false' | 'free_response';
+      report_reason: 'spam' | 'abuse' | 'legal_advice' | 'off_topic' | 'other';
       subscription_status: 'trialing' | 'active' | 'past_due' | 'canceled' | 'expired';
       translation_status: 'draft' | 'approved';
     };
@@ -1704,8 +1848,10 @@ export const Constants = {
       flag_status: ['open', 'resolved', 'dismissed'],
       org_kind: ['law_firm', 'school', 'nonprofit', 'other'],
       org_role: ['owner', 'admin', 'member'],
+      post_kind: ['discussion', 'tip', 'story'],
       question_status: ['draft', 'in_review', 'published', 'retired', 'rejected'],
       question_type: ['multiple_choice', 'multi_select', 'true_false', 'free_response'],
+      report_reason: ['spam', 'abuse', 'legal_advice', 'off_topic', 'other'],
       subscription_status: ['trialing', 'active', 'past_due', 'canceled', 'expired'],
       translation_status: ['draft', 'approved'],
     },
