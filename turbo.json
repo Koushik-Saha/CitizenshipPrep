@@ -12,6 +12,27 @@
     },
     "build": {
       "dependsOn": ["^build"],
+      "env": [
+        "ADMIN_*",
+        "ANTHROPIC_API_KEY",
+        "DATABASE_URL",
+        "EMAIL_FROM",
+        "EXPO_WEB_ORIGIN",
+        "LEGAL_*",
+        "MAILTRAP_*",
+        "NEON_AUTH_*",
+        "NEXT_DIST_DIR",
+        "NEXT_PUBLIC_*",
+        "POSTHOG_*",
+        "RATE_LIMIT_SECRET",
+        "REVALIDATE_SECRET",
+        "REVENUECAT_WEBHOOK_SECRET",
+        "SENTRY_*",
+        "SITE_URL",
+        "STRIPE_*",
+        "TEST_SIGN_IN_SECRET",
+        "VERCEL_ENV"
+      ],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {

@@ -1,0 +1,38 @@
+# What `vercel deploy` leaves behind. This file replaces .gitignore for the
+# upload, so it repeats what matters from it. Without it the local build
+# folders (several gigabytes) are sent.
+
+node_modules
+.turbo
+.next
+.next-*
+out
+dist
+coverage
+*.tsbuildinfo
+
+# secrets and local settings
+.env*
+!.env.example
+.claude
+CLAUDE.md
+CLAUDE.local.md
+
+# test and audit output
+.playwright-mcp
+.lighthouseci
+lighthouse-reports
+apps/web/e2e/results
+apps/web/e2e/report
+
+# the phone app's build output and store assets: the website does not use them
+apps/mobile/ios
+apps/mobile/android
+apps/mobile/store
+.expo
+web-build
+
+# official documents downloaded for research: kept on this machine only
+data/sources/*/*
+!data/sources/*/sources.json
+!data/sources/*/topic_map.md
