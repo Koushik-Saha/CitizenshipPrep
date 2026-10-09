@@ -103,6 +103,15 @@
   "fee": null,
   "official_study_material": [
     {
+      "title": "Einbürgerungstestverordnung (EinbTestV), Anlage 1: Gesamtkatalog der für den Einbürgerungstest zugelassenen Prüfungsfragen",
+      "url": "https://www.gesetze-im-internet.de/einbtestv/BJNR164900008.html",
+      "publisher": "Bundesministerium des Innern",
+      "kind": "question_bank",
+      "language": "de",
+      "license": "No copyright: annex to a federal regulation (§ 5 Abs. 1 UrhG)",
+      "reusable": "yes"
+    },
+    {
       "title": "Gesamtfragenkatalog zum Test \"Leben in Deutschland\" und zum \"Einbürgerungstest\"",
       "url": "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html",
       "publisher": "Bundesamt für Migration und Flüchtlinge",
@@ -138,7 +147,9 @@
       "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
     ],
     "official_study_material": [
-      "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html"
+      "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.html",
+      "https://www.gesetze-im-internet.de/einbtestv/BJNR164900008.html",
+      "https://www.gesetze-im-internet.de/urhg/__5.html"
     ]
   },
   "unverified": {

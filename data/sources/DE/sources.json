@@ -1,0 +1,208 @@
+{
+  "iso": "DE",
+  "researched_at": "2026-10-09T00:00:00Z",
+  "sources": [
+    {
+      "id": "einbtestv",
+      "kind": "question_bank",
+      "title": "Einbürgerungstestverordnung (EinbTestV), mit Anlage 1: Gesamtkatalog der für den Einbürgerungstest zugelassenen Prüfungsfragen",
+      "url": "https://www.gesetze-im-internet.de/einbtestv/BJNR164900008.html",
+      "publisher": "Bundesministerium des Innern",
+      "publication_date": "2008-08-05",
+      "version": "Zuletzt geändert durch Art. 1 V v. 21.6.2024 I Nr. 211",
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Gesetze, Verordnungen, amtliche Erlasse und Bekanntmachungen sowie Entscheidungen und amtlich verfaßte Leitsätze zu Entscheidungen genießen keinen urheberrechtlichen Schutz.",
+        "url": "https://www.gesetze-im-internet.de/urhg/__5.html"
+      },
+      "file": "einbtestv.html",
+      "sha256": "2d4c0751f052c46beb5de29ae17f700018b88c7bae46de921693da5ee2852e09",
+      "text_sha256": "83e169c2994bc08eba11041760817e2897d4f435cb3bd14bda1500d5988d778e",
+      "bytes": 697317,
+      "retrieved_at": "2026-10-09T20:04:17.622Z",
+      "notes": "The regulation itself, as consolidated on gesetze-im-internet.de. Annex 1 is the whole catalogue: 300 general questions and 10 for each Land, each with four answers. It is part of a federal regulation, so section 5(1) of the Copyright Act applies: no copyright. The annex prints NO answer key, and pictures in some questions are separate images. Annex 2 is a framework curriculum for courses, not a study text. Section 1 gives the format: 33 questions, three of them about the Land, 17 right in 60 minutes."
+    },
+    {
+      "id": "bamf-gesamtfragenkatalog",
+      "kind": "question_bank",
+      "title": "Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“",
+      "url": "https://www.bamf.de/SharedDocs/Anlagen/DE/Integration/Einbuergerung/gesamtfragenkatalog-lebenindeutschland.pdf?__blob=publicationFile",
+      "publisher": "Bundesamt für Migration und Flüchtlinge",
+      "publication_date": "2025-05-07",
+      "version": "Stand: 07.05.2025",
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "reuse_unclear",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": null,
+        "url": null
+      },
+      "file": "gesamtfragenkatalog.pdf",
+      "sha256": "edd3ed5e56a35241b6cc61aa0630482dc9e64498db508a7d6892ccee2ec707a9",
+      "text_sha256": "6bc2fd2a292e6ef4d7adb732c766eb4a54af5b614e32f7e03dafa38ae807a2fd",
+      "bytes": 8970190,
+      "retrieved_at": "2026-10-09T20:02:52.865Z",
+      "notes": "BAMF's own edition of the same catalogue, 191 pages, with the same numbering. It says: \"Die Formulierungen von einzelnen Fragen und Antworten können leicht von den verwendeten Originalfragen abweichen\" (it puts the feminine form first, for one). No answer key. The document states no terms of reuse; pictures carry their own credits. Used only to compare, not copied."
+    },
+    {
+      "id": "online-testcenter",
+      "kind": "practice_test",
+      "title": "Online-Testcenter für den Test \"Leben in Deutschland\" und den Einbürgerungstest",
+      "url": "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/OnlineTestcenter/online-testcenter-node.html",
+      "publisher": "Bundesamt für Migration und Flüchtlinge",
+      "publication_date": null,
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": "© 2026 Bundesamt für Migration und Flüchtlinge",
+        "url": "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/OnlineTestcenter/online-testcenter-node.html"
+      },
+      "file": "online-testcenter.html",
+      "sha256": "369bbf1a4071eb78d5f20aa543ae2e1186137d4f7f30b1fd8a4f5f5d988cff78",
+      "text_sha256": "34205195b677e03a0ce4cd35fec62f30259bae26015d94e7c338581d93c2ec0a",
+      "bytes": 52275,
+      "retrieved_at": "2026-10-09T20:03:50.786Z",
+      "notes": "The page that links BAMF's interactive catalogue and sample test (oet.bamf.de). That application shows the right answer after each question and is the only official place the answers are published. It is a session-based application marked \"Copyright © 2008 Bundesamt für Migration und Flüchtlinge\"; only this page is saved and no answers were taken from it. The page footer carries the copyright line quoted."
+    },
+    {
+      "id": "einbuergerung-page",
+      "kind": "format_page",
+      "title": "Einbürgerung in Deutschland: Einbürgerungstest",
+      "url": "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html",
+      "publisher": "Bundesamt für Migration und Flüchtlinge",
+      "publication_date": null,
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": "© 2026 Bundesamt für Migration und Flüchtlinge",
+        "url": "https://www.bamf.de/DE/Themen/Integration/ZugewanderteTeilnehmende/Einbuergerung/einbuergerung-node.html"
+      },
+      "file": "einbuergerung.html",
+      "sha256": "35b7d958bb5eecdfbb85c9c16362cad221f665ddf57c1733400e56011955a035",
+      "text_sha256": "84bd40d5b1174e656ebd39ec82af4a5ae276ed63fedd877c5ffadf6111d1f06c",
+      "bytes": 68998,
+      "retrieved_at": "2026-10-09T20:02:55.309Z",
+      "notes": "The format in BAMF's words: a booklet of 33 questions, 60 minutes, 17 right to pass, 25 euros; 30 questions from three subject areas and three about the Land of residence."
+    },
+    {
+      "id": "grundgesetz",
+      "kind": "legislation",
+      "title": "Grundgesetz für die Bundesrepublik Deutschland",
+      "url": "https://www.gesetze-im-internet.de/gg/BJNR000010949.html",
+      "publisher": "Bundesministerium der Justiz und Bundesamt für Justiz (gesetze-im-internet.de)",
+      "publication_date": "1949-05-23",
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Gesetze, Verordnungen, amtliche Erlasse und Bekanntmachungen sowie Entscheidungen und amtlich verfaßte Leitsätze zu Entscheidungen genießen keinen urheberrechtlichen Schutz.",
+        "url": "https://www.gesetze-im-internet.de/urhg/__5.html"
+      },
+      "file": "grundgesetz.html",
+      "sha256": "8df99989fc820e2d3f6c11be5a208fc84dc8edb79b60fd53826ab83fac8a7eca",
+      "text_sha256": "48338b4ff15feb6a3a442797a6989a486205eb4822028e9f5d5ade0e534663e8",
+      "bytes": 305445,
+      "retrieved_at": "2026-10-09T20:02:59.759Z",
+      "notes": "The Basic Law as consolidated on the day of download. Used to settle the answers of the official questions imported: each one names the article its answer rests on."
+    },
+    {
+      "id": "einigungsvertrag",
+      "kind": "legislation",
+      "title": "Einigungsvertrag (Vertrag über die Herstellung der Einheit Deutschlands)",
+      "url": "https://www.gesetze-im-internet.de/einigvtr/BJNR208890990.html",
+      "publisher": "Bundesministerium der Justiz und Bundesamt für Justiz (gesetze-im-internet.de)",
+      "publication_date": "1990-08-31",
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Gesetze, Verordnungen, amtliche Erlasse und Bekanntmachungen sowie Entscheidungen und amtlich verfaßte Leitsätze zu Entscheidungen genießen keinen urheberrechtlichen Schutz.",
+        "url": "https://www.gesetze-im-internet.de/urhg/__5.html"
+      },
+      "file": "einigungsvertrag.html",
+      "sha256": "80b227eb967b80c27b27868073ec69b119d670ec29e127b031a10825c7b171c3",
+      "text_sha256": "c4641babe70bed7268769280c4f4bb6a1695395a46c7bb17967166e7e8fe147d",
+      "bytes": 1537641,
+      "retrieved_at": "2026-10-09T20:03:49.538Z",
+      "notes": "Articles 1 and 2: the five Länder that joined on 3 October 1990, Berlin as capital, and 3 October as the Day of German Unity."
+    },
+    {
+      "id": "urhg-5",
+      "kind": "legislation",
+      "title": "Urheberrechtsgesetz, § 5 Amtliche Werke",
+      "url": "https://www.gesetze-im-internet.de/urhg/__5.html",
+      "publisher": "Bundesministerium der Justiz und Bundesamt für Justiz (gesetze-im-internet.de)",
+      "publication_date": null,
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "public_domain",
+        "name": null,
+        "commercial_use": "allowed",
+        "text": "Gesetze, Verordnungen, amtliche Erlasse und Bekanntmachungen sowie Entscheidungen und amtlich verfaßte Leitsätze zu Entscheidungen genießen keinen urheberrechtlichen Schutz.",
+        "url": "https://www.gesetze-im-internet.de/urhg/__5.html"
+      },
+      "file": "urhg-5.html",
+      "sha256": "0d1230ebb389ebdfdd0cb265ac74ee91345d19787520507c4db51cf85e375524",
+      "text_sha256": "c469ea2b23c498b1e46e649be1b6e8d2f9fef61ab312b5527ca06514c2f73172",
+      "bytes": 4525,
+      "retrieved_at": "2026-10-09T20:03:00.888Z",
+      "notes": "The rule the public-domain classification of the regulation and the statutes rests on."
+    },
+    {
+      "id": "bamf-impressum",
+      "kind": "other",
+      "title": "Impressum",
+      "url": "https://www.bamf.de/DE/Service/Impressum/impressum-node.html",
+      "publisher": "Bundesamt für Migration und Flüchtlinge",
+      "publication_date": null,
+      "version": null,
+      "language": "de",
+      "region": null,
+      "license": {
+        "class": "all_rights_reserved",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": "© 2026 Bundesamt für Migration und Flüchtlinge",
+        "url": "https://www.bamf.de/DE/Service/Impressum/impressum-node.html"
+      },
+      "file": "impressum.html",
+      "sha256": "3bf887049fb90bc447418226eed276c59670bb89d5f2ae684563b4f5093ad197",
+      "text_sha256": "1b07c08dbdbe62935c8ebd641a26640470cd5428c13a0a30cb0904bead7fbcb0",
+      "bytes": 50035,
+      "retrieved_at": "2026-10-09T20:03:46.541Z",
+      "notes": "BAMF's legal notice. It speaks only of pictures (\"Inhaber der ausschließlichen Nutzungsrechte\") and grants no licence for text."
+    }
+  ],
+  "not_found": [
+    {
+      "kind": "study_guide",
+      "searched": "There is no official textbook. BAMF's naturalisation page says the best preparation is to work through the question catalogue in its online test centre. Annex 2 of the regulation is a framework curriculum for course providers, not a text to study from."
+    },
+    {
+      "kind": "interview_questions",
+      "searched": "The test is written only (section 1 of the regulation: question sheets with four answers each). Neither the regulation nor BAMF's pages mention an oral part or interview questions."
+    }
+  ]
+}
