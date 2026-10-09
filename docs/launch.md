@@ -138,8 +138,19 @@ would have to be rebuilt.
 8. Set `SITE_URL` to `https://<your-domain>` (no trailing slash) and
    **redeploy**: it is read at build time, and until it is set every
    canonical link and the sitemap point at `localhost`.
-9. Production deploys happen on every push to `main`. If you would rather
-   release by hand, turn that off in Settings > Git.
+9. Connect the repository (Settings > Git) and production deploys happen on
+   every push to `main`. To stop every other branch and pull request from
+   building a preview, set Settings > Git > Ignored Build Step to the custom
+   command `[ "$VERCEL_GIT_COMMIT_REF" != "main" ]`: Vercel skips the build
+   when the command succeeds, which it does on any branch that is not `main`.
+   A skipped push shows as a cancelled deployment. If you would rather
+   release by hand, disconnect the repository instead.
+10. Vercel builds through Turborepo, which hides any environment variable
+    not named in `turbo.json` (`tasks.build.env`). A new variable the website
+    reads has to be added there as well as on Vercel, or the build will not
+    see it.
+11. To deploy from your machine: `vercel deploy --prod` from the repository
+    root. `.vercelignore` keeps the local build folders out of the upload.
 
 ## 5. Payments on the web: Stripe
 
