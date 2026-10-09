@@ -1,0 +1,184 @@
+{
+  "iso": "AU",
+  "researched_at": "2026-10-09T00:00:00Z",
+  "sources": [
+    {
+      "id": "our-common-bond",
+      "kind": "study_guide",
+      "title": "Australian Citizenship: Our Common Bond (testable section)",
+      "url": "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": "© Commonwealth of Australia 2020; revised since (names King Charles III as Head of State)",
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 4.0",
+        "commercial_use": "allowed",
+        "text": "With the exception of the Commonwealth Coat of Arms, all material presented in this publication is provided under a Creative Commons Attribution 4.0 International license at https://creativecommons.org/licenses/by/4.0/legalcode.",
+        "url": "https://immi.homeaffairs.gov.au/citizenship-subsite/files/our-common-bond-testable.pdf"
+      },
+      "file": "our-common-bond-testable.pdf",
+      "sha256": "c5d70f7274a856ee424e6f9975477430363e7d32b7226b0dbafb4ad0f73e9ede",
+      "text_sha256": "0ae012bf7e2549cfff8f0c378cd4989a135ee244b6b861fef2d57268cdc8b62a",
+      "bytes": 14186807,
+      "retrieved_at": "2026-10-09T19:44:14.069Z",
+      "notes": "50 pages. The testable section is Parts 1 to 4 and the glossary (pages 8 to 44 of the PDF). The licence does not cover the Commonwealth Coat of Arms; the acknowledgments page lists images supplied by others. The cover gives no publication date, and the copyright line says 2020 although the text has been revised since, so no date is recorded."
+    },
+    {
+      "id": "practice-test",
+      "kind": "practice_test",
+      "title": "Australian citizenship practice test",
+      "url": "https://citizenshippracticetest.homeaffairs.gov.au/",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "reuse_unclear",
+        "name": null,
+        "commercial_use": "unknown",
+        "text": null,
+        "url": null
+      },
+      "file": "practice-test.html",
+      "sha256": "6d5df0829d1de6517f5e96287bb4170545af991091b687f93edac26b774d04f1",
+      "text_sha256": null,
+      "bytes": 35681,
+      "retrieved_at": "2026-10-09T19:50:02.015Z",
+      "notes": "An interactive test of 20 questions; only its opening page is saved. The page carries no copyright or licence notice and no link to one, and it sits on its own address, outside the website the Department's Creative Commons statement speaks of. Its questions are not imported. It says: \"This is a sample test only. The questions will be different on the day of the test.\""
+    },
+    {
+      "id": "prepare-for-test",
+      "kind": "format_page",
+      "title": "Prepare for the citizenship test",
+      "url": "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/prepare-for-test",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 3.0 AU",
+        "commercial_use": "allowed",
+        "text": "All material presented on this website is provided under a Creative Commons Attribution 3.0 Australia licence",
+        "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer"
+      },
+      "file": "prepare-for-test.html",
+      "sha256": "c921d2a133fe6d24315ea95b6c6dcea8f5275559ede75b59a9e5ee880309daf1",
+      "text_sha256": null,
+      "bytes": 1296943,
+      "retrieved_at": "2026-10-09T19:44:15.219Z",
+      "notes": "Says all test questions are based on the booklet, and links the practice test, the podcast and the booklet. Its footer links to the Department's \"Copyright and disclaimer\" page (copyright-statement), whose wording the licence is taken from."
+    },
+    {
+      "id": "interview-and-test",
+      "kind": "format_page",
+      "title": "Learn about the citizenship interview and test",
+      "url": "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/learn-about-citizenship-interview-and-test",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 3.0 AU",
+        "commercial_use": "allowed",
+        "text": "All material presented on this website is provided under a Creative Commons Attribution 3.0 Australia licence",
+        "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer"
+      },
+      "file": "learn-about-interview-and-test.html",
+      "sha256": "b6b30a37f745866faf21c12726dba64256da8d25cbe9554100c66ba080334a08",
+      "text_sha256": null,
+      "bytes": 1311015,
+      "retrieved_at": "2026-10-09T19:44:16.629Z",
+      "notes": "Who sits the test, who is interviewed instead, and what help is available. Its footer links to the Department's \"Copyright and disclaimer\" page (copyright-statement), whose wording the licence is taken from."
+    },
+    {
+      "id": "our-common-bond-page",
+      "kind": "other",
+      "title": "Australian Citizenship: Our Common Bond",
+      "url": "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/our-common-bond",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 3.0 AU",
+        "commercial_use": "allowed",
+        "text": "All material presented on this website is provided under a Creative Commons Attribution 3.0 Australia licence",
+        "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer"
+      },
+      "file": "our-common-bond-page.html",
+      "sha256": "5354d100d1f49fdd278885a1b751e25c7996e348734b998c73825a2e7d41078e",
+      "text_sha256": null,
+      "bytes": 1301205,
+      "retrieved_at": "2026-10-09T19:44:17.825Z",
+      "notes": "Where the booklet is published, with the testable section in 40 community languages. The test itself is in English only. The translations are not downloaded. Its footer links to the Department's \"Copyright and disclaimer\" page (copyright-statement), whose wording the licence is taken from."
+    },
+    {
+      "id": "podcast-page",
+      "kind": "other",
+      "title": "Listen to the Our Common Bond podcast",
+      "url": "https://immi.homeaffairs.gov.au/citizenship/test-and-interview/listen-to-podcast",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 3.0 AU",
+        "commercial_use": "allowed",
+        "text": "All material presented on this website is provided under a Creative Commons Attribution 3.0 Australia licence",
+        "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer"
+      },
+      "file": "listen-to-podcast.html",
+      "sha256": "7a30767055b434275bb47179fdcada3de107690b4b6327ea7bfcc243f4d50e85",
+      "text_sha256": null,
+      "bytes": 1308091,
+      "retrieved_at": "2026-10-09T19:50:38.096Z",
+      "notes": "The booklet read aloud, part by part. The audio is not downloaded: it adds nothing to the text. Its footer links to the Department's \"Copyright and disclaimer\" page (copyright-statement), whose wording the licence is taken from."
+    },
+    {
+      "id": "copyright-statement",
+      "kind": "other",
+      "title": "Copyright and disclaimer",
+      "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer",
+      "publisher": "Department of Home Affairs",
+      "publication_date": null,
+      "version": null,
+      "language": "en",
+      "region": null,
+      "license": {
+        "class": "open_license",
+        "name": "CC BY 3.0 AU",
+        "commercial_use": "allowed",
+        "text": "All material presented on this website is provided under a Creative Commons Attribution 3.0 Australia licence",
+        "url": "https://www.homeaffairs.gov.au/access-and-accountability/using-our-website/copyright-and-disclaimer"
+      },
+      "file": "copyright-and-disclaimer.html",
+      "sha256": "1af4be20409bda5691e26f45f54e2765d07f54d8751dbdbea6b1635b432489e3",
+      "text_sha256": null,
+      "bytes": 1370089,
+      "retrieved_at": "2026-10-09T19:49:44.163Z",
+      "notes": "The Department's terms for its website. Excludes the Coat of Arms, the Department's logo, material marked otherwise and content supplied by third parties."
+    }
+  ],
+  "not_found": [
+    {
+      "kind": "question_bank",
+      "searched": "The Department publishes no list of test questions. The \"Prepare for the citizenship test\" page says only that all questions are based on the booklet, and offers a practice test whose questions \"will be different on the day of the test\"."
+    },
+    {
+      "kind": "interview_questions",
+      "searched": "The \"Learn about the citizenship interview and test\" page describes the interview held for people who do not sit the test, but gives no list of questions asked at it. Nothing of the kind is linked from the test pages."
+    }
+  ]
+}
