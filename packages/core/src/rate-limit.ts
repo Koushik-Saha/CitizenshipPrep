@@ -36,6 +36,11 @@ export const rateLimitRules = {
   communityPost: { limit: 5, windowSeconds: 60 * 60 },
   /** Comments one learner writes. */
   communityComment: { limit: 20, windowSeconds: 60 * 60 },
+  /**
+   * Posts and comments from one network address, whoever writes them: each is
+   * read by the model before it is shown, and accounts are free.
+   */
+  communityByAddress: { limit: 60, windowSeconds: 60 * 60 },
   /** Upvotes given or taken back by one learner. */
   communityVote: { limit: 60, windowSeconds: 60 },
   /** Reports made by one learner: enough to flag a bad thread, not to bury a group. */

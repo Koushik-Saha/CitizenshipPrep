@@ -9,12 +9,13 @@ import {
   toggleVote,
 } from '@oathly/api/server';
 import type { RateLimitName } from '@oathly/core';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { getScreener, isCommunitySwitchedOff } from '@/lib/community';
 import { getDb } from '@/lib/db';
 import { localizedPath } from '@/lib/i18n';
-import { rateLimited } from '@/lib/rate-limit';
+import { addressOf, rateLimited } from '@/lib/rate-limit';
 import { currentUser } from '@/lib/user';
 
 // Everything a learner does in a study group goes through here: signed in,
@@ -30,6 +31,16 @@ async function signedIn(limit: RateLimitName, back: string): Promise<string> {
   if (!user) redirect(await localizedPath('/sign-in'));
   if (await rateLimited(limit, 'user', user.userId))
     redirect(await localizedPath(`${back}notice=wait`));
+  // Writing is screened by the model, which costs something each time: it is
+  // also limited by where it comes from, and refused if that cannot be counted.
+  if (limit === 'communityPost' || limit === 'communityComment') {
+    const request = new Request('http://community.invalid', { headers: await headers() });
+    if (
+      await rateLimited('communityByAddress', 'address', addressOf(request), { failClosed: true })
+    ) {
+      redirect(await localizedPath(`${back}notice=wait`));
+    }
+  }
   return user.userId;
 }
 
