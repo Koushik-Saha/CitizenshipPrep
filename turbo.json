@@ -28,7 +28,7 @@
         "POSTHOG_*",
         "RATE_LIMIT_SECRET",
         "REVALIDATE_SECRET",
-        "REVENUECAT_WEBHOOK_SECRET",
+        "REVENUECAT_*",
         "SENTRY_*",
         "SITE_URL",
         "STRIPE_*",

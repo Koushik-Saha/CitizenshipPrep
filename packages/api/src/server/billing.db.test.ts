@@ -428,4 +428,73 @@ describe.skipIf(!url)('billing against the database', () => {
     });
     expect(await applyRevenueCatEvent(pool, nowhere)).toMatchObject({ kind: 'ignored' });
   });
+
+  it('gives nothing for a test purchase, unless test purchases are let in for that learner', async () => {
+    await pool.query('delete from public.subscriptions where user_id = $1', [PHONE]);
+    const sandbox = storeEvent({ environment: 'SANDBOX', original_transaction_id: 'tx_sandbox_1' });
+    expect(await applyRevenueCatEvent(pool, sandbox)).toMatchObject({
+      kind: 'ignored',
+      reason: 'a test purchase',
+    });
+    expect(await pro(PHONE)).toBe(false);
+    // Nothing was recorded, so the same event still counts once it is let in.
+    expect(
+      await applyRevenueCatEvent(pool, sandbox, { allowSandbox: (userId) => userId === PHONE }),
+    ).toMatchObject({ kind: 'applied', userId: PHONE });
+    expect(await pro(PHONE)).toBe(true);
+    await pool.query('delete from public.subscriptions where user_id = $1', [PHONE]);
+    // A real purchase needs no letting in.
+    const real = storeEvent({ environment: 'PRODUCTION' });
+    expect(await applyRevenueCatEvent(pool, real)).toMatchObject({ kind: 'applied' });
+  });
+
+  it('handles an event again when the first try failed before the plan was written', async () => {
+    await pool.query('delete from public.subscriptions where user_id = $1', [PHONE]);
+    const bought = storeEvent({ original_transaction_id: 'tx_retry_1' });
+    // A database that drops the write of the plan, once.
+    let failed = false;
+    const flaky = {
+      query: ((text: unknown, ...rest: unknown[]) => {
+        if (!failed && typeof text === 'string' && /insert into public\.subscriptions/.test(text)) {
+          failed = true;
+          return Promise.reject(new Error('connection lost'));
+        }
+        return (pool.query as (...args: unknown[]) => unknown)(text, ...rest);
+      }) as typeof pool.query,
+    };
+    await expect(applyRevenueCatEvent(flaky, bought)).rejects.toThrow('connection lost');
+    expect(await pro(PHONE)).toBe(false);
+    // The store sends it again: this time it must count.
+    expect(await applyRevenueCatEvent(flaky, bought)).toMatchObject({ kind: 'applied' });
+    expect(await pro(PHONE)).toBe(true);
+
+    await pool.query('delete from public.subscriptions where user_id = $1', [WEB]);
+    let stripeFailed = false;
+    const flakyForStripe = {
+      query: ((text: unknown, ...rest: unknown[]) => {
+        if (
+          !stripeFailed &&
+          typeof text === 'string' &&
+          /insert into public\.subscriptions/.test(text)
+        ) {
+          stripeFailed = true;
+          return Promise.reject(new Error('connection lost'));
+        }
+        return (pool.query as (...args: unknown[]) => unknown)(text, ...rest);
+      }) as typeof pool.query,
+    };
+    const created = {
+      id: `evt_test_billing_retry_${++sequence}`,
+      type: 'customer.subscription.created',
+      created: unix(now),
+      data: { object: subscription({ id: 'sub_test_billing_retry' }) },
+    } as unknown as StripeEvent;
+    await expect(applyStripeEvent(flakyForStripe, created, prices)).rejects.toThrow(
+      'connection lost',
+    );
+    expect(await applyStripeEvent(flakyForStripe, created, prices)).toMatchObject({
+      kind: 'applied',
+    });
+    expect(await pro(WEB)).toBe(true);
+  });
 });

@@ -283,6 +283,25 @@ async function firstDelivery(
   return (result.rowCount ?? 0) > 0;
 }
 
+/**
+ * Takes back the note that an event was handled, after handling it failed.
+ * The provider sends a failed event again; without this the second try would
+ * be answered "already handled" and a learner who paid would get nothing.
+ * Applying an event twice is harmless: each write is an upsert.
+ */
+async function forgetDelivery(
+  db: Db,
+  provider: 'stripe' | 'revenuecat',
+  eventId: string,
+): Promise<void> {
+  await db
+    .query('delete from public.billing_events where provider = $1 and event_id = $2', [
+      provider,
+      eventId,
+    ])
+    .catch(() => {});
+}
+
 async function profileExists(db: Db, userId: string): Promise<boolean> {
   const { rowCount } = await db.query('select 1 from public.profiles where id = $1', [userId]);
   return (rowCount ?? 0) > 0;
@@ -521,6 +540,19 @@ export async function applyStripeEvent(
   event: StripeEvent,
   prices: StripePrices,
 ): Promise<WebhookOutcome> {
+  try {
+    return await applyStripeEventOnce(db, event, prices);
+  } catch (error) {
+    await forgetDelivery(db, 'stripe', event.id);
+    throw error;
+  }
+}
+
+async function applyStripeEventOnce(
+  db: Db,
+  event: StripeEvent,
+  prices: StripePrices,
+): Promise<WebhookOutcome> {
   const object = event.data.object;
   const at = new Date(event.created * 1000);
   const metadata = record(object.metadata);
@@ -655,6 +687,17 @@ export interface RevenueCatEvent {
   cancel_reason?: string | null;
   transferred_from?: string[] | null;
   transferred_to?: string[] | null;
+  /** "PRODUCTION", or "SANDBOX" for a purchase made with a store test account. */
+  environment?: string | null;
+}
+
+export interface RevenueCatOptions {
+  /**
+   * Whether a test (sandbox) purchase counts for this learner. It costs
+   * nothing, so by default it gives nothing; a store reviewer's account is
+   * the usual exception.
+   */
+  allowSandbox?: (userId: string) => boolean;
 }
 
 const millis = (value: number | null | undefined): Date | null =>
@@ -742,7 +785,23 @@ export function changeFromRevenueCat(
 export async function applyRevenueCatEvent(
   db: Db,
   event: RevenueCatEvent,
+  options: RevenueCatOptions = {},
 ): Promise<WebhookOutcome> {
+  try {
+    return await applyRevenueCatEventOnce(db, event, options);
+  } catch (error) {
+    await forgetDelivery(db, 'revenuecat', event.id);
+    throw error;
+  }
+}
+
+async function applyRevenueCatEventOnce(
+  db: Db,
+  event: RevenueCatEvent,
+  options: RevenueCatOptions,
+): Promise<WebhookOutcome> {
+  const sandbox = event.environment?.toUpperCase() === 'SANDBOX';
+  const letIn = (userId: string) => !sandbox || options.allowSandbox?.(userId) === true;
   if (event.type === 'TRANSFER') {
     // The store account moved to another Oathly account ("restore purchases"
     // after signing in as someone else): what it bought moves with it.
@@ -752,6 +811,7 @@ export async function applyRevenueCatEvent(
       if (await profileExists(db, candidate)) to ??= candidate;
     }
     if (!to || from.length === 0) return ignored('no learner to transfer to');
+    if (!letIn(to)) return ignored('a test purchase');
     if (!(await firstDelivery(db, 'revenuecat', event, to))) return ignored('already handled');
     await db.query(
       `update public.subscriptions set user_id = $1
@@ -772,6 +832,7 @@ export async function applyRevenueCatEvent(
     if (candidate && (await profileExists(db, candidate))) userId ??= candidate;
   }
   if (!userId) return ignored('no such learner');
+  if (!letIn(userId)) return ignored('a test purchase');
   if (change.countryCode && !(await countryExists(db, change.countryCode))) {
     return ignored('no such country');
   }
