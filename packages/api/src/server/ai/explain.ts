@@ -1,7 +1,9 @@
-import type { Quota } from '@oathly/core';
+import { freeQuestionIds, hasAccess, type Quota } from '@oathly/core';
 import { languageName } from '@oathly/i18n';
 import type pg from 'pg';
 
+import { accessUser } from '../billing';
+import { loadQuestionPool } from '../quiz';
 import { toReadableStream, type TextGenerator } from './generator';
 import { completeUsage, reserveUsage, type UsageOptions } from './usage';
 
@@ -152,6 +154,13 @@ export async function explain(
 ): Promise<ExplainOutcome> {
   const context = await explanationContext(db, userId, questionId);
   if (!context) return { kind: 'unavailable' };
+  // Only for a question the learner's plan lets them study: an explanation
+  // gives the answer and the guide's passage, which is what a plan sells.
+  const user = await accessUser(db, userId);
+  if (!hasAccess(user, 'all_questions', context.countryCode, now)) {
+    const bank = await loadQuestionPool(db, context.countryCode);
+    if (!freeQuestionIds(bank).has(context.questionId)) return { kind: 'unavailable' };
+  }
 
   // An explanation already written costs nothing and is not counted.
   const cached = await cachedExplanation(db, context);

@@ -59,9 +59,11 @@ export type Reservation =
  * has been read: a client that hangs up early has still been answered, and
  * requests that arrive together cannot all take the last place.
  *
- * The record is written first, then judged by the ones before it, so of
- * several requests at once the earliest wins. One that is refused is removed
- * again and costs the learner nothing.
+ * The record is written first and then counted with every other one that
+ * can be seen. Each request sees its own record, and of two written at the
+ * same moment at least one sees the other's, so together they can never take
+ * more than is left. (Now and then both step back from the last place; the
+ * learner asks again.) One that is refused is removed and costs nothing.
  */
 export async function reserveUsage(
   db: Db,
@@ -89,14 +91,14 @@ export async function reserveUsage(
   const [earlier, total] = await Promise.all([
     db.query<{ created_at: Date }>(
       `select created_at from public.ai_usage
-       where user_id = $1 and feature = $2 and id < $3
+       where user_id = $1 and feature = $2 and id <> $3
          and created_at > $4::timestamptz - interval '24 hours'`,
       [entry.userId, entry.feature, id, now],
     ),
     db.query<{ used: number }>(
       `select count(*)::int as used from public.ai_usage
-       where id <= $1 and created_at > $2::timestamptz - interval '24 hours'`,
-      [id, now],
+       where created_at > $1::timestamptz - interval '24 hours'`,
+      [now],
     ),
   ]);
   const allowance = aiAllowance(user, now);

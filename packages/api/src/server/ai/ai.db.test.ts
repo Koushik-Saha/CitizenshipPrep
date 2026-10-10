@@ -1,3 +1,4 @@
+import { freeQuestionIds, FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
 import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -41,6 +42,7 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
   let pool: pg.Pool;
   let questionId: string;
   let draftId: string;
+  let insertQuestion: (status: string, text: string) => Promise<string>;
 
   async function cleanUp() {
     await pool.query('delete from public.profiles where id = $1', [USER]);
@@ -78,7 +80,7 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
         [document],
       )
     ).rows[0]!.id;
-    const insertQuestion = async (status: string, text: string) => {
+    insertQuestion = async (status: string, text: string) => {
       const id = (
         await pool.query<{ id: string }>(
           `insert into public.questions (country_code, topic_id, difficulty, type, correct_answer, source_url, status, verified_by, last_verified_at, source_passage_id, source_quote)
@@ -323,5 +325,37 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
         messages: [{ role: 'user', content: 'Hi' }],
       }),
     ).toEqual({ kind: 'not-studying' });
+  });
+
+  it('explains only questions the learner’s plan lets them study', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    await pool.query('delete from public.subscriptions where user_id = $1', [USER]);
+    // More questions than the Free plan's sample holds.
+    for (let n = 0; n < FREE_QUESTIONS_PER_COUNTRY + 2; n += 1) {
+      await insertQuestion('published', `Zusatzfrage Nummer ${n}`);
+    }
+    const { rows } = await pool.query<{ id: string; topicId: string }>(
+      `select id, topic_id as "topicId" from public.questions
+       where country_code = $1 and status = 'published'`,
+      [COUNTRY],
+    );
+    const free = freeQuestionIds(rows);
+    const locked = rows.find((row) => !free.has(row.id))!.id;
+    const sampled = rows.find((row) => free.has(row.id) && row.id !== questionId)!.id;
+
+    const { generator, requests } = fakeGenerator();
+    expect(await explain(pool, generator, USER, locked)).toEqual({ kind: 'unavailable' });
+    expect(requests).toHaveLength(0);
+    const inSample = await explain(pool, generator, USER, sampled);
+    expect(inSample.kind).toBe('stream');
+    await read((inSample as { stream: ReadableStream<Uint8Array> }).stream);
+
+    await pool.query(
+      `insert into public.subscriptions (user_id, plan, status, provider) values ($1, 'pro_monthly', 'active', 'manual')`,
+      [USER],
+    );
+    const withPro = await explain(pool, generator, USER, locked);
+    expect(withPro.kind).toBe('stream');
+    await read((withPro as { stream: ReadableStream<Uint8Array> }).stream);
   });
 });
