@@ -12,6 +12,7 @@ const reasonLabels: Record<string, string> = {
   toxicity: 'Screening: abusive',
   spam: 'Screening: spam',
   legal_advice: 'Asks about their own case',
+  personal_data: 'Screening: personal details',
   unscreened: 'Could not be screened',
   reports: 'Hidden by reports',
 };

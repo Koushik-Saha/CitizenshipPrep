@@ -16,6 +16,7 @@ export const holdReasons = [
   'toxicity',
   'spam',
   'legal_advice',
+  'personal_data',
   'unscreened',
   'reports',
   'removed',
@@ -61,11 +62,41 @@ export function looksLikeSpam(text: string): boolean {
   return links >= 3 || /(.)\1{14,}/.test(plain) || SPAM_PHRASES.test(plain);
 }
 
+const EMAIL_ADDRESS = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/;
+// Nine or more digits close together: a phone number, not a year or a score.
+const PHONE_NUMBER = /(?:\+?\d[\s().-]{0,2}){9,15}/;
+// Numbers an immigration office gives a person or a case: a US A-Number
+// ("A123456789"), a US receipt number ("IOE0912345678"), and anything written
+// after "case number", "receipt number", "file number" or "reference number".
+const IMMIGRATION_NUMBER =
+  /\bA[-\s]?\d{8,9}\b|\b(?:EAC|WAC|LIN|SRC|NBC|MSC|IOE|YSC)\d{10}\b|\b(?:case|receipt|file|reference|application|alien|registration)\s*(?:number|no\.?|#)\s*:?\s*[A-Z0-9-]{6,}/i;
+
+/**
+ * Whether a text carries something that identifies a person or their case: an
+ * email address, a phone number, or an immigration case number. A study group
+ * is read by strangers, and these are what a learner later wishes they had not
+ * posted, about themselves or about someone else.
+ */
+export function mentionsPersonalData(text: string): boolean {
+  return EMAIL_ADDRESS.test(text) || PHONE_NUMBER.test(text) || IMMIGRATION_NUMBER.test(text);
+}
+
+/**
+ * A text as it is handed to the model for screening, between <post> tags. A
+ * tag written inside the text is taken apart, so the writer cannot end the
+ * post early and add words of their own after it.
+ */
+export function screeningInput(text: string): string {
+  return `<post>\n${text.slice(0, 6000).replace(/<\s*(\/?)\s*post\s*>/gi, '[$1post]')}\n</post>`;
+}
+
 /** What the model found in a text. */
 export interface ScreeningVerdict {
   toxicity: boolean;
   spam: boolean;
   legalAdvice: boolean;
+  /** Details that identify a person or their case. */
+  personalData: boolean;
 }
 
 /**
@@ -90,7 +121,9 @@ export function parseScreening(reply: string): ScreeningVerdict | null {
   ) {
     return null;
   }
-  return { toxicity, spam, legalAdvice };
+  // Asked for with the rest; a reply without it is read as "none found", and
+  // the patterns above still apply.
+  return { toxicity, spam, legalAdvice, personalData: record.personal_data === true };
 }
 
 export interface Screening {
@@ -113,6 +146,7 @@ export function screen(text: string, model: ScreeningVerdict | null | 'none'): S
   if (verdict?.toxicity) heldFor.push('toxicity');
   if (verdict?.spam || looksLikeSpam(text)) heldFor.push('spam');
   if (legalNotice) heldFor.push('legal_advice');
+  if (verdict?.personalData || mentionsPersonalData(text)) heldFor.push('personal_data');
   if (model === null) heldFor.push('unscreened');
   return { heldFor, legalNotice };
 }
