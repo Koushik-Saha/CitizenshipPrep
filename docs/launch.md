@@ -188,7 +188,12 @@ All optional; the app runs without each.
 - **PostHog:** create a project; its project API key is `POSTHOG_KEY`. Set
   `POSTHOG_HOST` to `https://eu.i.posthog.com` if the project is in the EU.
 - **Anthropic:** `ANTHROPIC_API_KEY`, for AI explanations and the tutor. Set a
-  monthly spend limit in the Anthropic console.
+  monthly spend limit in the Anthropic console. The app has its own daily
+  limit as well, `AI_DAILY_LIMIT` (requests by everyone in 24 hours, default
+  5000): past it free accounts are told AI help is paused, past twice it
+  everyone is, and you are told through Sentry at 80% and 100%. To switch a
+  feature off in a hurry, set `DISABLE_AI`, `DISABLE_AI_TUTOR`,
+  `DISABLE_AI_EXPLANATIONS` or `DISABLE_COMMUNITY` to `1` and redeploy.
 
 ## 7. Check the live website
 
@@ -334,6 +339,12 @@ does.
       them an address whose mail you can forward the code from quickly (weak:
       reviews happen at any hour), or add a password sign-in for one review
       account. Decide, then say how in the review notes.
+- [ ] **Test purchases for App Review.** Reviewers buy with store test
+      accounts, and the server ignores test purchases unless told otherwise.
+      Put the review account's Oathly id in `REVENUECAT_SANDBOX_USERS` on
+      Vercel (comma separated for more than one) before you submit. Never
+      set `REVENUECAT_ALLOW_SANDBOX` on production: it lets every test
+      purchase count.
 - [ ] A real country is published, and the screenshots show it.
 - [ ] `/privacy` and `/terms` have been read by someone qualified.
 - [ ] Step 3.6 passed: deleting an account removes the sign-in account.
