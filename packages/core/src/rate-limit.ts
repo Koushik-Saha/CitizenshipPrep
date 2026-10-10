@@ -21,6 +21,13 @@ export const rateLimitRules = {
   explain: { limit: 20, windowSeconds: 60 },
   /** Tutor messages sent by one learner. */
   tutor: { limit: 10, windowSeconds: 60 },
+  /**
+   * AI requests of either kind from one network address, whoever the learner
+   * is: accounts are free, so the per-learner limits alone would let one
+   * machine with many accounts ask without end. Generous, because a classroom
+   * shares an address.
+   */
+  aiByAddress: { limit: 120, windowSeconds: 60 * 60 },
   /** Exam results reported by one learner: a correction or two, not a loop. */
   examResult: { limit: 10, windowSeconds: 60 * 60 },
   /** Tries at the reviewers' password from one network address. */

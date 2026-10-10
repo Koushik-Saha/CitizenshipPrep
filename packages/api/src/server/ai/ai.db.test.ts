@@ -192,6 +192,111 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
     expect((await quotaFor(pool, USER, 'tutor', new Date())).remaining).toBe(135);
   });
 
+  it('counts a request when it is made, whether or not the reply is ever read', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    await pool.query('delete from public.subscriptions where user_id = $1', [USER]);
+    const { generator } = fakeGenerator();
+    const ask = () =>
+      askTutor(pool, generator, USER, {
+        countryCode: COUNTRY,
+        messages: [{ role: 'user', content: 'Council?' }],
+      });
+    const before = (await quotaFor(pool, USER, 'tutor', new Date())).remaining;
+    // A client that hangs up: the reply is never read to its end.
+    const outcome = await ask();
+    expect(outcome.kind).toBe('stream');
+    await (outcome as { stream: ReadableStream<Uint8Array> }).stream.cancel();
+    expect((await quotaFor(pool, USER, 'tutor', new Date())).remaining).toBe(before - 1);
+  });
+
+  it('answers only as many requests as are left, however many arrive at once', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    await pool.query(
+      `insert into public.ai_usage (user_id, feature, model, input_tokens, output_tokens)
+       select $1, 'tutor', 'fake-model', 1, 1 from generate_series(1, 14)`,
+      [USER],
+    );
+    const { generator, requests } = fakeGenerator();
+    const outcomes = await Promise.all(
+      Array.from({ length: 5 }, () =>
+        askTutor(pool, generator, USER, {
+          countryCode: COUNTRY,
+          messages: [{ role: 'user', content: 'Council?' }],
+        }),
+      ),
+    );
+    const answered = outcomes.filter((outcome) => outcome.kind === 'stream');
+    expect(answered.length).toBeLessThanOrEqual(1);
+    expect(requests.length).toBeLessThanOrEqual(1);
+    await Promise.all(
+      answered.map((outcome) => read((outcome as { stream: ReadableStream<Uint8Array> }).stream)),
+    );
+    // Nobody is left holding more than the plan allows.
+    const { rows } = await pool.query(
+      `select count(*)::int as used from public.ai_usage where user_id = $1 and feature = 'tutor'`,
+      [USER],
+    );
+    expect(rows[0].used).toBeLessThanOrEqual(15);
+  });
+
+  it('records what a finished reply cost on the request that was counted', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    const { generator } = fakeGenerator('Nine members.');
+    const outcome = await askTutor(pool, generator, USER, {
+      countryCode: COUNTRY,
+      messages: [{ role: 'user', content: 'Council?' }],
+    });
+    await read((outcome as { stream: ReadableStream<Uint8Array> }).stream);
+    const { rows } = await pool.query(
+      `select model, input_tokens, output_tokens, cache_read_tokens from public.ai_usage
+       where user_id = $1 and feature = 'tutor'`,
+      [USER],
+    );
+    expect(rows).toEqual([
+      { model: 'fake-model', input_tokens: 120, output_tokens: 40, cache_read_tokens: 100 },
+    ]);
+  });
+
+  it('pauses free accounts first when the whole service has used its day, then everyone', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    const { generator, requests } = fakeGenerator();
+    const ask = (dailyLimit: number) =>
+      askTutor(
+        pool,
+        generator,
+        USER,
+        { countryCode: COUNTRY, messages: [{ role: 'user', content: 'Council?' }] },
+        new Date(),
+        { dailyLimit },
+      );
+    // Some use by the service today, whatever else is in the database.
+    await pool.query(
+      `insert into public.ai_usage (user_id, feature, model, input_tokens, output_tokens)
+       select $1, 'explanation', 'fake-model', 1, 1 from generate_series(1, 2)`,
+      [USER],
+    );
+    // A limit the service has just reached: the next request is over it.
+    const { rows } = await pool.query(
+      `select count(*)::int as used from public.ai_usage where created_at > now() - interval '24 hours'`,
+    );
+    const used: number = rows[0].used;
+    expect(await ask(used)).toEqual({ kind: 'paused' });
+    expect(requests).toHaveLength(0);
+    // A refused request is not held against the learner.
+    expect((await quotaFor(pool, USER, 'tutor', new Date())).remaining).toBe(15);
+
+    await pool.query(
+      `insert into public.subscriptions (user_id, plan, status, provider) values ($1, 'pro_monthly', 'active', 'manual')`,
+      [USER],
+    );
+    // Pro keeps working past the limit, up to twice it.
+    const paid = await ask(used);
+    expect(paid.kind).toBe('stream');
+    await read((paid as { stream: ReadableStream<Uint8Array> }).stream);
+    expect(await ask(Math.floor(used / 2))).toEqual({ kind: 'paused' });
+    await pool.query('delete from public.subscriptions where user_id = $1', [USER]);
+  });
+
   it('answers the tutor from the matching study material only', async () => {
     const { generator, requests } = fakeGenerator('The Lake Council has nine members.');
     const outcome = await askTutor(pool, generator, USER, {

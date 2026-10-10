@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { postSorts, type PostSort } from '@oathly/api/community';
 import { listPosts } from '@oathly/api/server';
 import { POST_BODY_MAX, POST_TITLE_MAX, postKinds, type PostKind } from '@oathly/core';
@@ -16,6 +17,7 @@ import {
 import { buttonClass, fieldClass, focusRing, labelClass } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
+import { isCommunitySwitchedOff } from '@/lib/community';
 import { requireMe } from '@/lib/user';
 
 import { submitPost } from './actions';
@@ -35,6 +37,7 @@ export default async function CommunityPage({
   searchParams,
 }: PageProps<'/[locale]/study/community'>) {
   const { locale, t } = await getT(params);
+  if (isCommunitySwitchedOff()) notFound();
   const { user, me } = await requireMe(locale);
   if (me.studyCountries.length === 0) {
     return (

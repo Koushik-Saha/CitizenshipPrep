@@ -3,7 +3,7 @@ import { languageName } from '@oathly/i18n';
 import type pg from 'pg';
 
 import { toReadableStream, type TextGenerator } from './generator';
-import { logUsage, quotaFor } from './usage';
+import { completeUsage, reserveUsage, type UsageOptions } from './usage';
 
 // "Explain more": a deeper explanation of a question, in the learner's study
 // language, grounded only in the passage of the official guide the question
@@ -138,6 +138,8 @@ export type ExplainOutcome =
   | { kind: 'cached'; text: string; locale: string }
   | { kind: 'stream'; stream: ReadableStream<Uint8Array>; locale: string }
   | { kind: 'limited'; quota: Quota }
+  /** The whole service has used its day's AI: see reserveUsage. */
+  | { kind: 'paused' }
   | { kind: 'unavailable' };
 
 export async function explain(
@@ -146,28 +148,33 @@ export async function explain(
   userId: string,
   questionId: string,
   now: Date = new Date(),
+  options: UsageOptions = {},
 ): Promise<ExplainOutcome> {
   const context = await explanationContext(db, userId, questionId);
   if (!context) return { kind: 'unavailable' };
 
-  // Both before the first token, so look them up together.
-  const [cached, quota] = await Promise.all([
-    cachedExplanation(db, context),
-    quotaFor(db, userId, 'explanation', now),
-  ]);
+  // An explanation already written costs nothing and is not counted.
+  const cached = await cachedExplanation(db, context);
   if (cached) return { kind: 'cached', text: cached, locale: context.locale };
-  if (!quota.allowed) return { kind: 'limited', quota };
 
-  const generation = generator.generate(explanationRequest(context));
-  const stream = toReadableStream(generation, async (result) => {
-    await logUsage(db, {
+  // Counted now, before the model is asked: see reserveUsage.
+  const reserved = await reserveUsage(
+    db,
+    {
       userId,
       feature: 'explanation',
       countryCode: context.countryCode,
       questionId: context.questionId,
-      model: result.model,
-      usage: result.usage,
-    });
+      model: generator.model,
+    },
+    now,
+    options,
+  );
+  if (reserved.kind !== 'reserved') return reserved;
+
+  const generation = generator.generate(explanationRequest(context));
+  const stream = toReadableStream(generation, async (result) => {
+    await completeUsage(db, reserved.id, result);
     if (!result.refused && result.text.trim()) {
       await db.query(
         `insert into public.ai_explanations (question_id, question_version, locale, text, model)

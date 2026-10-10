@@ -1,18 +1,16 @@
 import { tutorRequestSchema } from '@oathly/api/schemas';
 import { askTutor, TutorError } from '@oathly/api/server';
 
-import { getGenerator, limitMessage } from '@/lib/ai';
+import { aiGate, aiPaused, aiUsageOptions, getGenerator, limitMessage } from '@/lib/ai';
 import { apiUserId, jsonError } from '@/lib/api-auth';
 import { getDb } from '@/lib/db';
 import { readJson } from '@/lib/http';
-import { rateLimited } from '@/lib/rate-limit';
 
 // POST { countryCode, messages: [{ role, content }] } -> the tutor's reply, streamed.
 export async function POST(request: Request) {
   const userId = await apiUserId(request);
   if (!userId) return jsonError('Sign in to continue.', 401);
-  // A burst limit, on top of the plan's daily allowance.
-  const limited = await rateLimited('tutor', 'user', userId);
+  const limited = await aiGate(request, 'tutor', userId);
   if (limited) return limited;
   const { data: body, problem } = await readJson(
     request,
@@ -23,10 +21,14 @@ export async function POST(request: Request) {
 
   let outcome;
   try {
-    outcome = await askTutor(getDb(), getGenerator(), userId, {
-      countryCode: body.countryCode,
-      messages: body.messages,
-    });
+    outcome = await askTutor(
+      getDb(),
+      getGenerator(),
+      userId,
+      { countryCode: body.countryCode, messages: body.messages },
+      new Date(),
+      aiUsageOptions,
+    );
   } catch (error) {
     if (error instanceof TutorError) return jsonError(error.message, 400);
     throw error;
@@ -42,6 +44,8 @@ export async function POST(request: Request) {
       });
     case 'limited':
       return jsonError(limitMessage(outcome.quota.resetsAt, 'tutor messages'), 429);
+    case 'paused':
+      return aiPaused();
     case 'not-studying':
       return jsonError('Add this country to your study plan to ask its tutor.', 403);
   }

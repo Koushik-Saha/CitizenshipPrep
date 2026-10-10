@@ -39,13 +39,24 @@ export async function rateLimited(
   name: RateLimitName,
   kind: 'user' | 'address' | 'email',
   id: string,
+  /**
+   * What to do when the counter cannot be reached. Sign-in lets the request
+   * through, so a database fault does not lock everyone out; anything that
+   * costs money for each request (the AI) refuses instead.
+   */
+  { failClosed = false }: { failClosed?: boolean } = {},
 ): Promise<Response | null> {
   let decision;
   try {
     decision = await takeRateLimit(getDb(), rateLimitKey(name, kind, id), rateLimitRules[name]);
   } catch (error) {
     reportError(error, { where: 'rate-limit', limit: name });
-    return null;
+    if (!failClosed) return null;
+    const message = 'This is not available right now. Try again in a moment.';
+    return Response.json(
+      { error: message, message, code: 'UNAVAILABLE' },
+      { status: 503, headers: { 'retry-after': '30', 'cache-control': 'no-store' } },
+    );
   }
   // Old counters are cleared as new ones are written: now and then, off the
   // request's path, rather than by a job that would need running.

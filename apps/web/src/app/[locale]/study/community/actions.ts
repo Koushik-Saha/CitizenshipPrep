@@ -11,7 +11,7 @@ import {
 import type { RateLimitName } from '@oathly/core';
 import { redirect } from 'next/navigation';
 
-import { getScreener } from '@/lib/community';
+import { getScreener, isCommunitySwitchedOff } from '@/lib/community';
 import { getDb } from '@/lib/db';
 import { localizedPath } from '@/lib/i18n';
 import { rateLimited } from '@/lib/rate-limit';
@@ -25,6 +25,7 @@ const text = (form: FormData, name: string) => String(form.get(name) ?? '');
 const ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 async function signedIn(limit: RateLimitName, back: string): Promise<string> {
+  if (isCommunitySwitchedOff()) redirect(await localizedPath('/study'));
   const user = await currentUser();
   if (!user) redirect(await localizedPath('/sign-in'));
   if (await rateLimited(limit, 'user', user.userId))

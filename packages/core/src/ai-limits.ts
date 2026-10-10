@@ -47,3 +47,43 @@ export function checkQuota(
     resetsAt: remaining > 0 ? null : new Date(recent[recent.length - limit]!.getTime() + WINDOW_MS),
   };
 }
+
+// The whole service ------------------------------------------------------------------
+//
+// Accounts are free, so a limit per learner does not bound what the service
+// spends. This one does: requests by everyone in the last 24 hours.
+
+/** AI requests the whole service makes in 24 hours, when none is configured. */
+export const DEFAULT_AI_DAILY_LIMIT = 5000;
+
+/** The configured daily limit: a whole number of requests, or the default. */
+export function aiDailyLimit(configured: string | undefined): number {
+  const limit = Number(configured?.trim());
+  return configured?.trim() && Number.isSafeInteger(limit) && limit >= 0
+    ? limit
+    : DEFAULT_AI_DAILY_LIMIT;
+}
+
+/**
+ * Whether the service still answers this learner, given every request made
+ * today including theirs. Past the limit, free accounts wait; past twice the
+ * limit, everyone does.
+ */
+export function withinAiBudget(allowance: AiAllowance, usedToday: number, limit: number): boolean {
+  return usedToday <= (allowance === 'pro' ? limit * 2 : limit);
+}
+
+/**
+ * The share of the daily limit that this request is the first to reach: 80
+ * or 100, or null. Whoever runs the service is told at each, once.
+ */
+export function aiBudgetAlert(usedToday: number, limit: number): 80 | 100 | null {
+  if (limit <= 0) return null;
+  if (usedToday === limit) return 100;
+  return usedToday === Math.ceil(limit * 0.8) ? 80 : null;
+}
+
+/** Whether a switch such as DISABLE_AI_TUTOR is on: "1", "true", "yes" or "on". */
+export function isSwitchedOn(value: string | undefined): boolean {
+  return ['1', 'true', 'yes', 'on'].includes(value?.trim().toLowerCase() ?? '');
+}

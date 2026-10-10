@@ -2,7 +2,7 @@ import type { Quota } from '@oathly/core';
 import type pg from 'pg';
 
 import { toReadableStream, type TextGenerator } from './generator';
-import { logUsage, quotaFor } from './usage';
+import { completeUsage, reserveUsage, type UsageOptions } from './usage';
 
 // "Ask the tutor": a chat limited to one country's study material. Each turn
 // looks up the passages and questions that match what the learner asked and
@@ -146,6 +146,8 @@ export function cleanConversation(messages: unknown): TutorMessage[] {
 export type TutorOutcome =
   | { kind: 'stream'; stream: ReadableStream<Uint8Array>; quota: Quota }
   | { kind: 'limited'; quota: Quota }
+  /** The whole service has used its day's AI: see reserveUsage. */
+  | { kind: 'paused' }
   | { kind: 'not-studying' };
 
 export async function askTutor(
@@ -154,6 +156,7 @@ export async function askTutor(
   userId: string,
   request: { countryCode: string; messages: unknown },
   now: Date = new Date(),
+  options: UsageOptions = {},
 ): Promise<TutorOutcome> {
   const conversation = cleanConversation(request.messages);
   const country = await db.query<{ name: string }>(
@@ -165,8 +168,20 @@ export async function askTutor(
   const countryName = country.rows[0]?.name;
   if (!countryName) return { kind: 'not-studying' };
 
-  const quota = await quotaFor(db, userId, 'tutor', now);
-  if (!quota.allowed) return { kind: 'limited', quota };
+  // Counted now, before the model is asked: see reserveUsage.
+  const reserved = await reserveUsage(
+    db,
+    {
+      userId,
+      feature: 'tutor',
+      countryCode: request.countryCode,
+      questionId: null,
+      model: generator.model,
+    },
+    now,
+    options,
+  );
+  if (reserved.kind !== 'reserved') return reserved;
 
   // Search with the latest question and the one before, for follow-ups like "and when?".
   const recentQuestions = conversation
@@ -182,15 +197,6 @@ export async function askTutor(
     messages: conversation,
     maxTokens: 1500,
   });
-  const stream = toReadableStream(generation, (result) =>
-    logUsage(db, {
-      userId,
-      feature: 'tutor',
-      countryCode: request.countryCode,
-      questionId: null,
-      model: result.model,
-      usage: result.usage,
-    }),
-  );
-  return { kind: 'stream', stream, quota: { ...quota, remaining: quota.remaining - 1 } };
+  const stream = toReadableStream(generation, (result) => completeUsage(db, reserved.id, result));
+  return { kind: 'stream', stream, quota: reserved.quota };
 }

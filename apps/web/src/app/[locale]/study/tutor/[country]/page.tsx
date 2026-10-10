@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { focusRing } from '@/components/ui';
 import { getT } from '@/lib/i18n';
+import { isAiSwitchedOff } from '@/lib/ai';
 import { requireMe } from '@/lib/user';
 
 import { TutorChat } from './tutor-chat';
@@ -17,6 +18,7 @@ export async function generateMetadata({
 
 export default async function TutorPage({ params }: PageProps<'/[locale]/study/tutor/[country]'>) {
   const { locale, t } = await getT(params);
+  if (isAiSwitchedOff('tutor')) notFound();
   const { me } = await requireMe(locale);
   const code = (await params).country.toUpperCase();
   const country = me.studyCountries.find((candidate) => candidate.countryCode === code);

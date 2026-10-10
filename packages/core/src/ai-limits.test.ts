@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import { aiAllowance, aiLimits, checkQuota } from './ai-limits';
+import {
+  aiAllowance,
+  aiBudgetAlert,
+  aiDailyLimit,
+  aiLimits,
+  checkQuota,
+  DEFAULT_AI_DAILY_LIMIT,
+  isSwitchedOn,
+  withinAiBudget,
+} from './ai-limits';
 import { at } from './test-fixtures';
 
 const now = at('2026-10-04T12:00:00Z');
@@ -57,5 +66,45 @@ describe('checkQuota', () => {
       allowed: true,
       remaining: 180,
     });
+  });
+});
+
+describe('the whole service’s daily limit', () => {
+  it('reads a configured limit, and falls back to the default for anything else', () => {
+    expect(aiDailyLimit('250')).toBe(250);
+    expect(aiDailyLimit(' 0 ')).toBe(0);
+    expect(aiDailyLimit(undefined)).toBe(DEFAULT_AI_DAILY_LIMIT);
+    expect(aiDailyLimit('')).toBe(DEFAULT_AI_DAILY_LIMIT);
+    expect(aiDailyLimit('lots')).toBe(DEFAULT_AI_DAILY_LIMIT);
+    expect(aiDailyLimit('-5')).toBe(DEFAULT_AI_DAILY_LIMIT);
+    expect(aiDailyLimit('2.5')).toBe(DEFAULT_AI_DAILY_LIMIT);
+  });
+
+  it('answers everyone up to the limit, then only Pro, then nobody', () => {
+    expect(withinAiBudget('free', 100, 100)).toBe(true);
+    expect(withinAiBudget('free', 101, 100)).toBe(false);
+    expect(withinAiBudget('pro', 101, 100)).toBe(true);
+    expect(withinAiBudget('pro', 200, 100)).toBe(true);
+    expect(withinAiBudget('pro', 201, 100)).toBe(false);
+    expect(withinAiBudget('free', 1, 0)).toBe(false);
+  });
+
+  it('raises the alarm once at 80% and once at the limit', () => {
+    expect(aiBudgetAlert(79, 100)).toBeNull();
+    expect(aiBudgetAlert(80, 100)).toBe(80);
+    expect(aiBudgetAlert(81, 100)).toBeNull();
+    expect(aiBudgetAlert(100, 100)).toBe(100);
+    expect(aiBudgetAlert(101, 100)).toBeNull();
+    expect(aiBudgetAlert(8, 9)).toBe(80);
+    expect(aiBudgetAlert(1, 1)).toBe(100);
+    expect(aiBudgetAlert(0, 0)).toBeNull();
+  });
+});
+
+describe('isSwitchedOn', () => {
+  it('takes the usual ways of saying yes, and nothing else', () => {
+    for (const yes of ['1', 'true', 'TRUE', ' yes ', 'on']) expect(isSwitchedOn(yes)).toBe(true);
+    for (const no of [undefined, '', '0', 'false', 'off', 'no'])
+      expect(isSwitchedOn(no)).toBe(false);
   });
 });

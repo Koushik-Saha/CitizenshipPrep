@@ -14,8 +14,10 @@
       "dependsOn": ["^build"],
       "env": [
         "ADMIN_*",
+        "AI_DAILY_LIMIT",
         "ANTHROPIC_API_KEY",
         "DATABASE_URL",
+        "DISABLE_*",
         "EMAIL_FROM",
         "EXPO_WEB_ORIGIN",
         "LEGAL_*",

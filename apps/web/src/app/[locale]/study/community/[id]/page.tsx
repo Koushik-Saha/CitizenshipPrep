@@ -15,6 +15,7 @@ import {
 import { buttonClass, fieldClass, focusRing, labelClass } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
+import { isCommunitySwitchedOff } from '@/lib/community';
 import { requireMe } from '@/lib/user';
 
 import { report, submitComment, vote } from '../actions';
@@ -81,6 +82,7 @@ export default async function PostPage({
   searchParams,
 }: PageProps<'/[locale]/study/community/[id]'>) {
   const { locale, t } = await getT(params);
+  if (isCommunitySwitchedOff()) notFound();
   const { user } = await requireMe(locale);
   const { id } = await params;
   const post = UUID.test(id) ? await getThread(getDb(), user.userId, id) : null;
