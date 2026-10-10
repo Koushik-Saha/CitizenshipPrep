@@ -1,6 +1,6 @@
 'use client';
 
-import { localizePath } from '@oathly/i18n/locales';
+import { localizePath, splitLocalePath } from '@oathly/i18n/locales';
 import NextLink from 'next/link';
 import type { ComponentProps } from 'react';
 
@@ -14,7 +14,11 @@ import { useLocale } from '@/components/i18n/locale';
  */
 export default function Link({ href, ...props }: ComponentProps<typeof NextLink>) {
   const locale = useLocale();
+  // An address that already names its language is left as it is: a Server
+  // Component may have localised it before handing it over.
   const localized =
-    typeof href === 'string' && href.startsWith('/') ? localizePath(locale, href) : href;
+    typeof href === 'string' && href.startsWith('/') && !splitLocalePath(href).locale
+      ? localizePath(locale, href)
+      : href;
   return <NextLink href={localized} {...props} />;
 }
