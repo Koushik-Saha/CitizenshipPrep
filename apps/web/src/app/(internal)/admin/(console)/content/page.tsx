@@ -1,5 +1,6 @@
 import {
   getQueueCounts,
+  listApprovalTimes,
   listPendingTranslationLocales,
   pageQuestionQueue,
   pageTranslationQueue,
@@ -23,9 +24,11 @@ import {
 import { languageName } from '@oathly/i18n';
 import Link from 'next/link';
 
-import { BulkSelection, FilterForm } from '@/components/admin/queue-controls';
+import { BulkSelection, ConfirmApprove, FilterForm } from '@/components/admin/queue-controls';
+import { ApprovedToday } from '@/components/admin/review-keys';
 import { Badge, buttonClass, focusRing, Notice, StatusBadge } from '@/components/ui';
 import { getDb, requireReviewer } from '@/lib/admin';
+import { queueContext, questionHref } from '@/lib/review-queue';
 
 import { decideQuestions, decideTranslations } from './actions';
 
@@ -98,7 +101,7 @@ const pill =
   focusRing;
 
 export default async function ContentQueue({ searchParams }: PageProps<'/admin/content'>) {
-  await requireReviewer();
+  const reviewer = await requireReviewer();
   const params = await searchParams;
   const requested = single(params.view);
   const view: View = views.find((candidate) => candidate === requested) ?? 'questions';
@@ -120,8 +123,9 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
   const problem = single(params.problem);
 
   const db = getDb();
-  const [counts, countries, topics, locales] = await Promise.all([
+  const [counts, approvals, countries, topics, locales] = await Promise.all([
     getQueueCounts(db, country),
+    listApprovalTimes(db, reviewer.id),
     listReviewCountries(db),
     country && view !== 'translations' ? listReviewTopics(db, country) : [],
     view === 'translations' ? listPendingTranslationLocales(db) : [],
@@ -196,9 +200,12 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
             its source passage.
           </p>
         </div>
-        <p className="bg-success-soft text-success-fg rounded-full px-4 py-1.5 text-sm font-medium">
-          {counts.published} published{countryName ? ` for ${countryName}` : ''}
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <ApprovedToday times={approvals.map((time) => time.toISOString())} />
+          <p className="bg-success-soft text-success-fg rounded-full px-4 py-1.5 text-sm font-medium">
+            {counts.published} published{countryName ? ` for ${countryName}` : ''}
+          </p>
+        </div>
       </div>
 
       {(done || problem) && (
@@ -481,26 +488,29 @@ function BulkBar({
   approve,
   refuse,
 }: {
-  approve: { decision: string; label: string; confirm?: string };
+  approve: {
+    decision: string;
+    label: string;
+    /** Approving shows learners something new, so it is confirmed in a dialog first. */
+    dialog?: { noun: string; outcome: string; promise: string };
+  };
   refuse: { decision: string; label: string; reason: string };
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
       <div className="space-y-2">
-        {approve.confirm && (
-          <label className="flex items-start gap-2.5 text-sm">
-            <input type="checkbox" name="checked" className="accent-primary mt-0.5 size-4" />
-            <span>{approve.confirm}</span>
-          </label>
+        {approve.dialog ? (
+          <ConfirmApprove label={approve.label} {...approve.dialog} />
+        ) : (
+          <button
+            type="submit"
+            name="decision"
+            value={approve.decision}
+            className={buttonClass.primary}
+          >
+            {approve.label}
+          </button>
         )}
-        <button
-          type="submit"
-          name="decision"
-          value={approve.decision}
-          className={buttonClass.primary}
-        >
-          {approve.label}
-        </button>
       </div>
       <div className="flex flex-1 flex-wrap items-end justify-end gap-2">
         <div className="min-w-48 flex-1 sm:max-w-xs">
@@ -634,7 +644,11 @@ function QuestionList({
               approve={{
                 decision: 'approve',
                 label: 'Approve and publish',
-                confirm: 'I have checked each selected question against its source.',
+                dialog: {
+                  noun: 'question',
+                  outcome: 'published',
+                  promise: 'I have checked each of them against its source.',
+                },
               }}
               refuse={{ decision: 'reject', label: 'Reject', reason: 'Reason, if rejecting' }}
             />
@@ -653,10 +667,14 @@ function QuestionList({
                 type="checkbox"
                 name="ids"
                 value={question.id}
+                data-has-source={question.hasSource}
                 aria-label={`Select: ${question.text}`}
                 className={tick}
               />
-              <Link href={`/admin/content/questions/${question.id}`} className={rowLink}>
+              <Link
+                href={questionHref(question.id, queueContext(new URLSearchParams(back)).query)}
+                className={rowLink}
+              >
                 <span className="block font-medium">{question.text}</span>
                 <span className="text-fg-muted mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span>{question.countryCode}</span>
@@ -719,7 +737,11 @@ function TranslationList({
             approve={{
               decision: 'approve',
               label: 'Approve as drafted',
-              confirm: 'I have read each selected translation against the original.',
+              dialog: {
+                noun: 'translation',
+                outcome: 'approved',
+                promise: 'I have read each of them against the original.',
+              },
             }}
             refuse={{ decision: 'reject', label: 'Reject', reason: 'Reason, if rejecting' }}
           />

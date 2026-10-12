@@ -1,7 +1,9 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+
+import { buttonClass } from '@/components/ui';
 
 // The interactive parts of the review queue: filters that apply as they are
 // changed, and ticking several rows to decide them together. The filters are
@@ -125,5 +127,114 @@ export function BulkSelection({
         {bar}
       </div>
     </div>
+  );
+}
+
+/**
+ * The bulk bar's "approve": it opens a dialog that says how many will go out
+ * and asks the reviewer to confirm they checked each one, before anything is
+ * sent. The server refuses an approval that did not come through here (it
+ * checks the count the dialog confirmed).
+ */
+export function ConfirmApprove({
+  label,
+  noun,
+  outcome,
+  promise,
+}: {
+  /** The button that opens the dialog: "Approve and publish". */
+  label: string;
+  /** What is being approved: "question", "translation". */
+  noun: string;
+  /** What approving does to them: "published", "approved". */
+  outcome: string;
+  /** What the reviewer confirms: "I have checked each one against its source." */
+  promise: string;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const title = useId();
+  const [selected, setSelected] = useState(0);
+  const [unsourced, setUnsourced] = useState(0);
+  const [checked, setChecked] = useState(false);
+  const going = selected - unsourced;
+  const plural = (count: number) => `${count} ${noun}${count === 1 ? '' : 's'}`;
+
+  return (
+    <>
+      <button
+        type="button"
+        className={buttonClass.primary}
+        onClick={(event) => {
+          const ticked = [
+            ...(event.currentTarget.form?.querySelectorAll<HTMLInputElement>(
+              'input[name="ids"]:checked',
+            ) ?? []),
+          ];
+          setSelected(ticked.length);
+          setUnsourced(ticked.filter((box) => box.dataset.hasSource === 'false').length);
+          setChecked(false);
+          dialog.current?.showModal();
+        }}
+      >
+        {label}
+      </button>
+      <dialog
+        ref={dialog}
+        aria-labelledby={title}
+        // What was confirmed stands only while the dialog is open.
+        onClose={() => setSelected(0)}
+        className="bg-surface-raised text-fg border-border m-auto w-full max-w-md rounded-xl border p-6 shadow-lg backdrop:bg-black/50"
+      >
+        <h2 id={title} className="font-display text-xl font-semibold">
+          {going > 0 ? `Approve ${plural(going)}?` : 'Nothing to approve'}
+        </h2>
+        <p className="mt-2 text-sm" data-testid="confirm-count">
+          {going > 0
+            ? `${plural(going)} will be ${outcome} and shown to learners as soon as you confirm.`
+            : `None of the ${plural(selected)} you selected can be approved together.`}
+        </p>
+        {unsourced > 0 && (
+          <p className="text-accent-fg mt-2 text-sm font-medium" data-testid="confirm-refused">
+            {plural(unsourced)} {unsourced === 1 ? 'has' : 'have'} no source to check against and
+            will not be approved here. Open {unsourced === 1 ? 'it' : 'each'} and review it on its
+            own.
+          </p>
+        )}
+        {going > 0 && (
+          <label className="mt-4 flex items-start gap-2.5 text-sm">
+            <input
+              type="checkbox"
+              name="checked"
+              className="accent-primary mt-0.5 size-4"
+              checked={checked}
+              onChange={(event) => setChecked(event.target.checked)}
+            />
+            <span>{promise}</span>
+          </label>
+        )}
+        {/* What the reviewer was shown, for the server to hold the approval to. */}
+        <input type="hidden" name="confirmed" value={selected} />
+        <div className="mt-6 flex flex-wrap justify-end gap-3">
+          <button
+            type="button"
+            className={buttonClass.secondary}
+            onClick={() => dialog.current?.close()}
+          >
+            Cancel
+          </button>
+          {going > 0 && (
+            <button
+              type="submit"
+              name="decision"
+              value="approve"
+              disabled={!checked}
+              className={`${buttonClass.primary} disabled:cursor-not-allowed disabled:opacity-50`}
+            >
+              Approve {plural(going)}
+            </button>
+          )}
+        </div>
+      </dialog>
+    </>
   );
 }

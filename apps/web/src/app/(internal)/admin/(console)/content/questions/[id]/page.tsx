@@ -1,8 +1,14 @@
-import { getQuestionForReview, type QuestionForReview } from '@oathly/content/review';
+import {
+  getQuestionForReview,
+  getQueueNeighbours,
+  listApprovalTimes,
+  type QuestionForReview,
+} from '@oathly/content/review';
 import { locateQuote } from '@oathly/content/text';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ApprovedToday, ReviewKeys } from '@/components/admin/review-keys';
 import {
   Badge,
   buttonClass,
@@ -14,6 +20,7 @@ import {
   StatusBadge,
 } from '@/components/ui';
 import { getDb, requireReviewer } from '@/lib/admin';
+import { queueContext, queueHref, questionHref } from '@/lib/review-queue';
 
 import { approve, reject, retire, reverify, saveQuestion } from '../../actions';
 
@@ -30,15 +37,36 @@ const historyLabels: Record<string, string> = {
 
 const single = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
+/** What the last decision was, shown on the question it led to. */
+const doneLabels: Record<string, string> = {
+  approved: 'Approved and published.',
+  rejected: 'Rejected.',
+  reverified: 'Marked as still correct.',
+  retired: 'Retired. Learners no longer see it.',
+};
+
+const stepLink = buttonClass.secondary;
+
 export default async function ReviewQuestion({
   params,
   searchParams,
 }: PageProps<'/admin/content/questions/[id]'>) {
-  await requireReviewer();
+  const reviewer = await requireReviewer();
   const { id } = await params;
   const query = await searchParams;
-  const question = UUID.test(id) ? await getQuestionForReview(getDb(), id) : null;
+  const db = getDb();
+  const question = UUID.test(id) ? await getQuestionForReview(db, id) : null;
   if (!question) notFound();
+
+  // The filter the reviewer came through, and this question's place in it.
+  const from = queueContext(query);
+  const [place, approvals] = await Promise.all([
+    getQueueNeighbours(db, from.queue, from.filters, question.id),
+    listApprovalTimes(db, reviewer.id),
+  ]);
+  const previous = place?.previous ? questionHref(place.previous, from.query) : null;
+  const next = place?.next ? questionHref(place.next, from.query) : null;
+  const done = doneLabels[single(query.done) ?? ''];
 
   const problem = single(query.problem);
   const saved = single(query.saved) === '1';
@@ -49,11 +77,32 @@ export default async function ReviewQuestion({
 
   return (
     <>
-      <p className="text-sm">
-        <Link href="/admin/content" className={`${focusRing} text-primary-fg rounded-xs underline`}>
-          Back to the queue
-        </Link>
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm">
+          <Link
+            href={queueHref(from.query)}
+            className={`${focusRing} text-primary-fg rounded-xs underline`}
+          >
+            Back to the queue
+          </Link>
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <ApprovedToday times={approvals.map((time) => time.toISOString())} />
+          <nav aria-label="Questions in this filter" className="flex items-center gap-2">
+            {place && (
+              <p className="text-fg-muted me-1 text-sm" data-testid="queue-place">
+                {place.position} of {place.total}
+              </p>
+            )}
+            <StepLink href={previous} shortcut="previous" keys="k">
+              Previous
+            </StepLink>
+            <StepLink href={next} shortcut="next" keys="j">
+              Next
+            </StepLink>
+          </nav>
+        </div>
+      </div>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <h1 className="font-display text-3xl font-semibold">Review question</h1>
         <StatusBadge status={question.status} />
@@ -67,7 +116,16 @@ export default async function ReviewQuestion({
           : ''}
       </p>
 
+      <div className="mt-4">
+        <ReviewKeys key={question.id} canDecide={pending} />
+      </div>
+
       <div className="mt-6 space-y-3">
+        {done && (
+          <Notice tone="success" role="status">
+            {done} {place ? 'This is the next one.' : ''}
+          </Notice>
+        )}
         {problem && (
           <Notice tone="error" role="alert">
             {problem}
@@ -107,6 +165,7 @@ export default async function ReviewQuestion({
             Question
           </h2>
           <form className="mt-3 space-y-5">
+            <QueueFields query={from.query} next={place?.next ?? null} />
             <fieldset disabled={!editable} className="space-y-5">
               <div>
                 <label htmlFor="text" className={labelClass}>
@@ -221,6 +280,8 @@ export default async function ReviewQuestion({
                     type="submit"
                     formAction={approve.bind(null, question.id)}
                     className={buttonClass.primary}
+                    data-shortcut="approve"
+                    aria-keyshortcuts="a"
                   >
                     Approve and publish
                   </button>
@@ -229,6 +290,8 @@ export default async function ReviewQuestion({
                   type="submit"
                   formAction={saveQuestion.bind(null, question.id)}
                   className={pending ? buttonClass.secondary : buttonClass.primary}
+                  data-shortcut="save"
+                  aria-keyshortcuts="s"
                 >
                   Save changes
                 </button>
@@ -239,6 +302,8 @@ export default async function ReviewQuestion({
           {flagged && (
             <DecisionForm
               title="Still correct?"
+              decision="reverify"
+              queue={{ query: from.query, next: place?.next ?? null }}
               hint="Confirms you checked the question against the current source. Renews the verification date."
               noteLabel="Note (optional)"
               action={reverify.bind(null, question.id)}
@@ -249,6 +314,8 @@ export default async function ReviewQuestion({
           {pending && (
             <DecisionForm
               title="Reject"
+              decision="reject"
+              queue={{ query: from.query, next: place?.next ?? null }}
               hint="The draft is kept, hidden, so the same question is recognised if it is drafted again."
               noteLabel="Reason"
               noteRequired
@@ -260,6 +327,8 @@ export default async function ReviewQuestion({
           {published && (
             <DecisionForm
               title="Retire"
+              decision="retire"
+              queue={{ query: from.query, next: place?.next ?? null }}
               hint="Takes the question away from learners, for example when the law has changed."
               noteLabel="Reason"
               noteRequired
@@ -316,6 +385,8 @@ export default async function ReviewQuestion({
 function SourcePanel({ question }: { question: QuestionForReview }) {
   const { passage, sourceQuote } = question;
   const found = passage && sourceQuote ? locateQuote(passage.text, sourceQuote) : null;
+  // A question loaded from a file says where its answer is, in words.
+  const cited = question.origin || question.sourceLocator || question.needsFreshnessCheck;
 
   return (
     <section aria-labelledby="source-heading">
@@ -323,12 +394,45 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
         Source
       </h2>
       <div className="bg-surface border-border mt-3 rounded-lg border p-5">
+        {cited && (
+          <dl className="mb-4 space-y-3 text-sm">
+            {question.origin && (
+              <div>
+                <dt className="text-fg-muted">Wording</dt>
+                <dd className="font-medium">
+                  {question.origin === 'official'
+                    ? `The official question${question.officialNumber ? `, no. ${question.officialNumber}` : ''}, copied word for word`
+                    : 'Written by Oathly from the official material'}
+                </dd>
+              </div>
+            )}
+            {question.sourceLocator && (
+              <div>
+                <dt className="text-fg-muted">Where to look</dt>
+                <dd className="font-medium">{question.sourceLocator}</dd>
+              </div>
+            )}
+            {question.needsFreshnessCheck && (
+              <div>
+                <dt className="text-fg-muted">Before approving</dt>
+                <dd className="font-medium">
+                  The answer changes over time (an officeholder or a figure). Check it is current.
+                </dd>
+              </div>
+            )}
+          </dl>
+        )}
         {passage ? (
           <>
             <p className="font-medium">{passage.documentTitle}</p>
             <p className="text-fg-muted text-sm">
               {[passage.publisher, passage.heading].filter(Boolean).join(', ')}
             </p>
+            {passage.matchedByQuote && (
+              <p className="text-fg-muted mt-2 text-sm">
+                The question names no passage. This one was found by its quoted words.
+              </p>
+            )}
             {!passage.isCurrent && (
               <p className="text-accent-fg mt-2 text-sm font-medium">
                 This is the passage as it was when the question was written. It is no longer in the
@@ -345,10 +449,11 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
               </p>
             )}
             <p
-              className="border-border mt-4 max-h-[28rem] overflow-y-auto rounded-sm border p-3 text-sm leading-relaxed whitespace-pre-wrap"
+              className="border-border relative mt-4 max-h-[28rem] overflow-y-auto rounded-sm border p-3 text-sm leading-relaxed whitespace-pre-wrap"
               tabIndex={0}
               role="region"
               aria-label="Source passage"
+              data-passage
             >
               {found ? (
                 <>
@@ -371,40 +476,16 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
               </p>
             )}
           </>
-        ) : question.sourceLocator || question.sourceQuote ? (
-          // Loaded from a file: the source is a document outside the app, cited by place.
-          <dl className="space-y-3 text-sm">
-            {question.origin && (
-              <div>
-                <dt className="text-fg-muted">Wording</dt>
-                <dd className="font-medium">
-                  {question.origin === 'official'
-                    ? `The official question${question.officialNumber ? `, no. ${question.officialNumber}` : ''}, copied word for word`
-                    : 'Written by Oathly from the official material'}
-                </dd>
-              </div>
-            )}
-            {question.sourceLocator && (
-              <div>
-                <dt className="text-fg-muted">Where to look</dt>
-                <dd className="font-medium">{question.sourceLocator}</dd>
-              </div>
-            )}
-            {question.sourceQuote && (
-              <div>
-                <dt className="text-fg-muted">The words it rests on</dt>
-                <dd className="font-medium">“{question.sourceQuote}”</dd>
-              </div>
-            )}
-            {question.needsFreshnessCheck && (
-              <div>
-                <dt className="text-fg-muted">Before approving</dt>
-                <dd className="font-medium">
-                  The answer changes over time (an officeholder or a figure). Check it is current.
-                </dd>
-              </div>
-            )}
-          </dl>
+        ) : sourceQuote ? (
+          <div className="text-sm">
+            <p className="text-fg-muted">The words it rests on</p>
+            <p className="border-accent mt-1 border-l-4 pl-3 font-medium">“{sourceQuote}”</p>
+            <p className="text-fg-muted mt-3" data-testid="no-passage">
+              The passage around these words is not shown: the source document has not been loaded
+              into Oathly, or the words are not in it as quoted. Open the source to read them in
+              place.
+            </p>
+          </div>
         ) : (
           <p className="text-fg-muted text-sm">
             No passage is stored for this question. Check it against the source document itself.
@@ -425,8 +506,40 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
   );
 }
 
+/** The filter being worked through and what comes next in it, sent with every decision. */
+function QueueFields({ query, next }: { query: string; next: string | null }) {
+  return (
+    <>
+      <input type="hidden" name="queue" value={query} />
+      <input type="hidden" name="next" value={next ?? ''} />
+    </>
+  );
+}
+
+/** "Previous" or "Next", when there is one: at either end of the filter there is nothing to show. */
+function StepLink({
+  href,
+  shortcut,
+  keys,
+  children,
+}: {
+  href: string | null;
+  shortcut: string;
+  keys: string;
+  children: React.ReactNode;
+}) {
+  if (!href) return null;
+  return (
+    <Link href={href} className={stepLink} data-shortcut={shortcut} aria-keyshortcuts={keys}>
+      {children}
+    </Link>
+  );
+}
+
 function DecisionForm({
   title,
+  decision,
+  queue,
   hint,
   noteLabel,
   noteRequired = false,
@@ -435,6 +548,9 @@ function DecisionForm({
   tone,
 }: {
   title: string;
+  /** Which decision this is, for the keys that reach it. */
+  decision: string;
+  queue: { query: string; next: string | null };
   hint: string;
   noteLabel: string;
   noteRequired?: boolean;
@@ -444,7 +560,8 @@ function DecisionForm({
 }) {
   const id = `note-${title.toLowerCase().replace(/\W+/g, '-')}`;
   return (
-    <form action={action} className="border-border mt-8 border-t pt-6">
+    <form action={action} data-decision={decision} className="border-border mt-8 border-t pt-6">
+      <QueueFields {...queue} />
       <h3 className="font-medium">{title}</h3>
       <p className="text-fg-muted mt-1 text-sm">{hint}</p>
       <label htmlFor={id} className={`${labelClass} mt-3`}>

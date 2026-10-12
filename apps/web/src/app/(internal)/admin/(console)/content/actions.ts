@@ -21,6 +21,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { getDb, requireReviewer } from '@/lib/admin';
+import { questionHref, queueContext, queueHref } from '@/lib/review-queue';
 import { revalidatePublicContent } from '@/lib/revalidate';
 
 // Each action checks who is asking, makes one decision through
@@ -72,10 +73,33 @@ function finish(problem: string | null, here: string, next: string): never {
   // A decision can publish, change or withdraw what learners and visitors
   // see, so the public country and topic pages rebuild on their next visit.
   if (!problem) revalidatePublicContent();
-  redirect(problem ? `${here}?problem=${encodeURIComponent(problem)}` : next);
+  redirect(
+    problem
+      ? `${here}${here.includes('?') ? '&' : '?'}problem=${encodeURIComponent(problem)}`
+      : next,
+  );
 }
 
-const questionPath = (id: string) => `/admin/content/questions/${id}`;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Where a decision on one question leads: back to that question if it could
+ * not be made, otherwise on to the next one in the filter the reviewer is
+ * working through, or to the queue when there is none. The form says which
+ * filter ("queue") and which question comes next ("next"); the filter is read
+ * through the same checks as the queue's own address, and "next" has to be a
+ * question's id, so neither can send the reviewer anywhere else.
+ */
+function afterDecision(id: string, form: FormData, done: string) {
+  const { query } = queueContext(new URLSearchParams(text(form, 'queue')));
+  const next = text(form, 'next');
+  return {
+    here: questionHref(id, query),
+    onward: UUID.test(next) ? questionHref(next, query, { done }) : queueHref(query, { done }),
+    stay: (extra: Record<string, string>) => questionHref(id, query, extra),
+  };
+}
+
 const translationPath = (id: string, locale: string) =>
   `/admin/content/translations/${id}/${encodeURIComponent(locale)}`;
 
@@ -83,35 +107,40 @@ export async function saveQuestion(id: string, form: FormData) {
   const problem = await attempt((reviewerId) =>
     saveQuestionEdits(getDb(), id, reviewerId, readQuestionEdits(form)),
   );
-  finish(problem, questionPath(id), `${questionPath(id)}?saved=1`);
+  const { here, stay } = afterDecision(id, form, 'saved');
+  finish(problem, here, stay({ saved: '1' }));
 }
 
 export async function approve(id: string, form: FormData) {
   const problem = await attempt((reviewerId) =>
     approveQuestion(getDb(), id, reviewerId, readQuestionEdits(form)),
   );
-  finish(problem, questionPath(id), '/admin/content?done=approved');
+  const { here, onward } = afterDecision(id, form, 'approved');
+  finish(problem, here, onward);
 }
 
 export async function reject(id: string, form: FormData) {
   const problem = await attempt((reviewerId) =>
     rejectQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
-  finish(problem, questionPath(id), '/admin/content?done=rejected');
+  const { here, onward } = afterDecision(id, form, 'rejected');
+  finish(problem, here, onward);
 }
 
 export async function reverify(id: string, form: FormData) {
   const problem = await attempt((reviewerId) =>
     reverifyQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
-  finish(problem, questionPath(id), '/admin/content?view=source&done=reverified');
+  const { here, onward } = afterDecision(id, form, 'reverified');
+  finish(problem, here, onward);
 }
 
 export async function retire(id: string, form: FormData) {
   const problem = await attempt((reviewerId) =>
     retireQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
-  finish(problem, questionPath(id), '/admin/content?done=retired');
+  const { here, onward } = afterDecision(id, form, 'retired');
+  finish(problem, here, onward);
 }
 
 export async function approveTranslated(id: string, locale: string, form: FormData) {
@@ -158,6 +187,12 @@ async function decideInBulk(
       throw new ReviewError(
         'Tick the box to confirm you have checked each one against its source.',
       );
+    }
+    // Approving goes through a dialog that says how many will go out. What
+    // it showed has to be what arrives: a count that differs means the
+    // selection changed, or the dialog was skipped.
+    if (action === 'approve' && Number(text(form, 'confirmed')) !== new Set(ids).size) {
+      throw new ReviewError('Confirm how many you are approving, then approve them.');
     }
     outcome = await decide(reviewer.id, action, ids, text(form, 'note'));
   } catch (error) {

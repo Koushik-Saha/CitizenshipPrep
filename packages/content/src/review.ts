@@ -2,6 +2,7 @@ import type pg from 'pg';
 
 import { withTransaction, type Db } from './db';
 import type { QuestionOption } from './schemas';
+import { locateQuote } from './text';
 
 // Steps 4 and 5 of the pipeline: what a reviewer can see and decide. The admin
 // UI calls these and only renders; every rule about what a decision means
@@ -10,6 +11,8 @@ import type { QuestionOption } from './schemas';
 export class ReviewError extends Error {
   override readonly name = 'ReviewError';
 }
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface Reviewer {
   id: string;
@@ -376,6 +379,76 @@ export async function listQuestionQueue(
   ).items;
 }
 
+/** Where a question stands in a queue as filtered and ordered: for moving through it. */
+export interface QueueNeighbours {
+  previous: string | null;
+  next: string | null;
+  /** 1 for the first. */
+  position: number;
+  total: number;
+}
+
+/**
+ * The questions before and after `id` in a queue, with the same filters and
+ * order the list uses. Null when the question is not in the queue as filtered
+ * (it has been decided, or the filter leaves it out).
+ */
+export async function getQueueNeighbours(
+  db: Db,
+  queue: QuestionQueue,
+  filters: QueueFilters | string | undefined,
+  id: string,
+): Promise<QueueNeighbours | null> {
+  if (!UUID.test(id)) return null;
+  const { countryCode, search, topic, flag, origin, level, type, sort } = asFilters(filters);
+  const { rows } = await db.query<{
+    previous: string | null;
+    next: string | null;
+    position: number;
+    total: number;
+  }>(
+    `select previous, next, position, total
+     from (
+       select q.id,
+              lag(q.id) over ordered as previous,
+              lead(q.id) over ordered as next,
+              (row_number() over ordered)::int as position,
+              (count(*) over ())::int as total
+       ${QUESTION_QUEUE_FROM}
+       window ordered as (order by ${QUESTION_QUEUE_ORDER[sort ?? 'oldest']})
+     ) placed
+     where id = $9`,
+    [
+      queue,
+      countryCode ?? null,
+      likePattern(search),
+      topic ?? null,
+      flag ?? null,
+      origin ?? null,
+      level ?? null,
+      type ?? null,
+      id,
+    ],
+  );
+  return rows[0] ?? null;
+}
+
+/**
+ * When a reviewer approved each of their recent questions, newest first: the
+ * last day and a half, which holds "today" in any time zone. The page counts
+ * the ones that fall on the reviewer's own calendar day.
+ */
+export async function listApprovalTimes(db: Db, reviewerId: string, hours = 36): Promise<Date[]> {
+  const { rows } = await db.query<{ created_at: Date }>(
+    `select created_at from public.question_reviews
+     where reviewer_id = $1 and action = 'approved'
+       and created_at > now() - make_interval(hours => $2)
+     order by created_at desc`,
+    [reviewerId, hours],
+  );
+  return rows.map((row) => row.created_at);
+}
+
 export interface QueueTranslation {
   questionId: string;
   countryCode: string;
@@ -535,6 +608,11 @@ export interface QuestionForReview {
     heading: string | null;
     text: string;
     isCurrent: boolean;
+    /**
+     * True when the question names no passage and this one was found by its
+     * quoted words, among the country's loaded sources.
+     */
+    matchedByQuote: boolean;
   } | null;
   duplicateOf: { id: string; text: string; status: string } | null;
   history: ReviewDecision[];
@@ -669,13 +747,16 @@ export async function getQuestionForReview(db: Db, id: string): Promise<Question
     topics: topics.rows,
     passage:
       row.passage_text == null
-        ? null
+        ? row.source_quote
+          ? await findPassageByQuote(db, row.country_code, row.source_url, row.source_quote)
+          : null
         : {
             documentTitle: row.document_title ?? '',
             publisher: row.document_publisher,
             heading: row.passage_heading,
             text: row.passage_text,
             isCurrent: row.passage_is_current ?? false,
+            matchedByQuote: false,
           },
     duplicateOf,
     history: history.rows.map((entry) => ({
@@ -686,6 +767,51 @@ export async function getQuestionForReview(db: Db, id: string): Promise<Question
       createdAt: entry.created_at,
     })),
   };
+}
+
+/**
+ * The passage a quote comes from, for a question that was loaded from a file
+ * and so names no passage: looked for among the current passages of the
+ * country's loaded source documents, the question's own source first. Null
+ * when the source has not been loaded, or the words are not in it.
+ */
+async function findPassageByQuote(
+  db: Db,
+  countryCode: string,
+  sourceUrl: string,
+  quote: string,
+): Promise<QuestionForReview['passage']> {
+  // Narrow the search in the database by the quote's two longest words, then
+  // let locateQuote decide: it forgives line breaks and quote styles.
+  const words = [...new Set(quote.match(/[\p{L}\p{N}]{4,}/gu) ?? [])]
+    .sort((a, b) => b.length - a.length)
+    .slice(0, 2);
+  if (words.length === 0) return null;
+  const { rows } = await db.query<{
+    heading: string | null;
+    text: string;
+    title: string;
+    publisher: string | null;
+  }>(
+    `select p.heading, p.text, d.title, d.publisher
+     from public.source_passages p
+     join public.source_documents d on d.id = p.document_id
+     where d.country_code = $1 and p.is_current and p.text ilike all($3::text[])
+     order by (d.source_url = $2) desc, d.fetched_at desc, p.ordinal
+     limit 50`,
+    [countryCode, sourceUrl, words.map((word) => likePattern(word))],
+  );
+  const match = rows.find((row) => locateQuote(row.text, quote) !== null);
+  return match
+    ? {
+        documentTitle: match.title,
+        publisher: match.publisher,
+        heading: match.heading,
+        text: match.text,
+        isCurrent: true,
+        matchedByQuote: true,
+      }
+    : null;
 }
 
 // --- Decisions ---------------------------------------------------------------------
@@ -988,8 +1114,6 @@ export interface BulkOutcome {
   failed: { id: string; reason: string }[];
 }
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 function checkBulk(count: number, action: string, note: string) {
   if (count === 0) throw new ReviewError('Select at least one.');
   if (count > BULK_LIMIT) throw new ReviewError(`Select at most ${BULK_LIMIT} at a time.`);
@@ -1035,8 +1159,22 @@ export async function reviewQuestionsInBulk(
   checkBulk(ids.length, action, note);
   return eachOnItsOwn(ids, async (id) => {
     if (!UUID.test(id)) throw new ReviewError('Not a question.');
-    if (action === 'approve') await approveQuestion(pool, id, reviewerId);
-    else if (action === 'reject') await rejectQuestion(pool, id, reviewerId, note);
+    if (action === 'approve') {
+      // Several at once is for questions that can be checked at a glance. One
+      // that says nothing of where its answer comes from is not: it is looked
+      // at on its own, where the reviewer finds the source themselves.
+      const { rows } = await pool.query<{ has_source: boolean }>(
+        `select (source_passage_id is not null or source_locator is not null) as has_source
+         from public.questions where id = $1 and status in ('draft', 'in_review')`,
+        [id],
+      );
+      if (rows[0] && !rows[0].has_source) {
+        throw new ReviewError(
+          'It has no source to check it against. Open it and review it on its own.',
+        );
+      }
+      await approveQuestion(pool, id, reviewerId);
+    } else if (action === 'reject') await rejectQuestion(pool, id, reviewerId, note);
     else if (action === 'reverify') await reverifyQuestion(pool, id, reviewerId, note || undefined);
     else await retireQuestion(pool, id, reviewerId, note);
   });

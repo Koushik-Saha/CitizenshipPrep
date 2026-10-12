@@ -4,6 +4,9 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   BULK_LIMIT,
   ensureReviewer,
+  getQuestionForReview,
+  getQueueNeighbours,
+  listApprovalTimes,
   listPendingTranslationLocales,
   listQuestionQueue,
   pageQuestionQueue,
@@ -27,6 +30,7 @@ describe.skipIf(!url)('the review queue: filters and bulk decisions', () => {
 
   const cleanUp = async () => {
     await pool.query('delete from public.questions where country_code = $1', [COUNTRY]);
+    await pool.query('delete from public.source_documents where country_code = $1', [COUNTRY]);
     await pool.query('delete from public.countries where iso_code = $1', [COUNTRY]);
     await pool.query('delete from public.profiles where id = any($1)', [[REVIEWER.id, LEARNER]]);
   };
@@ -238,23 +242,122 @@ describe.skipIf(!url)('the review queue: filters and bulk decisions', () => {
     expect((await status(ids.capital!)).status).toBe('in_review');
   });
 
+  it('finds the questions before and after one, in the order and filter of the queue', async () => {
+    const around = (id: string, filters: Parameters<typeof getQueueNeighbours>[2]) =>
+      getQueueNeighbours(pool, 'pending', filters, id);
+    // Oldest first: capital, founded, vote, jury.
+    expect(await around(ids.founded!, { countryCode: COUNTRY })).toEqual({
+      previous: ids.capital,
+      next: ids.vote,
+      position: 2,
+      total: 4,
+    });
+    expect(await around(ids.capital!, { countryCode: COUNTRY })).toMatchObject({
+      previous: null,
+      next: ids.founded,
+      position: 1,
+    });
+    expect(await around(ids.jury!, { countryCode: COUNTRY })).toMatchObject({
+      previous: ids.vote,
+      next: null,
+      position: 4,
+    });
+    // Newest first turns it round; a filter leaves out what it leaves out.
+    expect(await around(ids.founded!, { countryCode: COUNTRY, sort: 'newest' })).toMatchObject({
+      previous: ids.vote,
+      next: ids.capital,
+    });
+    expect(await around(ids.vote!, { countryCode: COUNTRY, topic: 'rights' })).toEqual({
+      previous: null,
+      next: ids.jury,
+      position: 1,
+      total: 2,
+    });
+    // A question the filter does not hold has no place in it.
+    expect(await around(ids.capital!, { countryCode: COUNTRY, topic: 'rights' })).toBeNull();
+    expect(await around('10000000-0000-4000-8000-000000000000', COUNTRY)).toBeNull();
+  });
+
+  it('shows the passage a question’s quote comes from, when the source has been loaded', async () => {
+    const quote = 'Bulkland was founded in 1802';
+    await pool.query(
+      `update public.questions set source_quote = $2, source_locator = 'Guide, page 4' where id = $1`,
+      [ids.founded, quote],
+    );
+    // Nothing loaded yet: only the quote and where to look.
+    expect((await getQuestionForReview(pool, ids.founded!))!.passage).toBeNull();
+
+    const document = await pool.query<{ id: string }>(
+      `insert into public.source_documents
+         (country_code, title, publisher, source_url, media_type, locale, license, raw_hash, content_hash, byte_size)
+       values ($1, 'The Bulkland Guide', 'Ministry of Bulk', 'https://example.org/guide',
+               'text/plain', 'en', 'public-domain', repeat('a', 64), repeat('b', 64), 10)
+       returning id`,
+      [COUNTRY],
+    );
+    await pool.query(
+      `insert into public.source_passages (document_id, ordinal, heading, text, content_hash)
+       values ($1, 0, 'Geography', 'Bulkland has two rivers and a founded-sounding hill.', repeat('c', 64)),
+              ($1, 1, 'History', $2, repeat('d', 64))`,
+      [
+        document.rows[0]!.id,
+        'Settlers arrived by river.\nBulkland  was founded in 1802, after the Treaty of Sacks. It grew quickly.',
+      ],
+    );
+    const found = (await getQuestionForReview(pool, ids.founded!))!.passage;
+    expect(found).toMatchObject({
+      documentTitle: 'The Bulkland Guide',
+      publisher: 'Ministry of Bulk',
+      heading: 'History',
+      isCurrent: true,
+      matchedByQuote: true,
+    });
+    expect(found!.text).toContain('after the Treaty of Sacks');
+    // A quote that is in no passage finds none.
+    await pool.query(
+      `update public.questions set source_quote = 'No such words anywhere' where id = $1`,
+      [ids.vote],
+    );
+    expect((await getQuestionForReview(pool, ids.vote!))!.passage).toBeNull();
+    await pool.query('update public.questions set source_quote = null where id = $1', [ids.vote]);
+  });
+
   it('approves several at once, each recorded as the reviewer’s own decision', async () => {
+    expect(await listApprovalTimes(pool, REVIEWER.id)).toEqual([]);
+    // Two of them say where their answer is in the source; "vote" does not.
+    await pool.query(
+      `update public.questions set source_locator = 'Guide, page 4' where id = any($1)`,
+      [[ids.capital, ids.founded]],
+    );
     const outcome = await reviewQuestionsInBulk(pool, REVIEWER.id, 'approve', [
       ids.capital!,
       ids.founded!,
       ids.capital!, // Named twice: decided once.
       'not-a-question',
       '10000000-0000-4000-8000-000000000000',
+      ids.vote!,
     ]);
     expect(outcome.done).toBe(2);
-    // The two that could not go through say why, and did not stop the others.
+    // The ones that could not go through say why, and did not stop the others.
     expect(outcome.failed).toEqual([
       { id: 'not-a-question', reason: 'Not a question.' },
       {
         id: '10000000-0000-4000-8000-000000000000',
         reason: 'Only a draft or a question in review can be approved.',
       },
+      {
+        id: ids.vote,
+        reason: 'It has no source to check it against. Open it and review it on its own.',
+      },
     ]);
+    // A question with no source is never published in bulk.
+    expect((await status(ids.vote!)).status).toBe('in_review');
+    // What the reviewer has got through lately, for the page's count of today.
+    const times = await listApprovalTimes(pool, REVIEWER.id);
+    expect(times).toHaveLength(2);
+    expect(Date.now() - times[0]!.getTime()).toBeLessThan(60_000);
+    expect(await listApprovalTimes(pool, 'test:nobody')).toEqual([]);
+    expect(await listApprovalTimes(pool, REVIEWER.id, 0)).toEqual([]);
     for (const key of ['capital', 'founded']) {
       expect(await status(ids[key]!)).toEqual({ status: 'published', verified_by: REVIEWER.id });
     }

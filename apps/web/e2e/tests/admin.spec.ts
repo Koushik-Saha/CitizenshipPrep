@@ -50,8 +50,10 @@ test('the review pages lead to their sign-in, which lets nobody in on a wrong pa
 
 test('guesses at the reviewers’ password are limited', async ({ page }) => {
   test.slow();
+  // An address of its own, from a range no other test signs in from: this
+  // test uses up the address's tries, and whoever shared it would be refused.
   await page.context().setExtraHTTPHeaders({
-    'x-forwarded-for': `192.0.2.${1 + Math.floor(Math.random() * 250)}, 10.8.${Math.floor(Math.random() * 250)}.8`,
+    'x-forwarded-for': `198.18.${Math.floor(Math.random() * 250)}.${1 + Math.floor(Math.random() * 250)}, 10.8.0.8`,
   });
   await page.goto('/admin/sign-in');
   let refusedAt = 0;
@@ -153,10 +155,135 @@ test('a long queue is paged, and the filters keep their place', async ({ page })
   await expect(summary).toHaveText('26 to 30 of 30 questions');
 });
 
+test('a reviewer works through a filter from the question page, with the keyboard', async ({
+  page,
+}) => {
+  test.slow();
+  // Three of this test's own, citing words that are in the Testland guide.
+  const tag = `keys ${Math.random().toString(36).slice(2, 8)}`;
+  await addQuestionsToReview([81, 82, 83], tag, {
+    quote: 'the assembly chooses the First Minister',
+  });
+  await signInAsReviewer(
+    page,
+    `/admin/content?view=questions&country=ZZ&q=${encodeURIComponent(tag)}`,
+  );
+  // Other tests approve as the same reviewer while this one runs, so the
+  // count is only ever checked to have gone up.
+  const approved = async () => {
+    await expect(page.getByTestId('approved-today')).toHaveText(/^\d+ approved today$/);
+    return Number((await page.getByTestId('approved-today').innerText()).split(' ')[0]);
+  };
+  const approvedBefore = await approved();
+
+  await page.getByRole('link', { name: /Testland question 81/ }).click();
+  // The development server builds this page the first time it is asked for.
+  await page.waitForURL(/\/admin\/content\/questions\/[0-9a-f-]{36}\?/, { timeout: 120_000 });
+  // The filter came along, and says where this question stands in it.
+  await expect(page).toHaveURL(new RegExp(`q=${tag.replace(' ', '\\+')}`));
+  const place = page.getByTestId('queue-place');
+  await expect(place).toHaveText('1 of 3');
+
+  // The whole passage the quote comes from, with the quoted words marked in it.
+  const passage = page.getByRole('region', { name: 'Source passage' });
+  await expect(passage).toContainText('has 40 members elected every four years');
+  await expect(passage).toContainText('Sums used in the test');
+  await expect(passage.locator('mark#cited')).toHaveText('The Assembly chooses the First Minister');
+  await expect(page.getByText('This one was found by its quoted words.')).toBeVisible();
+  await expect(page.getByText('Testland guide, the chapter on government')).toBeVisible();
+  await expectAccessibleInBothThemes(page, 'review question, in a filter');
+
+  const question = page.getByLabel('Question (en)');
+  // J and K move through the filter without going back to the list.
+  await page.keyboard.press('j');
+  await expect(place).toHaveText('2 of 3');
+  await expect(question).toHaveValue(/Testland question 82/);
+  await page.keyboard.press('k');
+  await expect(place).toHaveText('1 of 3');
+  await expect(question).toHaveValue(/Testland question 81/);
+  await expect(page.getByRole('link', { name: 'Previous' })).toHaveCount(0);
+  await page.getByRole('link', { name: 'Next' }).click();
+  await expect(place).toHaveText('2 of 3');
+  await page.getByRole('link', { name: 'Previous' }).click();
+  await expect(place).toHaveText('1 of 3');
+
+  // A letter typed into a field is a letter, not a decision.
+  await question.focus();
+  await page.keyboard.type(' a j r ');
+  await expect(place).toHaveText('1 of 3');
+  await expect(question).toHaveValue(/ a j r /);
+  await expect(question).toHaveValue(/Testland question 81/);
+
+  // S saves, and stays on the question and in the filter.
+  await question.blur();
+  await page.keyboard.press('s');
+  await expect(page.getByRole('status').filter({ hasText: 'Changes saved.' })).toBeVisible();
+  await expect(place).toHaveText('1 of 3');
+
+  // With the keys switched off, a letter does nothing.
+  await page.getByLabel('Keyboard shortcuts').uncheck();
+  await expect(page.getByTestId('shortcut-keys')).toHaveCount(0);
+  await page.locator('h1').click();
+  await page.keyboard.press('a');
+  await page.keyboard.press('j');
+  await expect(place).toHaveText('1 of 3');
+  await page.getByLabel('Keyboard shortcuts').check();
+
+  // A approves and goes straight to the next one.
+  await page.locator('h1').click();
+  await page.keyboard.press('a');
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Approved and published. This is the next one.' }),
+  ).toBeVisible();
+  await expect(question).toHaveValue(/Testland question 82/);
+  await expect(place).toHaveText('1 of 2');
+  expect(await approved()).toBeGreaterThanOrEqual(approvedBefore + 1);
+
+  // R goes to the reason; Ctrl+Enter sends it.
+  await page.locator('h1').click();
+  await page.keyboard.press('r');
+  await expect(page.getByLabel('Reason')).toBeFocused();
+  await page.keyboard.type('Not what the guide says.');
+  await page.keyboard.press('Control+Enter');
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Rejected. This is the next one.' }),
+  ).toBeVisible();
+  await expect(question).toHaveValue(/Testland question 83/);
+  await expect(place).toHaveText('1 of 1');
+
+  // The last one in the filter leads back to the queue, still filtered.
+  await page.getByRole('button', { name: 'Approve and publish' }).click();
+  await expect(page).toHaveURL(/\/admin\/content\?/);
+  await expect(page).toHaveURL(/country=ZZ/);
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Approved and published.' }),
+  ).toBeVisible();
+  await expect(page.getByText('Nothing matches these filters.')).toBeVisible();
+  expect(await approved()).toBeGreaterThanOrEqual(approvedBefore + 2);
+});
+
+test('a question whose source is not loaded shows its quote and says so', async ({ page }) => {
+  test.slow();
+  const tag = `bare ${Math.random().toString(36).slice(2, 8)}`;
+  await addQuestionsToReview([84], tag, { quote: 'words that are in no loaded passage' });
+  await signInAsReviewer(
+    page,
+    `/admin/content?view=questions&country=ZZ&q=${encodeURIComponent(tag)}`,
+  );
+  await page.getByRole('link', { name: /Testland question 84/ }).click();
+  await page.waitForURL(/\/admin\/content\/questions\//, { timeout: 120_000 });
+  await expect(page.getByText('“words that are in no loaded passage”')).toBeVisible();
+  await expect(page.getByTestId('no-passage')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Source passage' })).toHaveCount(0);
+  await expectAccessible(page, 'review question, source not loaded');
+});
+
 test('several questions are approved or rejected at once', async ({ page }) => {
-  // Four of this test's own, found by a tag nothing else has.
+  // Four of this test's own, found by a tag nothing else has. One of them
+  // says nothing of where its answer is in the source.
   const tag = `set ${Math.random().toString(36).slice(2, 8)}`;
-  await addQuestionsToReview([95, 96, 97, 98], tag);
+  await addQuestionsToReview([95, 96, 98], tag);
+  await addQuestionsToReview([97], tag, { source: 'none' });
   await signInAsReviewer(
     page,
     `/admin/content?view=questions&country=ZZ&q=${encodeURIComponent(tag)}`,
@@ -172,22 +299,69 @@ test('several questions are approved or rejected at once', async ({ page }) => {
   await expect(bar).toBeVisible();
   await expectAccessibleInBothThemes(page, 'review queue, two selected');
 
-  // Publishing in bulk is still the reviewer saying each was checked.
+  // Approving asks first, saying how many will be published.
+  const dialog = page.getByRole('dialog');
   await bar.getByRole('button', { name: 'Approve and publish' }).click();
-  await expect(alert(page, /confirm you have checked each one/)).toBeVisible();
+  await expect(dialog.getByRole('heading')).toHaveText('Approve 2 questions?');
+  await expect(dialog.getByTestId('confirm-count')).toHaveText(
+    '2 questions will be published and shown to learners as soon as you confirm.',
+  );
+  await expectAccessible(page, 'review queue, confirming an approval');
+  // Cancelling publishes nothing.
+  await dialog.getByRole('button', { name: 'Cancel' }).click();
+  await expect(dialog).toBeHidden();
   await expect(boxes).toHaveCount(4);
 
+  // An approval that did not come through the dialog is refused by the server.
+  await page.evaluate(() => {
+    const form = document.querySelector<HTMLInputElement>('input[name="ids"]')!.form!;
+    const promise = document.createElement('input');
+    promise.type = 'hidden';
+    promise.name = 'checked';
+    promise.value = 'on';
+    const button = document.createElement('button');
+    button.name = 'decision';
+    button.value = 'approve';
+    button.hidden = true;
+    form.append(promise, button);
+    form.requestSubmit(button);
+  });
+  await expect(alert(page, /Confirm how many you are approving/)).toBeVisible();
+  await expect(boxes).toHaveCount(4);
+
+  // With one that has no source among them: it is named, and left out.
   await page.getByLabel(/Select: Testland question 95/).check();
   await page.getByLabel(/Select: Testland question 96/).check();
-  await bar.getByLabel('I have checked each selected question against its source.').check();
+  await page.getByLabel(/Select: Testland question 97/).check();
   await bar.getByRole('button', { name: 'Approve and publish' }).click();
+  await expect(dialog.getByRole('heading')).toHaveText('Approve 2 questions?');
+  await expect(dialog.getByTestId('confirm-refused')).toContainText(
+    '1 question has no source to check against and will not be approved here.',
+  );
+  // Publishing in bulk is still the reviewer saying each was checked.
+  const confirm = dialog.getByRole('button', { name: 'Approve 2 questions' });
+  await expect(confirm).toBeDisabled();
+  await dialog.getByLabel('I have checked each of them against its source.').check();
+  await confirm.click();
   await expect(
     page.getByRole('status').filter({ hasText: '2 approved and published.' }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole('status')
+      .filter({ hasText: '1 could not be: It has no source to check it against.' }),
   ).toBeVisible();
   await expect(boxes).toHaveCount(2);
   // Still on the filtered queue they were working through.
   await expect(page).toHaveURL(/country=ZZ/);
   await expect(page.getByRole('link', { name: /Testland question 97/ })).toBeVisible();
+
+  // Only ones with no source: there is nothing to approve together.
+  await page.getByLabel(/Select: Testland question 97/).check();
+  await bar.getByRole('button', { name: 'Approve and publish' }).click();
+  await expect(dialog.getByRole('heading')).toHaveText('Nothing to approve');
+  await expect(dialog.getByRole('button', { name: /^Approve/ })).toHaveCount(0);
+  await dialog.getByRole('button', { name: 'Cancel' }).click();
 
   // The rest, all at once, need a reason to be rejected.
   await page.getByLabel('Select all 2').check();
