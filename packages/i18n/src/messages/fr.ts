@@ -25,6 +25,7 @@ export const fr: Messages = {
     notFoundBody:
       'Il n’y a pas de page à cette adresse. Elle a peut-être été déplacée, ou le lien est mal saisi.',
     backHome: 'Aller à la page d’accueil',
+    contact: 'Contact',
     privacy: 'Confidentialité',
     terms: 'Conditions',
     account: 'Compte',
@@ -439,6 +440,41 @@ export const fr: Messages = {
     writing: 'Rédaction d’une explication…',
     aiNote:
       'Rédigé par IA à partir du passage du guide officiel. Non vérifié par un relecteur, peut contenir des erreurs.',
+  },
+
+  contact: {
+    metaTitle: 'Contact | Oathly',
+    title: 'Nous contacter',
+    intro:
+      'Une question sur votre compte, un paiement ou quelque chose qui ne fonctionne pas ? Écrivez-nous et nous vous répondrons par e-mail.',
+    notAdvice:
+      'Nous ne pouvons pas donner de conseils juridiques ni en matière d’immigration. Pour votre situation, consultez un conseiller agréé.',
+    name: 'Votre nom (facultatif)',
+    email: 'Votre adresse e-mail',
+    emailHint: 'Nous répondrons à cette adresse.',
+    message: 'Comment pouvons-nous vous aider ?',
+    send: 'Envoyer le message',
+    sent: 'Merci. Votre message a été envoyé et nous vous répondrons par e-mail.',
+    failed: 'Votre message n’a pas pu être envoyé. Réessayez dans un instant.',
+    wait: 'Trop de messages ont été envoyés d’ici. Réessayez dans une heure.',
+    invalidEmail: 'Indiquez une adresse e-mail à laquelle nous pouvons répondre.',
+    invalidMessage: 'Écrivez quelques mots sur ce dont vous avez besoin.',
+    direct: 'Vous pouvez aussi nous écrire à {email}.',
+    unavailable: 'Le formulaire de contact est en cours de mise en place. Revenez bientôt.',
+  },
+
+  report: {
+    open: 'Signaler un problème avec cette question',
+    title: 'Quel est le problème avec cette question ?',
+    incorrect: 'La réponse est fausse',
+    outdated: 'Elle n’est plus à jour',
+    unclear: 'Elle n’est pas claire',
+    typo: 'Elle contient une coquille',
+    details: 'Quelque chose à ajouter ? (facultatif)',
+    send: 'Envoyer le signalement',
+    cancel: 'Annuler',
+    thanks: 'Merci. Un relecteur va l’examiner.',
+    failed: 'Le signalement n’a pas pu être envoyé. Réessayez.',
   },
 
   tutor: {

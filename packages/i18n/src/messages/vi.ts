@@ -24,6 +24,7 @@ export const vi: Messages = {
     notFoundBody:
       'Không có trang nào ở địa chỉ này. Trang có thể đã được chuyển đi, hoặc liên kết bị gõ sai.',
     backHome: 'Về trang chủ',
+    contact: 'Liên hệ',
     privacy: 'Quyền riêng tư',
     terms: 'Điều khoản',
     account: 'Tài khoản',
@@ -420,6 +421,41 @@ export const vi: Messages = {
     writing: 'Đang viết lời giải thích…',
     aiNote:
       'Do AI viết từ đoạn trích của tài liệu chính thức. Chưa được người duyệt kiểm tra và có thể có sai sót.',
+  },
+
+  contact: {
+    metaTitle: 'Liên hệ | Oathly',
+    title: 'Liên hệ với chúng tôi',
+    intro:
+      'Bạn có câu hỏi về tài khoản, thanh toán hoặc điều gì đó không hoạt động? Hãy viết cho chúng tôi và chúng tôi sẽ trả lời qua email.',
+    notAdvice:
+      'Chúng tôi không thể tư vấn pháp lý hay nhập cư. Với trường hợp của riêng bạn, hãy hỏi một cố vấn có giấy phép.',
+    name: 'Tên của bạn (không bắt buộc)',
+    email: 'Địa chỉ email của bạn',
+    emailHint: 'Chúng tôi sẽ trả lời vào địa chỉ này.',
+    message: 'Chúng tôi có thể giúp gì?',
+    send: 'Gửi tin nhắn',
+    sent: 'Cảm ơn bạn. Tin nhắn đã được gửi và chúng tôi sẽ trả lời qua email.',
+    failed: 'Không gửi được tin nhắn. Hãy thử lại sau giây lát.',
+    wait: 'Đã có quá nhiều tin nhắn gửi từ đây. Hãy thử lại sau một giờ.',
+    invalidEmail: 'Nhập địa chỉ email mà chúng tôi có thể trả lời.',
+    invalidMessage: 'Viết vài lời về điều bạn cần.',
+    direct: 'Bạn cũng có thể viết cho chúng tôi tại {email}.',
+    unavailable: 'Biểu mẫu liên hệ đang được thiết lập. Hãy quay lại sau.',
+  },
+
+  report: {
+    open: 'Báo lỗi về câu hỏi này',
+    title: 'Câu hỏi này có vấn đề gì?',
+    incorrect: 'Đáp án sai',
+    outdated: 'Nội dung đã cũ',
+    unclear: 'Không rõ ràng',
+    typo: 'Có lỗi chính tả',
+    details: 'Bạn muốn bổ sung gì không? (không bắt buộc)',
+    send: 'Gửi báo cáo',
+    cancel: 'Hủy',
+    thanks: 'Cảm ơn bạn. Người duyệt sẽ xem xét.',
+    failed: 'Không gửi được báo cáo. Hãy thử lại.',
   },
 
   tutor: {

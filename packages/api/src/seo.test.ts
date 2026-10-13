@@ -235,6 +235,7 @@ describe('publicSitePages', () => {
       { path: '/canada/citizenship-test', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/canada/citizenship-test/history', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/canada/citizenship-test/rights', lastModified: '2026-09-02T00:00:00.000Z' },
+      { path: '/contact', lastModified: null },
       { path: '/privacy', lastModified: '2026-10-12' },
       { path: '/terms', lastModified: '2026-10-12' },
       { path: '/delete-account', lastModified: '2026-10-12' },
@@ -263,6 +264,7 @@ describe('publicSitePages', () => {
     expect(publicSitePages([])).toEqual([
       { path: '/', lastModified: null },
       { path: '/countries', lastModified: null },
+      { path: '/contact', lastModified: null },
       { path: '/privacy', lastModified: null },
       { path: '/terms', lastModified: null },
       { path: '/delete-account', lastModified: null },

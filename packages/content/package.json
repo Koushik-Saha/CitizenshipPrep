@@ -9,6 +9,7 @@
     ".": "./src/index.ts",
     "./db": "./src/db.ts",
     "./records": "./src/records.ts",
+    "./flags": "./src/flags.ts",
     "./review": "./src/review.ts",
     "./text": "./src/text.ts"
   },

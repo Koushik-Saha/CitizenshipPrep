@@ -11,6 +11,7 @@ import { Text, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
 
 import { Confetti } from '@/components/confetti';
+import { ReportQuestion } from '@/components/report-question';
 import { Body, Button, Card, Heading, Screen, useTheme } from '@/components/ui';
 import { useT } from '@/lib/i18n';
 import { backToStudy } from '@/lib/navigation';
@@ -190,6 +191,7 @@ export function Results({
                     {t('session.fromGuide', { quote: isolate(question.sourceQuote) })}
                   </Body>
                 )}
+                <ReportQuestion questionId={question.id} locale={wording.locale} />
               </Card>
             );
           })}

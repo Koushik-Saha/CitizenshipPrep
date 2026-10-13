@@ -24,6 +24,7 @@ import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
 
 import { AudioControls } from './audio-controls';
 import { ExplainMore } from './explain-more';
+import { ReportQuestion } from './report-question';
 import { Results } from './results';
 import { useCountdown } from './use-countdown';
 
@@ -541,6 +542,8 @@ export function StudySession({ session }: { session: Session }) {
           </div>
         </>
       )}
+      {/* With every question, whatever the kind of session. */}
+      <ReportQuestion key={question.id} questionId={question.id} locale={wording.locale} />
     </main>
   );
 }

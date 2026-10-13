@@ -219,6 +219,21 @@ describe('createOathlyApi', () => {
     expect(await seen[0]!.json()).toEqual({ countryCode: 'ZZ', result: 'passed' });
   });
 
+  it('sends a report of a problem with a question', async () => {
+    const seen: Request[] = [];
+    const api = createOathlyApi({
+      baseUrl: 'https://oathly.test',
+      getToken: async () => 't',
+      fetch: fakeFetch(201, { received: true }, seen),
+    });
+    await expect(
+      api.reportQuestion('q 1', { reason: 'typo', details: 'teh', locale: 'es' }),
+    ).resolves.toBeUndefined();
+    expect(seen[0]!.url).toBe('https://oathly.test/api/questions/q%201/report');
+    expect(seen[0]!.method).toBe('POST');
+    expect(await seen[0]!.json()).toEqual({ reason: 'typo', details: 'teh', locale: 'es' });
+  });
+
   it('reads the public list of exams without a session, and says when it cannot', async () => {
     const seen: Request[] = [];
     const facts = [

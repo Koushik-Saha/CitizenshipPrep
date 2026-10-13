@@ -24,8 +24,14 @@ export function isMailConfigured(): boolean {
   return Boolean(process.env.MAILTRAP_TOKEN && sender());
 }
 
-/** Where a batch is posted: the sandbox inbox when one is named, real sending otherwise. */
+/**
+ * Where a batch is posted: the sandbox inbox when one is named, real sending
+ * otherwise. MAILTRAP_API_URL replaces both, on a development server only,
+ * for trying the mail a page sends against a stand-in.
+ */
 function endpoint(): string {
+  const standIn = process.env.MAILTRAP_API_URL?.trim();
+  if (standIn && process.env.NODE_ENV !== 'production') return standIn;
   const inbox = process.env.MAILTRAP_INBOX_ID?.trim();
   return inbox && /^\d+$/.test(inbox)
     ? `https://sandbox.api.mailtrap.io/api/batch/${inbox}`

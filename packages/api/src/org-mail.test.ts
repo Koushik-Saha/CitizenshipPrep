@@ -99,6 +99,27 @@ describe('mailBatchRequest', () => {
       ],
     });
   });
+
+  it('gives a message its own reply address and kind when it has them', () => {
+    const request = mailBatchRequest({ email: 'support@example.com' }, [
+      {
+        to: 'support@example.com',
+        subject: 'Support: help',
+        text: 'help',
+        html: '<p>help</p>',
+        replyTo: 'maria@example.test',
+        category: 'Support request',
+      },
+    ]);
+    expect(request.requests[0]).toEqual({
+      to: [{ email: 'support@example.com' }],
+      subject: 'Support: help',
+      text: 'help',
+      html: '<p>help</p>',
+      reply_to: { email: 'maria@example.test' },
+      category: 'Support request',
+    });
+  });
 });
 
 describe('mailBatchResults', () => {

@@ -4,6 +4,7 @@ export * from './account';
 export * from './countries';
 export * from './me';
 export * from './tokens';
+export * from './question-reports';
 export * from './quiz';
 export * from './study';
 export * from './ai';

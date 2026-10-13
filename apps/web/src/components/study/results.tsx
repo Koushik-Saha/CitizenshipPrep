@@ -15,6 +15,7 @@ import Link from '@/components/link';
 import { buttonClass, focusRing } from '@/components/ui';
 
 import { ExplainMore } from './explain-more';
+import { ReportQuestion } from './report-question';
 import type { GivenAnswer } from './study-session';
 
 export function Results({
@@ -213,6 +214,7 @@ export function Results({
                   </p>
                 )}
                 {!isFlashcards && <ExplainMore questionId={question.id} />}
+                <ReportQuestion questionId={question.id} locale={wording.locale} />
                 {question.sourceQuote && (
                   <p className="text-fg-muted mt-2 text-sm">
                     {t('session.fromGuide', { quote: isolate(question.sourceQuote) })}{' '}

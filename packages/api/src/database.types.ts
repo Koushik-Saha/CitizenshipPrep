@@ -3,6 +3,39 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string;
+          actor_id: string;
+          actor_name: string | null;
+          created_at: string;
+          detail: Json;
+          id: number;
+          target_id: string | null;
+          target_type: string | null;
+        };
+        Insert: {
+          action: string;
+          actor_id: string;
+          actor_name?: string | null;
+          created_at?: string;
+          detail?: Json;
+          id?: never;
+          target_id?: string | null;
+          target_type?: string | null;
+        };
+        Update: {
+          action?: string;
+          actor_id?: string;
+          actor_name?: string | null;
+          created_at?: string;
+          detail?: Json;
+          id?: never;
+          target_id?: string | null;
+          target_type?: string | null;
+        };
+        Relationships: [];
+      };
       ai_explanations: {
         Row: {
           created_at: string;
@@ -1464,6 +1497,41 @@ export type Database = {
           },
         ];
       };
+      staff_second_factors: {
+        Row: {
+          confirmed_at: string | null;
+          created_at: string;
+          last_step: number | null;
+          secret_sealed: string;
+          sessions_from: string | null;
+          user_id: string;
+        };
+        Insert: {
+          confirmed_at?: string | null;
+          created_at?: string;
+          last_step?: number | null;
+          secret_sealed: string;
+          sessions_from?: string | null;
+          user_id: string;
+        };
+        Update: {
+          confirmed_at?: string | null;
+          created_at?: string;
+          last_step?: number | null;
+          secret_sealed?: string;
+          sessions_from?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'staff_second_factors_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean;
@@ -1709,7 +1777,7 @@ export type Database = {
       app_role: 'reviewer' | 'admin';
       attempt_mode: 'practice' | 'review' | 'mock_exam';
       exam_format_type: 'written' | 'oral' | 'interview' | 'language';
-      flag_reason: 'outdated' | 'incorrect' | 'unclear' | 'translation' | 'other';
+      flag_reason: 'outdated' | 'incorrect' | 'unclear' | 'translation' | 'other' | 'typo';
       flag_status: 'open' | 'resolved' | 'dismissed';
       org_kind: 'law_firm' | 'school' | 'nonprofit' | 'other';
       org_role: 'owner' | 'admin' | 'member';
@@ -1844,7 +1912,7 @@ export const Constants = {
       app_role: ['reviewer', 'admin'],
       attempt_mode: ['practice', 'review', 'mock_exam'],
       exam_format_type: ['written', 'oral', 'interview', 'language'],
-      flag_reason: ['outdated', 'incorrect', 'unclear', 'translation', 'other'],
+      flag_reason: ['outdated', 'incorrect', 'unclear', 'translation', 'other', 'typo'],
       flag_status: ['open', 'resolved', 'dismissed'],
       org_kind: ['law_firm', 'school', 'nonprofit', 'other'],
       org_role: ['owner', 'admin', 'member'],

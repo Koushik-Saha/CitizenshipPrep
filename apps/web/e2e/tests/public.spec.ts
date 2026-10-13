@@ -95,7 +95,7 @@ test('search engines get a sitemap and are kept out of the signed-in pages', asy
 }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('/testland/citizenship-test</loc>');
-  for (const page of ['/privacy', '/terms', '/delete-account']) {
+  for (const page of ['/contact', '/privacy', '/terms', '/delete-account']) {
     expect(sitemap).toContain(`${page}</loc>`);
   }
   expect(sitemap).toContain('hreflang="es"');

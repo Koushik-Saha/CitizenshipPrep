@@ -11,6 +11,7 @@ const groups = [
   'session',
   'results',
   'explain',
+  'report',
   'tutor',
   'audio',
   'plans',

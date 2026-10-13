@@ -215,6 +215,7 @@ export function publicSitePages(
         lastModified: topic.lastVerifiedAt,
       })),
     ]),
+    { path: '/contact', lastModified: null },
     { path: '/privacy', lastModified: legalUpdated },
     { path: '/terms', lastModified: legalUpdated },
     { path: '/delete-account', lastModified: legalUpdated },

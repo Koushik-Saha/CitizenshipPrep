@@ -54,6 +54,10 @@ export interface Mail {
   subject: string;
   text: string;
   html: string;
+  /** Where a reply should go, when not to the sender. */
+  replyTo?: string;
+  /** What kind of mail this is, for the mail service's own reports. */
+  category?: string;
 }
 
 export interface Sender {
@@ -90,6 +94,8 @@ export function mailBatchRequest(from: Sender, mails: readonly Mail[]) {
       subject: mail.subject,
       text: mail.text,
       html: mail.html,
+      ...(mail.replyTo ? { reply_to: { email: mail.replyTo } } : {}),
+      ...(mail.category ? { category: mail.category } : {}),
     })),
   };
 }

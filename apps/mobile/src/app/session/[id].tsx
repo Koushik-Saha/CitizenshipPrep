@@ -25,6 +25,7 @@ import { AudioControls } from '@/components/audio-controls';
 import { Flashcard } from '@/components/flashcard';
 import { OptionButton, type OptionState } from '@/components/option-button';
 import { ProgressBar } from '@/components/progress-bar';
+import { ReportQuestion } from '@/components/report-question';
 import { Results } from '@/components/results';
 import { Body, Button, Card, Heading, LinkButton, Screen, useTheme } from '@/components/ui';
 import { audioPlatform } from '@/lib/audio-platform';
@@ -426,6 +427,8 @@ function Runner({ session }: { session: StudySession }) {
           )}
         </>
       )}
+      {/* With every question, whatever the kind of session. */}
+      <ReportQuestion key={question.id} questionId={question.id} locale={wording.locale} />
     </Screen>
   );
 }

@@ -35,6 +35,10 @@ export const rateLimitRules = {
    * address and by the account being tried. Five each in fifteen minutes.
    */
   adminSignIn: { limit: 5, windowSeconds: 15 * 60 },
+  /** Problems with questions one learner reports. */
+  questionReport: { limit: 20, windowSeconds: 60 * 60 },
+  /** Messages to support from one network address. */
+  supportMessage: { limit: 5, windowSeconds: 60 * 60 },
   /** Posts one learner starts in the study groups. */
   communityPost: { limit: 5, windowSeconds: 60 * 60 },
   /** Comments one learner writes. */

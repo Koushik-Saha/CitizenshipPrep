@@ -60,6 +60,9 @@ export function SiteFooter({ t }: { t: Translator }) {
             {t('common.signIn')}
           </Link>
           {/* Rarely followed: nothing to prefetch. */}
+          <Link href={localizePath(t.locale, '/contact')} prefetch={false} className={navLink}>
+            {t('common.contact')}
+          </Link>
           <Link href={localizePath(t.locale, '/privacy')} prefetch={false} className={navLink}>
             {t('common.privacy')}
           </Link>

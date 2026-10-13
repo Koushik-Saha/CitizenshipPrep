@@ -27,6 +27,7 @@ export const en = {
     notFoundBody:
       'There is no page at this address. It may have moved, or the link may be mistyped.',
     backHome: 'Go to the home page',
+    contact: 'Contact',
     privacy: 'Privacy',
     terms: 'Terms',
     account: 'Account',
@@ -437,6 +438,41 @@ export const en = {
     writing: 'Writing an explanation…',
     aiNote:
       'Written by AI from the official guide’s passage. It has not been checked by a reviewer and may contain mistakes.',
+  },
+
+  contact: {
+    metaTitle: 'Contact | Oathly',
+    title: 'Contact us',
+    intro:
+      'A question about your account, a payment, or something that is not working? Write to us and we will reply by email.',
+    notAdvice:
+      'We cannot give legal or immigration advice. For your own case, speak to a licensed adviser.',
+    name: 'Your name (optional)',
+    email: 'Your email address',
+    emailHint: 'We reply to this address.',
+    message: 'How can we help?',
+    send: 'Send message',
+    sent: 'Thank you. Your message has been sent, and we will reply by email.',
+    failed: 'Your message could not be sent. Try again in a moment.',
+    wait: 'Too many messages have been sent from here. Try again in an hour.',
+    invalidEmail: 'Enter an email address we can reply to.',
+    invalidMessage: 'Write a few words about what you need.',
+    direct: 'You can also write to us at {email}.',
+    unavailable: 'The contact form is being set up. Check back soon.',
+  },
+
+  report: {
+    open: 'Report a problem with this question',
+    title: 'What is wrong with this question?',
+    incorrect: 'The answer is wrong',
+    outdated: 'It is out of date',
+    unclear: 'It is unclear',
+    typo: 'It has a typo',
+    details: 'Anything to add? (optional)',
+    send: 'Send report',
+    cancel: 'Cancel',
+    thanks: 'Thank you. A reviewer will look at it.',
+    failed: 'The report could not be sent. Try again.',
   },
 
   tutor: {

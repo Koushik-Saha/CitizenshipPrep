@@ -1,4 +1,4 @@
-import type { ExamOutcome, QueuedAnswer, SyncOutcome } from '@oathly/core';
+import type { ExamOutcome, QueuedAnswer, QuestionReportReason, SyncOutcome } from '@oathly/core';
 import * as z from 'zod/mini';
 
 import type { CountryFacts } from './countries';
@@ -125,6 +125,14 @@ export function createOathlyApi(options: OathlyApiOptions) {
       request(`/api/study/sessions/${id(attemptId)}`, studySessionSchema),
     completeSession: async (attemptId: string, result: SessionResult): Promise<void> => {
       await send(`/api/attempts/${id(attemptId)}/complete`, post(result));
+    },
+
+    /** Tells the reviewers something is wrong with a question. */
+    reportQuestion: async (
+      questionId: string,
+      report: { reason: QuestionReportReason; details?: string | null; locale?: string | null },
+    ): Promise<void> => {
+      await send(`/api/questions/${id(questionId)}/report`, post(report));
     },
 
     /** For the offline queue: pass as the `send` argument of syncQueue(). */

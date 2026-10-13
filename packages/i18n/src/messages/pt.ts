@@ -25,6 +25,7 @@ export const pt: Messages = {
     notFoundBody:
       'Não há página neste endereço. Ela pode ter sido movida, ou o link pode estar digitado errado.',
     backHome: 'Ir para a página inicial',
+    contact: 'Contato',
     privacy: 'Privacidade',
     terms: 'Termos',
     account: 'Conta',
@@ -436,6 +437,41 @@ export const pt: Messages = {
     writing: 'Escrevendo uma explicação…',
     aiNote:
       'Escrito por IA a partir do trecho do guia oficial. Não foi verificado por um revisor e pode conter erros.',
+  },
+
+  contact: {
+    metaTitle: 'Contato | Oathly',
+    title: 'Fale conosco',
+    intro:
+      'Tem uma dúvida sobre sua conta, um pagamento ou algo que não está funcionando? Escreva para nós e responderemos por e-mail.',
+    notAdvice:
+      'Não podemos dar orientação jurídica nem de imigração. Para o seu caso, procure um consultor licenciado.',
+    name: 'Seu nome (opcional)',
+    email: 'Seu e-mail',
+    emailHint: 'Responderemos para este endereço.',
+    message: 'Como podemos ajudar?',
+    send: 'Enviar mensagem',
+    sent: 'Obrigado. Sua mensagem foi enviada e responderemos por e-mail.',
+    failed: 'Não foi possível enviar sua mensagem. Tente de novo em instantes.',
+    wait: 'Muitas mensagens foram enviadas daqui. Tente de novo em uma hora.',
+    invalidEmail: 'Informe um e-mail para o qual possamos responder.',
+    invalidMessage: 'Escreva algumas palavras sobre o que você precisa.',
+    direct: 'Você também pode nos escrever em {email}.',
+    unavailable: 'O formulário de contato está sendo configurado. Volte em breve.',
+  },
+
+  report: {
+    open: 'Relatar um problema nesta pergunta',
+    title: 'O que há de errado com esta pergunta?',
+    incorrect: 'A resposta está errada',
+    outdated: 'Está desatualizada',
+    unclear: 'Não está clara',
+    typo: 'Tem um erro de digitação',
+    details: 'Algo a acrescentar? (opcional)',
+    send: 'Enviar relato',
+    cancel: 'Cancelar',
+    thanks: 'Obrigado. Um revisor vai analisar.',
+    failed: 'Não foi possível enviar o relato. Tente de novo.',
   },
 
   tutor: {

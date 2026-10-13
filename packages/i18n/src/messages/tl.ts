@@ -25,6 +25,7 @@ export const tl: Messages = {
     notFoundBody:
       'Walang pahina sa address na ito. Maaaring nailipat ito, o mali ang pagkaka-type ng link.',
     backHome: 'Pumunta sa home page',
+    contact: 'Makipag-ugnayan',
     privacy: 'Privacy',
     terms: 'Mga Tuntunin',
     account: 'Account',
@@ -439,6 +440,41 @@ export const tl: Messages = {
     writing: 'Isinusulat ang paliwanag…',
     aiNote:
       'Isinulat ng AI mula sa sipi ng opisyal na gabay. Hindi pa ito nasuri ng reviewer at maaaring may mga mali.',
+  },
+
+  contact: {
+    metaTitle: 'Makipag-ugnayan | Oathly',
+    title: 'Makipag-ugnayan sa amin',
+    intro:
+      'May tanong tungkol sa account mo, sa bayad, o sa bagay na hindi gumagana? Sumulat sa amin at sasagot kami sa email.',
+    notAdvice:
+      'Hindi kami makapagbibigay ng payong legal o pang-imigrasyon. Para sa sarili mong kaso, kumonsulta sa lisensiyadong tagapayo.',
+    name: 'Pangalan mo (opsiyonal)',
+    email: 'Email address mo',
+    emailHint: 'Dito kami sasagot.',
+    message: 'Paano kami makakatulong?',
+    send: 'Ipadala ang mensahe',
+    sent: 'Salamat. Naipadala na ang mensahe mo, at sasagot kami sa email.',
+    failed: 'Hindi naipadala ang mensahe mo. Subukan muli maya-maya.',
+    wait: 'Masyadong maraming mensahe ang naipadala mula rito. Subukan muli pagkalipas ng isang oras.',
+    invalidEmail: 'Maglagay ng email address na masasagot namin.',
+    invalidMessage: 'Sumulat ng ilang salita tungkol sa kailangan mo.',
+    direct: 'Maaari ka ring sumulat sa amin sa {email}.',
+    unavailable: 'Inihahanda pa ang contact form. Bumalik sa lalong madaling panahon.',
+  },
+
+  report: {
+    open: 'Mag-ulat ng problema sa tanong na ito',
+    title: 'Ano ang mali sa tanong na ito?',
+    incorrect: 'Mali ang sagot',
+    outdated: 'Luma na ito',
+    unclear: 'Hindi ito malinaw',
+    typo: 'May maling baybay',
+    details: 'May idadagdag ka pa? (opsiyonal)',
+    send: 'Ipadala ang ulat',
+    cancel: 'Kanselahin',
+    thanks: 'Salamat. Titingnan ito ng isang tagasuri.',
+    failed: 'Hindi naipadala ang ulat. Subukan muli.',
   },
 
   tutor: {

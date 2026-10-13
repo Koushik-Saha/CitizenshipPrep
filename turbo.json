@@ -32,6 +32,7 @@
         "SENTRY_*",
         "SITE_URL",
         "STRIPE_*",
+        "SUPPORT_EMAIL",
         "TEST_SIGN_IN_SECRET",
         "VERCEL_ENV"
       ],

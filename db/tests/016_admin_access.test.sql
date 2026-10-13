@@ -36,7 +36,8 @@ select lives_ok(
   'deleting the account does not need to touch the log'
 );
 select results_eq(
-  'select count(*)::int from public.admin_audit_log',
+  $$ select count(*)::int from public.admin_audit_log
+     where actor_id = 'ad000000-0000-0000-0000-00000000000b' $$,
   array[1],
   'and what they did stays on record'
 );
@@ -73,6 +74,7 @@ select throws_ok(
   '42501', null,
   'and cannot ask for a secret'
 );
+-- Whatever the table holds: none of it is a learner's to read.
 select is_empty(
   'select 1 from public.admin_audit_log',
   'and sees nothing in the audit log'
@@ -100,7 +102,8 @@ select throws_ok(
   'or mark a second factor as confirmed'
 );
 select results_eq(
-  'select action from public.admin_audit_log',
+  $$ select action from public.admin_audit_log
+     where actor_id = 'ad000000-0000-0000-0000-00000000000b' $$,
   array['question.approve'],
   'an admin can read the audit log'
 );

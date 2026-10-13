@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { requireReviewer } from '@/lib/admin';
+import { countOpenFlags } from '@oathly/content/flags';
+
+import { getDb, requireReviewer } from '@/lib/admin';
 
 import { signOut } from '../sign-in/actions';
 
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 
 export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
   const reviewer = await requireReviewer();
+  const openReports = await countOpenFlags(getDb());
   return (
     <>
       <header className="border-border bg-surface border-b">
@@ -34,6 +37,12 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
               className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Community
+            </Link>
+            <Link
+              href="/admin/flags"
+              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Reports{openReports > 0 ? ` (${openReports})` : ''}
             </Link>
             {reviewer.role === 'admin' && (
               <Link

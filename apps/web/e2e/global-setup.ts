@@ -14,6 +14,7 @@ const publicPages = [
   '/testland/citizenship-test/history',
   '/sign-in',
   '/privacy',
+  '/contact',
   '/terms',
   '/delete-account',
   '/account-deleted',

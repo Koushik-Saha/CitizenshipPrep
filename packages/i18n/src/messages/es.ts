@@ -25,6 +25,7 @@ export const es: Messages = {
     notFoundBody:
       'No hay ninguna página en esta dirección. Puede que se haya movido o que el enlace esté mal escrito.',
     backHome: 'Ir a la página de inicio',
+    contact: 'Contacto',
     privacy: 'Privacidad',
     terms: 'Condiciones',
     account: 'Cuenta',
@@ -436,6 +437,41 @@ export const es: Messages = {
     writing: 'Escribiendo una explicación…',
     aiNote:
       'Escrito por IA a partir del pasaje de la guía oficial. No lo ha revisado una persona y puede contener errores.',
+  },
+
+  contact: {
+    metaTitle: 'Contacto | Oathly',
+    title: 'Contacto',
+    intro:
+      '¿Tienes una pregunta sobre tu cuenta, un pago o algo que no funciona? Escríbenos y te responderemos por correo electrónico.',
+    notAdvice:
+      'No podemos dar asesoramiento legal ni de inmigración. Para tu propio caso, consulta a un asesor autorizado.',
+    name: 'Tu nombre (opcional)',
+    email: 'Tu correo electrónico',
+    emailHint: 'Responderemos a esta dirección.',
+    message: '¿En qué podemos ayudarte?',
+    send: 'Enviar mensaje',
+    sent: 'Gracias. Tu mensaje se ha enviado y te responderemos por correo electrónico.',
+    failed: 'No se pudo enviar tu mensaje. Inténtalo de nuevo en un momento.',
+    wait: 'Se han enviado demasiados mensajes desde aquí. Inténtalo de nuevo en una hora.',
+    invalidEmail: 'Escribe un correo electrónico al que podamos responder.',
+    invalidMessage: 'Escribe unas palabras sobre lo que necesitas.',
+    direct: 'También puedes escribirnos a {email}.',
+    unavailable: 'El formulario de contacto se está configurando. Vuelve pronto.',
+  },
+
+  report: {
+    open: 'Informar de un problema con esta pregunta',
+    title: '¿Qué problema tiene esta pregunta?',
+    incorrect: 'La respuesta es incorrecta',
+    outdated: 'Está desactualizada',
+    unclear: 'No está clara',
+    typo: 'Tiene una errata',
+    details: '¿Algo que añadir? (opcional)',
+    send: 'Enviar informe',
+    cancel: 'Cancelar',
+    thanks: 'Gracias. Un revisor la examinará.',
+    failed: 'No se pudo enviar el informe. Inténtalo de nuevo.',
   },
 
   tutor: {
