@@ -20,13 +20,14 @@ import {
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { getDb, requireReviewer } from '@/lib/admin';
+import { audit, getDb, requireReviewer } from '@/lib/admin';
 import { questionHref, queueContext, queueHref } from '@/lib/review-queue';
 import { revalidatePublicContent } from '@/lib/revalidate';
 
 // Each action checks who is asking, makes one decision through
-// @oathly/content, then redirects. Problems the reviewer can fix come back as
-// a message on the same screen; anything else is a real error.
+// @oathly/content, writes it to the record of what staff do, then redirects.
+// Problems the reviewer can fix come back as a message on the same screen;
+// anything else is a real error.
 
 const text = (form: FormData, name: string) => String(form.get(name) ?? '');
 
@@ -56,16 +57,25 @@ function readTranslationEdits(form: FormData): TranslationEdits {
   };
 }
 
-/** Runs a decision; returns the message to show if the reviewer needs to fix something. */
-async function attempt(decision: (reviewerId: string) => Promise<void>): Promise<string | null> {
+/**
+ * Runs a decision and records it; returns the message to show if the reviewer
+ * needs to fix something. `action` and `target` are what the record says was
+ * done, and to what.
+ */
+async function attempt(
+  action: string,
+  target: { type: 'question' | 'translation'; id: string },
+  decision: (reviewerId: string) => Promise<void>,
+): Promise<string | null> {
   const reviewer = await requireReviewer();
   try {
     await decision(reviewer.id);
-    return null;
   } catch (error) {
     if (error instanceof ReviewError) return error.message;
     throw error;
   }
+  await audit(reviewer, action, target);
+  return null;
 }
 
 function finish(problem: string | null, here: string, next: string): never {
@@ -104,7 +114,7 @@ const translationPath = (id: string, locale: string) =>
   `/admin/content/translations/${id}/${encodeURIComponent(locale)}`;
 
 export async function saveQuestion(id: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
+  const problem = await attempt('question.edit', { type: 'question', id }, (reviewerId) =>
     saveQuestionEdits(getDb(), id, reviewerId, readQuestionEdits(form)),
   );
   const { here, stay } = afterDecision(id, form, 'saved');
@@ -112,7 +122,7 @@ export async function saveQuestion(id: string, form: FormData) {
 }
 
 export async function approve(id: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
+  const problem = await attempt('question.approve', { type: 'question', id }, (reviewerId) =>
     approveQuestion(getDb(), id, reviewerId, readQuestionEdits(form)),
   );
   const { here, onward } = afterDecision(id, form, 'approved');
@@ -120,7 +130,7 @@ export async function approve(id: string, form: FormData) {
 }
 
 export async function reject(id: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
+  const problem = await attempt('question.reject', { type: 'question', id }, (reviewerId) =>
     rejectQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
   const { here, onward } = afterDecision(id, form, 'rejected');
@@ -128,7 +138,7 @@ export async function reject(id: string, form: FormData) {
 }
 
 export async function reverify(id: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
+  const problem = await attempt('question.reverify', { type: 'question', id }, (reviewerId) =>
     reverifyQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
   const { here, onward } = afterDecision(id, form, 'reverified');
@@ -136,7 +146,7 @@ export async function reverify(id: string, form: FormData) {
 }
 
 export async function retire(id: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
+  const problem = await attempt('question.retire', { type: 'question', id }, (reviewerId) =>
     retireQuestion(getDb(), id, reviewerId, text(form, 'note')),
   );
   const { here, onward } = afterDecision(id, form, 'retired');
@@ -144,15 +154,19 @@ export async function retire(id: string, form: FormData) {
 }
 
 export async function approveTranslated(id: string, locale: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
-    approveTranslation(getDb(), id, locale, reviewerId, readTranslationEdits(form)),
+  const problem = await attempt(
+    'translation.approve',
+    { type: 'translation', id: `${id}/${locale}` },
+    (reviewerId) => approveTranslation(getDb(), id, locale, reviewerId, readTranslationEdits(form)),
   );
   finish(problem, translationPath(id, locale), '/admin/content?view=translations&done=approved');
 }
 
 export async function rejectTranslated(id: string, locale: string, form: FormData) {
-  const problem = await attempt((reviewerId) =>
-    rejectTranslation(getDb(), id, locale, reviewerId, text(form, 'note')),
+  const problem = await attempt(
+    'translation.reject',
+    { type: 'translation', id: `${id}/${locale}` },
+    (reviewerId) => rejectTranslation(getDb(), id, locale, reviewerId, text(form, 'note')),
   );
   finish(problem, translationPath(id, locale), '/admin/content?view=translations&done=rejected');
 }
@@ -174,6 +188,7 @@ function queueUrl(form: FormData, extra: Record<string, string>): string {
  */
 async function decideInBulk(
   form: FormData,
+  kind: 'question' | 'translation',
   actions: readonly string[],
   decide: (reviewerId: string, action: string, ids: string[], note: string) => Promise<BulkOutcome>,
 ): Promise<never> {
@@ -199,6 +214,12 @@ async function decideInBulk(
     if (!(error instanceof ReviewError)) throw error;
     redirect(queueUrl(form, { problem: error.message }));
   }
+  // One line for the lot: which were asked for, and how many it was done to.
+  await audit(reviewer, `${kind}.bulk-${action}`, null, {
+    ids: [...new Set(ids)].slice(0, 200),
+    done: outcome.done,
+    failed: outcome.failed.length,
+  });
   revalidatePath('/admin/content', 'layout');
   if (outcome.done > 0) revalidatePublicContent();
   redirect(
@@ -213,7 +234,7 @@ async function decideInBulk(
 }
 
 export async function decideQuestions(form: FormData) {
-  await decideInBulk(form, bulkQuestionActions, (reviewerId, action, ids, note) =>
+  await decideInBulk(form, 'question', bulkQuestionActions, (reviewerId, action, ids, note) =>
     reviewQuestionsInBulk(
       getDb(),
       reviewerId,
@@ -225,7 +246,7 @@ export async function decideQuestions(form: FormData) {
 }
 
 export async function decideTranslations(form: FormData) {
-  await decideInBulk(form, bulkTranslationActions, (reviewerId, action, ids, note) =>
+  await decideInBulk(form, 'translation', bulkTranslationActions, (reviewerId, action, ids, note) =>
     reviewTranslationsInBulk(
       getDb(),
       reviewerId,

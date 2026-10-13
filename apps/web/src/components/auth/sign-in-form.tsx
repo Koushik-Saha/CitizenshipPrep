@@ -23,6 +23,7 @@ type State =
  */
 function useCallbackUrl(): string {
   const params = useSearchParams();
+  const localize = useLocalePath();
   const country = parseCountryCode(params.get('country'));
   const plan = parsePlanChoice(params.get('plan'));
   const invitation = params.get('join');
@@ -36,8 +37,11 @@ function useCallbackUrl(): string {
       : query
         ? `/welcome?${query}`
         : '/welcome';
+  // Staff on their way to the reviewers' area, which is in English only and
+  // asks for their authenticator next. Anyone else who lands there is sent away.
+  if (params.get('admin') === '1') return '/admin/sign-in';
   // In the language being read.
-  return useLocalePath()(path);
+  return localize(path);
 }
 
 /**

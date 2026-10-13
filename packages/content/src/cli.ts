@@ -21,6 +21,15 @@ import { translateQuestions } from './pipeline/translate';
 import { listDocuments, upsertCountry, upsertExamFormat, upsertTopic } from './repository';
 import { getQueueCounts, getTopicCoverage } from './review';
 import { fetchSource, readSourceFile } from './source';
+import {
+  findAccount,
+  grantStaffRole,
+  listStaff,
+  resetSecondFactor,
+  revokeStaffRole,
+  StaffError,
+  type StaffRole,
+} from './staff';
 import { createSpeaker, type Speaker } from './tts';
 
 const USAGE = `Oathly content pipeline
@@ -79,6 +88,19 @@ Usage: pnpm content <command> [options]
   question-stats Count a country's question files by topic, difficulty, type and style,
                  and list questions worded alike
                    --country
+
+  staff-list     Who holds a staff role, and whether they have set up their authenticator
+
+  staff-grant    Let an account into the reviewers' area (/admin). They sign in on the site
+                 with that account, then set up an authenticator app the first time
+                   (--email you@example.org | --user <id>) --role admin|reviewer
+
+  staff-revoke   Take an account's staff role away, and its authenticator with it
+                   (--email | --user)
+
+  staff-reset-2fa  Forget a staff member's authenticator (a lost phone): they set a new
+                 one up the next time they sign in
+                   (--email | --user)
 
   validate       Check every file in data/ against its schema: country profiles, their
                  index, and question files. Needs no database
@@ -210,6 +232,9 @@ async function main(): Promise<void> {
       locales: { type: 'string' },
       'include-unpublished': { type: 'boolean' },
       'dry-run': { type: 'boolean' },
+      email: { type: 'string' },
+      user: { type: 'string' },
+      role: { type: 'string' },
       prune: { type: 'boolean' },
     },
   });
@@ -533,6 +558,55 @@ async function main(): Promise<void> {
               `  ${topic.name}: ${topic.waiting} waiting, ${topic.published} published${translated}`,
             );
           }
+        }
+        break;
+      }
+
+      case 'staff-list': {
+        const staff = await listStaff(pool);
+        if (staff.length === 0) console.log('Nobody holds a staff role.');
+        for (const member of staff) {
+          const factor = {
+            none: 'no authenticator yet',
+            pending: 'authenticator being set up',
+            confirmed: 'authenticator in use',
+          }[member.secondFactor];
+          console.log(
+            `${member.role.padEnd(8)}  ${member.userId}  ${member.displayName ?? '(no name)'}  ${factor}`,
+          );
+        }
+        break;
+      }
+
+      case 'staff-grant':
+      case 'staff-revoke':
+      case 'staff-reset-2fa': {
+        const who = {
+          userId: optional(values, 'user') ?? undefined,
+          email: optional(values, 'email') ?? undefined,
+        };
+        try {
+          const account = await findAccount(pool, who);
+          const name = account.email ?? account.userId;
+          if (command === 'staff-grant') {
+            const role = required(values, 'role') as StaffRole;
+            await grantStaffRole(pool, account.userId, role);
+            console.log(`${name} is now ${role === 'admin' ? 'an admin' : 'a reviewer'}.`);
+            console.log('They sign in on the site, open /admin, and set up their authenticator.');
+          } else if (command === 'staff-revoke') {
+            const held = await revokeStaffRole(pool, account.userId);
+            console.log(held ? `${name} is no longer staff.` : `${name} held no staff role.`);
+          } else {
+            const had = await resetSecondFactor(pool, account.userId);
+            console.log(
+              had
+                ? `${name} will set up a new authenticator the next time they sign in.`
+                : `${name} had no authenticator.`,
+            );
+          }
+        } catch (error) {
+          if (error instanceof StaffError) throw new UsageError(error.message);
+          throw error;
         }
         break;
       }

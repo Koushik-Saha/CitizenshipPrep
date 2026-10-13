@@ -2,6 +2,7 @@ import { listModerationQueue, type ModerationItem } from '@oathly/api/server';
 import type { Metadata } from 'next';
 
 import { Badge, Notice } from '@/components/ui';
+import { requireReviewer } from '@/lib/admin';
 import { getDb } from '@/lib/db';
 
 import { decide } from './actions';
@@ -41,6 +42,8 @@ function Decision({ item, decision }: { item: ModerationItem; decision: 'approve
 // Everything held back from a study group, and anything showing that
 // learners have reported. Nothing here reaches other learners until approved.
 export default async function CommunityModeration({ searchParams }: PageProps<'/admin/community'>) {
+  // Checked here as well as in the layout: a page never relies on what wraps it.
+  await requireReviewer();
   const queue = await listModerationQueue(getDb());
   const { done, problem } = await searchParams;
   const date = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' });

@@ -30,8 +30,11 @@ export const rateLimitRules = {
   aiByAddress: { limit: 120, windowSeconds: 60 * 60 },
   /** Exam results reported by one learner: a correction or two, not a loop. */
   examResult: { limit: 10, windowSeconds: 60 * 60 },
-  /** Tries at the reviewers' password from one network address. */
-  adminSignIn: { limit: 10, windowSeconds: 15 * 60 },
+  /**
+   * Tries at getting into the reviewers' area, counted twice: by network
+   * address and by the account being tried. Five each in fifteen minutes.
+   */
+  adminSignIn: { limit: 5, windowSeconds: 15 * 60 },
   /** Posts one learner starts in the study groups. */
   communityPost: { limit: 5, windowSeconds: 60 * 60 },
   /** Comments one learner writes. */

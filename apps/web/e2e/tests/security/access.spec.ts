@@ -82,24 +82,27 @@ test.describe('a learner who is not a reviewer', () => {
     await signInAndOnboard(page);
   });
 
-  test('is sent to the reviewers’ sign-in, with or without a made-up session', async ({
+  test('is sent away from the reviewers’ pages, with or without a made-up session', async ({
     page,
     baseURL,
   }) => {
+    // Not even their sign-in page is drawn for someone with no staff role.
     await page.goto('/admin/content');
-    await expect(page).toHaveURL(/\/admin\/sign-in/);
+    await expect(page).toHaveURL(/localhost:\d+\/$/);
 
-    await page.context().addCookies([
-      {
-        name: 'oathly_admin',
-        value: `v1.${Date.now() + 3_600_000}.${'A'.repeat(43)}`,
-        url: `${baseURL}/admin`,
-      },
-    ]);
-    await page.goto('/admin/content');
-    await expect(page).toHaveURL(/\/admin\/sign-in/);
-    await page.goto('/admin/community');
-    await expect(page).toHaveURL(/\/admin\/sign-in/);
+    // A made-up session of each kind the area has ever used.
+    for (const value of [
+      `v1.${Date.now() + 3_600_000}.${'A'.repeat(43)}`,
+      `v2.${Date.now() + 3_600_000}.${Buffer.from('test:someone').toString('base64url')}.${'A'.repeat(43)}`,
+    ]) {
+      await page.context().addCookies([{ name: 'oathly_admin', value, url: `${baseURL}/admin` }]);
+      await page.goto('/admin/content');
+      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await page.goto('/admin/community');
+      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await page.goto('/admin/activity');
+      await expect(page).toHaveURL(/localhost:\d+\/$/);
+    }
   });
 
   test('cannot run a reviewer’s action by posting to its page', async ({ page }) => {

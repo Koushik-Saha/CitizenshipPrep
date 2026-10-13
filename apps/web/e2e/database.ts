@@ -96,3 +96,58 @@ export async function resetRateLimits(): Promise<void> {
     await pool.end();
   }
 }
+
+/**
+ * Gives a test account a staff role, as `pnpm content staff-grant` would. The
+ * account then signs in like anyone else and sets up its authenticator.
+ */
+export async function makeStaff(userId: string, role: 'admin' | 'reviewer'): Promise<void> {
+  const pool = createPool(e2eDatabaseUrl);
+  try {
+    await pool.query('insert into public.profiles (id) values ($1) on conflict (id) do nothing', [
+      userId,
+    ]);
+    await pool.query(
+      `insert into public.user_roles (user_id, role) values ($1, $2)
+       on conflict (user_id) do update set role = excluded.role`,
+      [userId, role],
+    );
+  } finally {
+    await pool.end();
+  }
+}
+
+/** The record of what staff did, for one account, oldest first: the actions' names. */
+export async function auditTrail(userId: string): Promise<string[]> {
+  const pool = createPool(e2eDatabaseUrl);
+  try {
+    const { rows } = await pool.query<{ action: string }>(
+      'select action from public.admin_audit_log where actor_id = $1 order by id',
+      [userId],
+    );
+    return rows.map((row) => row.action);
+  } finally {
+    await pool.end();
+  }
+}
+
+/** Takes a test account's staff role away, as `pnpm content staff-revoke` would. */
+export async function removeStaff(userId: string): Promise<void> {
+  const pool = createPool(e2eDatabaseUrl);
+  try {
+    await pool.query('delete from public.staff_second_factors where user_id = $1', [userId]);
+    await pool.query('delete from public.user_roles where user_id = $1', [userId]);
+  } finally {
+    await pool.end();
+  }
+}
+
+/** Forgets a test account's authenticator, as `pnpm content staff-reset-2fa` would. */
+export async function resetAuthenticator(userId: string): Promise<void> {
+  const pool = createPool(e2eDatabaseUrl);
+  try {
+    await pool.query('delete from public.staff_second_factors where user_id = $1', [userId]);
+  } finally {
+    await pool.end();
+  }
+}

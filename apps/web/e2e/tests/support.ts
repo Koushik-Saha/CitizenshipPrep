@@ -1,8 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
 import AxeBuilder from '@axe-core/playwright';
+import { totpCode, totpStep } from '@oathly/api/totp';
 import { translatorFor } from '@oathly/i18n/messages';
 import { expect, type Page } from '@playwright/test';
+
+import { makeStaff } from '../database';
 
 /** The app's own English words, so a test names a button by what the app calls it. */
 export const t = translatorFor('en');
@@ -77,18 +80,44 @@ export async function expectAccessibleInBothThemes(page: Page, name: string): Pr
   await page.emulateMedia({ colorScheme: 'light' });
 }
 
+/** A network address of its own: tries at the reviewers' sign-in are limited per address. */
+export const ownAddress = () =>
+  `192.0.2.${1 + Math.floor(Math.random() * 250)}, 10.1.${Math.floor(Math.random() * 250)}.1`;
+
+/** The code an authenticator set up with `key` shows now, or `stepsAhead` codes later. */
+export const authenticatorCode = (key: string, stepsAhead = 0) =>
+  totpCode(key.replace(/\s/g, ''), totpStep(new Date()) + stepsAhead);
+
+/** Signs in to the site as a new account that holds a staff role. Returns its id. */
+export async function signInAsStaffAccount(
+  page: Page,
+  role: 'admin' | 'reviewer' = 'admin',
+): Promise<string> {
+  const user = `e2e-staff-${randomUUID().slice(0, 12)}`;
+  await makeStaff(`test:${user}`, role);
+  await page.context().setExtraHTTPHeaders({ 'x-forwarded-for': ownAddress() });
+  await signIn(page, user);
+  return `test:${user}`;
+}
+
 /**
- * Signs in to the reviewers' pages through their own sign-in form. Each call
- * comes from a made-up network address of its own: tries at the password are
- * limited per address, and the tests must not use up each other's.
+ * Gets into the reviewers' pages the way staff do: signed in to the site with
+ * an account that holds a role, then a code from an authenticator, which a
+ * new account sets up first. Each call is a new account from a made-up
+ * network address of its own, so the tests do not use up each other's tries.
+ * Returns the account's id and its authenticator key.
  */
-export async function signInAsReviewer(page: Page, next = '/admin/content'): Promise<void> {
-  const address = `192.0.2.${1 + Math.floor(Math.random() * 250)}, 10.1.${Math.floor(Math.random() * 250)}.1`;
-  await page.context().setExtraHTTPHeaders({ 'x-forwarded-for': address });
+export async function signInAsReviewer(
+  page: Page,
+  next = '/admin/content',
+  role: 'admin' | 'reviewer' = 'admin',
+): Promise<{ userId: string; key: string }> {
+  const userId = await signInAsStaffAccount(page, role);
   await page.goto(next);
   await expect(page).toHaveURL(/\/admin\/sign-in/);
-  await page.getByLabel('Username').fill(process.env.E2E_ADMIN_USERNAME!);
-  await page.getByLabel('Password').fill(process.env.E2E_ADMIN_PASSWORD!);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  const key = await page.getByTestId('totp-secret').innerText();
+  await page.getByLabel('Six-digit code').fill(authenticatorCode(key));
+  await page.getByRole('button', { name: 'Turn it on and continue' }).click();
   await expect(page).not.toHaveURL(/\/admin\/sign-in/);
+  return { userId, key };
 }

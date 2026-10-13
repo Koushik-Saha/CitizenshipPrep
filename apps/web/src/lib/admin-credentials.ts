@@ -1,33 +1,72 @@
 import {
+  ADMIN_SESSION_HOURS,
   adminAccount,
   createAdminSession,
+  createStaffSession,
   isAdminLogin,
   verifyAdminSession,
-  ADMIN_SESSION_HOURS,
+  verifyStaffSession,
 } from '@oathly/api/admin-session';
+import { deriveKey } from '@oathly/api/totp';
 
-// Sign-in for the reviewers' area: one account, defined by ADMIN_USERNAME and
-// ADMIN_PASSWORD on the server, entered on /admin/sign-in and remembered in a
-// signed cookie. With either variable unset the admin area does not exist.
-// The rules are in @oathly/api (admin-session.ts); this reads the environment.
+// Sessions for the reviewers' area (/admin). Staff sign in with their own
+// account, which must hold a staff role, and a code from their authenticator;
+// that earns a signed session kept in a cookie. The rules are in @oathly/api
+// (admin-session.ts, totp.ts, staff.ts); this reads the environment.
+//
+// The keys that sign sessions and seal authenticator secrets are made from
+// ADMIN_SECRET, or from the sign-in service's cookie secret when that is not
+// set. Changing it signs staff out and makes them set their authenticator up
+// again. With neither, the admin area does not exist.
 
 export const ADMIN_SESSION_COOKIE = 'oathly_admin';
 
-const account = () => adminAccount(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
+const secret = () => process.env.ADMIN_SECRET || process.env.NEON_AUTH_COOKIE_SECRET || '';
 
 export function isAdminConfigured(): boolean {
-  return account() !== null;
+  return secret().length >= 32;
 }
 
-/** The reviewer a session cookie belongs to, or null. */
-export function verifyAdminCookie(value: string | null | undefined): string | null {
-  return verifyAdminSession(account(), value);
+const keys = new Map<string, Buffer>();
+function key(purpose: 'session' | 'second-factor'): Buffer {
+  const name = `${purpose}:${secret()}`;
+  let made = keys.get(name);
+  if (!made) {
+    made = deriveKey(secret(), purpose);
+    keys.set(name, made);
+  }
+  return made;
 }
 
-/** A new session if these are the account's username and password, or null. */
-export function signInAdmin(username: string, password: string): string | null {
-  const admin = account();
-  return admin && isAdminLogin(admin, username, password) ? createAdminSession(admin) : null;
+/** The key authenticator secrets are sealed with in the database. */
+export const secondFactorKey = () => key('second-factor');
+
+/** A session for a staff member whose code has just been accepted. */
+export const staffSessionFor = (userId: string) => createStaffSession(key('session'), userId);
+
+// The shared account that came before: ADMIN_USERNAME and ADMIN_PASSWORD. It
+// only ever works while no admin has an authenticator (lib/admin.ts,
+// sharedAccountOpen), which is how the first admin gets in to set theirs up.
+const sharedAccount = () => adminAccount(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
+
+export const isSharedAccountSet = () => sharedAccount() !== null;
+
+/** A session for the shared account if these are its username and password, or null. */
+export function signInShared(username: string, password: string): string | null {
+  const account = sharedAccount();
+  return account && isAdminLogin(account, username, password) ? createAdminSession(account) : null;
+}
+
+/** Whose session a cookie holds, if it is a real one that has not run out. */
+export type AdminCookie =
+  { kind: 'staff'; userId: string; startedAt: Date } | { kind: 'shared'; username: string };
+
+export function readAdminCookie(value: string | null | undefined): AdminCookie | null {
+  if (!value || !isAdminConfigured()) return null;
+  const staff = verifyStaffSession(key('session'), value);
+  if (staff) return { kind: 'staff', ...staff };
+  const username = verifyAdminSession(sharedAccount(), value);
+  return username ? { kind: 'shared', username } : null;
 }
 
 /** How the session cookie is set: readable by the server only, and only under /admin. */

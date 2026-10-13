@@ -7,22 +7,21 @@ import {
 } from '@oathly/i18n';
 import { NextResponse, type NextRequest } from 'next/server';
 
-import {
-  ADMIN_SESSION_COOKIE,
-  isAdminConfigured,
-  verifyAdminCookie,
-} from './lib/admin-credentials';
+import { ADMIN_SESSION_COOKIE, isAdminConfigured, readAdminCookie } from './lib/admin-credentials';
 import { getAuth, isAuthConfigured } from './lib/auth/server';
 import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from './lib/locale-cookie';
 import { TEST_SESSION_COOKIE, verifyTestSession } from './lib/test-sign-in';
 
-// /admin: the reviewers' area. Without a session, every page of it leads to
-// its sign-in page. Pages and Server Actions check again with requireReviewer().
+// /admin: the reviewers' area. Without a staff session (earned with a code
+// from an authenticator), every request to it, whatever the method, is sent
+// to its sign-in page, which sends anyone who is not staff away altogether.
+// This only checks that the session is real: pages and Server Actions check
+// who is signed in and what role they hold, with requireStaff().
 function adminGuard(request: NextRequest) {
   if (!isAdminConfigured()) return new NextResponse('Not found', { status: 404 });
   const { pathname, search } = request.nextUrl;
   if (pathname === '/admin/sign-in') return NextResponse.next();
-  if (verifyAdminCookie(request.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
+  if (readAdminCookie(request.cookies.get(ADMIN_SESSION_COOKIE)?.value)) {
     return NextResponse.next();
   }
   const signIn = new URL('/admin/sign-in', request.url);

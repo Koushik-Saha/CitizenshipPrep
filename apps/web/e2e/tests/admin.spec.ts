@@ -1,9 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { addQuestionsToReview } from '../database';
-import { expectAccessible, expectAccessibleInBothThemes, signInAsReviewer } from './support';
+import { addQuestionsToReview, auditTrail } from '../database';
+import {
+  authenticatorCode,
+  expectAccessible,
+  expectAccessibleInBothThemes,
+  ownAddress,
+  signInAsReviewer,
+  signInAsStaffAccount,
+} from './support';
 
-// The reviewers' pages: their own sign-in, the review queue with its filters,
+// The reviewers' pages: getting in with an authenticator, the review queue with its filters,
 // and deciding several questions at once. Global setup puts four Testland
 // questions in the queue ("Testland question 91" to 94) for looking at; the
 // test that decides questions adds its own, so it can be run again.
@@ -12,7 +19,7 @@ import { expectAccessible, expectAccessibleInBothThemes, signInAsReviewer } from
 const alert = (page: import('@playwright/test').Page, text: string | RegExp) =>
   page.getByRole('alert').filter({ hasText: text });
 
-test('the review pages lead to their sign-in, which lets nobody in on a wrong password', async ({
+test('the review pages ask staff for a code from their authenticator, and take no wrong one', async ({
   page,
   request,
 }) => {
@@ -20,60 +27,131 @@ test('the review pages lead to their sign-in, which lets nobody in on a wrong pa
   expect(direct.status()).toBe(307);
   expect(direct.headers().location).toContain('/admin/sign-in?next=');
 
-  await page.context().setExtraHTTPHeaders({ 'x-forwarded-for': '192.0.2.251, 10.9.9.9' });
+  // A member of staff, signed in to the site with their own account.
+  const userId = await signInAsStaffAccount(page);
   await page.goto('/admin/content?view=translations');
   await expect(page).toHaveURL(/\/admin\/sign-in\?next=/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Content review');
-  await expectAccessibleInBothThemes(page, 'reviewer sign-in');
+  // Their first time: an authenticator to set up.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set up your authenticator');
+  await expectAccessibleInBothThemes(page, 'authenticator set-up');
+  const key = await page.getByTestId('totp-secret').innerText();
+  // The key stays the same until it is in use: a reload does not undo the phone.
+  await page.reload();
+  await expect(page.getByTestId('totp-secret')).toHaveText(key);
 
-  await page.getByLabel('Username').fill(process.env.E2E_ADMIN_USERNAME!);
-  await page.getByLabel('Password').fill('not-the-password');
-  await page.getByRole('button', { name: 'Sign in' }).click();
-  await expect(alert(page, 'That username or password is not right.')).toBeVisible();
-  await expectAccessible(page, 'reviewer sign-in, refused');
+  await page.getByLabel('Six-digit code').fill('000000');
+  await page.getByRole('button', { name: 'Turn it on and continue' }).click();
+  await expect(alert(page, 'That code is not right')).toBeVisible();
+  await expectAccessible(page, 'authenticator set-up, refused');
   // Still outside.
   expect((await page.request.get('/admin/content', { maxRedirects: 0 })).status()).toBe(307);
 
   // The right one goes on to the page that was asked for.
-  await page.getByLabel('Username').fill(process.env.E2E_ADMIN_USERNAME!);
-  await page.getByLabel('Password').fill(process.env.E2E_ADMIN_PASSWORD!);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  const firstCode = authenticatorCode(key);
+  await page.getByLabel('Six-digit code').fill(firstCode);
+  await page.getByRole('button', { name: 'Turn it on and continue' }).click();
   await expect(page).toHaveURL(/\/admin\/content\?view=translations$/);
-  await expect(page.getByText(`Signed in as ${process.env.E2E_ADMIN_USERNAME}`)).toBeVisible();
+  await expect(page.getByText('Signed in as')).toBeVisible();
 
+  // Signing out of the reviewers' area leaves the account signed in to the site.
   await page.getByRole('button', { name: 'Sign out' }).click();
   await expect(page).toHaveURL(/\/admin\/sign-in/);
-  await expect(page.getByRole('status').filter({ hasText: 'You are signed out.' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'You are signed out' })).toBeVisible();
   await page.goto('/admin/content');
   await expect(page).toHaveURL(/\/admin\/sign-in/);
+  // The authenticator is in use now: its key is never shown again.
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enter your code');
+  await expect(page.getByTestId('totp-secret')).toHaveCount(0);
+  await expectAccessible(page, 'reviewer sign-in, code');
+
+  // A code works once: the one that turned the authenticator on is spent.
+  await page.getByLabel('Six-digit code').fill(firstCode);
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(alert(page, 'already been used')).toBeVisible();
+  // The next one is good.
+  await page.getByLabel('Six-digit code').fill(authenticatorCode(key, 1));
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page).toHaveURL(/\/admin\/content$/);
+
+  // All of it is on the record, in order, under their own account.
+  expect(await auditTrail(userId)).toEqual([
+    'second-factor.refused',
+    'second-factor.enrolled',
+    'sign-in.accepted',
+    'sign-out',
+    'sign-in.refused',
+    'sign-in.accepted',
+  ]);
 });
 
-test('guesses at the reviewers’ password are limited', async ({ page }) => {
+test('tries at the code are limited, for the account and for the network address', async ({
+  page,
+}) => {
   test.slow();
-  // An address of its own, from a range no other test signs in from: this
-  // test uses up the address's tries, and whoever shared it would be refused.
-  await page.context().setExtraHTTPHeaders({
-    'x-forwarded-for': `198.18.${Math.floor(Math.random() * 250)}.${1 + Math.floor(Math.random() * 250)}, 10.8.0.8`,
-  });
-  await page.goto('/admin/sign-in');
-  let refusedAt = 0;
-  for (let i = 1; i <= 24 && !refusedAt; i += 1) {
-    await page.getByLabel('Username').fill('reviewer');
-    await page.getByLabel('Password').fill(`guess-number-${i}`);
+  const { key } = await signInAsReviewer(page);
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Enter your code');
+
+  const guess = async (code: string) => {
+    await page.getByLabel('Six-digit code').fill(code);
     // The answer to one guess looks like the answer to the last: wait for this one's.
     await Promise.all([
       page.waitForResponse(
         (response) =>
           response.request().method() === 'POST' && response.url().includes('/admin/sign-in'),
       ),
-      page.getByRole('button', { name: 'Sign in' }).click(),
+      page.getByRole('button', { name: 'Continue' }).click(),
     ]);
     await expect(page.getByRole('alert').filter({ hasText: /not right|Too many/ })).toBeVisible();
-    await expect(page.getByLabel('Password')).toHaveValue('');
-    if (await alert(page, 'Too many tries').isVisible()) refusedAt = i;
+    await expect(page.getByLabel('Six-digit code')).toHaveValue('');
+    return alert(page, 'Too many tries').isVisible();
+  };
+
+  // Five tries in a quarter of an hour, and setting the authenticator up was the first.
+  let refusedAt = 0;
+  for (let i = 1; i <= 8 && !refusedAt; i += 1) {
+    if (await guess(String(100000 + i))) refusedAt = i;
   }
-  // Ten in a quarter of an hour, then no more: even the right password would wait.
-  expect(refusedAt).toBeGreaterThanOrEqual(11);
+  expect(refusedAt).toBe(5);
+  // Even the right code waits now.
+  expect(await guess(authenticatorCode(key, 1))).toBe(true);
+  // Coming from somewhere else does not help: the account itself is being counted.
+  await page.context().setExtraHTTPHeaders({ 'x-forwarded-for': ownAddress() });
+  expect(await guess(authenticatorCode(key, 1))).toBe(true);
+  expect((await page.request.get('/admin/content', { maxRedirects: 0 })).status()).toBe(307);
+});
+
+test('an address that keeps trying is stopped, whichever account it tries', async ({ browser }) => {
+  test.slow();
+  // An address of its own, from a range no other test signs in from.
+  const address = `198.18.${Math.floor(Math.random() * 250)}.${1 + Math.floor(Math.random() * 250)}, 10.8.0.8`;
+  let refused = false;
+  // Three accounts, two wrong codes each: six tries from one address.
+  for (let account = 1; account <= 3; account += 1) {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await signInAsStaffAccount(page);
+    await context.setExtraHTTPHeaders({ 'x-forwarded-for': address });
+    await page.goto('/admin/content');
+    for (let guessed = 1; guessed <= 2; guessed += 1) {
+      await page.getByLabel('Six-digit code').fill('000000');
+      // The answer to one guess looks like the answer to the last: wait for this one's.
+      await Promise.all([
+        page.waitForResponse(
+          (response) =>
+            response.request().method() === 'POST' && response.url().includes('/admin/sign-in'),
+        ),
+        page.getByRole('button', { name: 'Turn it on and continue' }).click(),
+      ]);
+      await expect(page.getByRole('alert').filter({ hasText: /not right|Too many/ })).toBeVisible();
+      await expect(page.getByLabel('Six-digit code')).toHaveValue('');
+      refused = await alert(page, 'Too many tries').isVisible();
+      // Nobody was refused before the sixth try.
+      expect(refused, `account ${account}, try ${guessed}`).toBe(account === 3 && guessed === 2);
+    }
+    await context.close();
+  }
+  expect(refused).toBe(true);
 });
 
 test('the queue narrows by country, words and topic', async ({ page }) => {

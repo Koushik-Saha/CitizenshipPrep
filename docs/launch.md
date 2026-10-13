@@ -215,7 +215,8 @@ Then, in a browser:
 
 - Sign in with your email. You should land on onboarding.
 - Open `/privacy` and `/terms`: your name and contact address are there.
-- Open `/admin` (if you set `ADMIN_USERNAME` and `ADMIN_PASSWORD`).
+- Make yourself an admin (`pnpm content staff-grant --email you@example.org --role admin`),
+  open `/admin`, and set up your authenticator app when it asks.
 - Do step 3.6: delete a throwaway account.
 
 ## 8. Phone apps: before the first build
@@ -362,24 +363,25 @@ live needs it.
 
 **Vercel (Production):**
 
-| Variable                                                                                                                         | To go live                                         | From                                          |
-| -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------------- |
-| `DATABASE_URL`                                                                                                                   | Yes                                                | Neon, pooled connection string (step 2)       |
-| `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET`                                                                                  | Yes                                                | Step 3                                        |
-| `SITE_URL`                                                                                                                       | Yes                                                | `https://<your-domain>`                       |
-| `LEGAL_OPERATOR`, `LEGAL_CONTACT_EMAIL`                                                                                          | Yes                                                | Step 0                                        |
-| `LEGAL_ADDRESS`, `LEGAL_JURISDICTION`                                                                                            | If they apply to you                               | Step 0                                        |
-| `REVALIDATE_SECRET`                                                                                                              | Yes                                                | `openssl rand -hex 32`                        |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD`                                                                                               | To review content                                  | You choose; password of 12 characters or more |
-| `ANTHROPIC_API_KEY`                                                                                                              | For AI explanations and the tutor                  | Anthropic console                             |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_COUNTRY_PASS` | To sell on the web                                 | Step 5                                        |
-| `STRIPE_PRICE_ORG_SEAT`                                                                                                          | To sell seats                                      | Step 5                                        |
-| `REVENUECAT_WEBHOOK_SECRET`                                                                                                      | To sell in the apps                                | Step 8                                        |
-| `MAILTRAP_TOKEN`, `EMAIL_FROM`                                                                                                   | To email invitations                               | Step 6                                        |
-| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                                                                                           | No                                                 | Step 6                                        |
-| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`                                                                              | No                                                 | Step 6                                        |
-| `POSTHOG_KEY`, `POSTHOG_HOST`                                                                                                    | No                                                 | Step 6                                        |
-| `GOOGLE_TTS_API_KEY`                                                                                                             | No (only the content CLI uses it, on your machine) | Google Cloud                                  |
+| Variable                                                                                                                         | To go live                                                                                                      | From                                    |
+| -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `DATABASE_URL`                                                                                                                   | Yes                                                                                                             | Neon, pooled connection string (step 2) |
+| `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET`                                                                                  | Yes                                                                                                             | Step 3                                  |
+| `SITE_URL`                                                                                                                       | Yes                                                                                                             | `https://<your-domain>`                 |
+| `LEGAL_OPERATOR`, `LEGAL_CONTACT_EMAIL`                                                                                          | Yes                                                                                                             | Step 0                                  |
+| `LEGAL_ADDRESS`, `LEGAL_JURISDICTION`                                                                                            | If they apply to you                                                                                            | Step 0                                  |
+| `REVALIDATE_SECRET`                                                                                                              | Yes                                                                                                             | `openssl rand -hex 32`                  |
+| `ADMIN_SECRET`                                                                                                                   | Recommended: signs staff sessions and seals authenticator secrets. Without it `NEON_AUTH_COOKIE_SECRET` is used | `openssl rand -hex 32`                  |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD`                                                                                               | No. The old shared sign-in; it stops working once an admin has an authenticator. Delete them then               |                                         |
+| `ANTHROPIC_API_KEY`                                                                                                              | For AI explanations and the tutor                                                                               | Anthropic console                       |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_COUNTRY_PASS` | To sell on the web                                                                                              | Step 5                                  |
+| `STRIPE_PRICE_ORG_SEAT`                                                                                                          | To sell seats                                                                                                   | Step 5                                  |
+| `REVENUECAT_WEBHOOK_SECRET`                                                                                                      | To sell in the apps                                                                                             | Step 8                                  |
+| `MAILTRAP_TOKEN`, `EMAIL_FROM`                                                                                                   | To email invitations                                                                                            | Step 6                                  |
+| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                                                                                           | No                                                                                                              | Step 6                                  |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`                                                                              | No                                                                                                              | Step 6                                  |
+| `POSTHOG_KEY`, `POSTHOG_HOST`                                                                                                    | No                                                                                                              | Step 6                                  |
+| `GOOGLE_TTS_API_KEY`                                                                                                             | No (only the content CLI uses it, on your machine)                                                              | Google Cloud                            |
 
 Never set on Vercel: `TEST_SIGN_IN_SECRET`, `TEST_DATABASE_URL`,
 `EXPO_WEB_ORIGIN`, `DATABASE_URL_UNPOOLED` (migrations run from your machine).

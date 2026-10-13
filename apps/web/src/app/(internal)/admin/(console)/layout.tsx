@@ -35,10 +35,19 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
             >
               Community
             </Link>
+            {reviewer.role === 'admin' && (
+              <Link
+                href="/admin/activity"
+                className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Activity
+              </Link>
+            )}
           </nav>
           <div className="flex items-center gap-4 text-sm">
             <p className="text-fg-muted">
               Signed in as <span className="text-fg font-medium">{reviewer.displayName}</span>
+              {reviewer.shared && ' (shared account)'}
             </p>
             <form action={signOut}>
               <button

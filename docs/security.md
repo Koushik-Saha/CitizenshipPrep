@@ -158,10 +158,34 @@ themselves. A refused call gets `429` with `Retry-After`. Tested in
 - **Server Actions for organizations and content review validate by hand**
   (tested functions in `packages/core` and `packages/api`), not with Zod.
   Review actions are behind the reviewers' sign-in.
-- **The review pages use one shared account** (`ADMIN_USERNAME`,
-  `ADMIN_PASSWORD`), entered on their own sign-in page and kept in a signed,
-  HTTP-only cookie for twelve hours. Guesses are limited to ten in fifteen
-  minutes per network address. Per-person reviewer accounts would be better.
+- **The review pages (`/admin`) take three things**, each checked on every
+  page and every action (`requireStaff` in `apps/web/src/lib/admin.ts`), not
+  only by the request proxy: a normal signed-in account; a staff role for it
+  in `public.user_roles` (`admin` or `reviewer`), read from the database each
+  time, so taking the role away ends the session at once; and a code from an
+  authenticator app (TOTP, `packages/api/src/server/totp.ts`), which earns a
+  signed, HTTP-only cookie tied to that account for twelve hours. A code
+  works once. Tries are limited to five in fifteen minutes, counted both by
+  network address and by account, and fail closed. Everyone else is sent
+  away: signed out to the site's sign-in, signed in without a role to the
+  front page.
+  - Roles are given from the command line (`pnpm content staff-grant`), by
+    whoever holds the database. There is no screen for it, so getting into
+    the admin area is never enough to make another admin.
+  - Authenticator secrets are stored sealed (AES-256-GCM) with a key made
+    from `ADMIN_SECRET`; no client can read the column. A lost phone:
+    `pnpm content staff-reset-2fa`.
+  - Everything staff do is written to `public.admin_audit_log` (who, what, on
+    what, when), which the database lets nobody change or delete, and which
+    admins read at `/admin/activity`.
+  - The shared account that came before (`ADMIN_USERNAME`, `ADMIN_PASSWORD`)
+    still works until the first admin has an authenticator in use, so that
+    there is a way in to set one up. From then on it is refused whatever the
+    environment says. Delete the two variables once you are in.
+  - Known limits: there is no QR code on the set-up screen (the key is typed
+    or opened on the phone), no recovery codes (a reset is done from the
+    command line), and the first factor is the site's own sign-in, an emailed
+    code, so an admin's mailbox matters as much as their phone.
 - **Four dependency advisories** (`pnpm audit --prod`, 2 high, 2 moderate):
   `node-forge`, `braces`, `uuid`, `decode-uri-component`, all inside Expo's
   build tooling, none in code that runs for a learner. Two have no fixed

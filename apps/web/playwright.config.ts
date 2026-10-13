@@ -14,8 +14,6 @@ const baseURL = `http://localhost:${port}`;
 // One secret per run, shared with the tests through the environment: the
 // development-only test sign-in is how they become a learner.
 process.env.TEST_SIGN_IN_SECRET ??= randomBytes(32).toString('hex');
-process.env.E2E_ADMIN_USERNAME ??= 'reviewer';
-process.env.E2E_ADMIN_PASSWORD ??= randomBytes(12).toString('hex');
 
 export default defineConfig({
   testDir: './e2e/tests',
@@ -50,8 +48,12 @@ export default defineConfig({
       NEXT_DIST_DIR: '.next-e2e',
       DATABASE_URL: e2eDatabaseUrl,
       TEST_SIGN_IN_SECRET: process.env.TEST_SIGN_IN_SECRET,
-      ADMIN_USERNAME: process.env.E2E_ADMIN_USERNAME,
-      ADMIN_PASSWORD: process.env.E2E_ADMIN_PASSWORD,
+      // Staff sign in with their own accounts. The shared account that came
+      // before is left unset, whatever .env.local holds: it would be open on
+      // a new database until the first test had set up an authenticator.
+      ADMIN_USERNAME: '',
+      ADMIN_PASSWORD: '',
+      ADMIN_SECRET: randomBytes(32).toString('hex'),
       // Sign-in is "set up", so its form is on the page to be checked, but
       // points nowhere: no test signs in for real.
       NEON_AUTH_BASE_URL: 'http://127.0.0.1:9/neon-auth',

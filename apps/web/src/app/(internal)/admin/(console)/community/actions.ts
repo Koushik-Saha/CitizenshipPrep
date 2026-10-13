@@ -3,7 +3,7 @@
 import { CommunityError, moderate } from '@oathly/api/server';
 import { redirect } from 'next/navigation';
 
-import { requireReviewer } from '@/lib/admin';
+import { audit, requireReviewer } from '@/lib/admin';
 import { getDb } from '@/lib/db';
 
 const ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -27,5 +27,6 @@ export async function decide(form: FormData): Promise<void> {
     if (!(error instanceof CommunityError)) throw error;
     redirect('/admin/community?problem=gone');
   }
+  await audit(reviewer, `community.${decision}`, { type: target, id });
   redirect(`/admin/community?done=${decision}`);
 }
