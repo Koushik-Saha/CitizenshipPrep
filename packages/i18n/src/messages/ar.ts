@@ -758,6 +758,21 @@ export const ar: Messages = {
   profile: {
     title: 'ملفك الشخصي',
     tabStudy: 'الدراسة',
+    nameLabel: 'الاسم',
+    nameHint: 'يظهر بجانب ما تكتبه في مجموعات الدراسة. اتركه فارغًا لعدم إظهار أي اسم.',
+    nameSave: 'حفظ الاسم',
+    nameSaved: 'تم حفظ اسمك.',
+    nameProblem:
+      'استخدم اسمًا لا يزيد على 60 حرفًا، دون روابط أو عناوين بريد إلكتروني أو أرقام هواتف.',
+    exportTitle: 'نسخة من بياناتك',
+    exportBody: 'نزّل كل ما يحتفظ به Oathly عن حسابك في ملف واحد.',
+    exportButton: 'تنزيل بياناتي',
+    analyticsTitle: 'إحصاءات الاستخدام',
+    analyticsBody:
+      'نحصي بعض الأحداث، مثل إنهاء جلسة، لنعرف كيف يُستخدم Oathly. وهي مرتبطة بحسابك، ولا تُباع أبدًا، ولا تُستخدم للإعلانات أبدًا.',
+    analyticsStop: 'توقف عن إحصاء استخدامي',
+    analyticsStart: 'أعد إحصاء استخدامي',
+    analyticsStopped: 'استخدامك لا يُحصى.',
     tabProfile: 'الملف الشخصي',
     progress: 'التقدم',
     sessions: 'الجلسات',

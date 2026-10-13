@@ -801,6 +801,22 @@ export const tl: Messages = {
   profile: {
     title: 'Ang iyong profile',
     tabStudy: 'Pag-aaral',
+    nameLabel: 'Pangalan',
+    nameHint:
+      'Ipinapakita sa tabi ng isinusulat mo sa mga study group. Iwanang walang laman para walang pangalang ipakita.',
+    nameSave: 'I-save ang pangalan',
+    nameSaved: 'Na-save na ang pangalan mo.',
+    nameProblem:
+      'Gumamit ng pangalang hanggang 60 character, walang link, email address o numero ng telepono.',
+    exportTitle: 'Kopya ng data mo',
+    exportBody: 'I-download sa isang file ang lahat ng hawak ng Oathly tungkol sa account mo.',
+    exportButton: 'I-download ang data ko',
+    analyticsTitle: 'Estadistika ng paggamit',
+    analyticsBody:
+      'Binibilang namin ang ilang pangyayari, gaya ng pagtatapos ng isang session, para makita kung paano ginagamit ang Oathly. Nakaugnay ang mga ito sa account mo, hindi kailanman ibinebenta, at hindi kailanman ginagamit sa advertising.',
+    analyticsStop: 'Itigil ang pagbilang sa akin',
+    analyticsStart: 'Bilangin akong muli',
+    analyticsStopped: 'Hindi binibilang ang paggamit mo.',
     tabProfile: 'Profile',
     progress: 'Progreso',
     sessions: 'Mga sesyon',

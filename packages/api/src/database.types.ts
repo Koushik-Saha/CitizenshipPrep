@@ -1732,6 +1732,7 @@ export type Database = {
       };
       user_settings: {
         Row: {
+          analytics_opt_out: boolean;
           created_at: string;
           daily_goal_minutes: number;
           onboarded_at: string | null;
@@ -1742,6 +1743,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          analytics_opt_out?: boolean;
           created_at?: string;
           daily_goal_minutes?: number;
           onboarded_at?: string | null;
@@ -1752,6 +1754,7 @@ export type Database = {
           user_id?: string;
         };
         Update: {
+          analytics_opt_out?: boolean;
           created_at?: string;
           daily_goal_minutes?: number;
           onboarded_at?: string | null;

@@ -785,6 +785,22 @@ export const es: Messages = {
   profile: {
     title: 'Tu perfil',
     tabStudy: 'Estudiar',
+    nameLabel: 'Nombre',
+    nameHint:
+      'Se muestra junto a lo que escribes en los grupos de estudio. Déjalo vacío para no mostrar ningún nombre.',
+    nameSave: 'Guardar nombre',
+    nameSaved: 'Tu nombre se ha guardado.',
+    nameProblem:
+      'Usa un nombre de hasta 60 caracteres, sin enlaces, correos electrónicos ni números de teléfono.',
+    exportTitle: 'Una copia de tus datos',
+    exportBody: 'Descarga en un solo archivo todo lo que Oathly guarda sobre tu cuenta.',
+    exportButton: 'Descargar mis datos',
+    analyticsTitle: 'Estadísticas de uso',
+    analyticsBody:
+      'Contamos algunos eventos, como terminar una sesión, para ver cómo se usa Oathly. Están vinculados a tu cuenta, nunca se venden y nunca se usan para publicidad.',
+    analyticsStop: 'Dejar de contar los míos',
+    analyticsStart: 'Volver a contar los míos',
+    analyticsStopped: 'Tu uso no se cuenta.',
     tabProfile: 'Perfil',
     progress: 'Progreso',
     sessions: 'Sesiones',

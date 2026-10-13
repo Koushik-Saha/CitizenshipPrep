@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { deletionBlocker, storeSubscriptionsToCancel } from './account';
+import {
+  deletionBlocker,
+  DISPLAY_NAME_MAX,
+  parseDisplayName,
+  storeSubscriptionsToCancel,
+} from './account';
 
 describe('deletionBlocker', () => {
   it('lets a learner with nothing shared delete their account', () => {
@@ -67,5 +72,42 @@ describe('storeSubscriptionsToCancel', () => {
       ]),
     ).toEqual([]);
     expect(storeSubscriptionsToCancel([])).toEqual([]);
+  });
+});
+
+describe('a display name', () => {
+  it('is kept, tidied', () => {
+    expect(parseDisplayName('  María   José  ')).toEqual({ ok: true, name: 'María José' });
+    expect(parseDisplayName('李小龙')).toEqual({ ok: true, name: '李小龙' });
+    expect(parseDisplayName('Ana\nBcc: x')).toEqual({ ok: true, name: 'Ana Bcc: x' });
+    expect(parseDisplayName('Ana 2')).toEqual({ ok: true, name: 'Ana 2' });
+  });
+
+  it('can be taken away', () => {
+    expect(parseDisplayName('')).toEqual({ ok: true, name: null });
+    expect(parseDisplayName('   ')).toEqual({ ok: true, name: null });
+  });
+
+  it('is refused when it is too long or is not text', () => {
+    expect(parseDisplayName('a'.repeat(DISPLAY_NAME_MAX))).toEqual({
+      ok: true,
+      name: 'a'.repeat(DISPLAY_NAME_MAX),
+    });
+    expect(parseDisplayName('a'.repeat(DISPLAY_NAME_MAX + 1))).toEqual({ ok: false });
+    expect(parseDisplayName(undefined)).toEqual({ ok: false });
+    expect(parseDisplayName(42)).toEqual({ ok: false });
+  });
+
+  it('may not carry a link, an address or a phone number', () => {
+    for (const name of [
+      'Visit https://spam.example',
+      'www.spam.example',
+      'spam.example/offer',
+      'write to me@example.test',
+      '<b>Ana</b>',
+      'Call 5551234567',
+    ]) {
+      expect(parseDisplayName(name), name).toEqual({ ok: false });
+    }
   });
 });

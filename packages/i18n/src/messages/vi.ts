@@ -764,6 +764,21 @@ export const vi: Messages = {
   profile: {
     title: 'Hồ sơ của bạn',
     tabStudy: 'Học',
+    nameLabel: 'Tên',
+    nameHint:
+      'Hiển thị bên cạnh những gì bạn viết trong nhóm học. Để trống nếu không muốn hiển thị tên.',
+    nameSave: 'Lưu tên',
+    nameSaved: 'Tên của bạn đã được lưu.',
+    nameProblem: 'Dùng tên tối đa 60 ký tự, không có liên kết, địa chỉ email hay số điện thoại.',
+    exportTitle: 'Bản sao dữ liệu của bạn',
+    exportBody: 'Tải về trong một tệp mọi thứ Oathly lưu giữ về tài khoản của bạn.',
+    exportButton: 'Tải dữ liệu của tôi',
+    analyticsTitle: 'Thống kê sử dụng',
+    analyticsBody:
+      'Chúng tôi đếm một vài sự kiện, như hoàn thành một buổi học, để biết Oathly được dùng thế nào. Chúng gắn với tài khoản của bạn, không bao giờ được bán và không bao giờ dùng cho quảng cáo.',
+    analyticsStop: 'Ngừng đếm của tôi',
+    analyticsStart: 'Đếm lại của tôi',
+    analyticsStopped: 'Việc sử dụng của bạn không được đếm.',
     tabProfile: 'Hồ sơ',
     progress: 'Tiến độ',
     sessions: 'Buổi học',

@@ -306,6 +306,51 @@ test('wherever a learner studies, the page says Oathly is independent and links 
   await expect(page.getByRole('contentinfo').getByText(t('common.notAffiliated'))).toBeVisible();
 });
 
+test('a learner changes their name, takes a copy of their data, and opts out of statistics', async ({
+  page,
+  request,
+}) => {
+  const user = await signInAndOnboard(page);
+  await page.goto('/study/account');
+
+  // A name of their own, shown at once.
+  await page.getByLabel(t('profile.nameLabel')).fill('  Maria   Silva ');
+  await page.getByRole('button', { name: t('profile.nameSave') }).click();
+  await expect(page.getByRole('status').filter({ hasText: t('profile.nameSaved') })).toBeVisible();
+  await expect(page.getByLabel(t('profile.nameLabel'))).toHaveValue('Maria Silva');
+  // A name may not carry a link: refused, and the old one stays.
+  await page.getByLabel(t('profile.nameLabel')).fill('Visit https://spam.example');
+  await page.getByRole('button', { name: t('profile.nameSave') }).click();
+  await expect(page.getByRole('alert').filter({ hasText: t('profile.nameProblem') })).toBeVisible();
+  await expect(page.getByLabel(t('profile.nameLabel'))).toHaveValue('Maria Silva');
+  await expectAccessibleInBothThemes(page, 'account');
+
+  // A copy of their data: a file, holding their account and what they study, and nobody else's.
+  await expect(page.getByRole('link', { name: t('profile.exportButton') })).toHaveAttribute(
+    'href',
+    '/api/me/export',
+  );
+  const copy = await page.request.get('/api/me/export');
+  expect(copy.status()).toBe(200);
+  expect(copy.headers()['content-disposition']).toMatch(/^attachment; filename="oathly-data-/);
+  const data = (await copy.json()) as {
+    account: { id: string; displayName: string };
+    data: Record<string, { country_code?: string }[]>;
+  };
+  expect(data.account).toMatchObject({ id: `test:${user}`, displayName: 'Maria Silva' });
+  expect(data.data.user_countries).toMatchObject([{ country_code: 'ZZ' }]);
+  expect(JSON.stringify(data)).not.toContain('test:e2e-warm-up');
+  // Nobody signed out gets anyone's.
+  expect((await request.get('/api/me/export')).status()).toBe(401);
+
+  // Their use is counted until they say otherwise, and again when they change their mind.
+  await page.getByRole('button', { name: t('profile.analyticsStop') }).click();
+  await expect(page.getByText(t('profile.analyticsStopped'))).toBeVisible();
+  await page.getByRole('button', { name: t('profile.analyticsStart') }).click();
+  await expect(page.getByText(t('profile.analyticsStopped'))).toHaveCount(0);
+  await expect(page.getByRole('button', { name: t('profile.analyticsStop') })).toBeVisible();
+});
+
 test('the plans page and the tutor are reachable and accessible', async ({ page }) => {
   await signInAndOnboard(page);
   await page.getByRole('link', { name: t('plans.title'), exact: true }).click();

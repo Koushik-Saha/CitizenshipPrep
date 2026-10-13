@@ -33,6 +33,8 @@ export const meSchema = z.object({
       onboardedAt: z.nullable(z.string()),
       /** When they confirmed their age and accepted the terms; null until they have. */
       termsAcceptedAt: z.optional(z.nullable(z.string())),
+      /** They have asked for their use not to be counted in product statistics. */
+      analyticsOptOut: z.optional(z.boolean()),
     }),
   ),
   studyCountries: z.array(studyCountrySchema),

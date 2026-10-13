@@ -73,6 +73,11 @@ test('an admin finds a user, sees what they hold and do, and deletes the account
   );
   expect(entry!.detail.reason).toBe('Asked by email on 13 October.');
 
+  // An account that does not exist is said not to be found, in the admin area's own page.
+  await page.goto('/admin/users/test:nobody-at-all');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Not found');
+  await expect(page.getByRole('link', { name: 'Back to the review queue' })).toBeVisible();
+
   // An admin cannot delete the account they are signed in with.
   await page.goto(`/admin/users/${encodeURIComponent(admin)}`);
   await page.getByLabel('Who asked, and how').fill('Testing that it is refused.');

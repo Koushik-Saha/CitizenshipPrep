@@ -67,8 +67,9 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
       daily_goal_minutes: number;
       onboarded_at: Date | null;
       terms_accepted_at: Date | null;
+      analytics_opt_out: boolean;
     }>(
-      `select daily_goal_minutes, onboarded_at, terms_accepted_at
+      `select daily_goal_minutes, onboarded_at, terms_accepted_at, analytics_opt_out
        from public.user_settings where user_id = $1`,
       [userId],
     ),
@@ -105,6 +106,7 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
           dailyGoalMinutes: settingsRow.daily_goal_minutes,
           onboardedAt: settingsRow.onboarded_at?.toISOString() ?? null,
           termsAcceptedAt: settingsRow.terms_accepted_at?.toISOString() ?? null,
+          analyticsOptOut: settingsRow.analytics_opt_out,
         }
       : null,
     studyCountries: countries.rows.map((country) => ({

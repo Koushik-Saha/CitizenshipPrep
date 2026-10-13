@@ -60,3 +60,29 @@ export function storeSubscriptionsToCancel(
   }
   return [...stores].sort();
 }
+
+// The name a learner goes by ------------------------------------------------------
+
+/** The longest a display name may be. */
+export const DISPLAY_NAME_MAX = 60;
+
+/**
+ * A display name as typed, checked. It is shown to other learners beside
+ * what its owner writes in study groups, so it may not carry what a post may
+ * not: a link, an email address, a phone number. Empty means "no name".
+ */
+export function parseDisplayName(
+  input: unknown,
+): { ok: true; name: string | null } | { ok: false } {
+  if (typeof input !== 'string') return { ok: false };
+  const name = input
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\u0000-\u001f\u007f]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!name) return { ok: true, name: null };
+  if ([...name].length > DISPLAY_NAME_MAX) return { ok: false };
+  const carriesAnAddress =
+    /[<>@]/.test(name) || /(https?:|www\.|\.[a-z]{2,}\/)/i.test(name) || /\d{7,}/.test(name);
+  return carriesAnAddress ? { ok: false } : { ok: true, name };
+}
