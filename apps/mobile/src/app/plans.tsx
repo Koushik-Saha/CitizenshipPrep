@@ -7,6 +7,7 @@ import { Redirect } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, View } from 'react-native';
 
+import { LegalLinks } from '@/components/legal-links';
 import {
   Body,
   Button,
@@ -231,6 +232,7 @@ export default function Plans() {
           testID="restore-purchases"
         />
       )}
+      <LegalLinks />
       <Body muted size="sm">
         {t('common.notAffiliated')}
       </Body>

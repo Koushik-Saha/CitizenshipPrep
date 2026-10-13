@@ -228,6 +228,9 @@ function CountrySection({
         <>
           <Card>
             <Readiness country={country} />
+            <Body muted size="sm">
+              {t('readiness.disclaimer')}
+            </Body>
             {country.readiness!.suggestions.slice(0, 2).map((item) => {
               const { title, detail, action, request } = suggestion(code, item, t);
               return (

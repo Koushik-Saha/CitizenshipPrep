@@ -238,6 +238,7 @@ describe('publicSitePages', () => {
       { path: '/contact', lastModified: null },
       { path: '/privacy', lastModified: '2026-10-12' },
       { path: '/terms', lastModified: '2026-10-12' },
+      { path: '/refunds', lastModified: '2026-10-12' },
       { path: '/delete-account', lastModified: '2026-10-12' },
     ]);
   });
@@ -267,6 +268,7 @@ describe('publicSitePages', () => {
       { path: '/contact', lastModified: null },
       { path: '/privacy', lastModified: null },
       { path: '/terms', lastModified: null },
+      { path: '/refunds', lastModified: null },
       { path: '/delete-account', lastModified: null },
     ]);
   });

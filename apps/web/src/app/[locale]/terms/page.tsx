@@ -84,7 +84,11 @@ export default async function TermsPage({ params }: PageProps<'/[locale]/terms'>
           </li>
           <li>
             Where the law gives you a right to withdraw from a purchase or to a refund, these terms
-            do not take it away.
+            do not take it away. How to cancel and how to ask for a refund are set out on the{' '}
+            <Link href={localizePath(locale, '/refunds')} className={legalLink}>
+              refunds page
+            </Link>
+            .
           </li>
           <li>
             Prices can change. A change applies to a subscription from its next renewal, and you

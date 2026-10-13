@@ -27,6 +27,7 @@ export const ar: Messages = {
     notFoundBody: 'لا توجد صفحة في هذا العنوان. ربما نُقلت، أو كُتب الرابط بشكل خاطئ.',
     backHome: 'الذهاب إلى الصفحة الرئيسية',
     contact: 'اتصل بنا',
+    refunds: 'الاسترداد',
     privacy: 'الخصوصية',
     terms: 'الشروط',
     account: 'الحساب',

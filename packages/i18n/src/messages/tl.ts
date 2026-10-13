@@ -26,6 +26,7 @@ export const tl: Messages = {
       'Walang pahina sa address na ito. Maaaring nailipat ito, o mali ang pagkaka-type ng link.',
     backHome: 'Pumunta sa home page',
     contact: 'Makipag-ugnayan',
+    refunds: 'Mga refund',
     privacy: 'Privacy',
     terms: 'Mga Tuntunin',
     account: 'Account',

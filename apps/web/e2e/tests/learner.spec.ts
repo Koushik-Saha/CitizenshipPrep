@@ -253,6 +253,33 @@ test('a buy button on the landing page leads to the plans page, through sign-up 
   await page.waitForURL(/\/study$/);
 });
 
+test('wherever a learner studies, the page says Oathly is independent and links to its terms', async ({
+  page,
+}) => {
+  await signInAndOnboard(page);
+  for (const path of ['/study', '/study/plans', '/study/account']) {
+    await page.goto(path);
+    const footer = page.getByRole('contentinfo');
+    await expect(footer.getByText(t('common.notAffiliated')), path).toBeVisible();
+    for (const [name, href] of [
+      [t('common.terms'), '/terms'],
+      [t('common.privacy'), '/privacy'],
+      [t('common.refunds'), '/refunds'],
+      [t('common.contact'), '/contact'],
+    ] as const) {
+      await expect(footer.getByRole('link', { name, exact: true }), path).toHaveAttribute(
+        'href',
+        href,
+      );
+    }
+  }
+  // In a session too, where the answers are.
+  await page.goto('/study');
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\/[0-9a-f-]{36}$/);
+  await expect(page.getByRole('contentinfo').getByText(t('common.notAffiliated'))).toBeVisible();
+});
+
 test('the plans page and the tutor are reachable and accessible', async ({ page }) => {
   await signInAndOnboard(page);
   await page.getByRole('link', { name: t('plans.title'), exact: true }).click();

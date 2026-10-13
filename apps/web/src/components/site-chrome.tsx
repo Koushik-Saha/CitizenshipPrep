@@ -69,6 +69,42 @@ export function SiteFooter({ t }: { t: Translator }) {
           <Link href={localizePath(t.locale, '/terms')} prefetch={false} className={navLink}>
             {t('common.terms')}
           </Link>
+          <Link href={localizePath(t.locale, '/refunds')} prefetch={false} className={navLink}>
+            {t('common.refunds')}
+          </Link>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
+/**
+ * The footer of the signed-in pages: that Oathly is not a government's, and
+ * the pages about the service. Wherever answers and a readiness estimate are
+ * shown, this is underneath.
+ */
+export function LegalFooter({ t }: { t: Translator }) {
+  const pages = [
+    ['/terms', 'common.terms'],
+    ['/privacy', 'common.privacy'],
+    ['/refunds', 'common.refunds'],
+    ['/contact', 'common.contact'],
+  ] as const;
+  return (
+    <footer className="border-border mt-10 border-t">
+      <div className="text-fg-muted mx-auto flex max-w-3xl flex-col gap-3 px-4 py-8 text-sm">
+        <p>{t('common.notAffiliated')}</p>
+        <nav aria-label={t('common.footerNav')} className="flex flex-wrap gap-x-6 gap-y-2">
+          {pages.map(([path, label]) => (
+            <Link
+              key={path}
+              href={localizePath(t.locale, path)}
+              prefetch={false}
+              className={navLink}
+            >
+              {t(label)}
+            </Link>
+          ))}
         </nav>
       </div>
     </footer>

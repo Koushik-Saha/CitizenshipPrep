@@ -2,6 +2,7 @@ import { looksLikeEmail, normalizeCode } from '@oathly/api';
 import { router } from 'expo-router';
 import { useState } from 'react';
 
+import { LegalLinks } from '@/components/legal-links';
 import { Body, Button, Field, Heading, Message, Screen } from '@/components/ui';
 import { sendSignInCode, verifySignInCode } from '@/lib/auth';
 import { useT } from '@/lib/i18n';
@@ -95,6 +96,7 @@ export default function SignIn() {
           />
         </>
       )}
+      <LegalLinks />
       <Body muted>{t('common.notAffiliated')}</Body>
     </Screen>
   );

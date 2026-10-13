@@ -218,6 +218,7 @@ export function publicSitePages(
     { path: '/contact', lastModified: null },
     { path: '/privacy', lastModified: legalUpdated },
     { path: '/terms', lastModified: legalUpdated },
+    { path: '/refunds', lastModified: legalUpdated },
     { path: '/delete-account', lastModified: legalUpdated },
   ];
 }

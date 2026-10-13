@@ -112,6 +112,61 @@ export function stripeDashboardUrl(id: string, live: boolean): string | null {
   return `https://dashboard.stripe.com/${live ? '' : 'test/'}${section}/${id}`;
 }
 
+/**
+ * What a checkout says and asks for besides the price, as Stripe Checkout
+ * takes it:
+ *
+ * - Above the pay button, always: that paying accepts the terms and the
+ *   refund policy, and asks for access to start at once. Buyers in the EU
+ *   and the UK have 14 days to withdraw from an online purchase unless they
+ *   ask for it to start straight away, so they are told that they are asking.
+ * - With `collectTax`: Stripe works out the VAT, GST or sales tax owed where
+ *   the buyer lives, which needs their address. Stripe Tax has to be set up
+ *   in the Stripe dashboard first, or Stripe refuses the checkout.
+ * - With `requireConsent`: a box the buyer must tick to accept the terms.
+ *   The address of the terms has to be set in the Stripe dashboard first.
+ *
+ * `existingCustomer` is whether the buyer is already a Stripe customer: their
+ * address is then saved to that customer, which Stripe needs to tax them.
+ */
+export function checkoutTerms(options: {
+  termsUrl: string;
+  refundsUrl: string;
+  collectTax: boolean;
+  requireConsent: boolean;
+  existingCustomer: boolean;
+}) {
+  const agreement =
+    `By paying you agree to Oathly's [terms](${options.termsUrl}) and ` +
+    `[refund policy](${options.refundsUrl}), and ask for access to start now. ` +
+    'If the law where you live gives you 14 days to withdraw, starting now can end that ' +
+    'right once access has begun.';
+  return {
+    custom_text: {
+      submit: { message: agreement },
+      ...(options.requireConsent
+        ? {
+            terms_of_service_acceptance: {
+              message: `I agree to Oathly's [terms](${options.termsUrl}) and [refund policy](${options.refundsUrl}).`,
+            },
+          }
+        : {}),
+    },
+    ...(options.requireConsent
+      ? { consent_collection: { terms_of_service: 'required' as const } }
+      : {}),
+    ...(options.collectTax
+      ? {
+          automatic_tax: { enabled: true },
+          billing_address_collection: 'required' as const,
+          ...(options.existingCustomer
+            ? { customer_update: { address: 'auto' as const, name: 'auto' as const } }
+            : {}),
+        }
+      : {}),
+  };
+}
+
 /** What can be bought, as a checkout request names it. */
 export type Purchase =
   { plan: 'pro_monthly' | 'pro_yearly' } | { plan: 'country_pass'; countryCode: string };

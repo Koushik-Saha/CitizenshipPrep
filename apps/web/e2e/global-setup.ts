@@ -16,6 +16,8 @@ const publicPages = [
   '/privacy',
   '/contact',
   '/terms',
+  '/refunds',
+  '/api/health',
   '/delete-account',
   '/account-deleted',
   '/join/not-a-real-invitation',

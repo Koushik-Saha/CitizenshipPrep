@@ -23,6 +23,7 @@ export const zhHans: Messages = {
     notFoundBody: '这个地址没有页面。它可能已被移走，或者链接输入有误。',
     backHome: '前往首页',
     contact: '联系我们',
+    refunds: '退款',
     privacy: '隐私',
     terms: '条款',
     account: '账户',

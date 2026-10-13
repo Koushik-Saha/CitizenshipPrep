@@ -95,7 +95,7 @@ test('search engines get a sitemap and are kept out of the signed-in pages', asy
 }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('/testland/citizenship-test</loc>');
-  for (const page of ['/contact', '/privacy', '/terms', '/delete-account']) {
+  for (const page of ['/contact', '/privacy', '/terms', '/refunds', '/delete-account']) {
     expect(sitemap).toContain(`${page}</loc>`);
   }
   expect(sitemap).toContain('hreflang="es"');
@@ -121,6 +121,7 @@ const publicPages = [
   ['/sign-in', 'sign-in'],
   ['/privacy', 'privacy policy'],
   ['/terms', 'terms'],
+  ['/refunds', 'refunds and cancelling'],
   ['/delete-account', 'how to delete an account'],
   ['/es/privacy', 'privacy policy, read from Spanish'],
   ['/join/not-a-real-invitation', 'invitation that is gone'],
@@ -194,4 +195,28 @@ test('when the sign-in service refuses or cannot be reached, the form says so an
   await page.getByRole('button', { name: t('auth.sendCode') }).click();
   await expect(page.getByRole('alert').filter({ hasText: t('auth.notConfigured') })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('auth.title'));
+});
+
+test('an uptime monitor has an address to ask, which says only whether the site is up', async ({
+  request,
+}) => {
+  const response = await request.get('/api/health');
+  expect(response.status()).toBe(200);
+  expect(await response.json()).toEqual({ status: 'ok' });
+  expect(response.headers()['cache-control']).toBe('no-store');
+});
+
+test('the refunds page is linked from the footer and from the terms', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .getByRole('contentinfo')
+    .getByRole('link', { name: t('common.refunds') })
+    .click();
+  await expect(page).toHaveURL(/\/refunds$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Refunds and cancelling');
+  await page.goto('/terms');
+  await expect(page.getByRole('link', { name: 'refunds page' })).toHaveAttribute(
+    'href',
+    '/refunds',
+  );
 });

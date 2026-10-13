@@ -1,4 +1,5 @@
 import { I18nProvider } from '@/components/i18n/provider';
+import { LegalFooter } from '@/components/site-chrome';
 import { StudyProviders } from '@/components/study/study-providers';
 import { clientMessages, getT } from '@/lib/i18n';
 
@@ -18,10 +19,13 @@ const groups = [
 ] as const;
 
 export default async function StudyLayout({ children, params }: LayoutProps<'/[locale]/study'>) {
-  const { locale } = await getT(params);
+  const { locale, t } = await getT(params);
   return (
-    <I18nProvider locale={locale} messages={clientMessages(locale, groups)}>
-      <StudyProviders>{children}</StudyProviders>
-    </I18nProvider>
+    <>
+      <I18nProvider locale={locale} messages={clientMessages(locale, groups)}>
+        <StudyProviders>{children}</StudyProviders>
+      </I18nProvider>
+      <LegalFooter t={t} />
+    </>
   );
 }

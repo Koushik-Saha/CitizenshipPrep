@@ -26,6 +26,7 @@ export const fr: Messages = {
       'Il n’y a pas de page à cette adresse. Elle a peut-être été déplacée, ou le lien est mal saisi.',
     backHome: 'Aller à la page d’accueil',
     contact: 'Contact',
+    refunds: 'Remboursements',
     privacy: 'Confidentialité',
     terms: 'Conditions',
     account: 'Compte',

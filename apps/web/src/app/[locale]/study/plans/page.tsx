@@ -243,8 +243,6 @@ export default async function PlansPage({
           </div>
         </section>
       )}
-
-      <p className="text-fg-muted mt-10 text-sm">{t('common.notAffiliated')}</p>
     </main>
   );
 }

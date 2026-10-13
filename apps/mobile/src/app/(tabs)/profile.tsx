@@ -5,6 +5,7 @@ import { Redirect, router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { OfflineBanner } from '@/components/offline-banner';
+import { LegalLinks } from '@/components/legal-links';
 import {
   Body,
   Button,
@@ -200,6 +201,7 @@ export default function Profile() {
         onPress={() => router.push('/delete-account')}
         testID="open-delete-account"
       />
+      <LegalLinks />
       <Body muted size="sm">
         {t('common.notAffiliated')}
       </Body>

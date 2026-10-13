@@ -25,6 +25,7 @@ export const vi: Messages = {
       'Không có trang nào ở địa chỉ này. Trang có thể đã được chuyển đi, hoặc liên kết bị gõ sai.',
     backHome: 'Về trang chủ',
     contact: 'Liên hệ',
+    refunds: 'Hoàn tiền',
     privacy: 'Quyền riêng tư',
     terms: 'Điều khoản',
     account: 'Tài khoản',

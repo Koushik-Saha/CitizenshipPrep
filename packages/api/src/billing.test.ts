@@ -2,6 +2,7 @@ import type { Entitlement } from '@oathly/core';
 import { describe, expect, it } from 'vitest';
 
 import {
+  checkoutTerms,
   formatPrice,
   parsePlanChoice,
   planFromProductId,
@@ -99,6 +100,66 @@ describe('a plan picked on a buy button', () => {
     expect(plansPath('country_pass')).toBe('/study/plans?plan=country_pass#pass');
     expect(plansPath()).toBe('/study/plans');
     expect(plansPath(null)).toBe('/study/plans');
+  });
+});
+
+describe('what a checkout says and asks for', () => {
+  const urls = {
+    termsUrl: 'https://oathly.example/terms',
+    refundsUrl: 'https://oathly.example/refunds',
+  };
+
+  it('always says that paying accepts the terms and asks for access to start now', () => {
+    const plain = checkoutTerms({
+      ...urls,
+      collectTax: false,
+      requireConsent: false,
+      existingCustomer: false,
+    });
+    expect(Object.keys(plain)).toEqual(['custom_text']);
+    const { message } = plain.custom_text.submit;
+    expect(message).toContain('[terms](https://oathly.example/terms)');
+    expect(message).toContain('[refund policy](https://oathly.example/refunds)');
+    expect(message).toContain('ask for access to start now');
+    expect(message).toContain('14 days to withdraw');
+    // Stripe takes at most 1,200 characters here.
+    expect(message.length).toBeLessThan(1200);
+  });
+
+  it('asks for a ticked box when consent is required', () => {
+    const asked = checkoutTerms({
+      ...urls,
+      collectTax: false,
+      requireConsent: true,
+      existingCustomer: false,
+    });
+    expect(asked.consent_collection).toEqual({ terms_of_service: 'required' });
+    expect(asked.custom_text.terms_of_service_acceptance!.message).toContain(
+      '[terms](https://oathly.example/terms)',
+    );
+    expect(asked).not.toHaveProperty('automatic_tax');
+  });
+
+  it('has Stripe work out the tax from the buyer’s address when tax is collected', () => {
+    const fresh = checkoutTerms({
+      ...urls,
+      collectTax: true,
+      requireConsent: false,
+      existingCustomer: false,
+    });
+    expect(fresh.automatic_tax).toEqual({ enabled: true });
+    expect(fresh.billing_address_collection).toBe('required');
+    expect(fresh).not.toHaveProperty('customer_update');
+    expect(fresh).not.toHaveProperty('consent_collection');
+    // Someone who has bought before: the address is saved to the customer Stripe already has.
+    const returning = checkoutTerms({
+      ...urls,
+      collectTax: true,
+      requireConsent: true,
+      existingCustomer: true,
+    });
+    expect(returning.customer_update).toEqual({ address: 'auto', name: 'auto' });
+    expect(returning.consent_collection).toEqual({ terms_of_service: 'required' });
   });
 });
 

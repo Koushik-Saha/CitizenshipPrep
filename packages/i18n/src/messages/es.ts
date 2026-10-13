@@ -26,6 +26,7 @@ export const es: Messages = {
       'No hay ninguna página en esta dirección. Puede que se haya movido o que el enlace esté mal escrito.',
     backHome: 'Ir a la página de inicio',
     contact: 'Contacto',
+    refunds: 'Reembolsos',
     privacy: 'Privacidad',
     terms: 'Condiciones',
     account: 'Cuenta',

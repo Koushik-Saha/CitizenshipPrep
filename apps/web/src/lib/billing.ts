@@ -1,4 +1,4 @@
-import type { PlanPrice, Purchase } from '@oathly/api/billing';
+import { checkoutTerms, type PlanPrice, type Purchase } from '@oathly/api/billing';
 import {
   applySubscriptionChange,
   changeFromStripeSubscription,
@@ -9,6 +9,7 @@ import {
   stripeProSubscriptionFor,
   type StripePrices,
 } from '@oathly/api/server';
+import { isSwitchedOn } from '@oathly/core';
 import type { UiLocale } from '@oathly/i18n';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
@@ -108,6 +109,25 @@ const checkoutLocale: Partial<Record<UiLocale, Stripe.Checkout.SessionCreatePara
   tl: 'fil',
 };
 
+/**
+ * What every checkout says and asks for besides the price (checkoutTerms in
+ * @oathly/api). The agreement above the pay button is always there. Tax and
+ * the tick box each need something set up in the Stripe dashboard first, so
+ * each is switched on from the environment once that is done:
+ * STRIPE_TAX=1 (Stripe Tax is on), STRIPE_TERMS_CONSENT=1 (the address of the
+ * terms is in Stripe's public details).
+ */
+async function checkoutExtras(existingCustomer: boolean) {
+  const origin = await siteOrigin();
+  return checkoutTerms({
+    termsUrl: `${origin}/terms`,
+    refundsUrl: `${origin}/refunds`,
+    collectTax: isSwitchedOn(process.env.STRIPE_TAX),
+    requireConsent: isSwitchedOn(process.env.STRIPE_TERMS_CONSENT),
+    existingCustomer,
+  });
+}
+
 /** Starts a Stripe Checkout for a plan and returns the page to send the learner to. */
 export async function createCheckout(input: {
   user: { userId: string; email: string | null };
@@ -143,6 +163,7 @@ export async function createCheckout(input: {
           ...(subscribing ? {} : { customer_creation: 'always' as const }),
         }),
     ...(subscribing ? { subscription_data: { metadata } } : { payment_intent_data: { metadata } }),
+    ...(await checkoutExtras(Boolean(customer))),
     allow_promotion_codes: true,
     locale: checkoutLocale[input.locale] ?? 'auto',
     success_url: `${input.returnUrl}?purchase=done`,
@@ -259,6 +280,7 @@ export async function createSeatCheckout(input: {
     metadata,
     subscription_data: { metadata, description: organization.name },
     ...(customer ? { customer } : { customer_email: user.email ?? undefined }),
+    ...(await checkoutExtras(Boolean(customer))),
     // Organizations pay from a business: let them put its name and tax id on the invoice.
     tax_id_collection: { enabled: true },
     ...(customer ? { customer_update: { name: 'auto' as const, address: 'auto' as const } } : {}),

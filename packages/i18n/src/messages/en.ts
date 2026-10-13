@@ -28,6 +28,7 @@ export const en = {
       'There is no page at this address. It may have moved, or the link may be mistyped.',
     backHome: 'Go to the home page',
     contact: 'Contact',
+    refunds: 'Refunds',
     privacy: 'Privacy',
     terms: 'Terms',
     account: 'Account',
