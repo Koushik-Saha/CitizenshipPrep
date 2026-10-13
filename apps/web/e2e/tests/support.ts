@@ -4,6 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { totpCode, totpStep } from '@oathly/api/totp';
 import { translatorFor } from '@oathly/i18n/messages';
 import { expect, type Page } from '@playwright/test';
+import jsQR from 'jsqr';
 
 import { makeStaff } from '../database';
 
@@ -88,6 +89,34 @@ export const ownAddress = () =>
 export const authenticatorCode = (key: string, stepsAhead = 0) =>
   totpCode(key.replace(/\s/g, ''), totpStep(new Date()) + stepsAhead);
 
+/**
+ * The key on the authenticator set-up screen. It sits behind "Cannot scan
+ * it?", under the QR code, so it is read from the page rather than from what
+ * is showing.
+ */
+export const setupKey = async (page: Page) =>
+  ((await page.getByTestId('totp-secret').textContent()) ?? '').trim();
+
+/**
+ * What the QR code on the set-up screen says when a phone scans it: the
+ * picture is drawn at a size a camera would see and read back.
+ */
+export async function scanSetupCode(page: Page): Promise<string | null> {
+  const image = await page.getByTestId('totp-qr').evaluate(async (element) => {
+    const img = element as HTMLImageElement;
+    await img.decode();
+    const size = 416;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const context = canvas.getContext('2d')!;
+    context.imageSmoothingEnabled = false;
+    context.drawImage(img, 0, 0, size, size);
+    return { size, data: Array.from(context.getImageData(0, 0, size, size).data) };
+  });
+  return jsQR(new Uint8ClampedArray(image.data), image.size, image.size)?.data ?? null;
+}
+
 /** Signs in to the site as a new account that holds a staff role. Returns its id. */
 export async function signInAsStaffAccount(
   page: Page,
@@ -115,7 +144,7 @@ export async function signInAsReviewer(
   const userId = await signInAsStaffAccount(page, role);
   await page.goto(next);
   await expect(page).toHaveURL(/\/admin\/sign-in/);
-  const key = await page.getByTestId('totp-secret').innerText();
+  const key = await setupKey(page);
   await page.getByLabel('Six-digit code').fill(authenticatorCode(key));
   await page.getByRole('button', { name: 'Turn it on and continue' }).click();
   // The development server compiles the page asked for the first time it is opened.

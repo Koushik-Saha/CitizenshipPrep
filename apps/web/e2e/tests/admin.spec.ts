@@ -6,6 +6,8 @@ import {
   expectAccessible,
   expectAccessibleInBothThemes,
   ownAddress,
+  scanSetupCode,
+  setupKey,
   signInAsReviewer,
   signInAsStaffAccount,
 } from './support';
@@ -34,10 +36,26 @@ test('the review pages ask staff for a code from their authenticator, and take n
   // Their first time: an authenticator to set up.
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set up your authenticator');
   await expectAccessibleInBothThemes(page, 'authenticator set-up');
-  const key = await page.getByTestId('totp-secret').innerText();
+  // A QR code to scan, which says what an authenticator needs: who issues the
+  // codes, for which account, and the key.
+  await expect(page.getByTestId('totp-qr')).toBeVisible();
+  const scanned = new URL((await scanSetupCode(page))!);
+  expect(scanned.protocol).toBe('otpauth:');
+  expect(scanned.host).toBe('totp');
+  expect(decodeURIComponent(scanned.pathname)).toMatch(/^\/Oathly:/);
+  expect(scanned.searchParams.get('issuer')).toBe('Oathly');
+  expect(scanned.searchParams.get('digits')).toBe('6');
+  expect(scanned.searchParams.get('period')).toBe('30');
+  // For a phone that cannot scan, the same key can be typed instead.
+  const key = await setupKey(page);
+  expect(key.replace(/\s/g, '')).toBe(scanned.searchParams.get('secret'));
+  await expect(page.getByTestId('totp-secret')).toBeHidden();
+  await page.getByText('Cannot scan it? Enter the key instead').click();
+  await expect(page.getByTestId('totp-secret')).toBeVisible();
   // The key stays the same until it is in use: a reload does not undo the phone.
   await page.reload();
-  await expect(page.getByTestId('totp-secret')).toHaveText(key);
+  expect(await setupKey(page)).toBe(key);
+  // A code made from what was scanned is what gets in, below.
 
   await page.getByLabel('Six-digit code').fill('000000');
   await page.getByRole('button', { name: 'Turn it on and continue' }).click();

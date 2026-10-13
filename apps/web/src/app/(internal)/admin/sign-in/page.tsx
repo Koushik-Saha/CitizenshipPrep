@@ -16,6 +16,7 @@ import {
   secondFactorKey,
 } from '@/lib/admin-credentials';
 import { getDb } from '@/lib/db';
+import { qrDataUri } from '@/lib/qr';
 import { currentUser } from '@/lib/user';
 
 import { confirmAuthenticator, enterCode, enterSharedAccount } from './actions';
@@ -223,6 +224,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
   const secret = await startEnrollment(getDb(), secondFactorKey(), user.userId);
   if (!secret) redirect('/admin/sign-in');
   const account = user.email || member.displayName || 'staff';
+  const uri = otpauthUri(secret, account);
   return (
     <Frame
       title="Set up your authenticator"
@@ -231,23 +233,42 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
     >
       <ol className="mt-6 list-decimal space-y-4 ps-5 text-sm">
         <li>
-          Open an authenticator app on your phone (Google Authenticator, 1Password, Authy or
-          similar) and add an account by entering a setup key.
+          Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator,
+          1Password, Authy or similar) and choose to add an account by scanning a QR code.
         </li>
         <li>
-          Enter this key, with the account name <strong>Oathly</strong>. It is time-based.
-          <code
-            data-testid="totp-secret"
-            className="bg-surface-sunken mt-2 block rounded-md px-3 py-2 font-mono text-base break-all select-all"
-          >
-            {spellSecret(secret)}
-          </code>
-          <a
-            href={otpauthUri(secret, account)}
-            className="text-primary-fg mt-2 inline-block underline underline-offset-4"
-          >
-            On the phone itself? Open it in your authenticator app
-          </a>
+          Scan this code.
+          {/* Drawn by this server: the code holds the secret, so no other site is asked to make it. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={qrDataUri(uri)}
+            alt="QR code to add Oathly to your authenticator app"
+            width={208}
+            height={208}
+            data-testid="totp-qr"
+            className="border-border mt-3 block rounded-md border bg-white"
+          />
+          <details className="mt-3">
+            <summary className="text-primary-fg cursor-pointer underline underline-offset-4">
+              Cannot scan it? Enter the key instead
+            </summary>
+            <p className="mt-2">
+              Choose “enter a setup key” in the app, name the account <strong>Oathly</strong>, pick
+              time-based, and type:
+            </p>
+            <code
+              data-testid="totp-secret"
+              className="bg-surface-sunken mt-2 block rounded-md px-3 py-2 font-mono text-base break-all select-all"
+            >
+              {spellSecret(secret)}
+            </code>
+            <a
+              href={uri}
+              className="text-primary-fg mt-2 inline-block underline underline-offset-4"
+            >
+              On the phone itself? Open it in your authenticator app
+            </a>
+          </details>
         </li>
         <li>Enter the six-digit code the app now shows.</li>
       </ol>

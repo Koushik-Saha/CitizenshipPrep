@@ -4,7 +4,13 @@ import path from 'node:path';
 import { expect, test, type APIRequestContext } from '@playwright/test';
 
 import { auditTrail, removeStaff, resetAuthenticator, sql } from '../../database';
-import { newLearner, signInAndOnboard, signInAsReviewer, signInAsStaffAccount } from '../support';
+import {
+  newLearner,
+  setupKey,
+  signInAndOnboard,
+  signInAsReviewer,
+  signInAsStaffAccount,
+} from '../support';
 
 // Who can reach the reviewers' area: nobody without a staff role and a code
 // from their authenticator. The routes are read from the app's own folders,
@@ -206,9 +212,7 @@ test('an authenticator sealed under an old secret says so, and lets nobody in', 
   await resetAuthenticator(userId);
   await page.reload();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set up your authenticator');
-  expect((await page.getByTestId('totp-secret').innerText()).replace(/\s/g, '')).not.toBe(
-    key.replace(/\s/g, ''),
-  );
+  expect((await setupKey(page)).replace(/\s/g, '')).not.toBe(key.replace(/\s/g, ''));
 });
 
 test('a reviewer gets the review pages and none of the admin-only ones', async ({ page }) => {

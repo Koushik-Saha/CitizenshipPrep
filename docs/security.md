@@ -189,8 +189,9 @@ themselves. A refused call gets `429` with `Retry-After`. Tested in
     account and deleting one are recorded; deleting asks for the word DELETE
     and a reason, cancels any Stripe subscription first, and removes the
     sign-in record as well as the data. The other pages only read.
-  - Known limits: there is no QR code on the set-up screen (the key is typed
-    or opened on the phone), no recovery codes (a reset is done from the
+  - The set-up screen shows a QR code, drawn by this server (the code holds
+    the secret, so no other site is asked to make it), with the key to type
+    as a fallback. Known limits: no recovery codes (a reset is done from the
     command line), and the first factor is the site's own sign-in, an emailed
     code, so an admin's mailbox matters as much as their phone.
 - **Four dependency advisories** (`pnpm audit --prod`, 2 high, 2 moderate):

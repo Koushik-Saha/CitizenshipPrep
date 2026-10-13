@@ -15,8 +15,9 @@ the first admin has set up an authenticator; after that the shared password is r
    sign-in on the live site: if it does not work, the live address is not yet a trusted domain in
    Neon Auth (Neon console > Auth). Fix that first; the shared password keeps working meanwhile.
 3. On your machine: `pnpm content staff-grant --email you@example.org --role admin`
-4. Open `https://oathly.vercel.app/admin`. It shows a setup key: add it to an authenticator app
-   (Google Authenticator, 1Password, Authy), then type the six-digit code.
+4. Open `https://oathly.vercel.app/admin`. It shows a QR code: scan it with an authenticator app
+   (Google Authenticator, Microsoft Authenticator, 1Password, Authy), then type the six-digit
+   code.
 5. On Vercel, delete `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
 6. `pnpm content staff-list` shows who is staff. The old shared account is listed as
    `admin:<name>`; it can no longer sign in, and `pnpm content staff-revoke --user admin:<name>`
