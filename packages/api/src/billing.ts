@@ -94,6 +94,24 @@ export function plansPath(plan?: PaidPlan | null): string {
   return `/study/plans?plan=${plan}#${plan === 'country_pass' ? 'pass' : 'pro'}`;
 }
 
+/**
+ * The page of the Stripe dashboard for something Stripe gave an id to: a
+ * customer, a subscription or a payment. That is where a refund is made.
+ * Null for an id with no page of its own. `live` is whether the server's key
+ * is a live one: test and live data are kept apart there.
+ */
+export function stripeDashboardUrl(id: string, live: boolean): string | null {
+  const section = id.startsWith('cus_')
+    ? 'customers'
+    : id.startsWith('sub_')
+      ? 'subscriptions'
+      : id.startsWith('pi_') || id.startsWith('ch_') || id.startsWith('py_')
+        ? 'payments'
+        : null;
+  if (!section || !/^[a-z]+_[A-Za-z0-9]+$/.test(id)) return null;
+  return `https://dashboard.stripe.com/${live ? '' : 'test/'}${section}/${id}`;
+}
+
 /** What can be bought, as a checkout request names it. */
 export type Purchase =
   { plan: 'pro_monthly' | 'pro_yearly' } | { plan: 'country_pass'; countryCode: string };

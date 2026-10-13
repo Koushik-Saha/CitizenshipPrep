@@ -43,7 +43,14 @@ const adminRoutes = all.filter(
     address === '/admin' || address.startsWith('/admin/') || address.startsWith('/api/admin'),
 );
 /** The pages only an admin may open: a reviewer is sent back to the queue. */
-const adminOnly = ['/admin/activity'];
+const adminOnly = [
+  '/admin/activity',
+  '/admin/users',
+  `/admin/users/${ID}`,
+  '/admin/billing',
+  '/admin/orgs',
+  '/admin/ai',
+];
 
 /** Asks for a route and follows it to where it ends. */
 async function endsAt(request: APIRequestContext, method: 'GET' | 'POST', address: string) {

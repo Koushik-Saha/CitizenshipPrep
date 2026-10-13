@@ -12,6 +12,15 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/** The pages only admins have, in the order the header lists them. */
+const adminPages = [
+  ['/admin/users', 'Users'],
+  ['/admin/billing', 'Payments'],
+  ['/admin/orgs', 'Organizations'],
+  ['/admin/ai', 'AI use'],
+  ['/admin/activity', 'Activity'],
+] as const;
+
 export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
   const reviewer = await requireReviewer();
   const openReports = await countOpenFlags(getDb());
@@ -25,7 +34,7 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
           >
             Oathly content review
           </Link>
-          <nav aria-label="Sections" className="flex gap-4 text-sm font-medium">
+          <nav aria-label="Sections" className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium">
             <Link
               href="/admin/content"
               className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -44,14 +53,16 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
             >
               Reports{openReports > 0 ? ` (${openReports})` : ''}
             </Link>
-            {reviewer.role === 'admin' && (
-              <Link
-                href="/admin/activity"
-                className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
-              >
-                Activity
-              </Link>
-            )}
+            {reviewer.role === 'admin' &&
+              adminPages.map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {label}
+                </Link>
+              ))}
           </nav>
           <div className="flex items-center gap-4 text-sm">
             <p className="text-fg-muted">

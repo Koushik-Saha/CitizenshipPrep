@@ -118,6 +118,7 @@ export async function signInAsReviewer(
   const key = await page.getByTestId('totp-secret').innerText();
   await page.getByLabel('Six-digit code').fill(authenticatorCode(key));
   await page.getByRole('button', { name: 'Turn it on and continue' }).click();
-  await expect(page).not.toHaveURL(/\/admin\/sign-in/);
+  // The development server compiles the page asked for the first time it is opened.
+  await expect(page).not.toHaveURL(/\/admin\/sign-in/, { timeout: 120_000 });
   return { userId, key };
 }

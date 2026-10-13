@@ -48,6 +48,11 @@ export function isBillingConfigured(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY) && stripePrices() !== null;
 }
 
+/** Whether the server's Stripe key is a live one: the dashboard keeps test and live data apart. */
+export function isStripeLive(): boolean {
+  return /^(sk|rk)_live_/.test(process.env.STRIPE_SECRET_KEY ?? '');
+}
+
 let client: Stripe | undefined;
 export function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;

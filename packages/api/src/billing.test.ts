@@ -6,6 +6,7 @@ import {
   parsePlanChoice,
   planFromProductId,
   plansPath,
+  stripeDashboardUrl,
   planSummary,
   purchaseProblem,
 } from './billing';
@@ -98,6 +99,31 @@ describe('a plan picked on a buy button', () => {
     expect(plansPath('country_pass')).toBe('/study/plans?plan=country_pass#pass');
     expect(plansPath()).toBe('/study/plans');
     expect(plansPath(null)).toBe('/study/plans');
+  });
+});
+
+describe('a link to the Stripe dashboard', () => {
+  it('goes to the page for a customer, a subscription or a payment', () => {
+    expect(stripeDashboardUrl('cus_123abc', true)).toBe(
+      'https://dashboard.stripe.com/customers/cus_123abc',
+    );
+    expect(stripeDashboardUrl('sub_123abc', false)).toBe(
+      'https://dashboard.stripe.com/test/subscriptions/sub_123abc',
+    );
+    expect(stripeDashboardUrl('pi_123abc', false)).toBe(
+      'https://dashboard.stripe.com/test/payments/pi_123abc',
+    );
+    expect(stripeDashboardUrl('ch_123abc', true)).toBe(
+      'https://dashboard.stripe.com/payments/ch_123abc',
+    );
+    expect(stripeDashboardUrl('py_123abc', true)).toContain('/payments/py_123abc');
+  });
+
+  it('is not made for an id with no page, or for anything that is not an id', () => {
+    expect(stripeDashboardUrl('cs_test_123', false)).toBeNull();
+    expect(stripeDashboardUrl('1000000123456789', true)).toBeNull();
+    expect(stripeDashboardUrl('cus_123/../../x', true)).toBeNull();
+    expect(stripeDashboardUrl('', true)).toBeNull();
   });
 });
 

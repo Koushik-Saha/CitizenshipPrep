@@ -151,3 +151,16 @@ export async function resetAuthenticator(userId: string): Promise<void> {
     await pool.end();
   }
 }
+
+/** Runs one statement against the scratch database: for a test to set a scene, or to look. */
+export async function sql<T extends Record<string, unknown>>(
+  text: string,
+  values: unknown[] = [],
+): Promise<T[]> {
+  const pool = createPool(e2eDatabaseUrl);
+  try {
+    return (await pool.query(text, values)).rows as T[];
+  } finally {
+    await pool.end();
+  }
+}
