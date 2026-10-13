@@ -25,4 +25,4 @@ export function operator(): Operator {
 }
 
 /** When the privacy policy and terms last changed. Update with every change to their text. */
-export const LEGAL_UPDATED = '2026-10-08';
+export const LEGAL_UPDATED = '2026-10-12';

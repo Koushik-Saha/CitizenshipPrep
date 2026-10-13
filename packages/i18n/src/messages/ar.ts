@@ -11,7 +11,7 @@ export const ar: Messages = {
     countries: 'الدول',
     allCountries: 'كل الدول',
     pricing: 'الأسعار',
-    faq: 'الأسئلة',
+    faq: 'الأسئلة الشائعة',
     backToStudy: 'العودة إلى الدراسة',
     tryAgain: 'حاول مرة أخرى',
     loading: 'جارٍ التحميل',

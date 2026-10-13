@@ -1,5 +1,7 @@
 // Locales and translation helpers for native-language study.
 
+import { uiLocales } from './locales';
+
 /**
  * Languages a learner can choose to study in, as BCP 47 tags. A question is
  * shown in the study language once a reviewed translation exists, and in the
@@ -42,6 +44,32 @@ export type StudyLocale = (typeof studyLocales)[number];
 
 export function isStudyLocale(value: string): value is StudyLocale {
   return (studyLocales as readonly string[]).includes(value);
+}
+
+/**
+ * The study languages on offer now: the ones the apps' own text also comes
+ * in. This is the number the site may claim. The rest of `studyLocales` stay
+ * valid for anyone already studying in one, and join the offer when the apps
+ * speak them.
+ */
+export const offeredStudyLocales: readonly StudyLocale[] = studyLocales.filter((locale) =>
+  (uiLocales as readonly string[]).includes(locale),
+);
+
+export function isOfferedStudyLocale(value: string): value is StudyLocale {
+  return (offeredStudyLocales as readonly string[]).includes(value);
+}
+
+/**
+ * The languages to list when someone picks one to study in: those on offer,
+ * and the one they already use if it is not among them, so saving the form
+ * again never changes their language behind their back.
+ */
+export function studyLocaleChoices(current?: string | null): readonly StudyLocale[] {
+  if (!current || !isStudyLocale(current) || isOfferedStudyLocale(current)) {
+    return offeredStudyLocales;
+  }
+  return [...offeredStudyLocales, current];
 }
 
 /** The language's name in another language, e.g. `languageName('de', 'en')` is "German". */

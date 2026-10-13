@@ -7,7 +7,7 @@ export const bn: Messages = {
     countries: 'দেশ',
     allCountries: 'সব দেশ',
     pricing: 'মূল্য',
-    faq: 'প্রশ্ন',
+    faq: 'সাধারণ প্রশ্ন',
     backToStudy: 'পড়াশোনায় ফিরে যান',
     tryAgain: 'আবার চেষ্টা করুন',
     loading: 'লোড হচ্ছে',

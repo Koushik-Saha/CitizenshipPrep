@@ -32,6 +32,17 @@ export interface CountryFacts {
   publishedQuestions: number;
 }
 
+/**
+ * The countries to list in public: those with at least one published
+ * question. A country whose questions are all still being checked has nothing
+ * to practise, so it stays off the lists until its first one is published.
+ */
+export function countriesWithQuestions<T extends Pick<CountryFacts, 'publishedQuestions'>>(
+  countries: readonly T[],
+): T[] {
+  return countries.filter((country) => country.publishedQuestions > 0);
+}
+
 export interface TopicSummary {
   slug: string;
   name: string;

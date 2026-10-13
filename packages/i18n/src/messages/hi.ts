@@ -7,7 +7,7 @@ export const hi: Messages = {
     countries: 'देश',
     allCountries: 'सभी देश',
     pricing: 'कीमत',
-    faq: 'सवाल',
+    faq: 'आम सवाल',
     backToStudy: 'पढ़ाई पर वापस जाएँ',
     tryAgain: 'फिर कोशिश करें',
     loading: 'लोड हो रहा है',

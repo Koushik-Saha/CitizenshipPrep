@@ -1,5 +1,5 @@
 import { isIsoDate } from '@oathly/core';
-import { isStudyLocale, localizePath } from '@oathly/i18n';
+import { isOfferedStudyLocale, localizePath } from '@oathly/i18n';
 import { parseCountryCode } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
 import type { Metadata } from 'next';
@@ -26,9 +26,9 @@ async function preferredLocale(): Promise<string | null> {
   const accepted = (await headers()).get('accept-language') ?? '';
   for (const entry of accepted.split(',')) {
     const tag = entry.split(';')[0]!.trim();
-    if (isStudyLocale(tag)) return tag;
+    if (isOfferedStudyLocale(tag)) return tag;
     const language = tag.split('-')[0]!;
-    if (isStudyLocale(language)) return language;
+    if (isOfferedStudyLocale(language)) return language;
   }
   return null;
 }
@@ -80,7 +80,7 @@ export default async function Onboarding({
               defaultLocale={
                 me.studyCountries[0]?.studyLocale ??
                 // Someone reading the app in Spanish most likely wants to study in it.
-                (isStudyLocale(locale) ? locale : null) ??
+                (isOfferedStudyLocale(locale) ? locale : null) ??
                 (await preferredLocale()) ??
                 'en'
               }

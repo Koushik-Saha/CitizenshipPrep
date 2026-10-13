@@ -1,12 +1,38 @@
 import { describe, expect, it } from 'vitest';
 
-import { endonym, isStudyLocale, languageName, studyLocales, textDirection } from './index';
+import {
+  endonym,
+  isOfferedStudyLocale,
+  isStudyLocale,
+  languageName,
+  offeredStudyLocales,
+  studyLocaleChoices,
+  studyLocales,
+  textDirection,
+  uiLocales,
+} from './index';
 
 describe('study locales', () => {
   it('are unique and recognised', () => {
     expect(new Set(studyLocales).size).toBe(studyLocales.length);
     expect(isStudyLocale('bn')).toBe(true);
     expect(isStudyLocale('xx')).toBe(false);
+  });
+
+  it('offers the ones the apps are written in, and no others', () => {
+    expect([...offeredStudyLocales].sort()).toEqual([...uiLocales].sort());
+    expect(isOfferedStudyLocale('es')).toBe(true);
+    // A study language, but the apps are not in German yet.
+    expect(isStudyLocale('de')).toBe(true);
+    expect(isOfferedStudyLocale('de')).toBe(false);
+  });
+
+  it('lists the languages on offer, keeping the one a learner already uses', () => {
+    expect(studyLocaleChoices()).toBe(offeredStudyLocales);
+    expect(studyLocaleChoices(null)).toBe(offeredStudyLocales);
+    expect(studyLocaleChoices('es')).toBe(offeredStudyLocales);
+    expect(studyLocaleChoices('xx')).toBe(offeredStudyLocales);
+    expect(studyLocaleChoices('de')).toEqual([...offeredStudyLocales, 'de']);
   });
 
   it('every one has a readable name in English and in itself', () => {

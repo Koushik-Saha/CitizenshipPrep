@@ -3,7 +3,7 @@
 import type { ExamCountry } from '@oathly/api';
 import { dailyGoalOptions, isoDate } from '@oathly/api/onboarding-options';
 import { searchCountries } from '@oathly/api/country-search';
-import { countryName, endonym, languageList, languageName, studyLocales } from '@oathly/i18n';
+import { countryName, endonym, languageList, languageName, studyLocaleChoices } from '@oathly/i18n';
 import { useActionState, useId, useState } from 'react';
 
 import { GlobePoster } from '@/components/globe/globe-poster';
@@ -164,7 +164,7 @@ export function OnboardingForm({
           defaultValue={defaultLocale}
           className={`${fieldClass} mt-3 max-w-sm`}
         >
-          {studyLocales.map((locale) => (
+          {studyLocaleChoices(defaultLocale).map((locale) => (
             <option key={locale} value={locale} lang={locale}>
               {endonym(locale)}
               {locale !== t.locale ? ` (${languageName(locale, t.locale)})` : ''}

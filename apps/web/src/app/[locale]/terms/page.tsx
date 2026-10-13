@@ -154,12 +154,12 @@ export default async function TermsPage({ params }: PageProps<'/[locale]/terms'>
       </Section>
 
       <Section title="Law and contact">
-        {who.jurisdiction && (
-          <p>
-            These terms are governed by the law of {who.jurisdiction}. If you are a consumer, you
-            also keep the protection of the mandatory law of the country where you live.
-          </p>
-        )}
+        <p>
+          These terms are governed by the law of{' '}
+          {who.jurisdiction ?? `the country where ${who.name} is established`}, and its courts
+          decide disputes about them. If you are a consumer, you also keep the protection of the
+          mandatory law of the country where you live, and you may bring a claim in its courts.
+        </p>
         <p>Questions about these terms go to:</p>
         <Contact operator={who} />
       </Section>

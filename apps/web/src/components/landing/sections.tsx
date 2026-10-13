@@ -11,7 +11,7 @@ import { formatPrice, type PlanPrice } from '@oathly/api/billing';
 import { aiLimits, FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
 import {
   languageList,
-  studyLocales,
+  offeredStudyLocales,
   type MessageKey,
   type Translator,
   localizePath,
@@ -169,6 +169,8 @@ export function CountryList({ countries, t }: { countries: CountryFacts[]; t: Tr
   );
 }
 
+const STUDY_GROUPS = 'landing.feature7Title';
+
 const features: { title: MessageKey; body: MessageKey; soon?: boolean }[] = [
   { title: 'landing.feature1Title', body: 'landing.feature1Body' },
   { title: 'landing.feature2Title', body: 'landing.feature2Body' },
@@ -176,13 +178,18 @@ const features: { title: MessageKey; body: MessageKey; soon?: boolean }[] = [
   { title: 'landing.feature4Title', body: 'landing.feature4Body' },
   { title: 'landing.feature5Title', body: 'landing.feature5Body' },
   { title: 'landing.feature6Title', body: 'landing.feature6Body' },
-  { title: 'landing.feature7Title', body: 'landing.feature7Body', soon: true },
+  { title: STUDY_GROUPS, body: 'landing.feature7Body' },
   { title: 'landing.feature8Title', body: 'landing.feature8Body', soon: true },
 ];
 
-export function Features({ t }: { t: Translator }) {
+/**
+ * `studyGroupsOpen` is whether study groups are switched on (lib/community):
+ * they are marked "coming soon" only while they are off, so this page and the
+ * privacy policy never disagree about what is live.
+ */
+export function Features({ t, studyGroupsOpen }: { t: Translator; studyGroupsOpen: boolean }) {
   // Only one of these mentions a number, but passing it to all is harmless.
-  const count = studyLocales.length;
+  const count = offeredStudyLocales.length;
   return (
     <Section id="features" title={t('landing.featuresTitle')} intro={t('landing.featuresIntro')}>
       <dl className="grid gap-x-12 gap-y-10 sm:grid-cols-2">
@@ -190,7 +197,9 @@ export function Features({ t }: { t: Translator }) {
           <div key={feature.title}>
             <dt className="font-display flex flex-wrap items-center gap-3 text-xl font-medium">
               {t(feature.title)}
-              {feature.soon && <Badge tone="warning">{t('common.comingSoon')}</Badge>}
+              {(feature.soon || (feature.title === STUDY_GROUPS && !studyGroupsOpen)) && (
+                <Badge tone="warning">{t('common.comingSoon')}</Badge>
+              )}
             </dt>
             <dd className="text-fg-muted mt-2">{t(feature.body, { count })}</dd>
           </div>
@@ -285,7 +294,7 @@ const faqs = [1, 2, 3, 4, 5, 6].map((n) => ({
 }));
 
 export function Faq({ t }: { t: Translator }) {
-  const count = studyLocales.length;
+  const count = offeredStudyLocales.length;
   return (
     <Section id="faq" title={t('landing.faqTitle')}>
       <div className="divide-border border-border max-w-3xl divide-y border-y">

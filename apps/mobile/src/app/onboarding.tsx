@@ -1,6 +1,6 @@
 import { dailyGoalOptions, onboardingSchema, searchCountries } from '@oathly/api';
 import { useExamCountries, useSaveOnboarding } from '@oathly/api/hooks';
-import { countryName, endonym, isStudyLocale, studyLocales } from '@oathly/i18n';
+import { countryName, endonym, isOfferedStudyLocale, offeredStudyLocales } from '@oathly/i18n';
 import { getLocales } from 'expo-localization';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
@@ -12,10 +12,11 @@ import { useSession } from '@/lib/session';
 
 /** The language to suggest studying in: the app's, or else the phone's. */
 function suggestedLocale(appLocale: string): string {
-  if (isStudyLocale(appLocale)) return appLocale;
+  if (isOfferedStudyLocale(appLocale)) return appLocale;
   for (const locale of getLocales()) {
-    if (isStudyLocale(locale.languageTag)) return locale.languageTag;
-    if (locale.languageCode && isStudyLocale(locale.languageCode)) return locale.languageCode;
+    if (isOfferedStudyLocale(locale.languageTag)) return locale.languageTag;
+    if (locale.languageCode && isOfferedStudyLocale(locale.languageCode))
+      return locale.languageCode;
   }
   return 'en';
 }
@@ -146,7 +147,7 @@ export default function Onboarding() {
           accessibilityRole="radiogroup"
           style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}
         >
-          {studyLocales.map((locale) => (
+          {offeredStudyLocales.map((locale) => (
             <Choice
               key={locale}
               label={endonym(locale)}

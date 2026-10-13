@@ -1,3 +1,4 @@
+import { countriesWithQuestions } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
 import type { Metadata } from 'next';
 
@@ -23,7 +24,7 @@ export const revalidate = 3600;
 
 export default async function Countries({ params }: PageProps<'/[locale]/countries'>) {
   const { t } = await getT(params);
-  const countries = await loadPublic((db) => listCountryFacts(db), []);
+  const countries = countriesWithQuestions(await loadPublic((db) => listCountryFacts(db), []));
   return (
     <>
       <SiteHeader t={t} path="/countries" />

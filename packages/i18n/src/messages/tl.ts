@@ -7,7 +7,7 @@ export const tl: Messages = {
     countries: 'Mga bansa',
     allCountries: 'Lahat ng bansa',
     pricing: 'Presyo',
-    faq: 'Mga tanong',
+    faq: 'Mga madalas itanong',
     backToStudy: 'Bumalik sa pag-aaral',
     tryAgain: 'Subukan ulit',
     loading: 'Naglo-load',

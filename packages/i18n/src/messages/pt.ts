@@ -7,7 +7,7 @@ export const pt: Messages = {
     countries: 'Países',
     allCountries: 'Todos os países',
     pricing: 'Preços',
-    faq: 'Perguntas',
+    faq: 'Perguntas frequentes',
     backToStudy: 'Voltar ao estudo',
     tryAgain: 'Tentar de novo',
     loading: 'Carregando',

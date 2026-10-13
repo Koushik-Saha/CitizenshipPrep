@@ -9,7 +9,7 @@ export const en = {
     countries: 'Countries',
     allCountries: 'All countries',
     pricing: 'Pricing',
-    faq: 'Questions',
+    faq: 'FAQ',
     backToStudy: 'Back to study',
     tryAgain: 'Try again',
     loading: 'Loading',

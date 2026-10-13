@@ -2,6 +2,7 @@ import { translatorFor } from '@oathly/i18n/messages';
 import { describe, expect, it } from 'vitest';
 
 import {
+  countriesWithQuestions,
   countryHighlights,
   describeExam,
   localCountryName,
@@ -39,6 +40,18 @@ describe('searchCountries', () => {
     expect(searchCountries(countries, 'de').map((c) => c.isoCode)).toEqual(['DE']);
     expect(searchCountries(countries, 'gb').map((c) => c.isoCode)).toEqual(['GB']);
     expect(searchCountries(countries, 'zz')).toEqual([]);
+  });
+});
+
+describe('countriesWithQuestions', () => {
+  it('keeps only the countries that have a published question', () => {
+    const listed = countriesWithQuestions([
+      { isoCode: 'US', publishedQuestions: 128 },
+      { isoCode: 'DE', publishedQuestions: 0 },
+      { isoCode: 'CA', publishedQuestions: 1 },
+    ]);
+    expect(listed.map((country) => country.isoCode)).toEqual(['US', 'CA']);
+    expect(countriesWithQuestions([])).toEqual([]);
   });
 });
 

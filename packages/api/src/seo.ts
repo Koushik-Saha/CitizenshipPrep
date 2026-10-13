@@ -192,20 +192,31 @@ export function topicFaq(
 
 /**
  * Every public page worth a search engine's visit, without a language: the
- * landing page, the country list, each country's test page and each topic's.
- * Pages behind sign-in are not here.
+ * landing page, the country list, each country's test page and each topic's,
+ * and the pages about the service itself. Pages behind sign-in are not here.
+ *
+ * A country is listed once it has a published question: `topics` only holds
+ * topics that have one, so a country with none has nothing to practise yet.
+ * `legalUpdated` is when the privacy policy and terms last changed.
  */
-export function publicSitePages(pages: readonly TestPages[]): SitePage[] {
-  const newest = latestDate(pages.map((page) => page.lastVerifiedAt));
+export function publicSitePages(
+  pages: readonly TestPages[],
+  legalUpdated: string | null = null,
+): SitePage[] {
+  const covered = pages.filter((page) => page.topics.length > 0);
+  const newest = latestDate(covered.map((page) => page.lastVerifiedAt));
   return [
     { path: '/', lastModified: newest },
     { path: '/countries', lastModified: newest },
-    ...pages.flatMap((page) => [
+    ...covered.flatMap((page) => [
       { path: testPath(page.slug), lastModified: page.lastVerifiedAt },
       ...page.topics.map((topic) => ({
         path: testPath(page.slug, topic.slug),
         lastModified: topic.lastVerifiedAt,
       })),
     ]),
+    { path: '/privacy', lastModified: legalUpdated },
+    { path: '/terms', lastModified: legalUpdated },
+    { path: '/delete-account', lastModified: legalUpdated },
   ];
 }

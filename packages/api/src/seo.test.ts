@@ -227,22 +227,45 @@ describe('publicSitePages', () => {
     { isoCode: 'DE', slug: 'germany', lastVerifiedAt: null, topics: [] },
   ];
 
-  it('lists the landing page, the country list, and every country and topic page', () => {
-    expect(publicSitePages(pages)).toEqual([
+  it('lists the landing page, the country list, every covered country and topic, and the legal pages', () => {
+    expect(publicSitePages(pages, '2026-10-12')).toEqual([
       // The lists change when any country does.
       { path: '/', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/countries', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/canada/citizenship-test', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/canada/citizenship-test/history', lastModified: '2026-09-04T00:00:00.000Z' },
       { path: '/canada/citizenship-test/rights', lastModified: '2026-09-02T00:00:00.000Z' },
-      { path: '/germany/citizenship-test', lastModified: null },
+      { path: '/privacy', lastModified: '2026-10-12' },
+      { path: '/terms', lastModified: '2026-10-12' },
+      { path: '/delete-account', lastModified: '2026-10-12' },
     ]);
+  });
+
+  it('leaves out a country that has no published question yet', () => {
+    const paths = publicSitePages(pages).map((page) => page.path);
+    expect(paths).not.toContain('/germany/citizenship-test');
+  });
+
+  it('does not let a country with nothing published date the lists', () => {
+    const waiting: TestPages = {
+      isoCode: 'AU',
+      slug: 'australia',
+      lastVerifiedAt: '2026-10-01T00:00:00.000Z',
+      topics: [],
+    };
+    expect(publicSitePages([...pages, waiting])[0]).toEqual({
+      path: '/',
+      lastModified: '2026-09-04T00:00:00.000Z',
+    });
   });
 
   it('still lists the fixed pages before any country is covered', () => {
     expect(publicSitePages([])).toEqual([
       { path: '/', lastModified: null },
       { path: '/countries', lastModified: null },
+      { path: '/privacy', lastModified: null },
+      { path: '/terms', lastModified: null },
+      { path: '/delete-account', lastModified: null },
     ]);
   });
 });

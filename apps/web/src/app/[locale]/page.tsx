@@ -1,5 +1,5 @@
 import { localizePath } from '@oathly/i18n';
-import { describeExam } from '@oathly/api/countries';
+import { countriesWithQuestions, describeExam } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
 import { localCountryName } from '@oathly/api/countries';
 import type { Metadata } from 'next';
@@ -23,6 +23,7 @@ import { LanguageMenu } from '@/components/i18n/language-menu';
 import { SiteFooter } from '@/components/site-chrome';
 import { focusRing } from '@/components/ui';
 import { planPrices } from '@/lib/billing';
+import { isCommunitySwitchedOff } from '@/lib/community';
 import { alternates, getT } from '@/lib/i18n';
 import { loadPublic } from '@/lib/public-content';
 
@@ -42,7 +43,9 @@ const navLink = `${focusRing} rounded-xs text-fg-muted hover:text-fg`;
 
 export default async function Landing({ params }: PageProps<'/[locale]'>) {
   const { t } = await getT(params);
-  const countries = await loadPublic((db) => listCountryFacts(db), []);
+  // Only countries with something to practise: one whose questions are all
+  // still being checked is not offered yet.
+  const countries = countriesWithQuestions(await loadPublic((db) => listCountryFacts(db), []));
   const prices = await planPrices();
   const markers = toMarkers(countries, t);
   // Picking a country, in the search or on the globe, goes to signing up for it.
@@ -99,20 +102,22 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
               {t('landing.heroTitle')}
             </h1>
             <p className="text-fg-muted mt-5 max-w-lg text-lg">{t('landing.heroBody')}</p>
-            <div className="mt-8 max-w-md">
-              <CountrySearch
-                countries={searchable}
-                startHref={startHref}
-                text={{
-                  label: t('landing.searchLabel'),
-                  noMatch: t('landing.searchNoMatch', { query: QUERY_SLOT }),
-                  statusNone: t('landing.searchStatusNone'),
-                  status: Array.from({ length: MAX_MATCHES }, (_, i) =>
-                    t('landing.searchStatus', { count: i + 1 }),
-                  ),
-                }}
-              />
-            </div>
+            {countries.length > 0 && (
+              <div className="mt-8 max-w-md">
+                <CountrySearch
+                  countries={searchable}
+                  startHref={startHref}
+                  text={{
+                    label: t('landing.searchLabel'),
+                    noMatch: t('landing.searchNoMatch', { query: QUERY_SLOT }),
+                    statusNone: t('landing.searchStatusNone'),
+                    status: Array.from({ length: MAX_MATCHES }, (_, i) =>
+                      t('landing.searchStatus', { count: i + 1 }),
+                    ),
+                  }}
+                />
+              </div>
+            )}
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
               <Link
                 href={localizePath(t.locale, '/sign-in')}
@@ -120,12 +125,14 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
               >
                 {t('landing.startFree')}
               </Link>
-              <a
-                href="#countries"
-                className={`${focusRing} rounded-xs underline underline-offset-4`}
-              >
-                {t('landing.seeCountries', { count: countries.length })}
-              </a>
+              {countries.length > 0 && (
+                <a
+                  href="#countries"
+                  className={`${focusRing} rounded-xs underline underline-offset-4`}
+                >
+                  {t('landing.seeCountries', { count: countries.length })}
+                </a>
+              )}
             </div>
           </div>
           {/* The globe sits behind the hero copy on small screens and beside it on large ones. */}
@@ -151,7 +158,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
       <main>
         <HowItWorks t={t} />
         <CountryList countries={countries} t={t} />
-        <Features t={t} />
+        <Features t={t} studyGroupsOpen={!isCommunitySwitchedOff()} />
         <Pricing t={t} prices={prices} />
         <Testimonials t={t} />
         <Faq t={t} />
