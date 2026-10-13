@@ -73,6 +73,30 @@ export function withinAiBudget(allowance: AiAllowance, usedToday: number, limit:
   return usedToday <= (allowance === 'pro' ? limit * 2 : limit);
 }
 
+/** How long an account counts as new. */
+export const NEW_ACCOUNT_HOURS = 24;
+
+/** The share of the daily limit that free accounts made in the last day may use between them. */
+export const NEW_ACCOUNT_SHARE = 0.25;
+
+/** Whether an account was made within the last day. */
+export function isNewAccount(createdAt: Date, now: Date): boolean {
+  return now.getTime() - createdAt.getTime() < NEW_ACCOUNT_HOURS * 60 * 60 * 1000;
+}
+
+/**
+ * Whether free accounts made in the last day, taken together, still have
+ * room, given every request they have made today including this one.
+ *
+ * Accounts are free to make, so without this someone could make many of them
+ * and use up the whole day's limit, pausing AI help for every free learner.
+ * New accounts share a quarter of the limit between them; when that is gone,
+ * a new account waits, and learners who have been here longer carry on.
+ */
+export function withinNewAccountBudget(usedByNewToday: number, limit: number): boolean {
+  return usedByNewToday <= Math.floor(limit * NEW_ACCOUNT_SHARE);
+}
+
 /**
  * The share of the daily limit that this request is the first to reach: 80
  * or 100, or null. Whoever runs the service is told at each, once.

@@ -3,7 +3,9 @@ import {
   aiBudgetAlert,
   aiDailyLimit,
   checkQuota,
+  isNewAccount,
   withinAiBudget,
+  withinNewAccountBudget,
   type AiFeature,
   type Quota,
 } from '@oathly/core';
@@ -64,6 +66,10 @@ export type Reservation =
  * same moment at least one sees the other's, so together they can never take
  * more than is left. (Now and then both step back from the last place; the
  * learner asks again.) One that is refused is removed and costs nothing.
+ *
+ * Free accounts made in the last day share a quarter of the service's daily
+ * limit between them (withinNewAccountBudget), so making accounts in bulk
+ * cannot use up the day for everyone else.
  */
 export async function reserveUsage(
   db: Db,
@@ -88,7 +94,7 @@ export async function reserveUsage(
     ),
   ]);
   const id = inserted.rows[0]!.id;
-  const [earlier, total] = await Promise.all([
+  const [earlier, total, account, byNew] = await Promise.all([
     db.query<{ created_at: Date }>(
       `select created_at from public.ai_usage
        where user_id = $1 and feature = $2 and id <> $3
@@ -98,6 +104,17 @@ export async function reserveUsage(
     db.query<{ used: number }>(
       `select count(*)::int as used from public.ai_usage
        where created_at > $1::timestamptz - interval '24 hours'`,
+      [now],
+    ),
+    db.query<{ created_at: Date }>('select created_at from public.profiles where id = $1', [
+      entry.userId,
+    ]),
+    // Today's requests by accounts made in the last day, this one's included.
+    db.query<{ used: number }>(
+      `select count(*)::int as used from public.ai_usage u
+       join public.profiles p on p.id = u.user_id
+       where u.created_at > $1::timestamptz - interval '24 hours'
+         and p.created_at > $1::timestamptz - interval '24 hours'`,
       [now],
     ),
   ]);
@@ -110,9 +127,13 @@ export async function reserveUsage(
   );
   const limit = options.dailyLimit ?? aiDailyLimit(process.env.AI_DAILY_LIMIT);
   const usedToday = total.rows[0]!.used;
+  const newAndFree = allowance === 'free' && isNewAccount(account.rows[0]?.created_at ?? now, now);
+  const withinBudget =
+    withinAiBudget(allowance, usedToday, limit) &&
+    (!newAndFree || withinNewAccountBudget(byNew.rows[0]!.used, limit));
   const refusal: Reservation | null = !quota.allowed
     ? { kind: 'limited', quota }
-    : withinAiBudget(allowance, usedToday, limit)
+    : withinBudget
       ? null
       : { kind: 'paused' };
   if (refusal) {

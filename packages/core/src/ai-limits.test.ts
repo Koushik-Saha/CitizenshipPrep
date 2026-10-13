@@ -7,8 +7,11 @@ import {
   aiLimits,
   checkQuota,
   DEFAULT_AI_DAILY_LIMIT,
+  isNewAccount,
   isSwitchedOn,
+  NEW_ACCOUNT_SHARE,
   withinAiBudget,
+  withinNewAccountBudget,
 } from './ai-limits';
 import { at } from './test-fixtures';
 
@@ -106,5 +109,27 @@ describe('isSwitchedOn', () => {
     for (const yes of ['1', 'true', 'TRUE', ' yes ', 'on']) expect(isSwitchedOn(yes)).toBe(true);
     for (const no of [undefined, '', '0', 'false', 'off', 'no'])
       expect(isSwitchedOn(no)).toBe(false);
+  });
+});
+
+describe('accounts made in the last day', () => {
+  const now = new Date('2026-10-13T12:00:00Z');
+
+  it('are new for twenty-four hours', () => {
+    expect(isNewAccount(new Date('2026-10-13T11:59:00Z'), now)).toBe(true);
+    expect(isNewAccount(new Date('2026-10-12T12:00:01Z'), now)).toBe(true);
+    expect(isNewAccount(new Date('2026-10-12T12:00:00Z'), now)).toBe(false);
+    expect(isNewAccount(new Date('2026-09-01T00:00:00Z'), now)).toBe(false);
+  });
+
+  it('share a quarter of the day’s limit between them', () => {
+    expect(NEW_ACCOUNT_SHARE).toBe(0.25);
+    expect(withinNewAccountBudget(1, 5000)).toBe(true);
+    expect(withinNewAccountBudget(1250, 5000)).toBe(true);
+    expect(withinNewAccountBudget(1251, 5000)).toBe(false);
+    // Rounded down, and nothing of nothing.
+    expect(withinNewAccountBudget(2, 10)).toBe(true);
+    expect(withinNewAccountBudget(3, 10)).toBe(false);
+    expect(withinNewAccountBudget(1, 0)).toBe(false);
   });
 });

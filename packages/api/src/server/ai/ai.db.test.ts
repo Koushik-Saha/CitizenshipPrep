@@ -55,7 +55,13 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
   beforeAll(async () => {
     pool = new pg.Pool({ connectionString: url });
     await cleanUp();
-    await pool.query(`insert into public.profiles (id) values ($1), ('test:ai-reviewer')`, [USER]);
+    // An account that has been here a while: accounts made in the last day
+    // share a smaller part of the service's limit, which has its own test.
+    await pool.query(
+      `insert into public.profiles (id, created_at)
+       values ($1, now() - interval '30 days'), ('test:ai-reviewer', now() - interval '30 days')`,
+      [USER],
+    );
     await pool.query(
       `insert into public.countries (iso_code, name, has_exam, exam_languages) values ($1, 'Lakeland', true, '{en}')`,
       [COUNTRY],
@@ -297,6 +303,71 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
     await read((paid as { stream: ReadableStream<Uint8Array> }).stream);
     expect(await ask(Math.floor(used / 2))).toEqual({ kind: 'paused' });
     await pool.query('delete from public.subscriptions where user_id = $1', [USER]);
+  });
+
+  it('lets accounts made today use only a quarter of the day between them', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    const { generator, requests } = fakeGenerator();
+    const ask = (dailyLimit: number) =>
+      askTutor(
+        pool,
+        generator,
+        USER,
+        { countryCode: COUNTRY, messages: [{ role: 'user', content: 'Council?' }] },
+        new Date(),
+        { dailyLimit },
+      );
+    const made = (when: string) =>
+      pool.query(`update public.profiles set created_at = now() - $2::interval where id = $1`, [
+        USER,
+        when,
+      ]);
+    const count = async (sql: string) =>
+      (await pool.query<{ used: number }>(`select count(*)::int as used from ${sql}`)).rows[0]!
+        .used;
+
+    // The account was made an hour ago and has been busy today: enough that a
+    // limit of four times what new accounts have used still has room for the
+    // service as a whole, whatever else is in the database.
+    await made('1 hour');
+    const others = await count(
+      `public.ai_usage u join public.profiles p on p.id = u.user_id
+       where u.created_at > now() - interval '24 hours'
+         and p.created_at <= now() - interval '24 hours'`,
+    );
+    await pool.query(
+      `insert into public.ai_usage (user_id, feature, model, input_tokens, output_tokens)
+       select $1, 'explanation', 'fake-model', 1, 1 from generate_series(1, $2::int)`,
+      [USER, Math.max(2, Math.ceil((others + 2) / 3))],
+    );
+    const byNew = await count(
+      `public.ai_usage u join public.profiles p on p.id = u.user_id
+       where u.created_at > now() - interval '24 hours'
+         and p.created_at > now() - interval '24 hours'`,
+    );
+    // New accounts have just used their quarter: one more from a new account is over it.
+    const limit = byNew * 4;
+    expect(await ask(limit)).toEqual({ kind: 'paused' });
+    expect(requests).toHaveLength(0);
+
+    // The same request from an account that has been here longer is answered.
+    await made('30 days');
+    const answered = await ask(limit);
+    expect(answered.kind).toBe('stream');
+    await read((answered as { stream: ReadableStream<Uint8Array> }).stream);
+
+    // And a new account that pays is not held to the new accounts' share.
+    await made('1 hour');
+    await pool.query(
+      `insert into public.subscriptions (user_id, plan, status, provider)
+       values ($1, 'pro_monthly', 'active', 'manual')`,
+      [USER],
+    );
+    const paid = await ask(limit);
+    expect(paid.kind).toBe('stream');
+    await read((paid as { stream: ReadableStream<Uint8Array> }).stream);
+    await pool.query('delete from public.subscriptions where user_id = $1', [USER]);
+    await made('30 days');
   });
 
   it('answers the tutor from the matching study material only', async () => {

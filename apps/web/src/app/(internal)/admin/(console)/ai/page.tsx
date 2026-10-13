@@ -79,7 +79,8 @@ export default async function AiUse() {
       <p className="text-fg-muted mt-1 max-w-3xl">
         Requests to Claude and what they cost, estimated from the tokens used at list price. The
         bill itself is in the Anthropic console. Days are in UTC; the limits count the last 24
-        hours.
+        hours. Free accounts made in the last day share a quarter of the service’s limit between
+        them, so new accounts made in bulk cannot use up the day for everyone else.
       </p>
 
       <div className="mt-6 max-w-3xl space-y-3">
