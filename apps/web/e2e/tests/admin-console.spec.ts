@@ -125,11 +125,14 @@ test('an admin sees subscriptions, organizations and what the AI is costing', as
   );
   await expectAccessibleInBothThemes(page, 'admin billing');
 
+  // The development server compiles each page the first time it is opened.
   await page.getByRole('link', { name: 'Organizations' }).click();
+  await page.waitForURL(/\/admin\/orgs$/, { timeout: 120_000 });
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Organizations');
   await expectAccessibleInBothThemes(page, 'admin organizations');
 
   await page.getByRole('link', { name: 'AI use' }).click();
+  await page.waitForURL(/\/admin\/ai$/, { timeout: 120_000 });
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('AI use');
   await expect(page.getByTestId('ai-service-use')).toContainText('of 5,000 requests');
   // The learner at their limit is counted in the notice and marked in the table.
