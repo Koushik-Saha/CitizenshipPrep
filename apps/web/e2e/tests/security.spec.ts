@@ -245,6 +245,23 @@ test('sign-in emails are rate limited per recipient and per network address', as
   expect(refusedAt).toBeGreaterThanOrEqual(31);
 });
 
+test('hidden files and made-up API paths are not found, whatever language is asked for', async ({
+  request,
+}) => {
+  const paths = ['/.env', '/.env.local', '/.git/config', '/.git/HEAD', '/api', '/api/nothing-here'];
+  for (const path of paths) {
+    const asked: Record<string, string>[] = [
+      {},
+      { 'accept-language': 'es' },
+      { cookie: 'oathly_locale=es' },
+    ];
+    for (const headers of asked) {
+      const response = await request.get(path, { headers, maxRedirects: 0 });
+      expect(response.status(), `${path} ${JSON.stringify(headers)}`).toBe(404);
+    }
+  }
+});
+
 test('every response carries the security headers', async ({ request }) => {
   for (const path of ['/', '/testland/citizenship-test', '/api/public/countries', '/sign-in']) {
     const headers = (await request.get(path)).headers();

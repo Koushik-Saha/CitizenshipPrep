@@ -71,6 +71,13 @@ const sameUrl = (request: NextRequest, pathname: string) => {
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // Nothing public starts with a dot except /.well-known, and /api on its own
+  // is not a page: a request for /.git/config is a scanner. It gets a plain
+  // "not found" at once, in every language, rather than a language redirect
+  // first.
+  if ((pathname.startsWith('/.') && !pathname.startsWith('/.well-known/')) || pathname === '/api') {
+    return new NextResponse('Not found', { status: 404 });
+  }
   // Internal, English-only tools.
   if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminGuard(request);
   if (pathname === '/brand') return NextResponse.next();
