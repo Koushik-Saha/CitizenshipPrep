@@ -3,6 +3,7 @@
 import type { ExamCountry } from '@oathly/api';
 import { dailyGoalOptions, isoDate } from '@oathly/api/onboarding-options';
 import { searchCountries } from '@oathly/api/country-search';
+import { MINIMUM_AGE } from '@oathly/core';
 import { countryName, endonym, languageList, languageName, studyLocaleChoices } from '@oathly/i18n';
 import { useActionState, useId, useState } from 'react';
 
@@ -11,6 +12,7 @@ import { GlobeSlot } from '@/components/globe/globe-slot';
 import { HERO_VIEW } from '@/components/globe/config';
 import type { GlobeMarker } from '@/components/globe/scene-store';
 import { useT } from '@/components/i18n/provider';
+import Link from '@/components/link';
 import { buttonClass, fieldClass, focusRing, labelClass, Notice } from '@/components/ui';
 
 import { completeOnboarding, type OnboardingState } from './actions';
@@ -26,6 +28,8 @@ interface Props {
   defaultLocale: string;
   /** A plan picked on the landing page: the plans page comes next. */
   plan?: string | null;
+  /** They have not yet confirmed their age and accepted the terms. */
+  askTerms: boolean;
   defaultDailyGoal: number;
   /** A target date an organization set with its invitation (YYYY-MM-DD). */
   defaultExamDate?: string | null;
@@ -40,6 +44,7 @@ export function OnboardingForm({
   adding,
   defaultLocale,
   plan,
+  askTerms,
   defaultDailyGoal,
   defaultExamDate,
 }: Props) {
@@ -206,6 +211,37 @@ export function OnboardingForm({
         </label>
       ) : (
         <input type="hidden" name="makePrimary" value="on" />
+      )}
+
+      {askTerms && (
+        <div>
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              name="acceptedTerms"
+              required
+              className="accent-primary mt-1 size-4 shrink-0"
+            />
+            <span>{t('onboarding.acceptTerms', { age: MINIMUM_AGE })}</span>
+          </label>
+          {/* In new tabs: reading them should not cost what has been filled in. */}
+          <p className="mt-2 flex flex-wrap gap-x-6 gap-y-1 ps-7 text-sm">
+            <Link
+              href="/terms"
+              target="_blank"
+              className={`${focusRing} text-primary-fg rounded-xs underline underline-offset-4`}
+            >
+              {t('onboarding.termsLink')}
+            </Link>
+            <Link
+              href="/privacy"
+              target="_blank"
+              className={`${focusRing} text-primary-fg rounded-xs underline underline-offset-4`}
+            >
+              {t('onboarding.privacyLink')}
+            </Link>
+          </p>
+        </div>
       )}
 
       <button type="submit" disabled={pending} className={buttonClass.primary}>

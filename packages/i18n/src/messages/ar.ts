@@ -269,6 +269,10 @@ export const ar: Messages = {
     makePrimary: 'اجعل التطبيق يفتح على هذا الاختبار',
     start: 'ابدأ الدراسة',
     add: 'أضف هذا الاختبار',
+    acceptTerms: 'عمري {age} عامًا أو أكثر، وأوافق على الشروط وسياسة الخصوصية.',
+    termsLink: 'اقرأ الشروط',
+    privacyLink: 'اقرأ سياسة الخصوصية',
+    acceptRequired: 'أكّد عمرك ووافق على الشروط للمتابعة.',
     checkAnswers: 'راجع إجاباتك.',
   },
 

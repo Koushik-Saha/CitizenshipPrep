@@ -41,9 +41,34 @@ test('a new learner sets up their study and lands on the dashboard', async ({ pa
   await expectAccessibleInBothThemes(page, 'onboarding');
 
   await page.getByRole('radio', { name: /Testland/ }).check();
+  // Nobody starts without confirming their age and accepting the terms: the
+  // form holds them here, and the server refuses whoever goes round the form.
+  const accept = page.getByRole('checkbox', { name: t('onboarding.acceptTerms', { age: 16 }) });
+  await expect(accept).not.toBeChecked();
+  await page.getByRole('button', { name: t('onboarding.start') }).click();
+  await expect(page).toHaveURL(/\/onboarding$/);
+  const answers = { countryCode: 'ZZ', examDate: null, studyLocale: 'en', dailyGoalMinutes: 15 };
+  const refused = await page.request.post('/api/me/onboarding', { data: answers });
+  expect(refused.status()).toBe(400);
+  expect((await refused.json()).error).toContain('16 or older');
+  // The terms and the policy can be read from here, without losing the form.
+  await expect(page.getByRole('link', { name: t('onboarding.termsLink') })).toHaveAttribute(
+    'href',
+    '/terms',
+  );
+  await expect(page.getByRole('link', { name: t('onboarding.privacyLink') })).toHaveAttribute(
+    'href',
+    '/privacy',
+  );
+
+  await accept.check();
   await page.getByRole('button', { name: t('onboarding.start') }).click();
   await expect(page).toHaveURL(/\/study$/);
   await expect(page.getByRole('heading', { level: 2, name: 'Testland' })).toBeVisible();
+  // Asked once: adding another exam later does not ask again.
+  await page.goto('/onboarding?add=1');
+  await expect(accept).toHaveCount(0);
+  await page.goto('/study');
   await expectAccessibleInBothThemes(page, 'dashboard');
 });
 
@@ -240,6 +265,7 @@ test('a buy button on the landing page leads to the plans page, through sign-up 
   await page.goto('/sign-in?plan=country_pass');
   await page.waitForURL(/\/onboarding\?plan=country_pass/);
   await page.getByRole('radio', { name: /Testland/ }).check();
+  await page.getByRole('checkbox', { name: t('onboarding.acceptTerms', { age: 16 }) }).check();
   await page.getByRole('button', { name: t('onboarding.start') }).click();
   await page.waitForURL(/\/study\/plans\?plan=country_pass#pass$/);
   await expect(page.getByRole('heading', { name: t('plans.countryPass') })).toBeVisible();

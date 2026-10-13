@@ -1,4 +1,4 @@
-import type { ExamOutcome } from '@oathly/core';
+import { MINIMUM_AGE, mustAcceptTerms, TERMS_VERSION, type ExamOutcome } from '@oathly/core';
 import type pg from 'pg';
 
 import type { ExamCountry, Me } from '../me';
@@ -63,8 +63,13 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
   if (!row) return null;
 
   const [settings, countries, progress] = await Promise.all([
-    db.query<{ daily_goal_minutes: number; onboarded_at: Date | null }>(
-      'select daily_goal_minutes, onboarded_at from public.user_settings where user_id = $1',
+    db.query<{
+      daily_goal_minutes: number;
+      onboarded_at: Date | null;
+      terms_accepted_at: Date | null;
+    }>(
+      `select daily_goal_minutes, onboarded_at, terms_accepted_at
+       from public.user_settings where user_id = $1`,
       [userId],
     ),
     db.query<{
@@ -99,6 +104,7 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
       ? {
           dailyGoalMinutes: settingsRow.daily_goal_minutes,
           onboardedAt: settingsRow.onboarded_at?.toISOString() ?? null,
+          termsAcceptedAt: settingsRow.terms_accepted_at?.toISOString() ?? null,
         }
       : null,
     studyCountries: countries.rows.map((country) => ({
@@ -154,13 +160,35 @@ export async function saveOnboarding(
     );
     if (!country.rowCount) throw new OnboardingError('Oathly does not cover that country yet.');
 
+    // Nobody starts studying without confirming their age and accepting the
+    // terms. Asked once: after that it is on record, with the version agreed to.
+    const accepted = await client.query<{ terms_accepted_at: Date | null }>(
+      'select terms_accepted_at from public.user_settings where user_id = $1',
+      [userId],
+    );
+    const accepting = mustAcceptTerms(accepted.rows[0]?.terms_accepted_at);
+    if (accepting && answer.acceptedTerms !== true) {
+      throw new OnboardingError(
+        `Confirm that you are ${MINIMUM_AGE} or older and that you accept the terms and the privacy policy.`,
+      );
+    }
+
     await client.query(
-      `insert into public.user_settings (user_id, daily_goal_minutes, onboarded_at)
-       values ($1, $2, now())
+      `insert into public.user_settings
+         (user_id, daily_goal_minutes, onboarded_at, terms_accepted_at, terms_version)
+       values ($1, $2, now(), $3, $4)
        on conflict (user_id) do update
          set daily_goal_minutes = excluded.daily_goal_minutes,
-             onboarded_at = coalesce(public.user_settings.onboarded_at, excluded.onboarded_at)`,
-      [userId, answer.dailyGoalMinutes],
+             onboarded_at = coalesce(public.user_settings.onboarded_at, excluded.onboarded_at),
+             terms_accepted_at =
+               coalesce(public.user_settings.terms_accepted_at, excluded.terms_accepted_at),
+             terms_version = coalesce(public.user_settings.terms_version, excluded.terms_version)`,
+      [
+        userId,
+        answer.dailyGoalMinutes,
+        accepting ? new Date() : null,
+        accepting ? TERMS_VERSION : null,
+      ],
     );
 
     const existing = await client.query<{ has_primary: boolean }>(

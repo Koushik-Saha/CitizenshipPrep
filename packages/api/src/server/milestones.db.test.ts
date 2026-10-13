@@ -146,6 +146,7 @@ describe.skipIf(!url)('rate limits, exam results and counted moments against the
         examDate: today,
         studyLocale: 'en',
         dailyGoalMinutes: 10,
+        acceptedTerms: true,
       });
       const [country] = (await getDashboard(pool, LEARNER))!.countries;
       expect(country).toMatchObject({ examResult: null, askExamResult: true });
@@ -155,6 +156,7 @@ describe.skipIf(!url)('rate limits, exam results and counted moments against the
         examDate: nextYear,
         studyLocale: 'en',
         dailyGoalMinutes: 10,
+        acceptedTerms: true,
       });
       expect((await getDashboard(pool, OTHER))!.countries[0]).toMatchObject({
         examResult: null,

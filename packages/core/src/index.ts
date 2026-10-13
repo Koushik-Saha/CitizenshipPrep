@@ -27,4 +27,5 @@ export * from './seo';
 export * from './session-run';
 export * from './speech';
 export * from './support';
+export * from './terms';
 export * from './types';

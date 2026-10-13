@@ -75,6 +75,7 @@ describe.skipIf(!url)('deleting an account against the database', () => {
         examDate: null,
         studyLocale: 'en',
         dailyGoalMinutes: 10,
+        acceptedTerms: true,
       });
     }
   });

@@ -283,6 +283,11 @@ export const fr: Messages = {
     makePrimary: 'Ouvrir l’application sur cet examen',
     start: 'Commencer à étudier',
     add: 'Ajouter cet examen',
+    acceptTerms:
+      'J’ai {age} ans ou plus, et j’accepte les conditions et la politique de confidentialité.',
+    termsLink: 'Lire les conditions',
+    privacyLink: 'Lire la politique de confidentialité',
+    acceptRequired: 'Confirmez votre âge et acceptez les conditions pour continuer.',
     checkAnswers: 'Vérifiez vos réponses.',
   },
 

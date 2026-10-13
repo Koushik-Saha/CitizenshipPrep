@@ -269,6 +269,11 @@ export const vi: Messages = {
     makePrimary: 'Mở ứng dụng vào kỳ thi này',
     start: 'Bắt đầu học',
     add: 'Thêm kỳ thi này',
+    acceptTerms:
+      'Tôi từ {age} tuổi trở lên và tôi chấp nhận điều khoản cùng chính sách quyền riêng tư.',
+    termsLink: 'Đọc điều khoản',
+    privacyLink: 'Đọc chính sách quyền riêng tư',
+    acceptRequired: 'Hãy xác nhận tuổi và chấp nhận điều khoản để tiếp tục.',
     checkAnswers: 'Hãy kiểm tra lại các câu trả lời.',
   },
 

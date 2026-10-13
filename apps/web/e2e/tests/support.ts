@@ -32,6 +32,8 @@ export async function signInAndOnboard(
   await expect(page).toHaveURL(/\/onboarding/);
   await page.getByRole('radio', { name: /Testland/ }).check();
   if (options.examDate) await page.locator('input[name="examDate"]').fill(options.examDate);
+  // Someone new confirms their age and accepts the terms before they start.
+  await page.getByRole('checkbox', { name: t('onboarding.acceptTerms', { age: 16 }) }).check();
   await page.getByRole('button', { name: t('onboarding.start') }).click();
   await page.waitForURL(/\/study$/);
   return user;

@@ -1,4 +1,4 @@
-import { isIsoDate } from '@oathly/core';
+import { isIsoDate, mustAcceptTerms } from '@oathly/core';
 import { isOfferedStudyLocale, localizePath } from '@oathly/i18n';
 import { parsePlanChoice } from '@oathly/api/billing';
 import { parseCountryCode } from '@oathly/api/countries';
@@ -86,6 +86,7 @@ export default async function Onboarding({
                 'en'
               }
               plan={parsePlanChoice(params.plan)}
+              askTerms={mustAcceptTerms(me.settings?.termsAcceptedAt)}
               defaultDailyGoal={me.settings?.dailyGoalMinutes ?? 15}
               defaultExamDate={
                 typeof params.date === 'string' && isIsoDate(params.date) ? params.date : null

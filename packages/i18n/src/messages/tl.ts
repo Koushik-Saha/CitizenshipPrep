@@ -285,6 +285,11 @@ export const tl: Messages = {
     makePrimary: 'Gawin itong pagsusulit na unang bubukas sa app',
     start: 'Magsimulang mag-aral',
     add: 'Idagdag ang pagsusulit na ito',
+    acceptTerms:
+      'Ako ay {age} taong gulang o higit pa, at tinatanggap ko ang mga tuntunin at ang patakaran sa privacy.',
+    termsLink: 'Basahin ang mga tuntunin',
+    privacyLink: 'Basahin ang patakaran sa privacy',
+    acceptRequired: 'Kumpirmahin ang edad mo at tanggapin ang mga tuntunin para magpatuloy.',
     checkAnswers: 'Suriin ang iyong mga sagot.',
   },
 

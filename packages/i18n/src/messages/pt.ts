@@ -281,6 +281,10 @@ export const pt: Messages = {
     makePrimary: 'Abrir o aplicativo neste exame',
     start: 'Começar a estudar',
     add: 'Adicionar este exame',
+    acceptTerms: 'Tenho {age} anos ou mais e aceito os termos e a política de privacidade.',
+    termsLink: 'Ler os termos',
+    privacyLink: 'Ler a política de privacidade',
+    acceptRequired: 'Confirme sua idade e aceite os termos para continuar.',
     checkAnswers: 'Confira suas respostas.',
   },
 

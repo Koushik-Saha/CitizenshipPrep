@@ -28,6 +28,7 @@ export async function completeOnboarding(
       studyLocale: String(form.get('studyLocale') ?? ''),
       dailyGoalMinutes: Number(form.get('dailyGoalMinutes')),
       makePrimary: form.get('makePrimary') === 'on',
+      acceptedTerms: form.get('acceptedTerms') === 'on',
     });
   } catch (error) {
     if (error instanceof OnboardingError) return { error: error.message };

@@ -31,6 +31,8 @@ export const meSchema = z.object({
     z.object({
       dailyGoalMinutes: z.number(),
       onboardedAt: z.nullable(z.string()),
+      /** When they confirmed their age and accepted the terms; null until they have. */
+      termsAcceptedAt: z.optional(z.nullable(z.string())),
     }),
   ),
   studyCountries: z.array(studyCountrySchema),

@@ -251,6 +251,10 @@ export const zhHans: Messages = {
     makePrimary: '打开应用时先显示这项考试',
     start: '开始学习',
     add: '添加这项考试',
+    acceptTerms: '我已满 {age} 周岁，并接受服务条款和隐私政策。',
+    termsLink: '阅读服务条款',
+    privacyLink: '阅读隐私政策',
+    acceptRequired: '请确认你的年龄并接受条款后继续。',
     checkAnswers: '请检查填写的内容。',
   },
 

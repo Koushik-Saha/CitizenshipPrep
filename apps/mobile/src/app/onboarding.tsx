@@ -1,11 +1,13 @@
 import { dailyGoalOptions, onboardingSchema, searchCountries } from '@oathly/api';
 import { useExamCountries, useSaveOnboarding } from '@oathly/api/hooks';
+import { MINIMUM_AGE, mustAcceptTerms } from '@oathly/core';
 import { countryName, endonym, isOfferedStudyLocale, offeredStudyLocales } from '@oathly/i18n';
 import { getLocales } from 'expo-localization';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Switch, Text, View } from 'react-native';
 
+import { LegalLinks } from '@/components/legal-links';
 import { Body, Button, Choice, Field, Heading, Message, Screen, useTheme } from '@/components/ui';
 import { useI18n } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
@@ -35,6 +37,9 @@ export default function Onboarding() {
   const [examDate, setExamDate] = useState('');
   const [studyLocale, setStudyLocale] = useState(() => suggestedLocale(appLocale));
   const [dailyGoal, setDailyGoal] = useState<number>(me?.settings?.dailyGoalMinutes ?? 15);
+  // Asked once: after that it is on record.
+  const askTerms = mustAcceptTerms(me?.settings?.termsAcceptedAt);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,7 +63,12 @@ export default function Onboarding() {
       studyLocale,
       dailyGoalMinutes: dailyGoal,
       makePrimary: (me?.studyCountries.length ?? 0) === 0,
+      acceptedTerms,
     };
+    if (askTerms && !acceptedTerms) {
+      setError(t('onboarding.acceptRequired'));
+      return;
+    }
     // The same rules the server applies, checked here first for a quicker answer.
     const checked = onboardingSchema.safeParse(answer);
     if (!checked.success) {
@@ -174,6 +184,24 @@ export default function Onboarding() {
           ))}
         </View>
       </View>
+
+      {askTerms && (
+        <View style={{ gap: theme.spacing[2] }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[3] }}>
+            <Switch
+              value={acceptedTerms}
+              onValueChange={setAcceptedTerms}
+              accessibilityLabel={t('onboarding.acceptTerms', { age: MINIMUM_AGE })}
+              trackColor={{ true: theme.colors.primary, false: theme.colors.borderStrong }}
+              testID="accept-terms"
+            />
+            <View style={{ flex: 1 }}>
+              <Body>{t('onboarding.acceptTerms', { age: MINIMUM_AGE })}</Body>
+            </View>
+          </View>
+          <LegalLinks />
+        </View>
+      )}
 
       <Button
         label={me?.studyCountries.length ? t('onboarding.add') : t('onboarding.start')}

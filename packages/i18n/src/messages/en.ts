@@ -284,6 +284,10 @@ export const en = {
     makePrimary: 'Make this the exam the app opens on',
     start: 'Start studying',
     add: 'Add this exam',
+    acceptTerms: 'I am {age} or older, and I accept the terms and the privacy policy.',
+    termsLink: 'Read the terms',
+    privacyLink: 'Read the privacy policy',
+    acceptRequired: 'Confirm your age and accept the terms to continue.',
     checkAnswers: 'Check your answers.',
   },
 

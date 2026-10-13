@@ -56,7 +56,13 @@ export default async function globalSetup(config: FullConfig) {
 
   await visit(`/api/test/sign-in?user=e2e-warm-up&secret=${process.env.TEST_SIGN_IN_SECRET}`);
   await api.post('/api/me/onboarding', {
-    data: { countryCode: 'ZZ', examDate: null, studyLocale: 'en', dailyGoalMinutes: 10 },
+    data: {
+      countryCode: 'ZZ',
+      examDate: null,
+      studyLocale: 'en',
+      dailyGoalMinutes: 10,
+      acceptedTerms: true,
+    },
     failOnStatusCode: false,
   });
   for (const path of learnerPages) await visit(path);

@@ -33,6 +33,11 @@ export function createOnboardingSchema(today: Date = new Date()) {
     dailyGoalMinutes: z.number().int().min(5).max(240),
     /** Make this the country the app opens on. The first country always is. */
     makePrimary: z.boolean().default(true),
+    /**
+     * The learner confirms they are old enough and accepts the terms and the
+     * privacy policy. Needed the first time; ignored once it is on record.
+     */
+    acceptedTerms: z.boolean().optional(),
   });
 }
 
