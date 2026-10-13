@@ -33,7 +33,7 @@ Medium: needs a condition that is not met yet, or the harm is limited. Low: hard
 | M4  | medium   | Test (sandbox) purchases unlock Pro in production                             | fixed  |
 | M5  | medium   | Organization invitations can be used to send mail to anyone                   | open   |
 | M6  | medium   | The rate limiter lets everything through when it cannot reach the database    | fixed  |
-| M7  | medium   | Reviewer sign-in is one shared password with a session that cannot be ended   | open   |
+| M7  | medium   | Reviewer sign-in is one shared password with a session that cannot be ended   | fixed  |
 | M8  | medium   | Post screening can be talked out of its verdict, and ignores personal data    | fixed  |
 | M9  | medium   | The content security policy allows inline scripts and any HTTPS connection    | open   |
 | L1  | low      | Three reports from any three accounts hide a post                             | open   |
@@ -52,6 +52,8 @@ No critical finding. No secret was found in the git history, so there is nothing
 **After the fixes (9 October 2026):** all three high findings are fixed, with four of the nine
 medium ones and one low. Open: five medium (M1 and M2, which wait for a decision; M5; M7; and M9,
 which `docs/security.md` already records as accepted) and nine low.
+
+**13 October 2026:** M7 is fixed in `cc980d5`. Open: four medium (M1, M2, M5, M9) and nine low.
 
 ## Part 1: database, server, payments
 
@@ -178,7 +180,14 @@ No finding.
 - **Fix:** per-person reviewer accounts (a role on a normal account, plus a second factor), with
   sessions stored on the server so they can be ended. Until then: a long random password, and
   derive the signing key from a separate secret.
-- **Status:** open.
+- **Status:** fixed in `cc980d5` (13 October 2026). Staff sign in with their own account, which
+  must hold a role in `user_roles`, and a code from an authenticator app; the role, the
+  authenticator and the time of the last sign-out are read from the database on every request,
+  so revoking a role, resetting an authenticator or signing out ends a session wherever a copy
+  of it is. The signing key is made from a server secret, not a password. `verified_by` names
+  the person. Tests: `apps/web/e2e/tests/security/admin-access.spec.ts`,
+  `packages/api/src/server/staff.db.test.ts`, `totp.test.ts`. The shared account still works
+  until the first admin has an authenticator in use, and never after.
 
 ### 4. Sign-in
 

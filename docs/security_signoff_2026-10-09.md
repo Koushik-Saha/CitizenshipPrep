@@ -16,6 +16,14 @@ it now stands and against a running server, not against the "fixed" lines in tho
   They do not block by the rule, but M1 and M2 start to matter the day content is published and
   learners sign up.
 
+## Since this sign-off
+
+Not re-audited by an independent pass; recorded here so the table below is not read as current.
+
+- **M7** (one shared reviewer password): fixed on 13 October 2026 in `cc980d5`. See
+  `docs/security_audit_2026-10-09.md`.
+- A signed-out check of the live site was made on 12 October: `docs/prod_check_2026-10-12.md`.
+
 ## What this sign-off is not
 
 - **Not independent.** The same reviewer wrote the audit, the fixes and this check. It was done

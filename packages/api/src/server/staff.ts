@@ -105,6 +105,24 @@ export async function startEnrollment(db: Db, key: Buffer, userId: string): Prom
 }
 
 /**
+ * Whether a staff member's authenticator can still be checked by this server.
+ * False when its secret was sealed with a key the server no longer holds (the
+ * secret was changed): no code will ever be accepted, and the authenticator
+ * has to be reset (`pnpm content staff-reset-2fa`) and set up again.
+ */
+export async function isSecondFactorReadable(
+  db: Db,
+  key: Buffer,
+  userId: string,
+): Promise<boolean> {
+  const { rows } = await db.query<{ secret_sealed: string }>(
+    'select secret_sealed from public.staff_second_factors where user_id = $1',
+    [userId],
+  );
+  return rows[0] ? openSecret(key, rows[0].secret_sealed) !== null : false;
+}
+
+/**
  * Checks a typed code against the staff member's authenticator. With
  * `confirming`, a first accepted code puts the authenticator into use;
  * without it, only one already in use counts. An accepted code is spent: the

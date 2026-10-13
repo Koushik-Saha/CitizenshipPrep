@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import {
   acceptSecondFactor,
+  isSecondFactorReadable,
   endStaffSessions,
   hasEnrolledAdmin,
   listAdminActions,
@@ -159,6 +160,10 @@ describe.skipIf(!url)('staff, their second factor and the record, against the da
     expect(
       await acceptSecondFactor(pool, otherKey, REVIEWER, code, { confirming: true, now }),
     ).toBe(false);
+    // The server can tell that it can no longer read an authenticator.
+    expect(await isSecondFactorReadable(pool, key, REVIEWER)).toBe(true);
+    expect(await isSecondFactorReadable(pool, otherKey, REVIEWER)).toBe(false);
+    expect(await isSecondFactorReadable(pool, key, LEARNER)).toBe(false);
     // The server's key changed (a rotated secret): setting up starts again with a new secret.
     const replaced = (await startEnrollment(pool, otherKey, REVIEWER))!;
     expect(replaced).not.toBe(secret);

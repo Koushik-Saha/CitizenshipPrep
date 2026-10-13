@@ -16,8 +16,9 @@ import { deriveKey } from '@oathly/api/totp';
 //
 // The keys that sign sessions and seal authenticator secrets are made from
 // ADMIN_SECRET, or from the sign-in service's cookie secret when that is not
-// set. Changing it signs staff out and makes them set their authenticator up
-// again. With neither, the admin area does not exist.
+// set. Changing it signs staff out and leaves their authenticators unreadable:
+// each is then reset from the command line (pnpm content staff-reset-2fa) and
+// set up again. With neither, the admin area does not exist.
 
 export const ADMIN_SESSION_COOKIE = 'oathly_admin';
 

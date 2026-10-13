@@ -1,5 +1,5 @@
 import { adminReturnPath, isStaffSessionCurrent } from '@oathly/api/admin-session';
-import { staffMember, startEnrollment } from '@oathly/api/server';
+import { isSecondFactorReadable, staffMember, startEnrollment } from '@oathly/api/server';
 import { otpauthUri, spellSecret } from '@oathly/api/totp';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -185,6 +185,22 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
   }
 
   if (member.secondFactorInUse) {
+    // Set up under a secret this server no longer holds: no code can be checked.
+    if (!(await isSecondFactorReadable(getDb(), secondFactorKey(), user.userId))) {
+      return (
+        <Frame
+          title="Your authenticator needs resetting"
+          intro="It was set up before this server’s admin secret was changed, so its codes can no longer be checked."
+        >
+          <p className="mt-6 text-sm">
+            Whoever runs the service resets it from the command line, and you set it up again here:
+          </p>
+          <code className="bg-surface-sunken mt-2 block rounded-md px-3 py-2 font-mono text-sm break-all">
+            pnpm content staff-reset-2fa --user {user.userId}
+          </code>
+        </Frame>
+      );
+    }
     return (
       <Frame
         title="Enter your code"

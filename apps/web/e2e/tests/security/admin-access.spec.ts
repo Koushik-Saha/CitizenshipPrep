@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { expect, test, type APIRequestContext } from '@playwright/test';
 
-import { auditTrail, removeStaff, resetAuthenticator } from '../../database';
+import { auditTrail, removeStaff, resetAuthenticator, sql } from '../../database';
 import { newLearner, signInAndOnboard, signInAsReviewer, signInAsStaffAccount } from '../support';
 
 // Who can reach the reviewers' area: nobody without a staff role and a code
@@ -182,6 +182,33 @@ test('an authenticator that has been reset takes its sessions with it', async ({
   // Back to setting one up, with a new key.
   await expect(page).toHaveURL(/\/admin\/sign-in/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set up your authenticator');
+});
+
+test('an authenticator sealed under an old secret says so, and lets nobody in', async ({
+  page,
+}) => {
+  test.slow();
+  const { userId, key } = await signInAsReviewer(page);
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  // As after the server's admin secret is changed: what is stored cannot be opened.
+  await sql(
+    `update public.staff_second_factors set secret_sealed = 'v1.AAAAAAAAAAAAAAAA.AAAAAAAAAAAAAAAAAAAAAA.AAAAAAAAAAAAAAAA'
+     where user_id = $1`,
+    [userId],
+  );
+  await page.goto('/admin/content');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Your authenticator needs resetting',
+  );
+  await expect(page.getByText(`staff-reset-2fa --user ${userId}`)).toBeVisible();
+  await expect(page.getByLabel('Six-digit code')).toHaveCount(0);
+  // Reset, as the command does: a new key to set up, not the old one.
+  await resetAuthenticator(userId);
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Set up your authenticator');
+  expect((await page.getByTestId('totp-secret').innerText()).replace(/\s/g, '')).not.toBe(
+    key.replace(/\s/g, ''),
+  );
 });
 
 test('a reviewer gets the review pages and none of the admin-only ones', async ({ page }) => {

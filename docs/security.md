@@ -71,19 +71,21 @@ oversights.
 Rules are in `packages/core/src/rate-limit.ts`; counters are in Postgres
 (`takeRateLimit`), so they hold across server instances.
 
-| What                           | Limit            | Counted by      |
-| ------------------------------ | ---------------- | --------------- |
-| Sign-in requests (`/api/auth`) | 30 in 5 minutes  | network address |
-| Sign-in emails                 | 5 in 15 minutes  | recipient       |
-| AI explanations                | 20 a minute      | learner         |
-| Tutor messages                 | 10 a minute      | learner         |
-| Exam results reported          | 10 an hour       | learner         |
-| Account deletion               | 5 an hour        | learner         |
-| Reviewer sign-in attempts      | 10 in 15 minutes | network address |
-| Study-group posts              | 5 an hour        | learner         |
-| Study-group comments           | 20 an hour       | learner         |
-| Study-group upvotes            | 60 a minute      | learner         |
-| Study-group reports            | 10 an hour       | learner         |
+| What                           | Limit           | Counted by                                  |
+| ------------------------------ | --------------- | ------------------------------------------- |
+| Sign-in requests (`/api/auth`) | 30 in 5 minutes | network address                             |
+| Sign-in emails                 | 5 in 15 minutes | recipient                                   |
+| AI explanations                | 20 a minute     | learner                                     |
+| Tutor messages                 | 10 a minute     | learner                                     |
+| Exam results reported          | 10 an hour      | learner                                     |
+| Account deletion               | 5 an hour       | learner                                     |
+| Admin sign-in attempts         | 5 in 15 minutes | network address, and account (fails closed) |
+| Questions reported             | 20 an hour      | learner                                     |
+| Messages to support            | 5 an hour       | network address (fails closed)              |
+| Study-group posts              | 5 an hour       | learner                                     |
+| Study-group comments           | 20 an hour      | learner                                     |
+| Study-group upvotes            | 60 a minute     | learner                                     |
+| Study-group reports            | 10 an hour      | learner                                     |
 
 The AI limits sit on top of the daily allowances each plan includes. Network
 and email addresses are counted under a keyed hash, never stored as
@@ -182,6 +184,11 @@ themselves. A refused call gets `429` with `Retry-After`. Tested in
     still works until the first admin has an authenticator in use, so that
     there is a way in to set one up. From then on it is refused whatever the
     environment says. Delete the two variables once you are in.
+  - Admins (not reviewers) also have `/admin/users`, `/admin/billing`,
+    `/admin/orgs`, `/admin/ai` and `/admin/activity`. Opening a user's
+    account and deleting one are recorded; deleting asks for the word DELETE
+    and a reason, cancels any Stripe subscription first, and removes the
+    sign-in record as well as the data. The other pages only read.
   - Known limits: there is no QR code on the set-up screen (the key is typed
     or opened on the phone), no recovery codes (a reset is done from the
     command line), and the first factor is the site's own sign-in, an emailed
