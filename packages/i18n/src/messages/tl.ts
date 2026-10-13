@@ -512,6 +512,16 @@ export const tl: Messages = {
     endsOn: 'Matatapos ito sa {date} at hindi na magre-renew.',
     passFor: 'Country Pass: {country}',
     manage: 'Pamahalaan ang billing',
+    cancel: 'Kanselahin ang plan',
+    cancelConfirm:
+      'Mananatili sa iyo ang Pro hanggang {date}. Pagkatapos nito, nasa Free plan ka na at hindi ka na sisingilin muli.',
+    cancelYes: 'Oo, kanselahin ang plan ko',
+    keep: 'Panatilihin ang plan ko',
+    cancelled:
+      'Nakansela na ang plan mo. Mananatili sa iyo ang Pro hanggang sa katapusan ng panahong binayaran mo.',
+    kept: 'Magre-renew ang plan mo gaya ng dati.',
+    changeFailed: 'Hindi ito natuloy. Subukan muli, o gamitin ang Pamahalaan ang billing.',
+    getAPass: 'Kumuha ng Country Pass',
     manageInStore: 'Binili ang subscription na ito sa {store}. Doon ito palitan o kanselahin.',
     boughtOnWeb:
       'Binili ang subscription na ito sa website ng Oathly. Doon ito palitan o kanselahin.',

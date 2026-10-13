@@ -7,6 +7,7 @@ import {
   applyRevenueCatEvent,
   applyStripeEvent,
   stripeCustomerFor,
+  stripeProSubscriptionFor,
   type RevenueCatEvent,
   type StripeEvent,
 } from './billing';
@@ -198,6 +199,9 @@ describe.skipIf(!url)('billing against the database', () => {
     expect(await pro(WEB)).toBe(true);
     // The other learner bought nothing.
     expect(await pro(PHONE)).toBe(false);
+    // The subscription a learner may cancel is their own, and only theirs.
+    expect(await stripeProSubscriptionFor(pool, WEB)).toBe(subscription().id);
+    expect(await stripeProSubscriptionFor(pool, PHONE)).toBeNull();
 
     // What the mobile app is served for this learner: the same row.
     const me = (await getMe(pool, WEB))!;
@@ -254,6 +258,8 @@ describe.skipIf(!url)('billing against the database', () => {
     );
     expect(await applyStripeEvent(pool, ended, prices)).toEqual({ kind: 'applied', userId: WEB });
     expect(await pro(WEB, new Date(periodEnd + 1000))).toBe(false);
+    // Once it has ended there is nothing left to cancel.
+    expect(await stripeProSubscriptionFor(pool, WEB)).toBeNull();
     const after = (await getDashboard(pool, WEB, new Date(periodEnd + 1000)))!;
     expect(after.countries[0]).toMatchObject({ publishedQuestions: 20, fullAccess: false });
   });

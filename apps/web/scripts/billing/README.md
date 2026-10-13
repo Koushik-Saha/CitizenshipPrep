@@ -24,12 +24,25 @@ stays in force until the end of the period paid for, then ends.
 
 ## Stripe (web)
 
-1. In the Stripe dashboard, in test mode, create a product "Oathly Pro" with
-   two recurring prices (monthly, yearly) and a product "Country Pass" with a
-   one-time price. Put the three price ids and the secret key in `.env.local`
-   (names in `.env.example`).
-2. Turn on the customer portal (Settings → Billing → Customer portal) and
-   allow cancelling at the end of the period.
+1. Put the secret key in `.env.local` (`STRIPE_SECRET_KEY`), then make the
+   products, the three prices and the customer portal settings in one go:
+
+   ```sh
+   node scripts/billing/setup-stripe.mjs --monthly 7.99 --yearly 59.99 --pass 19.99
+   ```
+
+   It prints the three price ids to put in the environment (names in
+   `.env.example`). It can be run again: asking for a different amount makes
+   a new price and retires the old one. With a live key it stops unless
+   `--live` is added. The amounts live in Stripe and nowhere else: the
+   landing page and the plans page read them from there.
+
+   By hand instead: create a product "Oathly Pro" with two recurring prices
+   (monthly, yearly) and a product "Country Pass" with a one-time price.
+
+2. The customer portal ("Manage billing") must allow cancelling at the end of
+   the period; the script sets that up. A learner can also cancel on the
+   plans page itself, which does not need the portal.
 3. Add a webhook endpoint `https://<your site>/api/billing/stripe/webhook`
    for `checkout.session.completed`,
    `checkout.session.async_payment_succeeded`,

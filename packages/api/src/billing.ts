@@ -1,6 +1,7 @@
 import {
   countryPasses,
   hasAccess,
+  isPaidPlan,
   proSubscription,
   type AccessUser,
   type Entitlement,
@@ -73,6 +74,24 @@ export function planSummary(
       (country) => !hasAccess(user, 'all_questions', country, now),
     ),
   };
+}
+
+/**
+ * The plan a buy button named, as it travels in an address (?plan=) from the
+ * landing page through sign-in. Null for anything else: it is typed by
+ * whoever wrote the link.
+ */
+export function parsePlanChoice(value: unknown): PaidPlan | null {
+  return typeof value === 'string' && isPaidPlan(value) ? value : null;
+}
+
+/**
+ * The plans page, at the part that sells the plan someone picked. The page
+ * is where a purchase starts: its buttons open the checkout.
+ */
+export function plansPath(plan?: PaidPlan | null): string {
+  if (!plan) return '/study/plans';
+  return `/study/plans?plan=${plan}#${plan === 'country_pass' ? 'pass' : 'pro'}`;
 }
 
 /** What can be bought, as a checkout request names it. */

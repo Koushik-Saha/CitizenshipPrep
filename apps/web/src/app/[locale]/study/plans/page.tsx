@@ -10,7 +10,7 @@ import { isBillingConfigured, planPrices } from '@/lib/billing';
 import { getT } from '@/lib/i18n';
 import { requireMe } from '@/lib/user';
 
-import { openBillingPortal, startCheckout } from './actions';
+import { cancelPlan, keepPlan, openBillingPortal, startCheckout } from './actions';
 
 export async function generateMetadata({
   params,
@@ -45,7 +45,9 @@ export default async function PlansPage({
   );
   const prices = await planPrices();
   const canBuy = isBillingConfigured();
-  const justBought = (await searchParams).purchase === 'done';
+  const query = await searchParams;
+  const justBought = query.purchase === 'done';
+  const planChange = ['cancelled', 'kept', 'failed'].find((kind) => kind === query['plan-change']);
   const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
   const nameOf = (code: string) =>
     countryName(
@@ -82,6 +84,21 @@ export default async function PlansPage({
         </div>
       )}
 
+      {planChange && (
+        <div className="mt-6">
+          <Notice
+            tone={planChange === 'failed' ? 'error' : 'success'}
+            role={planChange === 'failed' ? 'alert' : 'status'}
+          >
+            {planChange === 'failed'
+              ? t('plans.changeFailed')
+              : planChange === 'kept'
+                ? t('plans.kept')
+                : t('plans.cancelled')}
+          </Notice>
+        </div>
+      )}
+
       <section aria-labelledby="your-plan" className={`${card} mt-8`}>
         <h2 id="your-plan" className="text-fg-muted text-sm font-medium">
           {t('plans.yourPlan')}
@@ -102,11 +119,41 @@ export default async function PlansPage({
                 })}
             </p>
             {pro.plan !== 'team' && pro.provider === 'stripe' && canBuy && (
-              <form action={openBillingPortal} className="mt-4">
-                <button type="submit" className={buttonClass.secondary}>
-                  {t('plans.manage')}
-                </button>
-              </form>
+              <div className="mt-4 flex flex-wrap items-start gap-3">
+                <form action={openBillingPortal}>
+                  <button type="submit" className={buttonClass.secondary}>
+                    {t('plans.manage')}
+                  </button>
+                </form>
+                {pro.cancelAtPeriodEnd ? (
+                  <form action={keepPlan}>
+                    <button type="submit" className={buttonClass.primary}>
+                      {t('plans.keep')}
+                    </button>
+                  </form>
+                ) : (
+                  // Cancelling takes two presses: open this, then confirm.
+                  <details className="w-full">
+                    <summary
+                      className={`${focusRing} text-primary-fg inline-block cursor-pointer rounded-xs font-medium underline underline-offset-4`}
+                    >
+                      {t('plans.cancel')}
+                    </summary>
+                    <form action={cancelPlan} className="mt-3 space-y-3">
+                      <p>
+                        {pro.currentPeriodEnd
+                          ? t('plans.cancelConfirm', {
+                              date: dateFormat.format(new Date(pro.currentPeriodEnd)),
+                            })
+                          : t('plans.terms')}
+                      </p>
+                      <button type="submit" className={buttonClass.secondary}>
+                        {t('plans.cancelYes')}
+                      </button>
+                    </form>
+                  </details>
+                )}
+              </div>
             )}
             {(pro.provider === 'app_store' || pro.provider === 'play_store') && (
               <p className="text-fg-muted mt-2 text-sm">

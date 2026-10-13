@@ -24,6 +24,8 @@ interface Props {
   /** Adding a further country rather than onboarding for the first time. */
   adding: boolean;
   defaultLocale: string;
+  /** A plan picked on the landing page: the plans page comes next. */
+  plan?: string | null;
   defaultDailyGoal: number;
   /** A target date an organization set with its invitation (YYYY-MM-DD). */
   defaultExamDate?: string | null;
@@ -37,6 +39,7 @@ export function OnboardingForm({
   markers,
   adding,
   defaultLocale,
+  plan,
   defaultDailyGoal,
   defaultExamDate,
 }: Props) {
@@ -57,6 +60,7 @@ export function OnboardingForm({
 
   return (
     <form action={action} className="space-y-10">
+      {plan && <input type="hidden" name="plan" value={plan} />}
       {state.error && (
         <Notice tone="error" role="alert">
           {state.error}

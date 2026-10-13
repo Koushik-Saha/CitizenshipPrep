@@ -512,6 +512,16 @@ export const fr: Messages = {
     endsOn: 'Il prend fin le {date} et ne sera pas renouvelé.',
     passFor: 'Pass Pays : {country}',
     manage: 'Gérer la facturation',
+    cancel: 'Annuler l’abonnement',
+    cancelConfirm:
+      'Vous gardez Pro jusqu’au {date}. Ensuite, vous passez à la formule gratuite et vous n’êtes plus débité.',
+    cancelYes: 'Oui, annuler mon abonnement',
+    keep: 'Garder mon abonnement',
+    cancelled:
+      'Votre abonnement est annulé. Vous gardez Pro jusqu’à la fin de la période déjà payée.',
+    kept: 'Votre abonnement sera renouvelé comme avant.',
+    changeFailed: 'L’opération n’a pas abouti. Réessayez, ou utilisez Gérer la facturation.',
+    getAPass: 'Obtenir un Country Pass',
     manageInStore: 'Cet abonnement a été acheté sur {store}. Modifiez-le ou résiliez-le là-bas.',
     boughtOnWeb:
       'Cet abonnement a été acheté sur le site web d’Oathly. Modifiez-le ou résiliez-le là-bas.',

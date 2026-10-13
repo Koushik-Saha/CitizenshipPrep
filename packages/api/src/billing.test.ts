@@ -1,7 +1,14 @@
 import type { Entitlement } from '@oathly/core';
 import { describe, expect, it } from 'vitest';
 
-import { formatPrice, planFromProductId, planSummary, purchaseProblem } from './billing';
+import {
+  formatPrice,
+  parsePlanChoice,
+  planFromProductId,
+  plansPath,
+  planSummary,
+  purchaseProblem,
+} from './billing';
 
 const now = new Date('2026-10-06T12:00:00Z');
 const pro: Entitlement = {
@@ -72,6 +79,25 @@ describe('purchaseProblem', () => {
     expect(purchaseProblem(held, { plan: 'country_pass', countryCode: 'CA' })).toBeNull();
     // A pass does not stop someone upgrading to Pro.
     expect(purchaseProblem(held, { plan: 'pro_monthly' }, now)).toBeNull();
+  });
+});
+
+describe('a plan picked on a buy button', () => {
+  it('is read from an address only when it names a plan that is sold', () => {
+    expect(parsePlanChoice('pro_yearly')).toBe('pro_yearly');
+    expect(parsePlanChoice('country_pass')).toBe('country_pass');
+    expect(parsePlanChoice('team')).toBeNull();
+    expect(parsePlanChoice('https://elsewhere.example')).toBeNull();
+    expect(parsePlanChoice(['pro_yearly'])).toBeNull();
+    expect(parsePlanChoice(undefined)).toBeNull();
+  });
+
+  it('leads to the part of the plans page that sells it', () => {
+    expect(plansPath('pro_monthly')).toBe('/study/plans?plan=pro_monthly#pro');
+    expect(plansPath('pro_yearly')).toBe('/study/plans?plan=pro_yearly#pro');
+    expect(plansPath('country_pass')).toBe('/study/plans?plan=country_pass#pass');
+    expect(plansPath()).toBe('/study/plans');
+    expect(plansPath(null)).toBe('/study/plans');
   });
 });
 

@@ -1,9 +1,12 @@
 import type { PlanPrice, Purchase } from '@oathly/api/billing';
 import {
+  applySubscriptionChange,
+  changeFromStripeSubscription,
   linkOrgStripeCustomer,
   linkStripeCustomer,
   orgStripeCustomerFor,
   stripeCustomerFor,
+  stripeProSubscriptionFor,
   type StripePrices,
 } from '@oathly/api/server';
 import type { UiLocale } from '@oathly/i18n';
@@ -156,6 +159,34 @@ export async function createPortal(userId: string, returnUrl: string): Promise<s
     return_url: returnUrl,
   });
   return session.url;
+}
+
+/**
+ * Cancels the learner's own Pro subscription at the end of the period they
+ * have paid for, or (`cancel: false`) takes that back so it renews. Nothing
+ * is refunded and nothing is taken away now: Pro runs to the date already
+ * paid up to. False when they hold no web subscription to change.
+ *
+ * Stripe also reports the change by webhook; it is written here as well so
+ * the page the learner returns to already shows it.
+ */
+export async function setPlanCancellation(userId: string, cancel: boolean): Promise<boolean> {
+  const prices = stripePrices();
+  if (!prices) return false;
+  const db = getDb();
+  // Found by the learner's id: nobody can name someone else's subscription.
+  const subscriptionId = await stripeProSubscriptionFor(db, userId);
+  if (!subscriptionId) return false;
+  const subscription = await getStripe().subscriptions.update(subscriptionId, {
+    cancel_at_period_end: cancel,
+  });
+  const change = changeFromStripeSubscription(
+    subscription as unknown as Record<string, unknown>,
+    prices,
+    new Date(),
+  );
+  if (change) await applySubscriptionChange(db, { ...change, userId });
+  return true;
 }
 
 /** What a seat costs, and how often. */

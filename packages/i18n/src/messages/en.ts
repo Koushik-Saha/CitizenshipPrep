@@ -508,6 +508,16 @@ export const en = {
     endsOn: 'It ends on {date} and will not renew.',
     passFor: 'Country Pass: {country}',
     manage: 'Manage billing',
+    cancel: 'Cancel plan',
+    cancelConfirm:
+      'You keep Pro until {date}. After that you are on the Free plan and are not charged again.',
+    cancelYes: 'Yes, cancel my plan',
+    keep: 'Keep my plan',
+    cancelled:
+      'Your plan is cancelled. You keep Pro until the end of the period you have paid for.',
+    kept: 'Your plan will renew as before.',
+    changeFailed: 'That did not go through. Try again, or use Manage billing.',
+    getAPass: 'Get a Country Pass',
     manageInStore: 'This subscription was bought in the {store}. Change or cancel it there.',
     boughtOnWeb: 'This subscription was bought on the Oathly website. Change or cancel it there.',
     unavailable: 'Plans cannot be bought here yet.',

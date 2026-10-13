@@ -359,6 +359,24 @@ export async function stripeCustomerFor(db: Db, userId: string): Promise<string 
   return rows[0]?.stripe_customer_id ?? null;
 }
 
+/**
+ * The Stripe subscription behind a learner's Pro plan, if it is one they
+ * bought on the web and it has not ended. This is the one they may cancel or
+ * keep: never an organization's, and never another learner's.
+ */
+export async function stripeProSubscriptionFor(db: Db, userId: string): Promise<string | null> {
+  const { rows } = await db.query<{ provider_subscription_id: string }>(
+    `select provider_subscription_id from public.subscriptions
+     where user_id = $1 and provider = 'stripe' and provider_subscription_id is not null
+       and plan in ('pro_monthly', 'pro_yearly')
+       and status in ('trialing', 'active', 'past_due')
+     order by current_period_end desc nulls last
+     limit 1`,
+    [userId],
+  );
+  return rows[0]?.provider_subscription_id ?? null;
+}
+
 /** Remembers which Stripe customer a learner is. The first one linked stays. */
 export async function linkStripeCustomer(db: Db, userId: string, customerId: string) {
   await db.query(

@@ -1,5 +1,6 @@
 'use server';
 
+import { parsePlanChoice, plansPath } from '@oathly/api/billing';
 import { OnboardingError, removeStudyCountry, saveOnboarding } from '@oathly/api/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -33,7 +34,9 @@ export async function completeOnboarding(
     throw error;
   }
   revalidatePath('/[locale]/study', 'page');
-  redirect(await localizedPath('/study'));
+  // Someone who pressed a buy button before signing up goes on to the plans.
+  const plan = parsePlanChoice(form.get('plan'));
+  redirect(await localizedPath(plan ? plansPath(plan) : '/study'));
 }
 
 export async function stopStudying(countryCode: string) {

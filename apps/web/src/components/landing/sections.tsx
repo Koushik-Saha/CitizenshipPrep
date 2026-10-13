@@ -263,6 +263,21 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
             <li>{ai('pro')}</li>
             {proPrices.length > 0 && <li>{t('plans.proNote')}</li>}
           </ul>
+          {/* Buying needs an account: sign-in carries the plan to the plans page. */}
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href={localizePath(t.locale, '/sign-in?plan=pro_yearly')}
+              className={buttonClass.primary}
+            >
+              {t('plans.getYearly')}
+            </Link>
+            <Link
+              href={localizePath(t.locale, '/sign-in?plan=pro_monthly')}
+              className={buttonClass.secondary}
+            >
+              {t('plans.getMonthly')}
+            </Link>
+          </div>
         </div>
         <div className={`border-border ${card}`}>
           <h3 className="font-display text-2xl font-semibold">{t('plans.countryPass')}</h3>
@@ -273,6 +288,12 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
             <li>{t('plans.passSummary')}</li>
             <li>{ai('free')}</li>
           </ul>
+          <Link
+            href={localizePath(t.locale, '/sign-in?plan=country_pass')}
+            className={`${buttonClass.secondary} mt-8`}
+          >
+            {t('plans.getAPass')}
+          </Link>
         </div>
       </div>
       <p className="text-fg-muted mt-6">{t('landing.planGroups')}</p>

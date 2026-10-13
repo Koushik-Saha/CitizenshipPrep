@@ -214,6 +214,45 @@ test('a learner who did not pass is thanked, and nobody is asked before their da
   await expect(page.getByTestId('exam-result-ask-ZZ')).toHaveCount(0);
 });
 
+test('a buy button on the landing page leads to the plans page, through sign-up if need be', async ({
+  page,
+  browser,
+}) => {
+  // Someone signed out: each button goes to sign-in and names the plan.
+  const visitor = await browser.newPage();
+  await visitor.goto('/#pricing');
+  for (const [name, plan] of [
+    [t('plans.getYearly'), 'pro_yearly'],
+    [t('plans.getMonthly'), 'pro_monthly'],
+    [t('plans.getAPass'), 'country_pass'],
+  ] as const) {
+    await expect(visitor.getByRole('link', { name, exact: true })).toHaveAttribute(
+      'href',
+      `/sign-in?plan=${plan}`,
+    );
+  }
+  await visitor.close();
+
+  // Someone new presses one, signs up and sets up their study: the plans come next.
+  const user = newLearner();
+  await page.goto(`/api/test/sign-in?user=${user}&secret=${process.env.TEST_SIGN_IN_SECRET}`);
+  await page.waitForURL(/\/onboarding/);
+  await page.goto('/sign-in?plan=country_pass');
+  await page.waitForURL(/\/onboarding\?plan=country_pass/);
+  await page.getByRole('radio', { name: /Testland/ }).check();
+  await page.getByRole('button', { name: t('onboarding.start') }).click();
+  await page.waitForURL(/\/study\/plans\?plan=country_pass#pass$/);
+  await expect(page.getByRole('heading', { name: t('plans.countryPass') })).toBeVisible();
+
+  // Already set up: straight to the plan that was picked.
+  await page.goto('/#pricing');
+  await page.getByRole('link', { name: t('plans.getYearly'), exact: true }).click();
+  await page.waitForURL(/\/study\/plans\?plan=pro_yearly#pro$/);
+  // A plan that is not sold is not carried anywhere.
+  await page.goto('/sign-in?plan=https://elsewhere.example');
+  await page.waitForURL(/\/study$/);
+});
+
 test('the plans page and the tutor are reachable and accessible', async ({ page }) => {
   await signInAndOnboard(page);
   await page.getByRole('link', { name: t('plans.title'), exact: true }).click();

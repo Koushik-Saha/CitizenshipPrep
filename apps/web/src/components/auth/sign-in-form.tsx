@@ -1,5 +1,6 @@
 'use client';
 
+import { parsePlanChoice } from '@oathly/api/billing';
 import { parseCountryCode } from '@oathly/api/country-search';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -16,18 +17,24 @@ type State =
   | { step: 'error'; message: string };
 
 /**
- * Where to land after signing in: /welcome, carrying a country picked on the
- * landing page, or back to the invitation someone was about to accept.
+ * Where to land after signing in: /welcome, carrying a country or a plan
+ * picked on the landing page, or back to the invitation someone was about to
+ * accept.
  */
 function useCallbackUrl(): string {
   const params = useSearchParams();
   const country = parseCountryCode(params.get('country'));
+  const plan = parsePlanChoice(params.get('plan'));
   const invitation = params.get('join');
+  const carried = new URLSearchParams();
+  if (country) carried.set('country', country);
+  if (plan) carried.set('plan', plan);
+  const query = carried.toString();
   const path =
     invitation && /^[A-Za-z0-9_-]{20,100}$/.test(invitation)
       ? `/join/${invitation}`
-      : country
-        ? `/welcome?country=${country}`
+      : query
+        ? `/welcome?${query}`
         : '/welcome';
   // In the language being read.
   return useLocalePath()(path);
