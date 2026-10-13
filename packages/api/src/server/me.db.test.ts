@@ -117,6 +117,7 @@ describe.skipIf(!url)('learner data against the database', () => {
       dailyGoalMinutes: 30,
       onboardedAt: first,
       termsAcceptedAt: expect.any(String),
+      analyticsOptOut: false,
     });
   });
 
