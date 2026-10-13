@@ -707,6 +707,8 @@ export const fr: Messages = {
     inviteOverLimit:
       '{count} de plus ont été laissées de côté : une liste peut inviter {limit} personnes.',
     inviteNothing: 'Il n’y avait personne à inviter dans la liste.',
+    inviteTooMany:
+      'Cela fait trop d’invitations à la fois. Invitez jusqu’à 10 administrateurs à la fois, ou attendez une heure avant de réessayer.',
     pending: 'Invitations en attente',
     invitedOn: 'Invité le {date}',
     expiresOn: 'expire le {date}',

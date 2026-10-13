@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   activityLevel,
+  ADMIN_INVITES_PER_REQUEST,
   canManageMember,
   csvCell,
   INVITE_LIST_LIMIT,
@@ -11,13 +12,14 @@ import {
   learnerActivity,
   learnerStanding,
   logoType,
+  mayEmailInvites,
   normalizeEmail,
   orgSlug,
   parseCsv,
   parseInviteList,
   READY_SCORE,
-  seatSource,
   seatsInForce,
+  seatSource,
   seatUsage,
   summarizeLearners,
   toCsv,
@@ -478,5 +480,17 @@ describe('logos', () => {
     const svg = Uint8Array.from('<svg onload="alert(1)">', (char) => char.charCodeAt(0));
     expect(logoType(svg)).toBeNull();
     expect(logoType(new Uint8Array())).toBeNull();
+  });
+});
+
+describe('whether an organization’s invitations are emailed', () => {
+  it('only when it has seats, paid for or granted', () => {
+    expect(mayEmailInvites(0)).toBe(false);
+    expect(mayEmailInvites(1)).toBe(true);
+    expect(mayEmailInvites(250)).toBe(true);
+  });
+
+  it('caps how many administrators one request invites', () => {
+    expect(ADMIN_INVITES_PER_REQUEST).toBe(10);
   });
 });

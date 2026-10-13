@@ -675,6 +675,8 @@ export const ar: Messages = {
     problemPastDate: 'انقضى الموعد',
     inviteOverLimit: 'تُرك {count} آخرون: تتّسع القائمة الواحدة لدعوة {limit} شخص.',
     inviteNothing: 'لم يكن في القائمة أحد لدعوته.',
+    inviteTooMany:
+      'هذا عدد كبير جدًا من الدعوات دفعة واحدة. ادعُ حتى 10 مسؤولين في المرة الواحدة، أو انتظر ساعة وحاول مرة أخرى.',
     pending: 'دعوات معلّقة',
     invitedOn: 'دُعي في {date}',
     expiresOn: 'تنتهي في {date}',

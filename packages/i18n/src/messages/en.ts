@@ -701,6 +701,8 @@ export const en = {
     problemPastDate: 'the date has passed',
     inviteOverLimit: '{count} more were left out: one list can invite {limit} people.',
     inviteNothing: 'There was nobody on the list to invite.',
+    inviteTooMany:
+      'That is too many invitations at once. Invite up to 10 administrators at a time, or wait an hour and try again.',
     pending: 'Pending invitations',
     invitedOn: 'Invited {date}',
     expiresOn: 'expires {date}',

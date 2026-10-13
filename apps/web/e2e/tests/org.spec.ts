@@ -42,6 +42,15 @@ test('an admin creates an organization; its pages are theirs alone', async ({ pa
   ).toBeVisible();
   await expectAccessibleInBothThemes(page, 'organization invitations, refused');
 
+  // An admin takes no seat, so how many can be invited at once is capped:
+  // eleven are refused, and none of them is invited.
+  const eleven = Array.from({ length: 11 }, (_, i) => `admin${i + 1}@example.test`).join('\n');
+  await page.getByLabel(t('org.inviteEmails')).fill(eleven);
+  await page.getByLabel(t('org.inviteAsAdmins')).check();
+  await page.getByRole('button', { name: t('org.inviteButton') }).click();
+  await expect(page.getByText(t('org.inviteTooMany'))).toBeVisible();
+  await expect(page.getByLabel('admin1@example.test')).toHaveCount(0);
+
   // An admin takes no seat. With no mail service here, the invitation's link
   // is shown to be passed on; it opens for someone who is not signed in.
   await page.getByLabel(t('org.inviteEmails')).fill('colleague@example.test');

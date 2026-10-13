@@ -708,6 +708,8 @@ export const tl: Messages = {
     inviteOverLimit:
       '{count} pa ang hindi naisama: {limit} tao ang kayang imbitahan ng isang listahan.',
     inviteNothing: 'Walang maiimbitahan sa listahan.',
+    inviteTooMany:
+      'Masyadong maraming imbitasyon nang sabay-sabay. Mag-imbita ng hanggang 10 administrator sa isang pagkakataon, o maghintay ng isang oras at subukan muli.',
     pending: 'Mga nakabinbing imbitasyon',
     invitedOn: 'Inimbitahan noong {date}',
     expiresOn: 'mag-e-expire sa {date}',

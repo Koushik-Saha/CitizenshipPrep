@@ -696,6 +696,8 @@ export const es: Messages = {
     problemPastDate: 'la fecha ya pasó',
     inviteOverLimit: 'Se dejaron fuera {count} más: una lista puede invitar a {limit} personas.',
     inviteNothing: 'No había nadie en la lista a quien invitar.',
+    inviteTooMany:
+      'Son demasiadas invitaciones a la vez. Invita hasta 10 administradores cada vez, o espera una hora e inténtalo de nuevo.',
     pending: 'Invitaciones pendientes',
     invitedOn: 'Invitado el {date}',
     expiresOn: 'caduca el {date}',

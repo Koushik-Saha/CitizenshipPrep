@@ -22,10 +22,12 @@ import {
   type InviteOutcome,
 } from '@oathly/api/server';
 import {
+  ADMIN_INVITES_PER_REQUEST,
   INVITE_LIST_LIMIT,
   isIsoDate,
   isOrgAdmin,
   MAX_LOGO_BYTES,
+  mayEmailInvites,
   parseInviteList,
   type InviteList,
   type InviteListProblem,
@@ -47,6 +49,7 @@ import {
 import { getDb } from '@/lib/db';
 import { LOCALE_COOKIE } from '@/lib/locale-cookie';
 import { isMailConfigured, sendMails } from '@/lib/mailer';
+import { rateLimited } from '@/lib/rate-limit';
 import { currentUser, type SignedInUser } from '@/lib/user';
 
 // What an organization's admins, and the people they invite, can do. Every
@@ -144,7 +147,7 @@ export async function deleteLogo(form: FormData): Promise<void> {
 /** What the invitation form shows after it is sent. */
 export interface InviteState {
   done: boolean;
-  error: OrgProblem | 'nothing' | null;
+  error: OrgProblem | 'nothing' | 'too-many' | null;
   /** Invitations that went out by email. */
   emailed: number;
   /** Invitations to pass on by hand: email is not set up, or did not go. */
@@ -166,10 +169,20 @@ const emptyInvite: InviteState = {
   overLimit: 0,
 };
 
-/** Emails each invitation, and returns the ones that have to be passed on by hand. */
+/**
+ * Emails each invitation, and returns the ones that have to be passed on by
+ * hand: all of them when email is not set up, or when the organization has no
+ * seats (see mayEmailInvites).
+ */
 async function deliver(
   outcome: InviteOutcome,
-  input: { organizationName: string; role: 'member' | 'admin'; locale: UiLocale },
+  input: {
+    organizationName: string;
+    role: 'member' | 'admin';
+    locale: UiLocale;
+    /** The seats the organization has, paid for or granted. */
+    seats: number;
+  },
 ): Promise<{ emailed: number; links: { email: string; url: string }[] }> {
   const origin = await siteOrigin();
   const t = translatorFor(input.locale);
@@ -177,20 +190,21 @@ async function deliver(
     ...invite,
     url: `${origin}${localizePath(input.locale, `/join/${invite.token}`)}`,
   }));
-  const sent = isMailConfigured()
-    ? await sendMails(
-        invitations.map((invite) => ({
-          to: invite.email,
-          ...inviteEmail(t, {
-            organizationName: input.organizationName,
-            name: invite.name,
-            role: input.role,
-            link: invite.url,
-            expiresInDays: INVITE_DAYS,
-          }),
-        })),
-      )
-    : invitations.map(() => false);
+  const sent =
+    isMailConfigured() && mayEmailInvites(input.seats)
+      ? await sendMails(
+          invitations.map((invite) => ({
+            to: invite.email,
+            ...inviteEmail(t, {
+              organizationName: input.organizationName,
+              name: invite.name,
+              role: input.role,
+              link: invite.url,
+              expiresInDays: INVITE_DAYS,
+            }),
+          })),
+        )
+      : invitations.map(() => false);
   return {
     emailed: sent.filter(Boolean).length,
     links: invitations.filter((_, index) => !sent[index]).map(({ email, url }) => ({ email, url })),
@@ -203,8 +217,14 @@ const MAX_LIST_BYTES = 1024 * 1024;
 export async function sendInvites(_previous: InviteState, form: FormData): Promise<InviteState> {
   const locale = await pageLocale();
   const user = await signedIn(locale);
-  const { organization, role: myRole } = await organizationOf(form, user, locale);
+  const { organization, role: myRole, granted } = await organizationOf(form, user, locale);
   if (!isOrgAdmin(myRole)) return { ...emptyInvite, done: true, error: 'forbidden' };
+
+  // Invitations are email in someone else's inbox: how often one account
+  // sends them is limited, and if the count cannot be kept none go out.
+  if (await rateLimited('orgInvite', 'user', user.userId, { failClosed: true })) {
+    return { ...emptyInvite, done: true, error: 'too-many' };
+  }
 
   const role = field(form, 'role') === 'admin' ? 'admin' : 'member';
   const options = {
@@ -232,6 +252,9 @@ export async function sendInvites(_previous: InviteState, form: FormData): Promi
   }
   const state = { ...emptyInvite, done: true, problems: list.problems, overLimit: list.overLimit };
   if (list.rows.length === 0) return { ...state, error: list.problems.length ? null : 'nothing' };
+  if (role === 'admin' && list.rows.length > ADMIN_INVITES_PER_REQUEST) {
+    return { ...state, error: 'too-many' };
+  }
 
   try {
     const outcome = await inviteLearners(getDb(), user.userId, organization.id, list.rows, {
@@ -239,9 +262,15 @@ export async function sendInvites(_previous: InviteState, form: FormData): Promi
     });
     // The page around the form shows the seats and the invitations now out.
     revalidatePath('/[locale]/org/[slug]/invite', 'page');
+    const seats = await getSeats(getDb(), organization.id, granted);
     return {
       ...state,
-      ...(await deliver(outcome, { organizationName: organization.name, role, locale })),
+      ...(await deliver(outcome, {
+        organizationName: organization.name,
+        role,
+        locale,
+        seats: seats.total,
+      })),
       alreadyMembers: outcome.alreadyMembers,
       noSeats: outcome.noSeats,
     };
@@ -254,7 +283,7 @@ export async function sendInvites(_previous: InviteState, form: FormData): Promi
 /** What "send again" shows: sent, or the new link to pass on. */
 export interface ResendState {
   done: boolean;
-  error: OrgProblem | 'no-seats' | null;
+  error: OrgProblem | 'no-seats' | 'too-many' | null;
   emailed: boolean;
   url: string | null;
 }
@@ -262,8 +291,11 @@ export interface ResendState {
 export async function resendInvite(_previous: ResendState, form: FormData): Promise<ResendState> {
   const locale = await pageLocale();
   const user = await signedIn(locale);
-  const { organization } = await organizationOf(form, user, locale);
+  const { organization, granted } = await organizationOf(form, user, locale);
   const state: ResendState = { done: true, error: null, emailed: false, url: null };
+  if (await rateLimited('orgInvite', 'user', user.userId, { failClosed: true })) {
+    return { ...state, error: 'too-many' };
+  }
   try {
     const outcome = await renewInvite(
       getDb(),
@@ -274,7 +306,13 @@ export async function resendInvite(_previous: ResendState, form: FormData): Prom
     if (outcome.invited.length === 0) return { ...state, error: 'no-seats' };
     revalidatePath('/[locale]/org/[slug]/invite', 'page');
     const role = field(form, 'role') === 'admin' ? 'admin' : 'member';
-    const delivered = await deliver(outcome, { organizationName: organization.name, role, locale });
+    const seats = await getSeats(getDb(), organization.id, granted);
+    const delivered = await deliver(outcome, {
+      organizationName: organization.name,
+      role,
+      locale,
+      seats: seats.total,
+    });
     return { ...state, emailed: delivered.emailed > 0, url: delivered.links[0]?.url ?? null };
   } catch (error) {
     if (error instanceof OrgError) return { ...state, error: error.problem };

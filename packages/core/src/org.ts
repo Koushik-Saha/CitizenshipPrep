@@ -282,6 +282,23 @@ export interface SeatSubscription {
   currentPeriodEnd: string | null;
 }
 
+/**
+ * The most administrators one request may invite. An administrator takes no
+ * seat, so nothing else bounds how many can be invited.
+ */
+export const ADMIN_INVITES_PER_REQUEST = 10;
+
+/**
+ * Whether an organization's invitations go out by email from this service's
+ * address. Only when it has seats, paid for or granted by staff. Anyone can
+ * make an organization for nothing and call it anything; without this they
+ * could have the service write to strangers in that name. An organization
+ * with no seats is given each invitation link to pass on itself.
+ */
+export function mayEmailInvites(seats: number): boolean {
+  return seats > 0;
+}
+
 /** The seats an organization has now: those granted by staff plus those paid for and in force. */
 export function seatsInForce(
   granted: number | null,

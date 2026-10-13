@@ -640,6 +640,7 @@ export const zhHans: Messages = {
     problemPastDate: '日期已过',
     inviteOverLimit: '另有 {count} 人未处理：一份名单最多邀请 {limit} 人。',
     inviteNothing: '名单中没有可邀请的人。',
+    inviteTooMany: '一次邀请的人数过多。每次最多邀请 10 位管理员，或等待一小时后再试。',
     pending: '待接受的邀请',
     invitedOn: '{date} 邀请',
     expiresOn: '{date} 到期',

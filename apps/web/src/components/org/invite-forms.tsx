@@ -25,6 +25,7 @@ const problemLabel: Record<InviteProblem, `org.problem${string}`> = {
 const errorLabel = {
   nothing: 'org.inviteNothing',
   'no-seats': 'org.seatsNone',
+  'too-many': 'org.inviteTooMany',
   'not-found': 'org.errorNotFound',
   forbidden: 'org.errorForbidden',
   invalid: 'org.errorInvalid',

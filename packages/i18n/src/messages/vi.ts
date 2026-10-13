@@ -677,6 +677,8 @@ export const vi: Messages = {
     problemPastDate: 'đã quá ngày',
     inviteOverLimit: 'Còn {count} người bị bỏ lại: một danh sách mời được {limit} người.',
     inviteNothing: 'Danh sách không có ai để mời.',
+    inviteTooMany:
+      'Quá nhiều lời mời cùng lúc. Hãy mời tối đa 10 quản trị viên mỗi lần, hoặc chờ một giờ rồi thử lại.',
     pending: 'Lời mời đang chờ',
     invitedOn: 'Mời ngày {date}',
     expiresOn: 'hết hạn ngày {date}',
