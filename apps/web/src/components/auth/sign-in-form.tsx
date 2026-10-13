@@ -80,14 +80,35 @@ export function SignInForm() {
   const callbackUrl = useCallbackUrl();
   const [state, setState] = useState<State>({ step: 'ready' });
 
+  /**
+   * What to tell someone when the sign-in service refuses or cannot be
+   * reached. It can answer with an error or throw one; either way the form
+   * says so and stays, rather than the page failing. "Invalid origin" is the
+   * service not having been told about this site's address: nothing the
+   * person typing can fix, so it is said plainly.
+   */
+  const problemOf = (error: unknown, fallback: string) => {
+    const { code, message } = (error ?? {}) as { code?: string; message?: string };
+    if (code === 'INVALID_ORIGIN' || message === 'Invalid origin') return t('auth.notConfigured');
+    // What this site's own limits say ("Too many requests…") is for the reader;
+    // anything else the service or the browser says is not.
+    return (error as { status?: number } | null)?.status === 429 && message ? message : fallback;
+  };
+
   async function sendCode(form: FormData) {
     const email = String(form.get('email') ?? '').trim();
     setState({ step: 'sending' });
-    const authClient = await loadAuthClient();
-    const { error } = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
+    let problem: unknown = null;
+    try {
+      const authClient = await loadAuthClient();
+      const { error } = await authClient.emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
+      problem = error;
+    } catch (error) {
+      problem = error ?? new Error('failed');
+    }
     setState(
-      error
-        ? { step: 'error', message: error.message ?? t('auth.sendFailed') }
+      problem
+        ? { step: 'error', message: problemOf(problem, t('auth.sendFailed')) }
         : { step: 'code', email, problem: null, checking: false },
     );
   }
@@ -97,10 +118,21 @@ export function SignInForm() {
     const { email } = state;
     const otp = String(form.get('code') ?? '').replace(/\s/g, '');
     setState({ step: 'code', email, problem: null, checking: true });
-    const authClient = await loadAuthClient();
-    const { error } = await authClient.signIn.emailOtp({ email, otp });
-    if (error) {
-      setState({ step: 'code', email, problem: t('auth.codeFailed'), checking: false });
+    let problem: unknown = null;
+    try {
+      const authClient = await loadAuthClient();
+      const { error } = await authClient.signIn.emailOtp({ email, otp });
+      problem = error;
+    } catch (error) {
+      problem = error ?? new Error('failed');
+    }
+    if (problem) {
+      setState({
+        step: 'code',
+        email,
+        problem: problemOf(problem, t('auth.codeFailed')),
+        checking: false,
+      });
       return;
     }
     // A full load, so every page sees the new session from its first byte.
@@ -109,12 +141,18 @@ export function SignInForm() {
 
   async function continueWithGoogle() {
     setState({ step: 'sending' });
-    const authClient = await loadAuthClient();
-    const { error } = await authClient.signIn.social({
-      provider: 'google',
-      callbackURL: callbackUrl,
-    });
-    if (error) setState({ step: 'error', message: error.message ?? t('auth.googleFailed') });
+    let problem: unknown = null;
+    try {
+      const authClient = await loadAuthClient();
+      const { error } = await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: callbackUrl,
+      });
+      problem = error;
+    } catch (error) {
+      problem = error ?? new Error('failed');
+    }
+    if (problem) setState({ step: 'error', message: problemOf(problem, t('auth.googleFailed')) });
   }
 
   if (state.step === 'code') {

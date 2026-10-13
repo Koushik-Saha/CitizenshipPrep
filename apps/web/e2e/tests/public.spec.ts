@@ -170,3 +170,28 @@ test('without WebGL the landing page keeps its poster and loads no 3D', async ({
   expect(scripts.filter((path) => /\.(glb|ktx2|wasm)$/.test(path))).toEqual([]);
   expect(errors).toEqual([]);
 });
+
+test('when the sign-in service refuses or cannot be reached, the form says so and stays', async ({
+  page,
+}) => {
+  // The tests' server points sign-in at an address where nothing listens.
+  await page.goto('/sign-in');
+  await page.getByLabel(t('auth.email')).fill('someone@example.test');
+  await page.getByRole('button', { name: t('auth.sendCode') }).click();
+  await expect(page.getByRole('alert').filter({ hasText: t('auth.sendFailed') })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('auth.title'));
+
+  // The service has not been told about this site's address: said plainly,
+  // and the page does not fail.
+  await page.route('**/api/auth/email-otp/send-verification-otp', (route) =>
+    route.fulfill({
+      status: 403,
+      contentType: 'application/json',
+      body: JSON.stringify({ message: 'Invalid origin', code: 'INVALID_ORIGIN' }),
+    }),
+  );
+  await page.getByLabel(t('auth.email')).fill('someone@example.test');
+  await page.getByRole('button', { name: t('auth.sendCode') }).click();
+  await expect(page.getByRole('alert').filter({ hasText: t('auth.notConfigured') })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('auth.title'));
+});
