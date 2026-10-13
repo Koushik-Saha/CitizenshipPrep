@@ -31,7 +31,7 @@ Medium: needs a condition that is not met yet, or the harm is limited. Low: hard
 | M2  | medium   | Every signed-in user can list all profiles, and set any display name          | open   |
 | M3  | medium   | A payment event is marked handled before it is applied                        | fixed  |
 | M4  | medium   | Test (sandbox) purchases unlock Pro in production                             | fixed  |
-| M5  | medium   | Organization invitations can be used to send mail to anyone                   | open   |
+| M5  | medium   | Organization invitations can be used to send mail to anyone                   | fixed  |
 | M6  | medium   | The rate limiter lets everything through when it cannot reach the database    | fixed  |
 | M7  | medium   | Reviewer sign-in is one shared password with a session that cannot be ended   | fixed  |
 | M8  | medium   | Post screening can be talked out of its verdict, and ignores personal data    | fixed  |
@@ -53,7 +53,8 @@ No critical finding. No secret was found in the git history, so there is nothing
 medium ones and one low. Open: five medium (M1 and M2, which wait for a decision; M5; M7; and M9,
 which `docs/security.md` already records as accepted) and nine low.
 
-**13 October 2026:** M7 is fixed in `cc980d5`. Open: four medium (M1, M2, M5, M9) and nine low.
+**13 October 2026:** M7 is fixed in `cc980d5` and M5 in `6a8b796`. Open: three medium (M1 and M2,
+which wait for a decision about the Neon Data API, and M9, which is accepted) and nine low.
 
 ## Part 1: database, server, payments
 
@@ -282,7 +283,11 @@ upvotes and reports (`packages/core/src/rate-limit.ts`).
   the attacker's chosen organization name. It needs email to be configured, which it is not yet.
 - **Fix:** rate limit invitations per account and per organization, cap administrator invitations,
   and hold invitations from organizations with no paid or granted seats.
-- **Status:** open.
+- **Status:** fixed in `6a8b796` (13 October 2026). Invitations are emailed only when the
+  organization has seats, paid for or granted (`mayEmailInvites` in `packages/core/src/org.ts`);
+  without seats its admin is given each link to pass on. One request invites at most ten
+  administrators, and an account can send or re-send invitations twenty times an hour, failing
+  closed. Tests: `packages/core/src/org.test.ts`, `apps/web/e2e/tests/org.spec.ts`.
 
 #### L4. No limit on answers, sessions, packs or direct question flags (low)
 

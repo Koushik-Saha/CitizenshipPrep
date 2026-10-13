@@ -163,11 +163,13 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
             .
           </li>
           <li>
-            <strong>See or correct</strong> what we hold: most of it is on your dashboard; write to
-            us for a copy of the rest, or to have something corrected.
+            <strong>See, copy or correct</strong> what we hold: most of it is on your dashboard,
+            your account page lets you download a copy of all of it and change your name, and you
+            can write to us to have anything else corrected.
           </li>
           <li>
-            <strong>Object or complain.</strong> You can ask us to stop a use of your data, and you
+            <strong>Object or complain.</strong> You can ask us to stop a use of your data; your
+            account page has a switch that stops your use being counted in our usage statistics. You
             have the right to complain to the data protection authority where you live.
           </li>
         </List>

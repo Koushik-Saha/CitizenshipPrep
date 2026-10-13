@@ -3,7 +3,7 @@
 13 October 2026. The work of 12 and 13 October is in the repository and deployed. These are the
 steps that need your accounts, your decisions or your phone. In the order that matters.
 
-## 1. Move to your own admin account (about ten minutes)
+## 1. Move to your own admin account (done on 13 October, except the last two steps)
 
 The reviewers' area no longer wants a shared password. It still accepts yours, but only until
 the first admin has set up an authenticator; after that the shared password is refused for good.
@@ -87,7 +87,19 @@ service you sign in to, and the live values are on Vercel.
 - The Holidays section of the official US list can reach at most 10 questions; 12 needs two more
   written.
 
+- The questions' answers have not been fact-checked by anything but their writer. The prompt
+  labelled S5 fixes findings; it does not check questions. Ask for a fact-check of the US
+  questions as its own piece of work before approving them.
+
 ## 6. Smaller things
+
+- Point an uptime monitor (UptimeRobot, Better Stack or similar) at
+  `https://oathly.vercel.app/api/health`, and set `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` on
+  Vercel so errors reach you.
+- In Stripe, once Stripe Tax is on, set `STRIPE_TAX=1` on Vercel; once the address of your terms
+  is in Stripe's public details, set `STRIPE_TERMS_CONSENT=1`. Setting either before Stripe is
+  ready makes Stripe refuse every checkout.
+- Have a lawyer read `/refunds` along with the terms and the privacy policy.
 
 - The landing page shows no countries until one has a published question. That is what was asked
   for; it is how the live site looks today.

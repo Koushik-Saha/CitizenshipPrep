@@ -1,3 +1,5 @@
+import { TERMS_VERSION } from '@oathly/core';
+
 // Who runs Oathly, for the privacy policy and the terms. Set on the host
 // before going live: a policy has to say who is responsible and how to reach
 // them. The pages are built ahead of time, so these are read at build time.
@@ -24,5 +26,9 @@ export function operator(): Operator {
   };
 }
 
-/** When the privacy policy and terms last changed. Update with every change to their text. */
-export const LEGAL_UPDATED = '2026-10-13';
+/**
+ * When the privacy policy and terms last changed: the same date a learner's
+ * acceptance of them is recorded with (TERMS_VERSION in packages/core, which
+ * is where to change it, with every change to their text).
+ */
+export const LEGAL_UPDATED = TERMS_VERSION;

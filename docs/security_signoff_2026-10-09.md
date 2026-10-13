@@ -22,6 +22,10 @@ Not re-audited by an independent pass; recorded here so the table below is not r
 
 - **M7** (one shared reviewer password): fixed on 13 October 2026 in `cc980d5`. See
   `docs/security_audit_2026-10-09.md`.
+- **M5** (invitations as a mail relay): fixed on 13 October 2026 in `6a8b796`.
+- **N1** (the daily AI limit could be used up by new free accounts): reduced on 13 October 2026
+  in `7ff3a74`. Free accounts made in the last day now share a quarter of the limit. Still true:
+  accounts older than a day are not held to that share, and screening calls are not counted.
 - A signed-out check of the live site was made on 12 October: `docs/prod_check_2026-10-12.md`.
 
 ## What this sign-off is not
