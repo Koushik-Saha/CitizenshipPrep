@@ -20,6 +20,8 @@
         "DISABLE_*",
         "EMAIL_FROM",
         "EXPO_WEB_ORIGIN",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL",
         "LEGAL_*",
         "MAILTRAP_*",
         "NEON_AUTH_*",

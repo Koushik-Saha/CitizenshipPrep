@@ -21,7 +21,7 @@ export interface GenerationResult {
   usage: TokenUsage;
   /** The model that produced the answer (a fallback model if the first one declined). */
   model: string;
-  /** Claude declined to answer. */
+  /** The model declined to answer. */
   refused: boolean;
 }
 
@@ -92,6 +92,78 @@ export function createClaudeGenerator(client: Anthropic = new Anthropic()): Text
 }
 
 /**
+ * Starts `run` at once and gives back what it writes. `run` calls `emit` with
+ * each piece of the answer and resolves with the finished result.
+ *
+ * The answer is written whether or not anyone reads `textStream`: a caller
+ * may wait on `result` alone. If `run` fails, the stream fails after the
+ * pieces already written.
+ */
+export function eagerGeneration(
+  run: (emit: (text: string) => void) => Promise<GenerationResult>,
+): Generation {
+  const pieces: string[] = [];
+  let ended = false;
+  let wake: (() => void) | null = null;
+  const stir = () => {
+    wake?.();
+    wake = null;
+  };
+
+  const result = run((text) => {
+    pieces.push(text);
+    stir();
+  });
+  const settled = result.then(
+    () => null,
+    (error: unknown) => ({ error }),
+  );
+  void settled.then(() => {
+    ended = true;
+    stir();
+  });
+
+  async function* text(): AsyncIterable<string> {
+    for (;;) {
+      if (pieces.length > 0) yield pieces.shift()!;
+      else if (ended) break;
+      else await new Promise<void>((resolve) => (wake = resolve));
+    }
+    const failure = await settled;
+    if (failure) throw failure.error;
+  }
+
+  return { textStream: text(), result };
+}
+
+/**
+ * Waits until the answer has begun: its first words, or its end if it has
+ * none. Rejects if the model could not be reached at all. That is the moment
+ * to tell the learner so, before anything has been sent to them.
+ */
+export async function started(generation: Generation): Promise<Generation> {
+  const pieces = generation.textStream[Symbol.asyncIterator]();
+  const first = await pieces.next();
+  async function* text(): AsyncIterable<string> {
+    try {
+      if (first.done) return;
+      yield first.value;
+      for (;;) {
+        const next = await pieces.next();
+        if (next.done) return;
+        yield next.value;
+      }
+    } finally {
+      await pieces.return?.();
+    }
+  }
+  return { textStream: text(), result: generation.result };
+}
+
+/** What ends an answer that broke off part-way: said of explanations and tutor replies alike. */
+export const STOPPED_EARLY = 'The answer stopped early. Please try again.';
+
+/**
  * Streams the generation as UTF-8, then calls `onComplete` with the result.
  * A failure mid-stream ends the response with a short note rather than
  * leaving the reader hanging.
@@ -111,9 +183,7 @@ export function toReadableStream(
         }
         await onComplete(result);
       } catch {
-        controller.enqueue(
-          encoder.encode('\n\n(The explanation stopped early. Please try again.)'),
-        );
+        controller.enqueue(encoder.encode(`\n\n(${STOPPED_EARLY})`));
       } finally {
         controller.close();
       }

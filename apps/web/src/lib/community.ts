@@ -2,7 +2,7 @@ import { createScreener, type Screener } from '@oathly/api/server';
 
 import { isSwitchedOn } from '@oathly/core';
 
-import { getGenerator } from './ai';
+import { getGenerator, isAiConfigured } from './ai';
 
 /**
  * Reads a post before it is shown to anyone. With a model configured, every
@@ -10,7 +10,7 @@ import { getGenerator } from './ai';
  * Without one (a development server), the built-in rules decide alone.
  */
 export function getScreener(): Screener {
-  return createScreener(process.env.ANTHROPIC_API_KEY ? getGenerator() : null);
+  return createScreener(isAiConfigured() ? getGenerator() : null);
 }
 
 /**

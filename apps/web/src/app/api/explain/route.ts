@@ -1,7 +1,14 @@
 import { explainRequestSchema } from '@oathly/api/schemas';
 import { explain } from '@oathly/api/server';
 
-import { aiGate, aiPaused, aiUsageOptions, getGenerator, limitMessage } from '@/lib/ai';
+import {
+  aiGate,
+  aiPaused,
+  aiUnavailable,
+  aiUsageOptions,
+  getGenerator,
+  limitMessage,
+} from '@/lib/ai';
 import { apiUserId, jsonError } from '@/lib/api-auth';
 import { getDb } from '@/lib/db';
 import { readJson } from '@/lib/http';
@@ -51,6 +58,8 @@ export async function POST(request: Request) {
       return jsonError(limitMessage(outcome.quota.resetsAt, 'AI explanations'), 429);
     case 'paused':
       return aiPaused();
+    case 'failed':
+      return aiUnavailable();
     case 'unavailable':
       return jsonError('There is no source passage to explain this question from.', 404);
   }

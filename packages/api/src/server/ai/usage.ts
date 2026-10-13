@@ -145,6 +145,15 @@ export async function reserveUsage(
   return { kind: 'reserved', id, quota: { ...quota, remaining: quota.remaining - 1 } };
 }
 
+/**
+ * Takes back a counted request that no model could start to answer. Nothing
+ * was written and nothing was spent, so it does not come off the learner's
+ * day or the service's.
+ */
+export async function releaseUsage(db: Db, id: string): Promise<void> {
+  await db.query('delete from public.ai_usage where id = $1', [id]);
+}
+
 /** Fills in what a counted request turned out to cost, once its reply is finished. */
 export async function completeUsage(
   db: Db,

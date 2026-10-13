@@ -194,6 +194,14 @@ All optional; the app runs without each.
   everyone is, and you are told through Sentry at 80% and 100%. To switch a
   feature off in a hurry, set `DISABLE_AI`, `DISABLE_AI_TUTOR`,
   `DISABLE_AI_EXPLANATIONS` or `DISABLE_COMMUNITY` to `1` and redeploy.
+- **Google Gemini (optional, a second model):** `GEMINI_API_KEY`, from
+  https://aistudio.google.com/apikey. When Claude cannot start an answer (no
+  credit, a rejected key, an outage) the same request goes to Gemini, and the
+  learner sees no difference; a model that failed is left alone for five
+  minutes. Use a key from a project with billing on: on Google's free tier
+  what is sent may be used to improve its products. `GEMINI_MODEL` picks the
+  model (default `gemini-3.5-flash-lite`). If no model can answer, the learner
+  is told AI help is not available and the request is not counted.
 
 ## 7. Check the live website
 
@@ -374,6 +382,7 @@ live needs it.
 | `ADMIN_SECRET`                                                                                                                   | Recommended: signs staff sessions and seals authenticator secrets. Without it `NEON_AUTH_COOKIE_SECRET` is used | `openssl rand -hex 32`                  |
 | `ADMIN_USERNAME`, `ADMIN_PASSWORD`                                                                                               | No. The old shared sign-in; it stops working once an admin has an authenticator. Delete them then               |                                         |
 | `ANTHROPIC_API_KEY`                                                                                                              | For AI explanations and the tutor                                                                               | Anthropic console                       |
+| `GEMINI_API_KEY`, `GEMINI_MODEL`                                                                                                 | Optional: a second model for when Claude cannot answer                                                          | Google AI Studio                        |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_COUNTRY_PASS` | To sell on the web                                                                                              | Step 5                                  |
 | `STRIPE_PRICE_ORG_SEAT`                                                                                                          | To sell seats                                                                                                   | Step 5                                  |
 | `REVENUECAT_WEBHOOK_SECRET`                                                                                                      | To sell in the apps                                                                                             | Step 8                                  |

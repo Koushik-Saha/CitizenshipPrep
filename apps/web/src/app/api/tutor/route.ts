@@ -1,7 +1,14 @@
 import { tutorRequestSchema } from '@oathly/api/schemas';
 import { askTutor, TutorError } from '@oathly/api/server';
 
-import { aiGate, aiPaused, aiUsageOptions, getGenerator, limitMessage } from '@/lib/ai';
+import {
+  aiGate,
+  aiPaused,
+  aiUnavailable,
+  aiUsageOptions,
+  getGenerator,
+  limitMessage,
+} from '@/lib/ai';
 import { apiUserId, jsonError } from '@/lib/api-auth';
 import { getDb } from '@/lib/db';
 import { readJson } from '@/lib/http';
@@ -46,6 +53,8 @@ export async function POST(request: Request) {
       return jsonError(limitMessage(outcome.quota.resetsAt, 'tutor messages'), 429);
     case 'paused':
       return aiPaused();
+    case 'failed':
+      return aiUnavailable();
     case 'not-studying':
       return jsonError('Add this country to your study plan to ask its tutor.', 403);
   }

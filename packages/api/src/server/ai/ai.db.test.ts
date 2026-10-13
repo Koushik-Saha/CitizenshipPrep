@@ -3,6 +3,7 @@ import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { explain } from './explain';
+import { createFallbackGenerator } from './fallback';
 import type { GenerateRequest, Generation, TextGenerator } from './generator';
 import { askTutor, findStudyMaterial } from './tutor';
 import { quotaFor } from './usage';
@@ -34,6 +35,24 @@ function fakeGenerator(reply = 'Because the passage says so.') {
     },
   };
   return { generator, requests };
+}
+
+/** Stands in for a model that is out of credit or down: it fails before writing a word. */
+function downGenerator(): TextGenerator {
+  return {
+    model: 'down-model',
+    generate(): Generation {
+      const result = Promise.reject<never>(new Error('credit balance is too low'));
+      result.catch(() => {});
+      return {
+        // eslint-disable-next-line require-yield
+        textStream: (async function* () {
+          throw new Error('credit balance is too low');
+        })(),
+        result,
+      };
+    },
+  };
 }
 
 const read = (stream: ReadableStream<Uint8Array>) => new Response(stream).text();
@@ -428,5 +447,59 @@ describe.skipIf(!url)('AI explanations and tutor against the database', () => {
     const withPro = await explain(pool, generator, USER, locked);
     expect(withPro.kind).toBe('stream');
     await read((withPro as { stream: ReadableStream<Uint8Array> }).stream);
+  });
+
+  it('says so, and counts nothing, when no model can start an answer', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    await pool.query('delete from public.ai_explanations where question_id = $1', [questionId]);
+    const before = {
+      explanation: (await quotaFor(pool, USER, 'explanation', new Date())).remaining,
+      tutor: (await quotaFor(pool, USER, 'tutor', new Date())).remaining,
+    };
+
+    expect(await explain(pool, downGenerator(), USER, questionId)).toEqual({ kind: 'failed' });
+    expect(
+      await askTutor(pool, downGenerator(), USER, {
+        countryCode: COUNTRY,
+        messages: [{ role: 'user', content: 'How many members does the council have?' }],
+      }),
+    ).toEqual({ kind: 'failed' });
+
+    // Not off the learner's day, not off the service's, and nothing kept as an explanation.
+    expect((await quotaFor(pool, USER, 'explanation', new Date())).remaining).toBe(
+      before.explanation,
+    );
+    expect((await quotaFor(pool, USER, 'tutor', new Date())).remaining).toBe(before.tutor);
+    const kept = await pool.query('select 1 from public.ai_usage where user_id = $1', [USER]);
+    expect(kept.rows).toHaveLength(0);
+    const saved = await pool.query('select 1 from public.ai_explanations where question_id = $1', [
+      questionId,
+    ]);
+    expect(saved.rows).toHaveLength(0);
+  });
+
+  it('answers from the second model when the first is down, and records which one answered', async () => {
+    await pool.query('delete from public.ai_usage where user_id = $1', [USER]);
+    await pool.query('delete from public.ai_explanations where question_id = $1', [questionId]);
+    const { generator: second, requests } = fakeGenerator('From the second model.');
+    const generator = createFallbackGenerator([downGenerator(), second]);
+
+    const outcome = await explain(pool, generator, USER, questionId);
+    expect(outcome.kind).toBe('stream');
+    expect(await read((outcome as { stream: ReadableStream<Uint8Array> }).stream)).toBe(
+      'From the second model.',
+    );
+    expect(requests).toHaveLength(1);
+
+    const usage = await pool.query<{ model: string; output_tokens: number }>(
+      'select model, output_tokens from public.ai_usage where user_id = $1',
+      [USER],
+    );
+    expect(usage.rows).toEqual([{ model: 'fake-model', output_tokens: 40 }]);
+    const saved = await pool.query<{ model: string }>(
+      'select model from public.ai_explanations where question_id = $1',
+      [questionId],
+    );
+    expect(saved.rows).toEqual([{ model: 'fake-model' }]);
   });
 });

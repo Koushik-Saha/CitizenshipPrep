@@ -56,7 +56,7 @@ describe('toReadableStream', () => {
         async () => void (completed = true),
       ),
     );
-    expect(text).toBe('Part one. \n\n(The explanation stopped early. Please try again.)');
+    expect(text).toBe('Part one. \n\n(The answer stopped early. Please try again.)');
     expect(completed).toBe(false);
   });
 });

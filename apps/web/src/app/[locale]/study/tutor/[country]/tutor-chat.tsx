@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 
 import { useT } from '@/components/i18n/provider';
 import { buttonClass, fieldClass, Notice } from '@/components/ui';
-import { streamText } from '@/lib/stream-text';
+import { isAiDown, streamText } from '@/lib/stream-text';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -49,7 +49,13 @@ export function TutorChat({
     } catch (reason) {
       setMessages(conversation.slice(0, -1));
       setDraft(question);
-      setError(reason instanceof Error ? reason.message : String(reason));
+      setError(
+        isAiDown(reason)
+          ? t('tutor.unavailable')
+          : reason instanceof Error
+            ? reason.message
+            : String(reason),
+      );
     } finally {
       setBusy(false);
       inputRef.current?.focus();

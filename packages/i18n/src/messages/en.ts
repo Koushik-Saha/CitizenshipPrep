@@ -441,6 +441,8 @@ export const en = {
   explain: {
     more: 'Explain more',
     writing: 'Writing an explanation…',
+    unavailable:
+      'The AI explanation is not available right now. You can keep studying and try again later.',
     aiNote:
       'Written by AI from the official guide’s passage. It has not been checked by a reviewer and may contain mistakes.',
   },
@@ -490,6 +492,8 @@ export const en = {
     questionLabel: 'Your question about the {country} test',
     ask: 'Ask',
     keys: 'Enter to send, Shift+Enter for a new line.',
+    unavailable:
+      'The tutor is not available right now. Your question is still in the box: please try again later.',
     remaining: '{count, plural, one {# question left today.} other {# questions left today.}}',
     opening: 'Opening the tutor',
   },

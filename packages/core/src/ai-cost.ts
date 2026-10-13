@@ -18,6 +18,8 @@ export interface AiTokens {
  */
 const PRICES: { model: string; input: number; output: number }[] = [
   { model: 'claude-haiku-4-5', input: 1, output: 5 },
+  // The fallback model. Its cache reads are a tenth of input too; it has no cache writes.
+  { model: 'gemini-3.5-flash-lite', input: 0.3, output: 2.5 },
 ];
 
 /** What these tokens cost in US dollars at list price, or null for a model with no price here. */

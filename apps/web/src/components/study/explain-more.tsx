@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useT } from '@/components/i18n/provider';
 import { buttonClass } from '@/components/ui';
-import { streamText } from '@/lib/stream-text';
+import { isAiDown, streamText } from '@/lib/stream-text';
 
 type State =
   | { step: 'idle' }
@@ -27,7 +27,14 @@ export function ExplainMore({ questionId }: { questionId: string }) {
       });
       setState({ step: 'done', text, locale: response.headers.get('content-language') });
     } catch (error) {
-      setState({ step: 'error', message: error instanceof Error ? error.message : String(error) });
+      setState({
+        step: 'error',
+        message: isAiDown(error)
+          ? t('explain.unavailable')
+          : error instanceof Error
+            ? error.message
+            : String(error),
+      });
     }
   }
 
@@ -39,7 +46,11 @@ export function ExplainMore({ questionId }: { questionId: string }) {
     );
   }
   if (state.step === 'error') {
-    return <p className="text-error-fg mt-3 text-sm">{state.message}</p>;
+    return (
+      <p role="alert" className="text-error-fg mt-3 text-sm">
+        {state.message}
+      </p>
+    );
   }
   return (
     <div

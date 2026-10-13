@@ -60,6 +60,7 @@ export default defineConfig({
       NEON_AUTH_COOKIE_SECRET: randomBytes(32).toString('hex'),
       // Never the real services, whatever .env.local holds.
       ANTHROPIC_API_KEY: '',
+      GEMINI_API_KEY: '',
       STRIPE_SECRET_KEY: '',
       STRIPE_WEBHOOK_SECRET: '',
       MAILTRAP_TOKEN: '',

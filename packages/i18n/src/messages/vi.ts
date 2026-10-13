@@ -425,6 +425,7 @@ export const vi: Messages = {
   explain: {
     more: 'Giải thích thêm',
     writing: 'Đang viết lời giải thích…',
+    unavailable: 'Phần giải thích bằng AI hiện chưa dùng được. Bạn có thể học tiếp và thử lại sau.',
     aiNote:
       'Do AI viết từ đoạn trích của tài liệu chính thức. Chưa được người duyệt kiểm tra và có thể có sai sót.',
   },
@@ -474,6 +475,8 @@ export const vi: Messages = {
     questionLabel: 'Câu hỏi của bạn về kỳ thi {country}',
     ask: 'Hỏi',
     keys: 'Enter để gửi, Shift+Enter để xuống dòng.',
+    unavailable:
+      'Gia sư hiện chưa dùng được. Câu hỏi của bạn vẫn còn trong ô: vui lòng thử lại sau.',
     remaining: '{count, plural, other {Hôm nay còn # câu hỏi.}}',
     opening: 'Đang mở gia sư',
   },

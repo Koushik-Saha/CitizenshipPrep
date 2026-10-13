@@ -4,8 +4,8 @@ import type pg from 'pg';
 
 import { accessUser } from '../billing';
 import { loadQuestionPool } from '../quiz';
-import { toReadableStream, type TextGenerator } from './generator';
-import { completeUsage, reserveUsage, type UsageOptions } from './usage';
+import { started, toReadableStream, type Generation, type TextGenerator } from './generator';
+import { completeUsage, releaseUsage, reserveUsage, type UsageOptions } from './usage';
 
 // "Explain more": a deeper explanation of a question, in the learner's study
 // language, grounded only in the passage of the official guide the question
@@ -142,6 +142,8 @@ export type ExplainOutcome =
   | { kind: 'limited'; quota: Quota }
   /** The whole service has used its day's AI: see reserveUsage. */
   | { kind: 'paused' }
+  /** No model could start an answer: nothing was written and nothing is counted. */
+  | { kind: 'failed' }
   | { kind: 'unavailable' };
 
 export async function explain(
@@ -181,7 +183,13 @@ export async function explain(
   );
   if (reserved.kind !== 'reserved') return reserved;
 
-  const generation = generator.generate(explanationRequest(context));
+  let generation: Generation;
+  try {
+    generation = await started(generator.generate(explanationRequest(context)));
+  } catch {
+    await releaseUsage(db, reserved.id);
+    return { kind: 'failed' };
+  }
   const stream = toReadableStream(generation, async (result) => {
     await completeUsage(db, reserved.id, result);
     if (!result.refused && result.text.trim()) {

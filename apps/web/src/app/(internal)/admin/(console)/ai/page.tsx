@@ -51,7 +51,7 @@ function Against({ used, limit }: { used: number; limit: number }) {
 // limits that hold them: a number of requests a day for each learner, and one
 // for the whole service. Admins only. Costs are worked out from the tokens
 // each request used at the model's list price, so they are an estimate: the
-// bill is in the Anthropic console.
+// bills are in the Anthropic console, and Google's if Gemini is set up.
 export default async function AiUse() {
   await requireAdmin();
   const [days, usedToday, users] = await Promise.all([
@@ -77,10 +77,11 @@ export default async function AiUse() {
     <>
       <h1 className="font-display text-3xl font-semibold">AI use</h1>
       <p className="text-fg-muted mt-1 max-w-3xl">
-        Requests to Claude and what they cost, estimated from the tokens used at list price. The
-        bill itself is in the Anthropic console. Days are in UTC; the limits count the last 24
-        hours. Free accounts made in the last day share a quarter of the service’s limit between
-        them, so new accounts made in bulk cannot use up the day for everyone else.
+        AI requests and what they cost, estimated from the tokens used at list price. The bills
+        themselves are in the Anthropic console, and in Google’s if Gemini is set up as the second
+        model. Days are in UTC; the limits count the last 24 hours. Free accounts made in the last
+        day share a quarter of the service’s limit between them, so new accounts made in bulk cannot
+        use up the day for everyone else.
       </p>
 
       <div className="mt-6 max-w-3xl space-y-3">

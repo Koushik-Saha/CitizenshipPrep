@@ -444,6 +444,8 @@ export const tl: Messages = {
   explain: {
     more: 'Ipaliwanag pa',
     writing: 'Isinusulat ang paliwanag…',
+    unavailable:
+      'Hindi available ang paliwanag ng AI sa ngayon. Maaari kang magpatuloy sa pag-aaral at subukan ulit mamaya.',
     aiNote:
       'Isinulat ng AI mula sa sipi ng opisyal na gabay. Hindi pa ito nasuri ng reviewer at maaaring may mga mali.',
   },
@@ -493,6 +495,8 @@ export const tl: Messages = {
     questionLabel: 'Ang tanong mo tungkol sa pagsusulit ng {country}',
     ask: 'Itanong',
     keys: 'Enter para ipadala, Shift+Enter para sa bagong linya.',
+    unavailable:
+      'Hindi available ang tutor sa ngayon. Nasa kahon pa rin ang tanong mo: pakisubukan ulit mamaya.',
     remaining:
       '{count, plural, one {# tanong na lang ngayong araw.} other {# tanong na lang ngayong araw.}}',
     opening: 'Binubuksan ang tutor',

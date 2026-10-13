@@ -440,6 +440,8 @@ export const pt: Messages = {
   explain: {
     more: 'Explicar mais',
     writing: 'Escrevendo uma explicação…',
+    unavailable:
+      'A explicação por IA não está disponível no momento. Você pode continuar estudando e tentar de novo mais tarde.',
     aiNote:
       'Escrito por IA a partir do trecho do guia oficial. Não foi verificado por um revisor e pode conter erros.',
   },
@@ -489,6 +491,8 @@ export const pt: Messages = {
     questionLabel: 'Sua pergunta sobre o teste ({country})',
     ask: 'Perguntar',
     keys: 'Enter para enviar, Shift+Enter para uma nova linha.',
+    unavailable:
+      'O tutor não está disponível no momento. Sua pergunta continua na caixa: tente de novo mais tarde.',
     remaining: '{count, plural, one {Resta # pergunta hoje.} other {Restam # perguntas hoje.}}',
     opening: 'Abrindo o tutor',
   },

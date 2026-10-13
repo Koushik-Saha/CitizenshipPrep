@@ -1,8 +1,8 @@
 import type { Quota } from '@oathly/core';
 import type pg from 'pg';
 
-import { toReadableStream, type TextGenerator } from './generator';
-import { completeUsage, reserveUsage, type UsageOptions } from './usage';
+import { started, toReadableStream, type Generation, type TextGenerator } from './generator';
+import { completeUsage, releaseUsage, reserveUsage, type UsageOptions } from './usage';
 
 // "Ask the tutor": a chat limited to one country's study material. Each turn
 // looks up the passages and questions that match what the learner asked and
@@ -148,6 +148,8 @@ export type TutorOutcome =
   | { kind: 'limited'; quota: Quota }
   /** The whole service has used its day's AI: see reserveUsage. */
   | { kind: 'paused' }
+  /** No model could start an answer: nothing was written and nothing is counted. */
+  | { kind: 'failed' }
   | { kind: 'not-studying' };
 
 export async function askTutor(
@@ -191,12 +193,20 @@ export async function askTutor(
     .join(' ');
   const material = await findStudyMaterial(db, request.countryCode, recentQuestions);
 
-  const generation = generator.generate({
-    system: tutorSystem(countryName),
-    context: materialContext(material),
-    messages: conversation,
-    maxTokens: 1500,
-  });
+  let generation: Generation;
+  try {
+    generation = await started(
+      generator.generate({
+        system: tutorSystem(countryName),
+        context: materialContext(material),
+        messages: conversation,
+        maxTokens: 1500,
+      }),
+    );
+  } catch {
+    await releaseUsage(db, reserved.id);
+    return { kind: 'failed' };
+  }
   const stream = toReadableStream(generation, (result) => completeUsage(db, reserved.id, result));
   return { kind: 'stream', stream, quota: reserved.quota };
 }

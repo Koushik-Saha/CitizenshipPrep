@@ -363,6 +363,28 @@ test('the plans page and the tutor are reachable and accessible', async ({ page 
   await expectAccessibleInBothThemes(page, 'tutor');
 });
 
+test('a learner is told plainly when AI help cannot be reached, and keeps their question', async ({
+  page,
+}) => {
+  // This server has no AI model, which is what an account with no credit looks like.
+  await signInAndOnboard(page);
+  await page.goto('/study/tutor/zz');
+  const box = page.getByRole('textbox');
+  await box.fill('How many members does the council have?');
+  await page.getByRole('button', { name: t('tutor.ask'), exact: true }).click();
+  await expect(page.getByRole('alert').filter({ hasText: t('tutor.unavailable') })).toBeVisible();
+  await expect(box).toHaveValue('How many members does the council have?');
+
+  // The same for an explanation: an answer the page can read, not a broken reply.
+  const pack = await (await page.request.get('/api/packs/ZZ')).json();
+  const explained = await page.request.post('/api/explain', {
+    data: { questionId: pack.questions[0].id },
+    headers: { 'content-type': 'application/json' },
+  });
+  expect(explained.status()).toBe(503);
+  expect((await explained.json()).code).toBe('AI_UNAVAILABLE');
+});
+
 test('the study pages work in a right-to-left language', async ({ page }) => {
   await signInAndOnboard(page);
   await page.goto('/ar/study');

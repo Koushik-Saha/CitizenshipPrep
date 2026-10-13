@@ -1,16 +1,35 @@
-import { createClaudeGenerator, type TextGenerator, type UsageOptions } from '@oathly/api/server';
+import {
+  createAppGenerator,
+  isAiConfigured as hasModelKey,
+  type TextGenerator,
+  type UsageOptions,
+} from '@oathly/api/server';
 import { isSwitchedOn } from '@oathly/core';
 
 import { reportError } from './monitoring';
 import { addressOf, rateLimited } from './rate-limit';
 
-// Claude is only ever called from here: route handlers on the server. The API
-// key never reaches a browser or the app.
+// The models are only ever called from here: route handlers on the server.
+// Their API keys never reach a browser or the app.
 const globalForAi = globalThis as typeof globalThis & { oathlyGenerator?: TextGenerator };
 
+/**
+ * Claude, with Gemini behind it when GEMINI_API_KEY is set: if Claude cannot
+ * start an answer, Gemini is asked the same thing. Whoever runs the service
+ * is told each time a model fails.
+ */
 export function getGenerator(): TextGenerator {
-  globalForAi.oathlyGenerator ??= createClaudeGenerator();
+  globalForAi.oathlyGenerator ??= createAppGenerator(process.env, {
+    onFailure(model, error) {
+      reportError(error, { where: 'ai-model', model });
+    },
+  });
   return globalForAi.oathlyGenerator;
+}
+
+/** Whether any model has a key. Without one, AI help answers "not available". */
+export function isAiConfigured(): boolean {
+  return hasModelKey(process.env);
 }
 
 /** The message when a plan's allowance is used up. Relative, so it reads right in any time zone. */
@@ -43,6 +62,19 @@ export function aiPaused(): Response {
   const message = 'AI help is paused for now. Please try again later.';
   return Response.json(
     { error: message, message, code: 'AI_PAUSED' },
+    { status: 503, headers: { 'cache-control': 'no-store' } },
+  );
+}
+
+/**
+ * What a learner is told when no model could start an answer: the provider is
+ * out of credit, down, or not set up. Nothing was counted against them.
+ */
+export function aiUnavailable(): Response {
+  const message =
+    'AI help is not available right now. You can keep studying: every question still has its written explanation. Please try again later.';
+  return Response.json(
+    { error: message, message, code: 'AI_UNAVAILABLE' },
     { status: 503, headers: { 'cache-control': 'no-store' } },
   );
 }

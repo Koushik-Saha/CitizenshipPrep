@@ -400,6 +400,7 @@ export const zhHans: Messages = {
   explain: {
     more: '详细讲解',
     writing: '正在撰写讲解…',
+    unavailable: 'AI 讲解暂时无法使用。你可以继续学习，稍后再试。',
     aiNote: '由 AI 根据官方指南的段落撰写，未经审核员核对，可能有误。',
   },
 
@@ -446,6 +447,7 @@ export const zhHans: Messages = {
     questionLabel: '你关于{country}考试的问题',
     ask: '提问',
     keys: '按 Enter 发送，Shift+Enter 换行。',
+    unavailable: '辅导老师暂时无法使用。你的问题仍保留在输入框中，请稍后再试。',
     remaining: '{count, plural, other {今天还可以提 # 个问题。}}',
     opening: '正在打开辅导老师',
   },

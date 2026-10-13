@@ -22,6 +22,13 @@ describe('what AI use costs', () => {
     ).toBeCloseTo(2);
   });
 
+  it('prices the second model, Gemini, at its own list price', () => {
+    const model = 'gemini-3.5-flash-lite';
+    expect(aiCostUsd({ ...none, model, input: 1_000_000 })).toBeCloseTo(0.3);
+    expect(aiCostUsd({ ...none, model, output: 1_000_000 })).toBeCloseTo(2.5);
+    expect(aiCostUsd({ ...none, model, cacheRead: 1_000_000 })).toBeCloseTo(0.03);
+  });
+
   it('gives no figure for a model it has no price for', () => {
     expect(aiCostUsd({ ...none, model: 'some-other-model', input: 1_000_000 })).toBeNull();
   });

@@ -127,8 +127,8 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
           <li>Neon: the database, and signing in (including sign-in emails).</li>
           <li>Vercel: hosting the website and the service behind the apps.</li>
           <li>
-            Anthropic: writing AI explanations and tutor replies. It receives the question and what
-            you asked, not who you are.
+            Anthropic, and Google when Anthropic’s service cannot answer: writing AI explanations
+            and tutor replies. They receive the question and what you asked, not who you are.
           </li>
           <li>Stripe: payments made on the website.</li>
           <li>Apple, Google and RevenueCat: purchases made in the phone apps.</li>

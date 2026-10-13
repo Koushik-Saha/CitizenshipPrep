@@ -444,6 +444,8 @@ export const fr: Messages = {
   explain: {
     more: 'Expliquer davantage',
     writing: 'Rédaction d’une explication…',
+    unavailable:
+      'L’explication par IA n’est pas disponible pour le moment. Vous pouvez continuer à étudier et réessayer plus tard.',
     aiNote:
       'Rédigé par IA à partir du passage du guide officiel. Non vérifié par un relecteur, peut contenir des erreurs.',
   },
@@ -493,6 +495,8 @@ export const fr: Messages = {
     questionLabel: 'Votre question sur le test ({country})',
     ask: 'Demander',
     keys: 'Entrée pour envoyer, Maj+Entrée pour un retour à la ligne.',
+    unavailable:
+      'Le tuteur n’est pas disponible pour le moment. Votre question est toujours dans le champ : veuillez réessayer plus tard.',
     remaining:
       '{count, plural, one {Il vous reste # question aujourd’hui.} other {Il vous reste # questions aujourd’hui.}}',
     opening: 'Ouverture du tuteur',
