@@ -1,6 +1,36 @@
 @import 'tailwindcss';
 @import '@oathly/tokens/theme.css';
 
+/*
+ * Everything that can be clicked shows the hand. Tailwind 4 leaves buttons
+ * with the arrow, as browsers do, so without this only the controls that
+ * asked for it had one. In the base layer, so a cursor-* class still wins.
+ */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  input:is(
+      [type='button'],
+      [type='submit'],
+      [type='reset'],
+      [type='checkbox'],
+      [type='radio'],
+      [type='file']
+    ):not(:disabled),
+  select:not(:disabled),
+  summary,
+  label:has(> input:is([type='checkbox'], [type='radio']):not(:disabled)) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role='button'][aria-disabled='true'],
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+}
+
 /* Readiness gauge: sweeps up from empty when the dashboard loads. */
 @keyframes gauge-fill {
   from {
