@@ -5,6 +5,7 @@ import {
   approveTranslation,
   bulkQuestionActions,
   bulkTranslationActions,
+  deleteQuestion,
   rejectQuestion,
   rejectTranslation,
   retireQuestion,
@@ -13,6 +14,7 @@ import {
   reviewQuestionsInBulk,
   reviewTranslationsInBulk,
   saveQuestionEdits,
+  unpublishQuestion,
   type BulkOutcome,
   type QuestionEdits,
   type TranslationEdits,
@@ -20,7 +22,7 @@ import {
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { audit, getDb, requireReviewer } from '@/lib/admin';
+import { audit, getDb, requireAdmin, requireReviewer } from '@/lib/admin';
 import { questionHref, queueContext, queueHref } from '@/lib/review-queue';
 import { revalidatePublicContent } from '@/lib/revalidate';
 
@@ -153,6 +155,46 @@ export async function retire(id: string, form: FormData) {
   finish(problem, here, onward);
 }
 
+/** Back to the review queue: learners stop seeing it, and nothing is lost. */
+export async function unpublish(id: string, form: FormData) {
+  const problem = await attempt('question.unpublish', { type: 'question', id }, (reviewerId) =>
+    unpublishQuestion(getDb(), id, reviewerId, text(form, 'note')),
+  );
+  const { here, onward } = afterDecision(id, form, 'unpublished');
+  finish(problem, here, onward);
+}
+
+/**
+ * Deletes one question for good. Admins only, and the form has to carry the
+ * tick that says they know it cannot be undone. What the question said is
+ * written to the record, since nothing else of it remains.
+ */
+export async function remove(id: string, form: FormData) {
+  const admin = await requireAdmin();
+  const { here, onward } = afterDecision(id, form, 'deleted');
+  let problem: string | null = null;
+  try {
+    if (form.get('sure') !== 'on') {
+      throw new ReviewError('Tick the box to confirm that you want it deleted for good.');
+    }
+    const deleted = await deleteQuestion(getDb(), id, admin.id);
+    await audit(
+      admin,
+      'question.delete',
+      { type: 'question', id },
+      {
+        country: deleted.countryCode,
+        status: deleted.status,
+        text: deleted.text,
+      },
+    );
+  } catch (error) {
+    if (!(error instanceof ReviewError)) throw error;
+    problem = error.message;
+  }
+  finish(problem, here, onward);
+}
+
 export async function approveTranslated(id: string, locale: string, form: FormData) {
   const problem = await attempt(
     'translation.approve',
@@ -209,6 +251,13 @@ async function decideInBulk(
     if (action === 'approve' && Number(text(form, 'confirmed')) !== new Set(ids).size) {
       throw new ReviewError('Confirm how many you are approving, then approve them.');
     }
+    // Deleting is for admins, and goes through a dialog of its own in the same way.
+    if (action === 'delete') {
+      if (reviewer.role !== 'admin') throw new ReviewError('Only an admin can delete questions.');
+      if (form.get('sure') !== 'on' || Number(text(form, 'deleting')) !== new Set(ids).size) {
+        throw new ReviewError('Confirm how many you are deleting, then delete them.');
+      }
+    }
     outcome = await decide(reviewer.id, action, ids, text(form, 'note'));
   } catch (error) {
     if (!(error instanceof ReviewError)) throw error;
@@ -219,6 +268,16 @@ async function decideInBulk(
     ids: [...new Set(ids)].slice(0, 200),
     done: outcome.done,
     failed: outcome.failed.length,
+    // What the deleted ones said: this line is all that is left of them.
+    ...(outcome.deleted
+      ? {
+          deleted: outcome.deleted.map(({ id, countryCode, text: said }) => ({
+            id,
+            country: countryCode,
+            text: said.slice(0, 120),
+          })),
+        }
+      : {}),
   });
   revalidatePath('/admin/content', 'layout');
   if (outcome.done > 0) revalidatePublicContent();

@@ -161,7 +161,7 @@ export interface QueueQuestion {
   needsFreshnessCheck: boolean;
 }
 
-export type QuestionQueue = 'pending' | 'source-changed';
+export type QuestionQueue = 'pending' | 'source-changed' | 'published';
 
 /** Which flagged questions to show. */
 export const queueFlags = ['duplicate', 'no-source', 'has-source', 'freshness'] as const;
@@ -251,6 +251,7 @@ const QUESTION_QUEUE_FROM = `
      where ($2::text is null or q.country_code = $2)
        and case $1
              when 'pending' then q.status in ('draft', 'in_review')
+             when 'published' then q.status = 'published'
              else q.source_changed_at is not null and q.status in ('draft', 'in_review', 'published')
            end
        and ($3::text is null or wording.text ilike $3)
@@ -1003,6 +1004,97 @@ export async function retireQuestion(
   });
 }
 
+/**
+ * Takes a published question back to the review queue. Learners stop seeing
+ * it at once and its verification stamp is cleared: it is waiting to be
+ * checked again, and approving it publishes it as before. Nothing is lost.
+ */
+export async function unpublishQuestion(
+  pool: pg.Pool,
+  questionId: string,
+  reviewerId: string,
+  note?: string,
+): Promise<void> {
+  await withTransaction(pool, async (db) => {
+    await assertStaff(db, reviewerId);
+    const unpublished = await db.query(
+      `update public.questions
+       set status = 'in_review', verified_by = null, last_verified_at = null
+       where id = $1 and status = 'published'`,
+      [questionId],
+    );
+    if (!unpublished.rowCount) {
+      throw new ReviewError('Only a published question can be unpublished.');
+    }
+    // Its wording is a draft again, as it was before it was approved.
+    await db.query(
+      `update public.question_translations
+       set status = 'draft', reviewed_by = null, reviewed_at = null
+       where question_id = $1 and translated_from is null`,
+      [questionId],
+    );
+    await recordDecision(db, { questionId, reviewerId, action: 'unpublished', note });
+  });
+}
+
+/** What a deleted question was, for the record of what staff do: it is all that is left of it. */
+export interface DeletedQuestion {
+  id: string;
+  countryCode: string;
+  status: string;
+  text: string;
+}
+
+/**
+ * Deletes a question for good, with its wording, translations, reports and
+ * review history. Admins only, and never a question a learner has answered:
+ * their results are built on it, so that one is unpublished or retired
+ * instead. There is no way back from this; unpublishing is the way to take a
+ * question down and keep it.
+ */
+export async function deleteQuestion(
+  pool: pg.Pool,
+  questionId: string,
+  adminId: string,
+): Promise<DeletedQuestion> {
+  try {
+    return await withTransaction(pool, async (db) => {
+      const admin = await db.query(
+        `select 1 from public.user_roles where user_id = $1 and role = 'admin'`,
+        [adminId],
+      );
+      if (!admin.rowCount) throw new ReviewError('Only an admin can delete a question.');
+      const { rows } = await db.query<{ country_code: string; status: string; text: string }>(
+        `select q.country_code, q.status::text,
+                coalesce((select t.text from public.question_translations t
+                          where t.question_id = q.id
+                          order by (t.translated_from is null) desc, t.created_at limit 1), '') as text
+         from public.questions q where q.id = $1 for update`,
+        [questionId],
+      );
+      const question = rows[0];
+      if (!question) throw new ReviewError('That question is no longer there.');
+      await db.query('delete from public.questions where id = $1', [questionId]);
+      return {
+        id: questionId,
+        countryCode: question.country_code,
+        status: question.status,
+        text: question.text.slice(0, 300),
+      };
+    });
+  } catch (error) {
+    // Something still refers to it, which is a learner's answer. Postgres says
+    // so as 23001 (restrict) or 23503 (foreign key), depending on its version.
+    const code = (error as { code?: string }).code;
+    if (code === '23001' || code === '23503') {
+      throw new ReviewError(
+        'Learners have already answered it, so it cannot be deleted. Unpublish or retire it instead.',
+      );
+    }
+    throw error;
+  }
+}
+
 // --- Translations --------------------------------------------------------------------
 
 export interface TranslationForReview {
@@ -1102,7 +1194,14 @@ export async function rejectTranslation(
 /** The most one bulk decision covers: more than a reviewer can honestly have read is too many. */
 export const BULK_LIMIT = 200;
 
-export const bulkQuestionActions = ['approve', 'reject', 'reverify', 'retire'] as const;
+export const bulkQuestionActions = [
+  'approve',
+  'reject',
+  'reverify',
+  'retire',
+  'unpublish',
+  'delete',
+] as const;
 export type BulkQuestionAction = (typeof bulkQuestionActions)[number];
 
 export const bulkTranslationActions = ['approve', 'reject'] as const;
@@ -1112,6 +1211,8 @@ export type BulkTranslationAction = (typeof bulkTranslationActions)[number];
 export interface BulkOutcome {
   done: number;
   failed: { id: string; reason: string }[];
+  /** What was deleted, when deleting: for the record, as nothing else of it remains. */
+  deleted?: DeletedQuestion[];
 }
 
 function checkBulk(count: number, action: string, note: string) {
@@ -1144,7 +1245,8 @@ async function eachOnItsOwn(
 
 /**
  * The same decision on several questions: approve (publish as drafted),
- * reject, confirm after a source change, or retire. Each is recorded as the
+ * reject, confirm after a source change, retire, unpublish (back to the
+ * queue) or delete for good. Each is recorded as the
  * reviewer's own decision, exactly as if made one at a time, so approving in
  * bulk is still the reviewer saying they have checked each one.
  */
@@ -1157,7 +1259,8 @@ export async function reviewQuestionsInBulk(
 ): Promise<BulkOutcome> {
   const ids = [...new Set(questionIds)];
   checkBulk(ids.length, action, note);
-  return eachOnItsOwn(ids, async (id) => {
+  const deleted: DeletedQuestion[] = [];
+  const outcome = await eachOnItsOwn(ids, async (id) => {
     if (!UUID.test(id)) throw new ReviewError('Not a question.');
     if (action === 'approve') {
       // Several at once is for questions that can be checked at a glance. One
@@ -1176,8 +1279,12 @@ export async function reviewQuestionsInBulk(
       await approveQuestion(pool, id, reviewerId);
     } else if (action === 'reject') await rejectQuestion(pool, id, reviewerId, note);
     else if (action === 'reverify') await reverifyQuestion(pool, id, reviewerId, note || undefined);
+    else if (action === 'unpublish')
+      await unpublishQuestion(pool, id, reviewerId, note || undefined);
+    else if (action === 'delete') deleted.push(await deleteQuestion(pool, id, reviewerId));
     else await retireQuestion(pool, id, reviewerId, note);
   });
+  return action === 'delete' ? { ...outcome, deleted } : outcome;
 }
 
 /**

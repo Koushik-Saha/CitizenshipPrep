@@ -409,6 +409,9 @@ test('several questions are approved or rejected at once', async ({ page }) => {
   await expect(boxes).toHaveCount(4);
 
   // An approval that did not come through the dialog is refused by the server.
+  // The dialog forgets what it showed once it has closed, which the page
+  // hears of a moment after: wait for that, or this races it.
+  await expect(page.locator('input[name="confirmed"]')).toHaveValue('0');
   await page.evaluate(() => {
     const form = document.querySelector<HTMLInputElement>('input[name="ids"]')!.form!;
     const promise = document.createElement('input');
@@ -469,6 +472,117 @@ test('several questions are approved or rejected at once', async ({ page }) => {
   await bar.getByRole('button', { name: 'Reject' }).click();
   await expect(page.getByRole('status').filter({ hasText: '2 rejected.' })).toBeVisible();
   await expect(page.getByText('Nothing matches these filters.')).toBeVisible();
+});
+
+test('published questions are listed, and can be unpublished or deleted', async ({
+  page,
+  browser,
+}) => {
+  const tag = `pub ${Math.random().toString(36).slice(2, 8)}`;
+  await addQuestionsToReview([95, 96, 98], tag);
+  const filter = `country=ZZ&q=${encodeURIComponent(tag)}`;
+  const { userId } = await signInAsReviewer(page, `/admin/content?view=questions&${filter}`);
+  const boxes = page.locator('input[name="ids"]');
+  const bar = page.getByTestId('bulk-bar');
+  const dialog = page.getByRole('dialog');
+  const status = (text: string | RegExp) => page.getByRole('status').filter({ hasText: text });
+
+  // Publish the three, so there is something published to see.
+  await page.getByLabel('Select all 3').check();
+  await bar.getByRole('button', { name: 'Approve and publish' }).click();
+  await dialog.getByLabel('I have checked each of them against its source.').check();
+  await dialog.getByRole('button', { name: 'Approve 3 questions' }).click();
+  await expect(status('3 approved and published.')).toBeVisible();
+
+  // They are in the Published list, which keeps the filter.
+  await page
+    .getByRole('navigation', { name: 'Queues' })
+    .getByRole('link', { name: /^Published/ })
+    .click();
+  await expect(page).toHaveURL(/view=published/);
+  await expect(boxes).toHaveCount(3);
+  await expect(page.getByText('These are what learners see now.')).toBeVisible();
+
+  // Unpublishing sends one back to the review queue.
+  await page.getByLabel(/Select: Testland question 95/).check();
+  await expect(bar).toBeVisible();
+  await expectAccessibleInBothThemes(page, 'published list, one selected');
+  await bar.getByRole('button', { name: 'Unpublish' }).click();
+  await expect(status('1 unpublished.')).toBeVisible();
+  await expect(boxes).toHaveCount(2);
+
+  // Deleting asks first, and says it cannot be undone.
+  await page.getByLabel(/Select: Testland question 96/).check();
+  await bar.getByRole('button', { name: 'Delete' }).click();
+  await expect(dialog.getByRole('heading')).toHaveText('Delete 1 question for good?');
+  await expect(dialog.getByTestId('delete-count')).toContainText('This cannot be undone.');
+  await expectAccessible(page, 'published list, confirming a deletion');
+  const confirm = dialog.getByRole('button', { name: 'Delete 1 question' });
+  await expect(confirm).toBeDisabled();
+  // Cancelling deletes nothing.
+  await dialog.getByRole('button', { name: 'Cancel' }).click();
+  await expect(boxes).toHaveCount(2);
+
+  // A deletion that did not come through the dialog is refused by the server.
+  await expect(page.locator('input[name="deleting"]')).toHaveValue('0');
+  await page.evaluate(() => {
+    const form = document.querySelector<HTMLInputElement>('input[name="ids"]')!.form!;
+    const button = document.createElement('button');
+    button.name = 'decision';
+    button.value = 'delete';
+    button.hidden = true;
+    form.append(button);
+    form.requestSubmit(button);
+  });
+  await expect(alert(page, /Confirm how many you are deleting/)).toBeVisible();
+  await expect(boxes).toHaveCount(2);
+
+  await page.getByLabel(/Select: Testland question 96/).check();
+  await bar.getByRole('button', { name: 'Delete' }).click();
+  await dialog.getByLabel('I understand they cannot be brought back.').check();
+  await confirm.click();
+  await expect(status('1 deleted for good.')).toBeVisible();
+  await expect(boxes).toHaveCount(1);
+
+  // From the question's own page: unpublish it, then delete it for good.
+  await page.getByRole('link', { name: /Testland question 98/ }).click();
+  await page.getByRole('button', { name: 'Unpublish question' }).click();
+  await expect(status(/Unpublished\. It is back in the review queue/)).toBeVisible();
+  await expect(page.getByText('Nothing matches these filters.')).toBeVisible();
+
+  // The unpublished ones are waiting in the review queue again.
+  await page.goto(`/admin/content?view=questions&${filter}`);
+  await expect(boxes).toHaveCount(2);
+  await page.getByRole('link', { name: /Testland question 98/ }).click();
+  await page.getByLabel('I understand it cannot be brought back.').check();
+  await page.getByRole('button', { name: 'Delete question' }).click();
+  await expect(status('Deleted for good.')).toBeVisible();
+
+  // Who did what is on the record.
+  const trail = await auditTrail(userId);
+  expect(trail).toEqual(
+    expect.arrayContaining([
+      'question.bulk-unpublish',
+      'question.bulk-delete',
+      'question.unpublish',
+      'question.delete',
+    ]),
+  );
+
+  // A reviewer who is not an admin is not offered "delete" at all.
+  const other = await browser.newContext();
+  const reviewer = await other.newPage();
+  await signInAsReviewer(reviewer, `/admin/content?view=questions&${filter}`, 'reviewer');
+  await reviewer.getByLabel(/Select: Testland question 95/).check();
+  await expect(
+    reviewer.getByTestId('bulk-bar').getByRole('button', { name: 'Reject' }),
+  ).toBeVisible();
+  await expect(reviewer.getByRole('button', { name: 'Delete' })).toHaveCount(0);
+  // Tidy up: the last of this test's questions.
+  await reviewer.getByTestId('bulk-bar').getByLabel('Reason, if rejecting').fill('End of test.');
+  await reviewer.getByTestId('bulk-bar').getByRole('button', { name: 'Reject' }).click();
+  await expect(reviewer.getByRole('status').filter({ hasText: '1 rejected.' })).toBeVisible();
+  await other.close();
 });
 
 test('the brand page is accessible', async ({ page }) => {

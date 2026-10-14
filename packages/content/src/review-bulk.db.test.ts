@@ -23,16 +23,21 @@ const url = process.env.TEST_DATABASE_URL;
 const COUNTRY = 'ZN';
 const REVIEWER = { id: 'test:bulk-reviewer', displayName: 'Bulk Reviewer' };
 const LEARNER = 'test:bulk-learner';
+const ADMIN = { id: 'test:bulk-admin', displayName: 'Bulk Admin' };
 
 describe.skipIf(!url)('the review queue: filters and bulk decisions', () => {
   let pool: pg.Pool;
   const ids: Record<string, string> = {};
 
   const cleanUp = async () => {
+    // A learner's answers hold their questions in place, so they go first.
+    await pool.query('delete from public.attempts where user_id = $1', [LEARNER]);
     await pool.query('delete from public.questions where country_code = $1', [COUNTRY]);
     await pool.query('delete from public.source_documents where country_code = $1', [COUNTRY]);
     await pool.query('delete from public.countries where iso_code = $1', [COUNTRY]);
-    await pool.query('delete from public.profiles where id = any($1)', [[REVIEWER.id, LEARNER]]);
+    await pool.query('delete from public.profiles where id = any($1)', [
+      [REVIEWER.id, ADMIN.id, LEARNER],
+    ]);
   };
   const status = async (id: string) =>
     (
@@ -461,5 +466,137 @@ describe.skipIf(!url)('the review queue: filters and bulk decisions', () => {
     );
     expect(rejected).toEqual({ done: 1, failed: [] });
     expect(await waiting({ countryCode: COUNTRY })).toEqual([]);
+  });
+
+  /** Two more questions with a source, approved: what a published list is made of. */
+  const publishTwo = async (first: string, second: string) => {
+    const topic = await pool.query<{ id: string }>(
+      `select id from public.topics where country_code = $1 and slug = 'history'`,
+      [COUNTRY],
+    );
+    const made: string[] = [];
+    for (const text of [first, second]) {
+      const { rows } = await pool.query<{ id: string }>(
+        `insert into public.questions
+           (country_code, topic_id, difficulty, type, correct_answer, source_url, status,
+            source_locator)
+         values ($1, $2, 1, 'multiple_choice', '{"keys": ["a"]}', 'https://example.org/guide',
+                 'in_review', 'Guide, page 9')
+         returning id`,
+        [COUNTRY, topic.rows[0]!.id],
+      );
+      made.push(rows[0]!.id);
+      await pool.query(
+        `insert into public.question_translations (question_id, locale, text, options, status)
+         values ($1, 'en', $2, '[{"key":"a","text":"A"},{"key":"b","text":"B"}]', 'draft')`,
+        [rows[0]!.id, text],
+      );
+    }
+    expect(await reviewQuestionsInBulk(pool, REVIEWER.id, 'approve', made)).toMatchObject({
+      done: 2,
+    });
+    return made as [string, string];
+  };
+
+  it('lists what is published, and takes questions back to the queue without losing them', async () => {
+    const [river, lake] = await publishTwo('Which river is longest?', 'Which lake is deepest?');
+    const published = async () =>
+      (await listQuestionQueue(pool, 'published', COUNTRY)).map((question) => question.text);
+    expect(await published()).toEqual(
+      expect.arrayContaining(['Which river is longest?', 'Which lake is deepest?']),
+    );
+    // Nothing waiting for review is in the published list.
+    expect(await listQuestionQueue(pool, 'pending', COUNTRY)).toEqual([]);
+
+    const outcome = await reviewQuestionsInBulk(
+      pool,
+      REVIEWER.id,
+      'unpublish',
+      [river, lake, ids.vote!],
+      'Published before they were checked.',
+    );
+    expect(outcome).toEqual({
+      done: 2,
+      failed: [{ id: ids.vote, reason: 'Only a published question can be unpublished.' }],
+    });
+    // Back in the queue, no longer stamped as verified, wording a draft again.
+    for (const id of [river, lake]) {
+      expect(await status(id)).toEqual({ status: 'in_review', verified_by: null });
+    }
+    const wording = await pool.query<{ status: string; reviewed_by: string | null }>(
+      'select status::text, reviewed_by from public.question_translations where question_id = $1',
+      [river],
+    );
+    expect(wording.rows).toEqual([{ status: 'draft', reviewed_by: null }]);
+    expect(await published()).not.toContain('Which river is longest?');
+    expect(
+      (await listQuestionQueue(pool, 'pending', COUNTRY)).map((question) => question.text),
+    ).toEqual(['Which river is longest?', 'Which lake is deepest?']);
+    // Its history says what happened and why.
+    const history = (await getQuestionForReview(pool, river))!.history.map(
+      (entry) => `${entry.action}: ${entry.note ?? ''}`,
+    );
+    expect(history).toContain('unpublished: Published before they were checked.');
+    // Approving it publishes it again, as before.
+    expect(await reviewQuestionsInBulk(pool, REVIEWER.id, 'approve', [river])).toMatchObject({
+      done: 1,
+    });
+    expect(await status(river)).toEqual({ status: 'published', verified_by: REVIEWER.id });
+    expect(await reviewQuestionsInBulk(pool, REVIEWER.id, 'unpublish', [river])).toMatchObject({
+      done: 1,
+    });
+  });
+
+  it('deletes for good, for admins only, and never a question a learner has answered', async () => {
+    const pending = await listQuestionQueue(pool, 'pending', COUNTRY);
+    const river = pending.find((question) => question.text === 'Which river is longest?')!.id;
+    const lake = pending.find((question) => question.text === 'Which lake is deepest?')!.id;
+
+    // A reviewer who is not an admin cannot.
+    expect(await reviewQuestionsInBulk(pool, REVIEWER.id, 'delete', [lake])).toMatchObject({
+      done: 0,
+      failed: [{ id: lake, reason: 'Only an admin can delete a question.' }],
+    });
+    await ensureReviewer(pool, ADMIN, 'admin');
+
+    // A learner has answered one of them.
+    const attempt = await pool.query<{ id: string }>(
+      `insert into public.attempts (user_id, country_code) values ($1, $2) returning id`,
+      [LEARNER, COUNTRY],
+    );
+    await pool.query(
+      `insert into public.answer_events
+         (user_id, attempt_id, question_id, question_version, selected_answer, correct, time_ms)
+       values ($1, $2, $3, 1, '{"keys": ["a"]}', true, 1200)`,
+      [LEARNER, attempt.rows[0]!.id, river],
+    );
+
+    const outcome = await reviewQuestionsInBulk(pool, ADMIN.id, 'delete', [river, lake]);
+    expect(outcome).toEqual({
+      done: 1,
+      failed: [
+        {
+          id: river,
+          reason:
+            'Learners have already answered it, so it cannot be deleted. Unpublish or retire it instead.',
+        },
+      ],
+      // What it said is handed back, to be written to the record.
+      deleted: [
+        { id: lake, countryCode: COUNTRY, status: 'in_review', text: 'Which lake is deepest?' },
+      ],
+    });
+    // The answered one is untouched; the other is gone with everything of its own.
+    expect((await status(river)).status).toBe('in_review');
+    for (const table of ['questions', 'question_translations', 'question_reviews']) {
+      const column = table === 'questions' ? 'id' : 'question_id';
+      const left = await pool.query(`select 1 from public.${table} where ${column} = $1`, [lake]);
+      expect(left.rows, table).toHaveLength(0);
+    }
+    // Deleting it again says it is not there.
+    expect(await reviewQuestionsInBulk(pool, ADMIN.id, 'delete', [lake])).toMatchObject({
+      done: 0,
+      failed: [{ id: lake, reason: 'That question is no longer there.' }],
+    });
   });
 });

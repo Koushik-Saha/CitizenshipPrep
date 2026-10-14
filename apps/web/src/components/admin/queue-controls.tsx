@@ -238,3 +238,82 @@ export function ConfirmApprove({
     </>
   );
 }
+
+/**
+ * The bulk bar's "delete": a dialog that says how many will go and that they
+ * cannot be brought back, with a box to tick before anything is sent. The
+ * server refuses a deletion that did not come through here.
+ */
+export function ConfirmDelete({ noun }: { noun: string }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const title = useId();
+  const [selected, setSelected] = useState(0);
+  const [sure, setSure] = useState(false);
+  const plural = (count: number) => `${count} ${noun}${count === 1 ? '' : 's'}`;
+
+  return (
+    <>
+      <button
+        type="button"
+        className={buttonClass.danger}
+        onClick={(event) => {
+          setSelected(
+            event.currentTarget.form?.querySelectorAll('input[name="ids"]:checked').length ?? 0,
+          );
+          setSure(false);
+          dialog.current?.showModal();
+        }}
+      >
+        Delete
+      </button>
+      <dialog
+        ref={dialog}
+        aria-labelledby={title}
+        onClose={() => setSelected(0)}
+        className="bg-surface-raised text-fg border-border m-auto w-full max-w-md rounded-xl border p-6 shadow-lg backdrop:bg-black/50"
+      >
+        <h2 id={title} className="font-display text-xl font-semibold">
+          Delete {plural(selected)} for good?
+        </h2>
+        <p className="mt-2 text-sm" data-testid="delete-count">
+          {plural(selected)} will be removed with {selected === 1 ? 'its' : 'their'} translations,
+          reports and history. This cannot be undone. To take a question down and keep it, unpublish
+          it instead.
+        </p>
+        <p className="text-fg-muted mt-2 text-sm">
+          A question a learner has already answered is not deleted: their results are built on it.
+        </p>
+        <label className="mt-4 flex items-start gap-2.5 text-sm">
+          <input
+            type="checkbox"
+            name="sure"
+            className="accent-primary mt-0.5 size-4"
+            checked={sure}
+            onChange={(event) => setSure(event.target.checked)}
+          />
+          <span>I understand they cannot be brought back.</span>
+        </label>
+        {/* What the admin was shown, for the server to hold the deletion to. */}
+        <input type="hidden" name="deleting" value={selected} />
+        <div className="mt-6 flex flex-wrap justify-end gap-3">
+          <button
+            type="button"
+            className={buttonClass.secondary}
+            onClick={() => dialog.current?.close()}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            name="decision"
+            value="delete"
+            disabled={!sure || selected === 0}
+            className={`${buttonClass.danger} disabled:cursor-not-allowed disabled:opacity-50`}
+          >
+            Delete {plural(selected)}
+          </button>
+        </div>
+      </dialog>
+    </>
+  );
+}

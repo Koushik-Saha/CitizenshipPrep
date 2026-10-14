@@ -20,11 +20,17 @@ import {
   type QueueFlag,
   type QueueQuestion,
   type QueueTranslation,
+  type QuestionQueue,
 } from '@oathly/content/review';
 import { languageName } from '@oathly/i18n';
 import Link from 'next/link';
 
-import { BulkSelection, ConfirmApprove, FilterForm } from '@/components/admin/queue-controls';
+import {
+  BulkSelection,
+  ConfirmApprove,
+  ConfirmDelete,
+  FilterForm,
+} from '@/components/admin/queue-controls';
 import { ApprovedToday } from '@/components/admin/review-keys';
 import { Badge, buttonClass, focusRing, Notice, StatusBadge } from '@/components/ui';
 import { getDb, requireReviewer } from '@/lib/admin';
@@ -32,7 +38,7 @@ import { queueContext, questionHref } from '@/lib/review-queue';
 
 import { decideQuestions, decideTranslations } from './actions';
 
-const views = ['questions', 'translations', 'source'] as const;
+const views = ['questions', 'published', 'translations', 'source'] as const;
 type View = (typeof views)[number];
 
 const flagLabels: Record<QueueFlag, string> = {
@@ -80,6 +86,14 @@ function doneMessage(done: string | undefined, count: number | null): string | n
       return 'Marked as still correct.';
     case 'retired':
       return 'Retired. Learners no longer see it.';
+    case 'unpublished':
+      return 'Unpublished. It is back in the review queue and learners no longer see it.';
+    case 'deleted':
+      return 'Deleted for good.';
+    case 'unpublish':
+      return several('Unpublished.', 'unpublished. They are back in the review queue.');
+    case 'delete':
+      return several('Deleted for good.', 'deleted for good.');
     case 'approve':
       return several('Approved and published.', 'approved and published.');
     case 'reject':
@@ -122,6 +136,9 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
   const failed = Number(single(params.failed) ?? 0);
   const problem = single(params.problem);
 
+  const queue: QuestionQueue =
+    view === 'source' ? 'source-changed' : view === 'published' ? 'published' : 'pending';
+
   const db = getDb();
   const [counts, approvals, countries, topics, locales] = await Promise.all([
     getQueueCounts(db, country),
@@ -155,6 +172,7 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
 
   const tabs: { view: View; label: string; count: number }[] = [
     { view: 'questions', label: 'Questions', count: counts.questions },
+    { view: 'published', label: 'Published', count: counts.published },
     { view: 'translations', label: 'Translations', count: counts.translations },
     { view: 'source', label: 'Source changed', count: counts.sourceChanged },
   ];
@@ -196,8 +214,9 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
         <div>
           <h1 className="font-display text-3xl font-semibold">Review queue</h1>
           <p className="text-fg-muted mt-2 max-w-[70ch]">
-            Nothing here is visible to learners until you approve it. Check each question against
-            its source passage.
+            {view === 'published'
+              ? 'These are what learners see now. Unpublish sends a question back to the review queue and keeps it; delete removes it for good.'
+              : 'Nothing here is visible to learners until you approve it. Check each question against its source passage.'}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -453,13 +472,14 @@ export default async function ContentQueue({ searchParams }: PageProps<'/admin/c
           />
         ) : (
           <QuestionList
-            queue={view === 'source' ? 'source-changed' : 'pending'}
+            queue={queue}
             result={await pageQuestionQueue(
               db,
-              view === 'source' ? 'source-changed' : 'pending',
+              queue,
               { countryCode: country, search, topic, flag, origin, level, type, sort },
               paging,
             )}
+            canDelete={reviewer.role === 'admin'}
             back={back}
             pageHref={(page) => href({ page: page > 1 ? String(page) : undefined })}
             filtered={chips.length > 0}
@@ -487,7 +507,10 @@ const reasonField = `${focusRing} border-border-strong bg-surface h-10 w-full ro
 function BulkBar({
   approve,
   refuse,
+  remove = false,
 }: {
+  /** Whether to offer "delete": admins only. */
+  remove?: boolean;
   approve: {
     decision: string;
     label: string;
@@ -523,10 +546,11 @@ function BulkBar({
           type="submit"
           name="decision"
           value={refuse.decision}
-          className={buttonClass.danger}
+          className={remove ? buttonClass.secondary : buttonClass.danger}
         >
           {refuse.label}
         </button>
+        {remove && <ConfirmDelete noun="question" />}
       </div>
     </div>
   );
@@ -612,8 +636,11 @@ function QuestionList({
   back,
   pageHref,
   filtered,
+  canDelete,
 }: {
-  queue: 'pending' | 'source-changed';
+  queue: QuestionQueue;
+  /** Whether this reviewer may delete questions: admins only. */
+  canDelete: boolean;
   result: QueuePage<QueueQuestion>;
   back: string;
   pageHref: (page: number) => string;
@@ -627,7 +654,9 @@ function QuestionList({
           ? 'Nothing matches these filters.'
           : queue === 'pending'
             ? 'No questions are waiting for review. Draft more with “pnpm content draft”.'
-            : 'No questions are flagged. The monthly source check adds them here when a cited passage changes.'}
+            : queue === 'published'
+              ? 'Nothing is published yet. Approve questions in the Questions tab and they appear here.'
+              : 'No questions are flagged. The monthly source check adds them here when a cited passage changes.'}
       </Empty>
     );
   }
@@ -651,6 +680,13 @@ function QuestionList({
                 },
               }}
               refuse={{ decision: 'reject', label: 'Reject', reason: 'Reason, if rejecting' }}
+              remove={canDelete}
+            />
+          ) : queue === 'published' ? (
+            <BulkBar
+              approve={{ decision: 'unpublish', label: 'Unpublish' }}
+              refuse={{ decision: 'retire', label: 'Retire', reason: 'Reason, if retiring' }}
+              remove={canDelete}
             />
           ) : (
             <BulkBar

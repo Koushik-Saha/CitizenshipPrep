@@ -22,7 +22,7 @@ import {
 import { getDb, requireReviewer } from '@/lib/admin';
 import { queueContext, queueHref, questionHref } from '@/lib/review-queue';
 
-import { approve, reject, retire, reverify, saveQuestion } from '../../actions';
+import { approve, reject, remove, retire, reverify, saveQuestion, unpublish } from '../../actions';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -31,6 +31,7 @@ const historyLabels: Record<string, string> = {
   edited: 'Edited',
   rejected: 'Rejected',
   reverified: 'Confirmed still correct',
+  unpublished: 'Unpublished: back in the review queue',
   translation_approved: 'Translation approved',
   translation_rejected: 'Translation rejected',
 };
@@ -43,6 +44,8 @@ const doneLabels: Record<string, string> = {
   rejected: 'Rejected.',
   reverified: 'Marked as still correct.',
   retired: 'Retired. Learners no longer see it.',
+  unpublished: 'Unpublished. It is back in the review queue and learners no longer see it.',
+  deleted: 'Deleted for good.',
 };
 
 const stepLink = buttonClass.secondary;
@@ -326,6 +329,18 @@ export default async function ReviewQuestion({
           )}
           {published && (
             <DecisionForm
+              title="Unpublish"
+              decision="unpublish"
+              queue={{ query: from.query, next: place?.next ?? null }}
+              hint="Sends the question back to the review queue. Learners stop seeing it at once, nothing is lost, and approving it publishes it again."
+              noteLabel="Note (optional)"
+              action={unpublish.bind(null, question.id)}
+              button="Unpublish question"
+              tone="secondary"
+            />
+          )}
+          {published && (
+            <DecisionForm
               title="Retire"
               decision="retire"
               queue={{ query: from.query, next: place?.next ?? null }}
@@ -336,6 +351,33 @@ export default async function ReviewQuestion({
               button="Retire question"
               tone="danger"
             />
+          )}
+          {reviewer.role === 'admin' && (
+            <form
+              action={remove.bind(null, question.id)}
+              data-decision="delete"
+              className="border-border mt-8 border-t pt-6"
+            >
+              <QueueFields query={from.query} next={place?.next ?? null} />
+              <h3 className="font-medium">Delete</h3>
+              <p className="text-fg-muted mt-1 text-sm">
+                Removes the question for good, with its translations, reports and history. It cannot
+                be undone{published ? '; to take it down and keep it, unpublish it' : ''}. A
+                question a learner has already answered cannot be deleted.
+              </p>
+              <label className="mt-3 flex items-start gap-2.5 text-sm">
+                <input
+                  type="checkbox"
+                  name="sure"
+                  required
+                  className="accent-primary mt-0.5 size-4"
+                />
+                <span>I understand it cannot be brought back.</span>
+              </label>
+              <button type="submit" className={`${buttonClass.danger} mt-3`}>
+                Delete question
+              </button>
+            </form>
           )}
         </section>
       </div>

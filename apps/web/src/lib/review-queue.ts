@@ -30,7 +30,8 @@ const read = (params: Params, name: string): string | undefined => {
 };
 
 export function queueContext(params: Params): QueueContext {
-  const view = read(params, 'view') === 'source' ? 'source' : 'questions';
+  const asked = read(params, 'view');
+  const view = asked === 'source' || asked === 'published' ? asked : 'questions';
   const country = read(params, 'country')?.toUpperCase();
   const filters: QueueFilters = {
     countryCode: country && /^[A-Z]{2}$/.test(country) ? country : undefined,
@@ -43,7 +44,7 @@ export function queueContext(params: Params): QueueContext {
     sort: queueSorts.find((candidate) => candidate === read(params, 'sort')),
   };
   const carried: Record<string, string | undefined> = {
-    view: view === 'source' ? 'source' : undefined,
+    view: view === 'questions' ? undefined : view,
     country: filters.countryCode,
     q: filters.search,
     topic: filters.topic,
@@ -59,7 +60,7 @@ export function queueContext(params: Params): QueueContext {
     if (value) query.set(name, value);
   }
   return {
-    queue: view === 'source' ? 'source-changed' : 'pending',
+    queue: view === 'source' ? 'source-changed' : view === 'published' ? 'published' : 'pending',
     filters,
     query: query.toString(),
   };
