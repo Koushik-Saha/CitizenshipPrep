@@ -12,6 +12,8 @@ import {
   createCheckout,
   createPortal,
   isBillingConfigured,
+  isOnSale,
+  planPrices,
   setPlanCancellation,
   siteOrigin,
 } from '@/lib/billing';
@@ -44,6 +46,8 @@ export async function startCheckout(form: FormData): Promise<void> {
         ? { plan, countryCode }
         : null;
   if (!purchase) redirect(plans);
+  // Only a plan whose price the page shows: the checkout charges that price.
+  if (!isOnSale(await planPrices(), purchase.plan)) redirect(plans);
   // Never take money for something already held.
   if (purchaseProblem(await accessUser(getDb(), user.userId), purchase)) redirect(plans);
 

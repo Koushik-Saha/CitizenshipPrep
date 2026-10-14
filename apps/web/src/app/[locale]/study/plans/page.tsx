@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { PlanRefresher } from '@/components/study/plan-refresher';
 import { buttonClass, focusRing, Notice } from '@/components/ui';
-import { isBillingConfigured, planPrices } from '@/lib/billing';
+import { isBillingConfigured, isOnSale, planPrices } from '@/lib/billing';
 import { getT } from '@/lib/i18n';
 import { requireMe } from '@/lib/user';
 
@@ -45,6 +45,12 @@ export default async function PlansPage({
   );
   const prices = await planPrices();
   const canBuy = isBillingConfigured();
+  // A plan is sold only with its price beside it: the checkout charges that price.
+  const onSale = {
+    pro_yearly: isOnSale(prices, 'pro_yearly'),
+    pro_monthly: isOnSale(prices, 'pro_monthly'),
+    country_pass: isOnSale(prices, 'country_pass'),
+  };
   const query = await searchParams;
   const justBought = query.purchase === 'done';
   const planChange = ['cancelled', 'kept', 'failed'].find((kind) => kind === query['plan-change']);
@@ -177,7 +183,8 @@ export default async function PlansPage({
         )}
       </section>
 
-      {!canBuy && (summary.canBuyPro || summary.passCountries.length > 0) && (
+      {((summary.canBuyPro && !(onSale.pro_yearly && onSale.pro_monthly)) ||
+        (summary.passCountries.length > 0 && !onSale.country_pass)) && (
         <div className="mt-6">
           <Notice tone="neutral">{t('plans.unavailable')}</Notice>
         </div>
@@ -197,7 +204,7 @@ export default async function PlansPage({
               type="submit"
               name="plan"
               value="pro_yearly"
-              disabled={!canBuy}
+              disabled={!onSale.pro_yearly}
               className={buttonClass.primary}
             >
               {t('plans.getYearly')}
@@ -208,7 +215,7 @@ export default async function PlansPage({
               type="submit"
               name="plan"
               value="pro_monthly"
-              disabled={!canBuy}
+              disabled={!onSale.pro_monthly}
               className={buttonClass.secondary}
             >
               {t('plans.getMonthly')}
@@ -235,7 +242,11 @@ export default async function PlansPage({
               <form key={code} action={startCheckout}>
                 <input type="hidden" name="plan" value="country_pass" />
                 <input type="hidden" name="countryCode" value={code} />
-                <button type="submit" disabled={!canBuy} className={buttonClass.secondary}>
+                <button
+                  type="submit"
+                  disabled={!onSale.country_pass}
+                  className={buttonClass.secondary}
+                >
                   {t('plans.getPass', { country: nameOf(code) })}
                 </button>
               </form>

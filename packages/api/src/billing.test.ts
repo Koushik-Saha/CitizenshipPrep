@@ -6,6 +6,7 @@ import {
   formatPrice,
   parsePlanChoice,
   planFromProductId,
+  planPriceFrom,
   plansPath,
   stripeDashboardUrl,
   planSummary,
@@ -34,6 +35,66 @@ describe('formatPrice', () => {
     expect(formatPrice({ amount: 799, currency: 'EUR' }, 'fr')).toMatch(/^7,99\s€$/);
     // Yen has no smaller unit.
     expect(formatPrice({ amount: 800, currency: 'jpy' }, 'en')).toBe('¥800');
+  });
+});
+
+describe('planPriceFrom', () => {
+  const monthly = {
+    active: true,
+    unit_amount: 799,
+    currency: 'usd',
+    type: 'recurring' as const,
+    recurring: { interval: 'month', interval_count: 1 },
+  };
+  const yearly = {
+    ...monthly,
+    unit_amount: 5999,
+    recurring: { interval: 'year', interval_count: 1 },
+  };
+  const once = { ...monthly, unit_amount: 1999, type: 'one_time' as const, recurring: null };
+
+  it('reads what each plan costs from the price that sells it', () => {
+    expect(planPriceFrom('pro_monthly', monthly)).toEqual({
+      plan: 'pro_monthly',
+      amount: 799,
+      currency: 'usd',
+    });
+    expect(planPriceFrom('pro_yearly', yearly)).toEqual({
+      plan: 'pro_yearly',
+      amount: 5999,
+      currency: 'usd',
+    });
+    expect(planPriceFrom('country_pass', once)).toEqual({
+      plan: 'country_pass',
+      amount: 1999,
+      currency: 'usd',
+    });
+  });
+
+  it('refuses a price billed on another schedule than the plan says', () => {
+    // "A month" on the page must be a month at the checkout, and a pass never renews.
+    expect(planPriceFrom('pro_monthly', yearly)).toBeNull();
+    expect(planPriceFrom('pro_yearly', monthly)).toBeNull();
+    expect(planPriceFrom('pro_monthly', once)).toBeNull();
+    expect(planPriceFrom('country_pass', monthly)).toBeNull();
+    expect(
+      planPriceFrom('pro_monthly', {
+        ...monthly,
+        recurring: { interval: 'month', interval_count: 3 },
+      }),
+    ).toBeNull();
+    expect(
+      planPriceFrom('pro_yearly', {
+        ...yearly,
+        recurring: { interval: 'month', interval_count: 12 },
+      }),
+    ).toBeNull();
+  });
+
+  it('refuses an archived price, and one without a fixed amount', () => {
+    expect(planPriceFrom('pro_monthly', { ...monthly, active: false })).toBeNull();
+    expect(planPriceFrom('pro_monthly', { ...monthly, unit_amount: null })).toBeNull();
+    expect(planPriceFrom('country_pass', { ...once, unit_amount: 0 })).toBeNull();
   });
 });
 

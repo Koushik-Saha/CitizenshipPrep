@@ -1,4 +1,4 @@
-import { checkoutTerms, type PlanPrice, type Purchase } from '@oathly/api/billing';
+import { checkoutTerms, planPriceFrom, type PlanPrice, type Purchase } from '@oathly/api/billing';
 import {
   applySubscriptionChange,
   changeFromStripeSubscription,
@@ -9,12 +9,13 @@ import {
   stripeProSubscriptionFor,
   type StripePrices,
 } from '@oathly/api/server';
-import { isSwitchedOn } from '@oathly/core';
+import { isSwitchedOn, paidPlans, type PaidPlan } from '@oathly/core';
 import type { UiLocale } from '@oathly/i18n';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 
 import { getDb } from './db';
+import { reportError } from './monitoring';
 
 // Stripe, for web purchases: Checkout to buy, the customer portal to manage,
 // and webhooks (app/api/billing/stripe/webhook) to record what happened.
@@ -67,9 +68,12 @@ const PRICE_TTL_MS = 10 * 60 * 1000;
 let cached: { at: number; prices: PlanPrice[] } | undefined;
 
 /**
- * What each plan costs, from Stripe, so a price is changed in one place.
- * Empty when billing is not set up or Stripe cannot be reached: the pages
- * then show the plans without prices rather than failing.
+ * What each plan costs, from Stripe, so a price is changed in one place: the
+ * pages show these and the checkout charges the same prices. A plan whose
+ * Stripe price does not charge what its label says (planPriceFrom) is left
+ * out and reported, and is then not sold. Empty when billing is not set up
+ * or Stripe cannot be reached: the pages then show the plans without prices
+ * or buy buttons rather than failing.
  */
 export async function planPrices(): Promise<PlanPrice[]> {
   const ids = stripePrices();
@@ -77,17 +81,33 @@ export async function planPrices(): Promise<PlanPrice[]> {
   if (cached && Date.now() - cached.at < PRICE_TTL_MS) return cached.prices;
   try {
     const stripe = getStripe();
-    const prices = await Promise.all(
-      (['pro_monthly', 'pro_yearly', 'country_pass'] as const).map(async (plan) => {
-        const price = await stripe.prices.retrieve(ids[plan]);
-        return { plan, amount: price.unit_amount ?? 0, currency: price.currency };
+    const found = await Promise.all(
+      paidPlans.map(async (plan) => {
+        const price = planPriceFrom(plan, await stripe.prices.retrieve(ids[plan]));
+        if (!price) {
+          reportError(
+            new Error(`The Stripe price set for ${plan} does not charge what the plan says.`),
+            {
+              where: 'billing-prices',
+              plan,
+            },
+          );
+        }
+        return price;
       }),
     );
+    const prices = found.filter((price) => price !== null);
     cached = { at: Date.now(), prices };
     return prices;
-  } catch {
+  } catch (error) {
+    reportError(error, { where: 'billing-prices' });
     return cached?.prices ?? [];
   }
+}
+
+/** Whether `plan` can be bought now: billing is set up and its price is known. */
+export function isOnSale(prices: readonly PlanPrice[], plan: PaidPlan): boolean {
+  return isBillingConfigured() && prices.some((price) => price.plan === plan);
 }
 
 /** This site's address, for the pages Stripe sends people back to. */

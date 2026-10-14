@@ -50,6 +50,17 @@ stays in force until the end of the period paid for, then ends.
    `customer.subscription.deleted` and `charge.refunded`. Put its signing
    secret in `STRIPE_WEBHOOK_SECRET`. Locally:
    `stripe listen --forward-to localhost:3000/api/billing/stripe/webhook`.
+4. Put the same five values (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and
+   the three `STRIPE_PRICE_*`) in the hosting provider's environment and
+   redeploy. Until all five are there, plans are described but not sold: no
+   prices and no buy buttons. A price that does not bill as its plan says (a
+   "monthly" price that is yearly, a pass that renews, an archived price)
+   keeps that plan off sale too, and is reported. Then check that the site
+   shows each plan at what Stripe charges, with the same key and prices:
+
+   ```sh
+   node --env-file=../../.env.local scripts/billing/prices-live.mjs https://<your site>
+   ```
 
 ## RevenueCat (mobile)
 

@@ -239,26 +239,28 @@ test('a learner who did not pass is thanked, and nobody is asked before their da
   await expect(page.getByTestId('exam-result-ask-ZZ')).toHaveCount(0);
 });
 
-test('a buy button on the landing page leads to the plans page, through sign-up if need be', async ({
+test('a plan is offered on the landing page only with its price, and leads through sign-up to the plans page', async ({
   page,
   browser,
 }) => {
-  // Someone signed out: each button goes to sign-in and names the plan.
+  // The tests' server has no Stripe, so no price is known: the paid plans are
+  // described, but nothing offers to sell them at a price nobody was shown.
   const visitor = await browser.newPage();
   await visitor.goto('/#pricing');
-  for (const [name, plan] of [
-    [t('plans.getYearly'), 'pro_yearly'],
-    [t('plans.getMonthly'), 'pro_monthly'],
-    [t('plans.getAPass'), 'country_pass'],
-  ] as const) {
-    await expect(visitor.getByRole('link', { name, exact: true })).toHaveAttribute(
-      'href',
-      `/sign-in?plan=${plan}`,
-    );
+  const pricing = visitor.locator('#pricing');
+  await expect(pricing.getByRole('heading', { name: t('plans.pro') })).toBeVisible();
+  for (const name of [t('plans.getYearly'), t('plans.getMonthly'), t('plans.getAPass')]) {
+    await expect(pricing.getByRole('link', { name, exact: true })).toHaveCount(0);
   }
+  await expect(pricing.getByText(t('plans.unavailable'))).toHaveCount(2);
+  await expect(pricing.getByRole('link', { name: t('landing.startFree') })).toHaveAttribute(
+    'href',
+    '/sign-in',
+  );
   await visitor.close();
 
-  // Someone new presses one, signs up and sets up their study: the plans come next.
+  // Someone new picks a plan (a buy button links to sign-in naming it), signs
+  // up and sets up their study: the plans come next.
   const user = newLearner();
   await page.goto(`/api/test/sign-in?user=${user}&secret=${process.env.TEST_SIGN_IN_SECRET}`);
   await page.waitForURL(/\/onboarding/);
@@ -271,8 +273,7 @@ test('a buy button on the landing page leads to the plans page, through sign-up 
   await expect(page.getByRole('heading', { name: t('plans.countryPass') })).toBeVisible();
 
   // Already set up: straight to the plan that was picked.
-  await page.goto('/#pricing');
-  await page.getByRole('link', { name: t('plans.getYearly'), exact: true }).click();
+  await page.goto('/sign-in?plan=pro_yearly');
   await page.waitForURL(/\/study\/plans\?plan=pro_yearly#pro$/);
   // A plan that is not sold is not carried anywhere.
   await page.goto('/sign-in?plan=https://elsewhere.example');

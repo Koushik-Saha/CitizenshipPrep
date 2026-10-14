@@ -37,6 +37,45 @@ export interface PlanPrice {
   currency: string;
 }
 
+/** A price as the payment provider describes it (Stripe's fields): what a checkout with it charges. */
+export interface ProviderPrice {
+  active: boolean;
+  /** Null for prices with no fixed amount (tiered, metered, pay what you want). */
+  unit_amount: number | null;
+  currency: string;
+  /** 'one_time' or 'recurring'; anything else is not a price a plan can be sold at. */
+  type: string;
+  recurring: { interval: string; interval_count: number } | null;
+}
+
+/** How often each plan is charged: every month, every year, or once. */
+const billedEvery: Record<PaidPlan, { interval: 'month' | 'year'; count: 1 } | 'once'> = {
+  pro_monthly: { interval: 'month', count: 1 },
+  pro_yearly: { interval: 'year', count: 1 },
+  country_pass: 'once',
+};
+
+/**
+ * What `plan` costs, read from the price that sells it, or null when that
+ * price would not charge what the plan's label says: archived, without a
+ * fixed amount, or billed on another schedule (a "monthly" price that is
+ * yearly, a pass that renews). The pages show a plan's price next to its
+ * buy button and the checkout charges that same price, so a plan whose price
+ * is null is shown as not on sale rather than with a wrong label.
+ */
+export function planPriceFrom(plan: PaidPlan, price: ProviderPrice): PlanPrice | null {
+  const amount = price.unit_amount;
+  if (!price.active || amount === null || !Number.isInteger(amount) || amount <= 0) return null;
+  const expected = billedEvery[plan];
+  const matches =
+    expected === 'once'
+      ? price.type === 'one_time'
+      : price.type === 'recurring' &&
+        price.recurring?.interval === expected.interval &&
+        price.recurring.interval_count === expected.count;
+  return matches ? { plan, amount, currency: price.currency } : null;
+}
+
 /** A price in the reader's language: "$7.99", "7,99 €", "¥800". */
 export function formatPrice(price: Pick<PlanPrice, 'amount' | 'currency'>, locale: string): string {
   const format = new Intl.NumberFormat(locale, {

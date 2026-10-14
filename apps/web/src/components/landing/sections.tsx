@@ -209,7 +209,7 @@ export function Features({ t, studyGroupsOpen }: { t: Translator; studyGroupsOpe
   );
 }
 
-/** "$7.99 a month", or nothing where the price is not known (billing is not set up). */
+/** "$7.99 a month", or nothing where the price is not known: that plan is not on sale. */
 function priceLine(
   t: Translator,
   prices: readonly PlanPrice[],
@@ -230,7 +230,10 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
     priceLine(t, prices, 'pro_monthly', 'plans.perMonth'),
     priceLine(t, prices, 'pro_yearly', 'plans.perYear'),
   ].filter((line) => line !== null);
+  const onSale = (plan: PlanPrice['plan']) => prices.some((price) => price.plan === plan);
+  const notOnSale = <p className="text-fg-muted mt-8 text-sm">{t('plans.unavailable')}</p>;
   const card = 'rounded-xl border p-6 sm:p-8';
+  const priced = 'text-fg text-lg font-medium';
   return (
     <Section
       id="pricing"
@@ -255,7 +258,7 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
         </div>
         <div className={`border-border-strong ${card}`}>
           <h3 className="font-display text-2xl font-semibold">{t('plans.pro')}</h3>
-          <p className="text-fg-muted mt-1">
+          <p className={`mt-1 ${proPrices.length > 0 ? priced : 'text-fg-muted'}`}>
             {proPrices.length > 0 ? proPrices.join(t('exam.factSeparator')) : t('plans.proNote')}
           </p>
           <ul className="mt-6 list-disc space-y-2 ps-5">
@@ -263,37 +266,50 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
             <li>{ai('pro')}</li>
             {proPrices.length > 0 && <li>{t('plans.proNote')}</li>}
           </ul>
-          {/* Buying needs an account: sign-in carries the plan to the plans page. */}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href={localizePath(t.locale, '/sign-in?plan=pro_yearly')}
-              className={buttonClass.primary}
-            >
-              {t('plans.getYearly')}
-            </Link>
-            <Link
-              href={localizePath(t.locale, '/sign-in?plan=pro_monthly')}
-              className={buttonClass.secondary}
-            >
-              {t('plans.getMonthly')}
-            </Link>
-          </div>
+          {/* Buying needs an account: sign-in carries the plan to the plans page.
+              A plan is offered only with its price, the one the checkout charges. */}
+          {onSale('pro_yearly') || onSale('pro_monthly') ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {onSale('pro_yearly') && (
+                <Link
+                  href={localizePath(t.locale, '/sign-in?plan=pro_yearly')}
+                  className={buttonClass.primary}
+                >
+                  {t('plans.getYearly')}
+                </Link>
+              )}
+              {onSale('pro_monthly') && (
+                <Link
+                  href={localizePath(t.locale, '/sign-in?plan=pro_monthly')}
+                  className={buttonClass.secondary}
+                >
+                  {t('plans.getMonthly')}
+                </Link>
+              )}
+            </div>
+          ) : (
+            notOnSale
+          )}
         </div>
         <div className={`border-border ${card}`}>
           <h3 className="font-display text-2xl font-semibold">{t('plans.countryPass')}</h3>
-          <p className="text-fg-muted mt-1">
+          <p className={`mt-1 ${onSale('country_pass') ? priced : 'text-fg-muted'}`}>
             {priceLine(t, prices, 'country_pass', 'plans.once') ?? t('plans.passNote')}
           </p>
           <ul className="mt-6 list-disc space-y-2 ps-5">
             <li>{t('plans.passSummary')}</li>
             <li>{ai('free')}</li>
           </ul>
-          <Link
-            href={localizePath(t.locale, '/sign-in?plan=country_pass')}
-            className={`${buttonClass.secondary} mt-8`}
-          >
-            {t('plans.getAPass')}
-          </Link>
+          {onSale('country_pass') ? (
+            <Link
+              href={localizePath(t.locale, '/sign-in?plan=country_pass')}
+              className={`${buttonClass.secondary} mt-8`}
+            >
+              {t('plans.getAPass')}
+            </Link>
+          ) : (
+            notOnSale
+          )}
         </div>
       </div>
       <p className="text-fg-muted mt-6">{t('landing.planGroups')}</p>
