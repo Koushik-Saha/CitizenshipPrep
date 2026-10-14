@@ -6,9 +6,8 @@
 // model and texture. Nothing renders unless the slot is on screen and the
 // tab is visible (frameloop="demand"), and then at most 30 frames a second.
 
+import { dragView, isOnGlobe } from '@oathly/core/globe-drag';
 import {
-  dragView,
-  isOnGlobe,
   latLngToVector,
   longitudeDelta,
   viewRotation,

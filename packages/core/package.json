@@ -7,7 +7,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./globe": "./src/globe.ts"
+    "./globe": "./src/globe.ts",
+    "./globe-drag": "./src/globe-drag.ts"
   },
   "scripts": {
     "lint": "eslint .",

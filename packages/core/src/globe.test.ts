@@ -2,12 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   chooseSceneMode,
-  dragView,
   haloAlpha,
-  isOnGlobe,
   latLngToVector,
   longitudeDelta,
-  MAX_DRAG_LATITUDE,
   projectToView,
   rimAmount,
   surfaceLight,
@@ -16,6 +13,7 @@ import {
   viewRotation,
   type Vec3,
 } from './globe';
+import { dragView, isOnGlobe, MAX_DRAG_LATITUDE } from './globe-drag';
 
 const expectVector = (actual: Vec3, expected: Vec3) =>
   actual.forEach((value, i) => expect(value).toBeCloseTo(expected[i]!, 10));
