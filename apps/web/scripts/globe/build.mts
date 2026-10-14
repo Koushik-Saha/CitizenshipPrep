@@ -1,16 +1,20 @@
 // Builds the globe assets in public/globe:
 //
-//   earth.glb    a sphere with a halftone land texture: Meshopt-compressed
-//                geometry, KTX2 (Basis ETC1S) texture embedded
+//   earth.glb    a sphere with the Earth at night as its texture, as a
+//                satellite sees it: Meshopt-compressed geometry, KTX2 (Basis
+//                ETC1S) texture embedded
 //   poster-*.webp  the same globe drawn in software, shown in the page's HTML
 //                and kept on devices that do not get the 3D globe
 //   basis/       the KTX2 transcoder three.js loads in the browser
 //
 // and, in apps/mobile/assets/globe, the land as a list of dots plus a poster
-// for the phone app's welcome screen.
+// of that dotted globe for the phone app's welcome screen.
 //
 // Countries are not drawn into any of these: the page places them from the
-// database. Land outlines are Natural Earth's 1:110m land (public domain).
+// database. The night view is NASA's "Earth at Night" (Black Marble 2012:
+// NASA Earth Observatory, Robert Simmon, from Suomi NPP VIIRS data), which
+// like all NASA imagery is in the public domain. Land outlines for the
+// phone's dots are Natural Earth's 1:110m land (public domain).
 //
 // Run: pnpm --filter @oathly/web globe:assets   (needs cwebp on the PATH)
 
@@ -50,6 +54,9 @@ import {
 const LAND_URL =
   'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_land.geojson';
 
+const NIGHT_URL =
+  'https://eoimages.gsfc.nasa.gov/images/imagerecords/79000/79765/dnb_land_ocean_ice.2012.3600x1800.jpg';
+
 const OUT = path.resolve(import.meta.dirname, '../../public/globe');
 const MOBILE_OUT = path.resolve(import.meta.dirname, '../../../mobile/assets/globe');
 /** Spacing of the phone app's land dots, in degrees. */
@@ -57,6 +64,9 @@ const MOBILE_DOT_STEP = 2.2;
 const MOBILE_POSTER = 720;
 const TEXTURE_WIDTH = 2048;
 const TEXTURE_HEIGHT = 1024;
+/** How the night view is brightened: lifted a little, lights lifted more. */
+const NIGHT_GAIN = 1.25;
+const NIGHT_GAMMA = 0.82;
 /** Spacing of the halftone dots, in degrees of latitude. */
 const DOT_STEP = 1.25;
 const DOT_RADIUS = DOT_STEP * 0.34;
@@ -185,6 +195,45 @@ function drawTexture(isLand: (lng: number, lat: number) => boolean): Raster {
     data[i * 4 + 3] = 255;
   }
   return { width, height, data };
+}
+
+/** The part of sharp this script uses: resize, drop alpha, hand back raw RGB. */
+interface DecodedImage {
+  resize(width: number, height: number, options: { fit: 'fill'; kernel: 'lanczos3' }): DecodedImage;
+  removeAlpha(): DecodedImage;
+  raw(): DecodedImage;
+  toBuffer(options: {
+    resolveWithObject: true;
+  }): Promise<{ data: Buffer; info: { width: number; height: number } }>;
+}
+
+/**
+ * The Earth at night, as an equirectangular texture: NASA's composite, made
+ * a little brighter so the continents and their city lights read at the size
+ * of the page's globe. Colours are NASA's own: deep navy sea, warm lights.
+ */
+async function loadNight(): Promise<Raster> {
+  const response = await fetch(NIGHT_URL);
+  if (!response.ok) throw new Error(`Could not download the night view: HTTP ${response.status}`);
+  // sharp is not a dependency of ours; Next.js brings it for its image
+  // pipeline. Only what is used here is described.
+  const sharp = createRequire(createRequire(import.meta.url).resolve('next/package.json'))(
+    'sharp',
+  ) as (input: Buffer) => DecodedImage;
+  const { data, info } = await sharp(Buffer.from(await response.arrayBuffer()))
+    .resize(TEXTURE_WIDTH, TEXTURE_HEIGHT, { fit: 'fill', kernel: 'lanczos3' })
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const out = new Uint8Array(info.width * info.height * 4);
+  for (let i = 0; i < info.width * info.height; i += 1) {
+    for (let k = 0; k < 3; k += 1) {
+      const v = data[i * 3 + k]! / 255;
+      out[i * 4 + k] = Math.round(255 * Math.min(1, NIGHT_GAIN * Math.pow(v, NIGHT_GAMMA)));
+    }
+    out[i * 4 + 3] = 255;
+  }
+  return { width: info.width, height: info.height, data: out };
 }
 
 function sample(texture: Raster, lng: number, lat: number): [number, number, number] {
@@ -379,9 +428,11 @@ async function buildModel(ktx2: Uint8Array): Promise<Uint8Array> {
 async function main() {
   mkdirSync(path.join(OUT, 'basis'), { recursive: true });
 
-  console.log('Drawing the land texture…');
-  const isLand = landTest(await loadLand());
-  const texture = drawTexture(isLand);
+  console.log('Fetching the night view and the land outlines…');
+  const [texture, isLand] = await Promise.all([
+    loadNight(),
+    loadLand().then((polygons) => landTest(polygons)),
+  ]);
 
   console.log('Encoding KTX2…');
   const ktx2 = await encodeToKTX2(new Uint8Array(0), {
@@ -401,21 +452,13 @@ async function main() {
 
   console.log('Drawing the posters…');
   const scratch = mkdtempSync(path.join(tmpdir(), 'oathly-globe-'));
+  const writePoster = (raster: Raster, name: string, to: string) => {
+    const source = path.join(scratch, `${name}.png`);
+    writeFileSync(source, png(raster));
+    execFileSync('cwebp', ['-quiet', '-q', '74', '-alpha_q', '80', '-m', '6', source, '-o', to]);
+  };
   for (const size of POSTER_SIZES) {
-    const source = path.join(scratch, `poster-${size}.png`);
-    writeFileSync(source, png(drawPoster(texture, size)));
-    execFileSync('cwebp', [
-      '-quiet',
-      '-q',
-      '74',
-      '-alpha_q',
-      '80',
-      '-m',
-      '6',
-      source,
-      '-o',
-      path.join(OUT, `poster-${size}.webp`),
-    ]);
+    writePoster(drawPoster(texture, size), `poster-${size}`, path.join(OUT, `poster-${size}.webp`));
   }
 
   const require = createRequire(import.meta.url);
@@ -426,12 +469,13 @@ async function main() {
   }
 
   // The phone app draws the land as points rather than a texture, and keeps
-  // one poster for devices that do not get the 3D globe.
+  // one poster of that dotted globe for devices that do not get the 3D one.
   mkdirSync(MOBILE_OUT, { recursive: true });
   const dots = landDots(isLand);
   writeFileSync(path.join(MOBILE_OUT, 'land-dots.json'), `${JSON.stringify(dots)}\n`);
-  copyFileSync(
-    path.join(OUT, `poster-${MOBILE_POSTER}.webp`),
+  writePoster(
+    drawPoster(drawTexture(isLand), MOBILE_POSTER),
+    'mobile-poster',
     path.join(MOBILE_OUT, 'poster.webp'),
   );
   console.log(`Wrote ${MOBILE_OUT}: ${dots.length / 2} land dots and the poster.`);

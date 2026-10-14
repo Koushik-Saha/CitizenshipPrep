@@ -3,7 +3,11 @@
 
 export { HERO_VIEW } from '@oathly/core/globe';
 
-/** Brand navy and gold (see @oathly/tokens). */
+/**
+ * Brand navy and gold (see @oathly/tokens). The web globe's surface is a
+ * night view of the Earth (see scripts/globe/build.mts); `ocean` and `land`
+ * colour the dotted globe the phone app's poster shows.
+ */
 export const GLOBE_COLORS = {
   ocean: '#132244', // navy-900
   land: '#6B89C4', // navy-400
@@ -25,5 +29,5 @@ export const PHONE_POSTER = { media: '(max-width: 639px)', size: 560 } as const;
 /** The globe's radius as a fraction of half the poster (or slot) width. */
 export const POSTER_RADIUS = 0.8;
 
-/** Degrees of longitude per second while idling. One turn takes six minutes. */
-export const IDLE_SPIN = 1;
+/** Degrees of longitude per second while idling. One turn takes a minute and a half. */
+export const IDLE_SPIN = 4;
