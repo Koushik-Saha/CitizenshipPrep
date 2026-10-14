@@ -1,11 +1,14 @@
 // Builds the globe assets in public/globe:
 //
 //   earth.glb    a sphere with the Earth at night as its texture, as a
-//                satellite sees it: Meshopt-compressed geometry, KTX2 (Basis
-//                ETC1S) texture embedded
+//                satellite sees it: Meshopt-compressed geometry, the texture
+//                embedded as WebP (EXT_texture_webp)
 //   poster-*.webp  the same globe drawn in software, shown in the page's HTML
 //                and kept on devices that do not get the 3D globe
-//   basis/       the KTX2 transcoder three.js loads in the browser
+//
+// The texture is a plain image on purpose. A GPU-compressed one (KTX2) needs
+// a decoder that builds code from strings at run time, which the site's
+// Content-Security-Policy rightly forbids: the globe never drew in production.
 //
 // and, in apps/mobile/assets/globe, the land as a list of dots plus a poster
 // of that dotted globe for the phone app's welcome screen.
@@ -19,7 +22,7 @@
 // Run: pnpm --filter @oathly/web globe:assets   (needs cwebp on the PATH)
 
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -28,12 +31,11 @@ import { crc32, deflateSync } from 'node:zlib';
 import { Document, NodeIO } from '@gltf-transform/core';
 import {
   EXTMeshoptCompression,
+  EXTTextureWebP,
   KHRMaterialsUnlit,
   KHRMeshQuantization,
-  KHRTextureBasisu,
 } from '@gltf-transform/extensions';
 import { meshopt } from '@gltf-transform/functions';
-import { encodeToKTX2 } from 'ktx2-encoder';
 import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 
 import {
@@ -64,6 +66,8 @@ const MOBILE_DOT_STEP = 2.2;
 const MOBILE_POSTER = 720;
 const TEXTURE_WIDTH = 2048;
 const TEXTURE_HEIGHT = 1024;
+/** WebP quality of the 3D globe's texture: city lights are small, so it is kept high. */
+const TEXTURE_QUALITY = 82;
 /** How the night view is brightened: lifted a little, lights lifted more. */
 const NIGHT_GAIN = 1.25;
 const NIGHT_GAMMA = 0.82;
@@ -384,10 +388,10 @@ function sphere(widthSegments: number, heightSegments: number) {
   };
 }
 
-async function buildModel(ktx2: Uint8Array): Promise<Uint8Array> {
+async function buildModel(webp: Uint8Array): Promise<Uint8Array> {
   await MeshoptEncoder.ready;
   const document = new Document();
-  document.createExtension(KHRTextureBasisu).setRequired(true);
+  document.createExtension(EXTTextureWebP).setRequired(true);
   const unlit = document.createExtension(KHRMaterialsUnlit);
   const buffer = document.createBuffer();
   const geometry = sphere(72, 48);
@@ -404,7 +408,7 @@ async function buildModel(ktx2: Uint8Array): Promise<Uint8Array> {
       'TEXCOORD_0',
       document.createAccessor().setType('VEC2').setArray(geometry.uvs).setBuffer(buffer),
     );
-  const texture = document.createTexture('earth').setMimeType('image/ktx2').setImage(ktx2);
+  const texture = document.createTexture('earth').setMimeType('image/webp').setImage(webp);
   const material = document
     .createMaterial('earth')
     .setBaseColorTexture(texture)
@@ -417,8 +421,8 @@ async function buildModel(ktx2: Uint8Array): Promise<Uint8Array> {
   const io = new NodeIO()
     .registerExtensions([
       EXTMeshoptCompression,
+      EXTTextureWebP,
       KHRMeshQuantization,
-      KHRTextureBasisu,
       KHRMaterialsUnlit,
     ])
     .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
@@ -426,7 +430,7 @@ async function buildModel(ktx2: Uint8Array): Promise<Uint8Array> {
 }
 
 async function main() {
-  mkdirSync(path.join(OUT, 'basis'), { recursive: true });
+  mkdirSync(OUT, { recursive: true });
 
   console.log('Fetching the night view and the land outlines…');
   const [texture, isLand] = await Promise.all([
@@ -434,24 +438,27 @@ async function main() {
     loadLand().then((polygons) => landTest(polygons)),
   ]);
 
-  console.log('Encoding KTX2…');
-  const ktx2 = await encodeToKTX2(new Uint8Array(0), {
-    enableDebug: false,
-    isUASTC: false,
-    generateMipmap: true,
-    qualityLevel: 160,
-    compressionLevel: 4,
-    isPerceptual: true,
-    isSetKTX2SRGBTransferFunc: true,
-    imageDecoder: async () => texture,
-  });
+  const scratch = mkdtempSync(path.join(tmpdir(), 'oathly-globe-'));
+
+  console.log('Encoding the texture…');
+  writeFileSync(path.join(scratch, 'texture.png'), png(texture));
+  execFileSync('cwebp', [
+    '-quiet',
+    '-q',
+    String(TEXTURE_QUALITY),
+    '-m',
+    '6',
+    path.join(scratch, 'texture.png'),
+    '-o',
+    path.join(scratch, 'texture.webp'),
+  ]);
+  const webp = new Uint8Array(readFileSync(path.join(scratch, 'texture.webp')));
 
   console.log('Building the model…');
-  const glb = await buildModel(ktx2);
+  const glb = await buildModel(webp);
   writeFileSync(path.join(OUT, 'earth.glb'), glb);
 
   console.log('Drawing the posters…');
-  const scratch = mkdtempSync(path.join(tmpdir(), 'oathly-globe-'));
   const writePoster = (raster: Raster, name: string, to: string) => {
     const source = path.join(scratch, `${name}.png`);
     writeFileSync(source, png(raster));
@@ -459,13 +466,6 @@ async function main() {
   };
   for (const size of POSTER_SIZES) {
     writePoster(drawPoster(texture, size), `poster-${size}`, path.join(OUT, `poster-${size}.webp`));
-  }
-
-  const require = createRequire(import.meta.url);
-  // three's main entry is build/three.cjs; the transcoder ships beside it.
-  const basis = path.resolve(path.dirname(require.resolve('three')), '../examples/jsm/libs/basis');
-  for (const file of ['basis_transcoder.js', 'basis_transcoder.wasm']) {
-    copyFileSync(path.join(basis, file), path.join(OUT, 'basis', file));
   }
 
   // The phone app draws the land as points rather than a texture, and keeps
@@ -484,7 +484,7 @@ async function main() {
     (file) => `${file} ${(readFileSync(path.join(OUT, file)).length / 1024).toFixed(1)} KB`,
   );
   console.log(
-    `Wrote ${OUT}:\n  ${sizes.join('\n  ')}\n  (texture ${(ktx2.length / 1024).toFixed(1)} KB)`,
+    `Wrote ${OUT}:\n  ${sizes.join('\n  ')}\n  (texture ${(webp.length / 1024).toFixed(1)} KB)`,
   );
 }
 

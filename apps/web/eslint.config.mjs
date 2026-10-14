@@ -15,7 +15,7 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-    // Vendored third-party files (the KTX2 transcoder).
+    // Built assets (see scripts/globe/build.mts).
     'public/**',
   ]),
 ]);

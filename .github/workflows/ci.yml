@@ -155,6 +155,12 @@ jobs:
         env:
           NAV_BUDGET_MS: 300
 
+      # The globe falls back to a still picture when it cannot load, so a
+      # broken globe looks fine. The development server relaxes the security
+      # policy; this is the one place it is checked as visitors get it.
+      - name: 3D globe draws in production
+        run: node apps/web/scripts/perf/globe-live.mjs
+
       - uses: actions/upload-artifact@v7
         if: always()
         with:

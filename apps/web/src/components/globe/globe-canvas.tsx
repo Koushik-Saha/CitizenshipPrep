@@ -36,10 +36,8 @@ import {
   ShaderMaterial,
   type Texture,
   Vector3,
-  type WebGLRenderer,
 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 import { GLOBE_COLORS, IDLE_SPIN, POSTER_RADIUS } from './config';
@@ -55,12 +53,6 @@ const DRAG_SLOP = 6;
 const MAX_FLING = 140;
 /** How long after a drag the globe keeps the tilt it was left at, in milliseconds. */
 const TILT_HOLD_MS = 2500;
-
-let ktx2Loader: KTX2Loader | null = null;
-function getKtx2Loader(gl: WebGLRenderer): KTX2Loader {
-  ktx2Loader ??= new KTX2Loader().setTranscoderPath('/globe/basis/').detectSupport(gl);
-  return ktx2Loader;
-}
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -238,9 +230,12 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
   const size = useThree((state) => state.size);
   // Read the camera and renderer through get() where they are changed.
   const get = useThree((state) => state.get);
+  // The texture is WebP inside the model (EXT_texture_webp), which the
+  // loader reads as an ordinary image. Nothing here may build code from
+  // strings: the site's Content-Security-Policy forbids it, and in
+  // production the globe would quietly stay a picture.
   const gltf = useLoader(GLTFLoader, MODEL_URL, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
-    loader.setKTX2Loader(getKtx2Loader(gl));
   });
 
   const earth = useMemo(() => {
