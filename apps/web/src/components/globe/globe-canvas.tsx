@@ -7,6 +7,8 @@
 // tab is visible (frameloop="demand"), and then at most 30 frames a second.
 
 import {
+  dragView,
+  isOnGlobe,
   latLngToVector,
   longitudeDelta,
   viewRotation,
@@ -48,6 +50,12 @@ const MODEL_URL = '/globe/earth.glb';
 const FRAME_MS = 1000 / 30;
 /** Never turn a pole to face the viewer: focus latitudes are kept within this. */
 const MAX_FOCUS_LATITUDE = 35;
+/** A press that moves less than this many pixels is a click, not a drag. */
+const DRAG_SLOP = 6;
+/** The fastest a flick may leave the globe turning, in degrees a second. */
+const MAX_FLING = 140;
+/** How long after a drag the globe keeps the tilt it was left at, in milliseconds. */
+const TILT_HOLD_MS = 2500;
 
 let ktx2Loader: KTX2Loader | null = null;
 function getKtx2Loader(gl: WebGLRenderer): KTX2Loader {
@@ -289,6 +297,18 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
   const hovered = useRef<{ marker: GlobeMarker; group: Group } | null>(null);
   const firstFrame = useRef(true);
   const celebrationStart = useRef<number | null>(null);
+  // Turning the globe by hand. `velocity` is how fast it is turning by
+  // itself, in degrees a second: the idle speed, or what a flick left it at.
+  const drag = useRef({
+    active: false,
+    pointer: -1,
+    x: 0,
+    y: 0,
+    at: 0,
+    moved: 0,
+    velocity: IDLE_SPIN,
+    releasedAt: Number.NEGATIVE_INFINITY,
+  });
 
   // A new slot (another page) starts from its own view.
   const { latitude: startLatitude, longitude: startLongitude } = slot.view;
@@ -297,9 +317,105 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
     firstFrame.current = true;
     celebrationStart.current = null;
     hovered.current = null;
+    Object.assign(drag.current, {
+      active: false,
+      moved: 0,
+      velocity: IDLE_SPIN,
+      releasedAt: Number.NEGATIVE_INFINITY,
+    });
   }, [slot.id, startLatitude, startLongitude]);
 
   const focus = slot.focus ? slot.markers.find((marker) => marker.code === slot.focus) : null;
+
+  // Dragging turns the globe: press on it and move. While a page has it
+  // turned to one country (`focus`) it stays there. A touch that moves up or
+  // down scrolls the page instead (the canvas is "pan-y"), and the browser
+  // then cancels the pointer, which ends the drag.
+  const canDrag = useRef(false);
+  const canSelect = Boolean(slot.onSelect);
+  useLayoutEffect(() => {
+    canDrag.current = !focus;
+  });
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const state = drag.current;
+    const radius = () => (canvas.clientWidth / 2) * POSTER_RADIUS;
+    const onGlobe = (event: PointerEvent) => {
+      const box = canvas.getBoundingClientRect();
+      return isOnGlobe(
+        event.clientX - box.left - box.width / 2,
+        event.clientY - box.top - box.height / 2,
+        radius(),
+      );
+    };
+    const down = (event: PointerEvent) => {
+      // Every press starts as a click, whether or not it goes on to turn the globe.
+      if (!state.active) state.moved = 0;
+      if (!canDrag.current || state.active || !onGlobe(event)) return;
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      Object.assign(state, {
+        active: true,
+        pointer: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+        at: event.timeStamp,
+        moved: 0,
+        velocity: 0,
+      });
+      canvas.setPointerCapture(event.pointerId);
+      canvas.style.cursor = 'grabbing';
+      // A drag with the mouse would otherwise select the text beside the globe.
+      if (event.pointerType === 'mouse') event.preventDefault();
+    };
+    const move = (event: PointerEvent) => {
+      if (!state.active) {
+        if (event.pointerType === 'mouse') {
+          canvas.style.cursor =
+            !canDrag.current || !onGlobe(event)
+              ? ''
+              : hovered.current && canSelect
+                ? 'pointer'
+                : 'grab';
+        }
+        return;
+      }
+      if (event.pointerId !== state.pointer) return;
+      const dx = event.clientX - state.x;
+      const dy = event.clientY - state.y;
+      const before = view.current.longitude;
+      view.current = dragView(view.current, dx, dy, radius());
+      state.moved += Math.hypot(dx, dy);
+      // The speed of the hand, smoothed, for the globe to carry on at when let go.
+      const seconds = Math.max(1, event.timeStamp - state.at) / 1000;
+      const speed = (view.current.longitude - before) / seconds;
+      state.velocity = state.velocity * 0.6 + speed * 0.4;
+      state.x = event.clientX;
+      state.y = event.clientY;
+      state.at = event.timeStamp;
+    };
+    const up = (event: PointerEvent) => {
+      if (!state.active || event.pointerId !== state.pointer) return;
+      state.active = false;
+      state.releasedAt = performance.now();
+      // Held still before letting go: it stays where it was put.
+      if (event.timeStamp - state.at > 120) state.velocity = 0;
+      state.velocity = Math.max(-MAX_FLING, Math.min(MAX_FLING, state.velocity));
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      canvas.style.cursor = event.type === 'pointerup' && onGlobe(event) ? 'grab' : '';
+    };
+    canvas.addEventListener('pointerdown', down);
+    canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerup', up);
+    canvas.addEventListener('pointercancel', up);
+    return () => {
+      canvas.removeEventListener('pointerdown', down);
+      canvas.removeEventListener('pointermove', move);
+      canvas.removeEventListener('pointerup', up);
+      canvas.removeEventListener('pointercancel', up);
+      state.active = false;
+      canvas.style.cursor = '';
+    };
+  }, [gl, canSelect]);
 
   useFrame((state, delta) => {
     const dt = Math.min(delta, 0.1);
@@ -311,9 +427,20 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
       const latitude = Math.max(-MAX_FOCUS_LATITUDE, Math.min(MAX_FOCUS_LATITUDE, focus.latitude));
       current.longitude += longitudeDelta(current.longitude, focus.longitude) * ease;
       current.latitude += (latitude - current.latitude) * ease;
-    } else if (!hovered.current && !firstFrame.current) {
-      current.longitude += IDLE_SPIN * dt;
-      current.latitude += (slot.view.latitude - current.latitude) * ease;
+    } else if (drag.current.active) {
+      // The hand has it: the pointer sets the view as it moves.
+    } else if (!firstFrame.current) {
+      // Left alone it turns by itself. After a flick it carries on at the
+      // speed it was let go and settles back into its idle turn; the tilt it
+      // was left at is kept for a moment, then eases back too.
+      const state = drag.current;
+      state.velocity += (IDLE_SPIN - state.velocity) * (1 - Math.exp(-dt * 1.2));
+      if (!hovered.current) current.longitude += state.velocity * dt;
+      const dragged = Number.isFinite(state.releasedAt);
+      if (!hovered.current && performance.now() - state.releasedAt > TILT_HOLD_MS) {
+        const settle = dragged ? 1 - Math.exp(-dt * 0.8) : ease;
+        current.latitude += (slot.view.latitude - current.latitude) * settle;
+      }
     }
     const { pitch, yaw } = viewRotation(current);
     tilt.current!.rotation.x = pitch;
@@ -355,10 +482,12 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
 
   const onHover = (marker: GlobeMarker | null, group: Group | null) => {
     const { camera, gl } = get();
+    // No card for whatever passes under the pointer while the globe is being turned.
+    if (drag.current.active && marker) return;
     hovered.current = marker && group ? { marker, group } : null;
     if (!marker || !group) {
       sceneStore.setHover(null);
-      gl.domElement.style.cursor = '';
+      if (!drag.current.active) gl.domElement.style.cursor = canDrag.current ? 'grab' : '';
       return;
     }
     const point = group.getWorldPosition(new Vector3()).project(camera);
@@ -386,7 +515,10 @@ function Globe({ slot, onFirstFrame }: { slot: Slot; onFirstFrame: () => void })
               marker={marker}
               register={register(marker.code)}
               onHover={onHover}
-              onSelect={(code) => slot.onSelect?.(code)}
+              onSelect={(code) => {
+                // The end of a drag is not a click on the country under it.
+                if (drag.current.moved <= DRAG_SLOP) slot.onSelect?.(code);
+              }}
             />
           ))}
         </group>

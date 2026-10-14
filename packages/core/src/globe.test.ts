@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 
 import {
   chooseSceneMode,
+  dragView,
   haloAlpha,
+  isOnGlobe,
   latLngToVector,
   longitudeDelta,
+  MAX_DRAG_LATITUDE,
   projectToView,
   rimAmount,
   surfaceLight,
@@ -73,6 +76,43 @@ describe('longitudeDelta', () => {
     expect(longitudeDelta(0, 180)).toBe(180);
     expect(longitudeDelta(0, -180)).toBe(180);
     expect(longitudeDelta(10, 10)).toBe(0);
+  });
+});
+
+describe('dragging the globe', () => {
+  const view = { latitude: 10, longitude: -40 };
+
+  it('makes the surface follow the pointer', () => {
+    // A point at the centre, dragged a little to the right, ends up right of centre.
+    const after = dragView(view, 20, 0, 200);
+    expect(projectToView(view, after)[0]).toBeGreaterThan(0);
+    expect(after.longitude).toBeLessThan(view.longitude);
+    // Dragged down, it ends up below the centre: the north comes into view.
+    const lower = dragView(view, 0, 20, 200);
+    expect(projectToView(view, lower)[1]).toBeLessThan(0);
+    expect(lower.latitude).toBeGreaterThan(view.latitude);
+  });
+
+  it('turns one radian for a drag as long as the radius', () => {
+    expect(dragView(view, -200, 0, 200).longitude).toBeCloseTo(view.longitude + 180 / Math.PI);
+    // Twice the globe on screen, half the turn for the same drag.
+    expect(dragView(view, -200, 0, 400).longitude).toBeCloseTo(view.longitude + 90 / Math.PI);
+  });
+
+  it('never tips a pole into the middle', () => {
+    expect(dragView(view, 0, 5000, 200).latitude).toBe(MAX_DRAG_LATITUDE);
+    expect(dragView(view, 0, -5000, 200).latitude).toBe(-MAX_DRAG_LATITUDE);
+  });
+
+  it('leaves the view alone when the globe has no size yet', () => {
+    expect(dragView(view, 50, 50, 0)).toBe(view);
+  });
+
+  it('starts only on the globe itself, not in the corners around it', () => {
+    expect(isOnGlobe(0, 0, 100)).toBe(true);
+    expect(isOnGlobe(60, 80, 100)).toBe(true);
+    expect(isOnGlobe(80, 80, 100)).toBe(false);
+    expect(isOnGlobe(0, 0, 0)).toBe(false);
   });
 });
 
