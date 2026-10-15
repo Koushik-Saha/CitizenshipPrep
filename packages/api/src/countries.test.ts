@@ -100,6 +100,7 @@ describe('countryHighlights', () => {
       },
     ],
     publishedQuestions: 0,
+    complete: true,
   };
 
   it('describes the main exam, its languages and the question bank', () => {

@@ -30,10 +30,7 @@ export default async function AccountPage({
   const said = (await searchParams).name;
   const nameNotice = said === 'saved' || said === 'problem' ? said : null;
   const optedOut = me.settings?.analyticsOptOut === true;
-  const plan = planSummary(
-    me,
-    me.studyCountries.map((country) => country.countryCode),
-  );
+  const plan = planSummary(me, me.studyCountries);
   // What renews until cancelled: everything in force but a one-off pass.
   const renewing = me.entitlements
     .filter(

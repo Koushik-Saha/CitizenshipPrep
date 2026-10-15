@@ -16,6 +16,7 @@ export const vi: Messages = {
     footerNav: 'Chân trang',
     breadcrumb: 'Đường dẫn',
     comingSoon: 'Sắp ra mắt',
+    beta: 'Beta',
     notAffiliated:
       'Oathly là ứng dụng học tập độc lập. Ứng dụng không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ.',
     errorTitle: 'Đã xảy ra lỗi',
@@ -113,6 +114,8 @@ export const vi: Messages = {
     planFree: 'Miễn phí',
     planFreeNote: 'Không cần thẻ.',
     planAiAllowance: '{explanations} lời giải thích và {messages} tin nhắn cho gia sư mỗi ngày',
+    passBetaNote:
+      'Chưa bán cho các nước được đánh dấu Beta, vì câu hỏi của các nước này vẫn đang được hoàn thiện.',
     planGroups: 'Trường học, thư viện và dịch vụ hỗ trợ định cư: gói cho nhóm sắp ra mắt.',
 
     storiesTitle: 'Học viên nói gì',
@@ -152,6 +155,8 @@ export const vi: Messages = {
       '{count, plural, other {# câu hỏi luyện tập, mỗi câu đều được đối chiếu với tài liệu chính thức.}}',
     countryLeadNoQuestions: 'Câu hỏi luyện tập đang được đối chiếu với tài liệu chính thức.',
     studyForTest: 'Học cho kỳ thi {country}',
+    betaNote:
+      'Beta: câu hỏi cho bài thi này vẫn đang được bổ sung và kiểm tra. Country Pass của nước này sẽ được bán khi câu hỏi đã đầy đủ; Pro đã bao gồm nước này.',
     theTest: 'Kỳ thi',
     formatBeingChecked: 'Hình thức thi đang được kiểm tra.',
     whatItCovers: 'Nội dung thi',
@@ -546,6 +551,8 @@ export const vi: Messages = {
     kept: 'Gói của bạn sẽ gia hạn như trước.',
     changeFailed: 'Thao tác chưa hoàn tất. Hãy thử lại, hoặc dùng Quản lý thanh toán.',
     getAPass: 'Mua Country Pass',
+    passInBeta:
+      '{country} đang ở giai đoạn Beta: câu hỏi vẫn đang được hoàn thiện nên Country Pass chưa được bán. Pro đã bao gồm nước này.',
     manageInStore: 'Gói đăng ký này được mua trên {store}. Hãy thay đổi hoặc hủy tại đó.',
     boughtOnWeb: 'Gói đăng ký này được mua trên trang web Oathly. Hãy thay đổi hoặc hủy tại đó.',
     unavailable: 'Hiện chưa thể mua gói tại đây.',

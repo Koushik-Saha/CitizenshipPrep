@@ -1,22 +1,29 @@
 import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { getTestGuide, getTopicGuide, listCountryFacts, listTestPages } from './countries';
+import {
+  countryCompleteness,
+  getTestGuide,
+  getTopicGuide,
+  listCountryFacts,
+  listTestPages,
+} from './countries';
 
 // Needs the local database (`pnpm db:start`); skipped when the URL is not set.
 const url = process.env.TEST_DATABASE_URL;
 // Codes no real country uses, and unlike the other test files' codes.
 const PLACED = 'XP';
 const UNPLACED = 'XU';
+const COMPLETE = 'XC';
 const REVIEWER = 'test-guide-reviewer';
 
 describe.skipIf(!url)('public country facts against the database', () => {
   let pool: pg.Pool;
 
   const cleanUp = async () => {
-    const codes = [PLACED, UNPLACED];
+    const codes = [PLACED, UNPLACED, COMPLETE];
     await pool.query('delete from public.questions where country_code = any($1)', [codes]);
-    await pool.query('delete from public.countries where iso_code = any($1)', [[PLACED, UNPLACED]]);
+    await pool.query('delete from public.countries where iso_code = any($1)', [codes]);
     await pool.query('delete from public.profiles where id = $1', [REVIEWER]);
   };
 
@@ -136,12 +143,54 @@ describe.skipIf(!url)('public country facts against the database', () => {
         },
       ],
       publishedQuestions: 4,
+      // Four questions, and a topic with none: still in Beta.
+      complete: false,
     });
     expect(facts.find((country) => country.isoCode === UNPLACED)).toMatchObject({
       latitude: null,
       longitude: null,
       exams: [],
     });
+  });
+
+  it('says a country is complete once every topic is covered and there are enough questions', async () => {
+    // A test of 2 questions with no published pool needs 5 mock exams' worth,
+    // 10, and every topic needs 10 of its own: two topics of 10 each.
+    await pool.query(
+      `insert into public.countries (iso_code, name, has_exam, exam_languages)
+       values ($1, 'Completeland', true, '{en}')`,
+      [COMPLETE],
+    );
+    await pool.query(
+      `insert into public.exam_formats
+         (country_code, slug, name, format_type, question_count, source_url, is_current)
+       values ($1, 'test', 'Test', 'written', 2, 'https://example.org/complete', true)`,
+      [COMPLETE],
+    );
+    const topics = await pool.query<{ id: string }>(
+      `insert into public.topics (country_code, slug, name)
+       values ($1, 'one', 'One'), ($1, 'two', 'Two') returning id`,
+      [COMPLETE],
+    );
+    await pool.query(
+      `insert into public.questions
+         (country_code, topic_id, difficulty, type, correct_answer, source_url, status,
+          verified_by, last_verified_at)
+       select $1, topic.id, 1, 'multiple_choice', '{"keys": ["a"]}', 'https://example.org/guide',
+              'published', $2, now()
+       from unnest($3::uuid[]) as topic(id), generate_series(1, 10)`,
+      [COMPLETE, REVIEWER, topics.rows.map((topic) => topic.id)],
+    );
+    const complete = await countryCompleteness(pool, [COMPLETE, PLACED]);
+    expect(Object.fromEntries(complete)).toEqual({ [COMPLETE]: true, [PLACED]: false });
+
+    // One question taken back: its topic is short again, and the country is in Beta.
+    await pool.query(
+      `update public.questions set status = 'in_review', verified_by = null, last_verified_at = null
+       where id = (select id from public.questions where topic_id = $1 limit 1)`,
+      [topics.rows[0]!.id],
+    );
+    expect((await countryCompleteness(pool, [COMPLETE])).get(COMPLETE)).toBe(false);
   });
 
   it('describes a country’s test: its exams in full, its topics and when it was last checked', async () => {
@@ -152,6 +201,7 @@ describe.skipIf(!url)('public country facts against the database', () => {
       name: 'Placedland',
       examLanguages: ['en'],
       publishedQuestions: 4,
+      complete: false,
       // The newest check of anything on the page: a question here, not the
       // exam, and never the retired format.
       lastVerifiedAt: '2026-09-04T00:00:00.000Z',

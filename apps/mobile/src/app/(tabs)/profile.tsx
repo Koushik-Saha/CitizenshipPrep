@@ -42,10 +42,7 @@ export default function Profile() {
     ? `${Math.round((me.progress.correctAnswers / me.progress.questionsAnswered) * 100)}%`
     : '–';
   const packs = Object.values(offline.packs);
-  const plan = planSummary(
-    me,
-    me.studyCountries.map((country) => country.countryCode),
-  );
+  const plan = planSummary(me, me.studyCountries);
 
   return (
     <Screen>

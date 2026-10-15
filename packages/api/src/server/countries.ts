@@ -1,4 +1,4 @@
-import { latestDate } from '@oathly/core';
+import { isCountryComplete, latestDate, type ExamSize } from '@oathly/core';
 import type pg from 'pg';
 
 import type {
@@ -22,22 +22,69 @@ const isoDate = (value: Date | string | null) =>
   value === null ? null : new Date(value).toISOString();
 
 /**
+ * Whether each country's questions are complete enough to sell on their own
+ * (isCountryComplete in packages/core): every country with an exam, or the
+ * ones named. A country still in Beta is studied as usual, but its Country
+ * Pass is not sold.
+ */
+export async function countryCompleteness(
+  db: Db,
+  isoCodes?: readonly string[],
+): Promise<Map<string, boolean>> {
+  const { rows } = await db.query<{
+    iso_code: string;
+    published: number;
+    topic_questions: number[];
+    exams: ExamSize[];
+  }>(
+    `select c.iso_code,
+            (select count(*)::int from public.questions q
+             where q.country_code = c.iso_code and q.status = 'published') as published,
+            array(select count(q.id)::int
+                  from public.topics t
+                  left join public.questions q on q.topic_id = t.id and q.status = 'published'
+                  where t.country_code = c.iso_code
+                  group by t.id) as topic_questions,
+            coalesce((select json_agg(json_build_object(
+                                'questionCount', f.question_count,
+                                'questionPoolSize', f.question_pool_size))
+                      from public.exam_formats f
+                      where f.country_code = c.iso_code and f.is_current), '[]') as exams
+     from public.countries c
+     where c.has_exam and ($1::text[] is null or c.iso_code = any($1))`,
+    [isoCodes ? [...isoCodes] : null],
+  );
+  return new Map(
+    rows.map((row) => [
+      row.iso_code,
+      isCountryComplete({
+        publishedQuestions: row.published,
+        topicQuestions: row.topic_questions,
+        exams: row.exams,
+      }),
+    ]),
+  );
+}
+
+/**
  * Every country with a citizenship exam, with its current exam formats and
  * how many published questions it has. Public data: used to build the
  * landing page, so it reads nothing about any learner.
  */
 export async function listCountryFacts(db: Db, isoCode?: string): Promise<CountryFacts[]> {
-  const { rows } = await db.query<{
-    iso_code: string;
-    slug: string;
-    name: string;
-    exam_languages: string[];
-    latitude: string | null;
-    longitude: string | null;
-    exams: (Omit<ExamFacts, 'lastVerifiedAt'> & { lastVerifiedAt: string | null })[] | null;
-    published_questions: string;
-  }>(
-    `select c.iso_code, c.slug, c.name, c.exam_languages, c.latitude, c.longitude,
+  const [completeness, { rows }] = await Promise.all([
+    countryCompleteness(db, isoCode ? [isoCode] : undefined),
+    db.query<{
+      iso_code: string;
+      slug: string;
+      name: string;
+      exam_languages: string[];
+      latitude: string | null;
+      longitude: string | null;
+      exams: (Omit<ExamFacts, 'lastVerifiedAt'> & { lastVerifiedAt: string | null })[] | null;
+      published_questions: string;
+    }>(
+      `select c.iso_code, c.slug, c.name, c.exam_languages, c.latitude, c.longitude,
             (select json_agg(json_build_object(
                       'name', f.name,
                       'formatType', f.format_type,
@@ -54,8 +101,9 @@ export async function listCountryFacts(db: Db, isoCode?: string): Promise<Countr
      from public.countries c
      where c.has_exam and ($1::text is null or c.iso_code = $1)
      order by c.name`,
-    [isoCode ?? null],
-  );
+      [isoCode ?? null],
+    ),
+  ]);
   return rows.map((row) => ({
     isoCode: row.iso_code,
     slug: row.slug,
@@ -68,6 +116,7 @@ export async function listCountryFacts(db: Db, isoCode?: string): Promise<Countr
       lastVerifiedAt: isoDate(exam.lastVerifiedAt),
     })),
     publishedQuestions: Number(row.published_questions),
+    complete: completeness.get(row.iso_code) ?? false,
   }));
 }
 
@@ -241,6 +290,7 @@ export async function getTestGuide(
     listTopics(db, country.iso_code),
     sampleQuestions(db, country.iso_code, locale, limit, null),
   ]);
+  const publishedQuestions = topics.reduce((sum, topic) => sum + topic.publishedQuestions, 0);
   return {
     isoCode: country.iso_code,
     slug: country.slug,
@@ -249,7 +299,12 @@ export async function getTestGuide(
     exams,
     topics: topics.map(summary),
     questions,
-    publishedQuestions: topics.reduce((sum, topic) => sum + topic.publishedQuestions, 0),
+    publishedQuestions,
+    complete: isCountryComplete({
+      publishedQuestions,
+      topicQuestions: topics.map((topic) => topic.publishedQuestions),
+      exams,
+    }),
     lastVerifiedAt: latestDate([
       ...exams.map((exam) => exam.lastVerifiedAt),
       ...topics.map((topic) => topic.lastVerifiedAt),

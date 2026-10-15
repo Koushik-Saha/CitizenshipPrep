@@ -19,6 +19,23 @@ test('the landing page leads to a country and on to sign-in', async ({ page }) =
   await expect(page).toHaveURL(/\/sign-in\?country=ZZ$/);
 });
 
+test('a country whose questions are still being completed is marked Beta, and its pass is not sold', async ({
+  page,
+}) => {
+  // Testland has 30 questions, short of five mock exams' worth: a half-built country.
+  await page.goto('/');
+  const card = page.locator('#countries li').filter({ hasText: 'Testland' }).first();
+  await expect(card.getByText(t('common.beta'), { exact: true })).toBeVisible();
+  const pricing = page.locator('#pricing');
+  await expect(pricing.getByText(t('landing.passBetaNote'))).toBeVisible();
+
+  await page.goto('/countries');
+  await expect(page.getByText(t('common.beta'), { exact: true }).first()).toBeVisible();
+
+  await page.goto('/testland/citizenship-test');
+  await expect(page.getByTestId('country-beta')).toHaveText(t('countries.betaNote'));
+});
+
 test('a country page shows the exam facts, ten samples with answers, and its topics', async ({
   page,
 }) => {

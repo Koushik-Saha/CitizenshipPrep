@@ -130,6 +130,7 @@ export function CountryCards({
             >
               {localCountryName(country, t)}
             </Link>
+            {!country.complete && <Badge tone="warning">{t('common.beta')}</Badge>}
           </Heading>
           <p className="text-fg-muted mt-1 text-sm">
             {t('exam.takenIn', { languages: languageList(country.examLanguages, t.locale) })}
@@ -220,7 +221,19 @@ function priceLine(
   return price ? t(message, { price: formatPrice(price, t.locale) }) : null;
 }
 
-export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPrice[] }) {
+/**
+ * `hasBeta`: some country is still in Beta (CountryFacts.complete), and its
+ * Country Pass is not sold.
+ */
+export function Pricing({
+  t,
+  prices,
+  hasBeta,
+}: {
+  t: Translator;
+  prices: readonly PlanPrice[];
+  hasBeta: boolean;
+}) {
   const ai = (allowance: 'free' | 'pro') =>
     t('landing.planAiAllowance', {
       explanations: aiLimits[allowance].explanation,
@@ -299,6 +312,7 @@ export function Pricing({ t, prices }: { t: Translator; prices: readonly PlanPri
           <ul className="mt-6 list-disc space-y-2 ps-5">
             <li>{t('plans.passSummary')}</li>
             <li>{ai('free')}</li>
+            {hasBeta && <li>{t('landing.passBetaNote')}</li>}
           </ul>
           {onSale('country_pass') ? (
             <Link

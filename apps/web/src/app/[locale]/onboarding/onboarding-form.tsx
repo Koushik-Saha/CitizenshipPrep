@@ -13,12 +13,15 @@ import { HERO_VIEW } from '@/components/globe/config';
 import type { GlobeMarker } from '@/components/globe/scene-store';
 import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
-import { buttonClass, fieldClass, focusRing, labelClass, Notice } from '@/components/ui';
+import { Badge, buttonClass, fieldClass, focusRing, labelClass, Notice } from '@/components/ui';
 
 import { completeOnboarding, type OnboardingState } from './actions';
 
 interface Props {
-  countries: ExamCountry[];
+  /** `complete: false` marks a country in Beta (isCountryComplete in packages/core). */
+  countries: (ExamCountry & { complete?: boolean })[];
+  /** "Beta", in the page's language. */
+  betaLabel: string;
   /** Picked on the landing page before signing in. */
   preselected: string | null;
   /** The countries on the globe beside the list. */
@@ -39,6 +42,7 @@ const initialState: OnboardingState = { error: null };
 
 export function OnboardingForm({
   countries,
+  betaLabel,
   preselected,
   markers,
   adding,
@@ -110,7 +114,10 @@ export function OnboardingForm({
                       onChange={() => setCountryCode(country.isoCode)}
                       className="accent-primary size-4 shrink-0"
                     />
-                    <span className="flex-1">{country.name}</span>
+                    <span className="flex flex-1 flex-wrap items-center gap-2">
+                      {country.name}
+                      {country.complete === false && <Badge tone="warning">{betaLabel}</Badge>}
+                    </span>
                     <span className="text-fg-muted text-sm">
                       {t('onboarding.inLanguages', {
                         languages: languageList(country.examLanguages, t.locale),

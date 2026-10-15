@@ -98,29 +98,47 @@ describe('planPriceFrom', () => {
   });
 });
 
+const studying = (...codes: string[]) => codes.map((countryCode) => ({ countryCode }));
+
 describe('planSummary', () => {
   it('offers a Free learner Pro, and a pass for each country they study', () => {
-    expect(planSummary({ entitlements: [] }, ['US', 'CA'], now)).toEqual({
+    expect(planSummary({ entitlements: [] }, studying('US', 'CA'), now)).toEqual({
       pro: null,
       passes: [],
       canBuyPro: true,
       passCountries: ['US', 'CA'],
+      betaCountries: [],
     });
   });
 
   it('offers a pass only for countries not already open', () => {
-    const summary = planSummary({ entitlements: [pass('US')] }, ['US', 'CA'], now);
+    const summary = planSummary({ entitlements: [pass('US')] }, studying('US', 'CA'), now);
     expect(summary).toMatchObject({ passes: ['US'], canBuyPro: true, passCountries: ['CA'] });
   });
 
   it('offers a Pro learner nothing more', () => {
-    expect(planSummary({ entitlements: [pro] }, ['US', 'CA'], now)).toEqual({
+    expect(planSummary({ entitlements: [pro] }, studying('US', 'CA'), now)).toEqual({
       pro,
       passes: [],
       canBuyPro: false,
       passCountries: [],
+      betaCountries: [],
     });
-    expect(planSummary({ entitlements: [] }, []).canBuyPro).toBe(true);
+    expect(planSummary({ entitlements: [] }, studying()).canBuyPro).toBe(true);
+  });
+
+  it('does not sell a pass for a country whose questions are still being completed', () => {
+    const countries = [
+      { countryCode: 'US', complete: true },
+      { countryCode: 'GB', complete: false },
+    ];
+    expect(planSummary({ entitlements: [] }, countries, now)).toMatchObject({
+      canBuyPro: true,
+      passCountries: ['US'],
+      betaCountries: ['GB'],
+    });
+    // Once open (Pro includes every country), there is nothing to say about it.
+    expect(planSummary({ entitlements: [pro] }, countries, now).betaCountries).toEqual([]);
   });
 });
 

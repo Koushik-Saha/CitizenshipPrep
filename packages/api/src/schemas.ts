@@ -31,6 +31,8 @@ export const countryFactsSchema = z.object({
     }),
   ),
   publishedQuestions: z.number(),
+  // Absent from a server from before Beta existed, where every country was sold.
+  complete: z._default(z.boolean(), true),
 }) satisfies z.ZodMiniType<CountryFacts>;
 
 const suggestionSchema = z.discriminatedUnion('kind', [

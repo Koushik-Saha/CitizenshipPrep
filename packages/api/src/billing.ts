@@ -95,23 +95,39 @@ export interface PlanSummary {
   passes: string[];
   /** Pro can be bought: there is none in force. */
   canBuyPro: boolean;
-  /** Countries the learner studies that neither Pro nor a pass opens yet. */
+  /** Countries the learner studies that neither Pro nor a pass opens yet, and whose pass is sold. */
   passCountries: string[];
+  /**
+   * Countries the learner studies that are not open yet, whose questions are
+   * still being completed (Beta): their pass is not sold, but Pro opens them.
+   */
+  betaCountries: string[];
 }
 
+/**
+ * A half-built country is not sold on its own: a country whose `complete` is
+ * false goes in betaCountries, not passCountries. One that does not say is
+ * taken as complete (an older saved copy); the checkout asks the server again.
+ */
 export function planSummary(
   user: AccessUser,
-  studyCountries: readonly string[],
+  studyCountries: readonly { countryCode: string; complete?: boolean }[],
   now: Date = new Date(),
 ): PlanSummary {
   const pro = proSubscription(user, now);
+  const closed = studyCountries.filter(
+    (country) => !hasAccess(user, 'all_questions', country.countryCode, now),
+  );
   return {
     pro,
     passes: countryPasses(user, now),
     canBuyPro: pro === null,
-    passCountries: studyCountries.filter(
-      (country) => !hasAccess(user, 'all_questions', country, now),
-    ),
+    passCountries: closed
+      .filter((country) => country.complete !== false)
+      .map((country) => country.countryCode),
+    betaCountries: closed
+      .filter((country) => country.complete === false)
+      .map((country) => country.countryCode),
   };
 }
 

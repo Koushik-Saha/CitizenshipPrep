@@ -159,7 +159,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
         <HowItWorks t={t} />
         <CountryList countries={countries} t={t} />
         <Features t={t} studyGroupsOpen={!isCommunitySwitchedOff()} />
-        <Pricing t={t} prices={prices} />
+        <Pricing t={t} prices={prices} hasBeta={countries.some((country) => !country.complete)} />
         <Testimonials t={t} />
         <Faq t={t} />
       </main>

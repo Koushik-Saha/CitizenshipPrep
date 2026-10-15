@@ -16,6 +16,7 @@ export const zhHans: Messages = {
     footerNav: '页脚',
     breadcrumb: '当前位置',
     comingSoon: '即将推出',
+    beta: '测试版',
     notAffiliated: 'Oathly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。',
     errorTitle: '出了点问题',
     errorBody: '无法显示此页面。请重试；如果问题仍然存在，请稍后再来。',
@@ -104,6 +105,7 @@ export const zhHans: Messages = {
     planFree: '免费',
     planFreeNote: '无需绑定银行卡。',
     planAiAllowance: '每天 {explanations} 次答案讲解和 {messages} 条辅导消息',
+    passBetaNote: '标为测试版的国家题目仍在完善中，暂不出售。',
     planGroups: '学校、图书馆和安置服务机构：团体方案即将推出。',
 
     storiesTitle: '学员怎么说',
@@ -142,6 +144,8 @@ export const zhHans: Messages = {
     countryLeadWithQuestions: '{count, plural, other {# 道练习题，每道都对照官方指南核对过。}}',
     countryLeadNoQuestions: '练习题正在对照官方指南核对。',
     studyForTest: '备考{country}入籍考试',
+    betaNote:
+      '测试版：本考试的题目仍在添加和核对中。题目完整后才会开售其 Country Pass；Pro 现已包含该国家。',
     theTest: '考试',
     formatBeingChecked: '考试形式正在核对中。',
     whatItCovers: '考试内容',
@@ -510,6 +514,8 @@ export const zhHans: Messages = {
     kept: '你的订阅将照常续订。',
     changeFailed: '操作未完成。请重试，或使用“管理账单”。',
     getAPass: '购买 Country Pass',
+    passInBeta:
+      '{country}处于测试版：题目仍在完善中，因此其 Country Pass 暂不出售。Pro 现已包含该国家。',
     manageInStore: '此订阅是在 {store} 购买的，请前往那里更改或取消。',
     boughtOnWeb: '此订阅是在 Oathly 网站上购买的，请前往那里更改或取消。',
     unavailable: '目前还无法在这里购买套餐。',

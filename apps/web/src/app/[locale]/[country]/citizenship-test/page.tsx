@@ -16,7 +16,7 @@ import {
   SampleQuestions,
 } from '@/components/seo/test-page';
 import { Breadcrumbs, SiteFooter, SiteHeader } from '@/components/site-chrome';
-import { focusRing } from '@/components/ui';
+import { focusRing, Notice } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
 import { loadPublic } from '@/lib/public-content';
@@ -94,6 +94,11 @@ export default async function TestPage({ params }: Props) {
           </p>
         )}
         <LastChecked date={guide.lastVerifiedAt} t={t} />
+        {!guide.complete && (
+          <div className="mt-6" data-testid="country-beta">
+            <Notice tone="warning">{t('countries.betaNote')}</Notice>
+          </div>
+        )}
         <div className="mt-8">
           <Link
             href={signIn}

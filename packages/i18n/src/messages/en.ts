@@ -18,6 +18,7 @@ export const en = {
     footerNav: 'Footer',
     breadcrumb: 'Breadcrumb',
     comingSoon: 'Coming soon',
+    beta: 'Beta',
     notAffiliated:
       'Oathly is an independent study app. It is not affiliated with, or endorsed by, any government.',
     errorTitle: 'Something went wrong',
@@ -121,6 +122,8 @@ export const en = {
     planFree: 'Free',
     planFreeNote: 'No card needed.',
     planAiAllowance: '{explanations} answer explanations and {messages} tutor messages a day',
+    passBetaNote:
+      'Not yet sold for countries marked Beta, whose questions are still being completed.',
     planGroups: 'Schools, libraries and settlement services: plans for groups are coming soon.',
 
     storiesTitle: 'What learners say',
@@ -159,6 +162,8 @@ export const en = {
     countryLeadWithQuestions:
       '{count, plural, one {# practice question, checked against the official guide.} other {# practice questions, each checked against the official guide.}}',
     countryLeadNoQuestions: 'Practice questions are being checked against the official guide.',
+    betaNote:
+      'Beta: questions for this test are still being added and checked. Its Country Pass goes on sale once they are complete; Pro includes it now.',
     studyForTest: 'Study for the {country} test',
     theTest: 'The test',
     formatBeingChecked: 'The exam format is being checked.',
@@ -563,6 +568,8 @@ export const en = {
     kept: 'Your plan will renew as before.',
     changeFailed: 'That did not go through. Try again, or use Manage billing.',
     getAPass: 'Get a Country Pass',
+    passInBeta:
+      '{country} is in Beta: its questions are still being completed, so its Country Pass is not on sale yet. Pro includes it now.',
     manageInStore: 'This subscription was bought in the {store}. Change or cancel it there.',
     boughtOnWeb: 'This subscription was bought on the Oathly website. Change or cancel it there.',
     unavailable: 'Plans cannot be bought here yet.',

@@ -2,7 +2,7 @@
 
 import { purchaseProblem, type Purchase } from '@oathly/api/billing';
 import { parseCountryCode } from '@oathly/api/country-search';
-import { accessUser } from '@oathly/api/server';
+import { accessUser, countryCompleteness } from '@oathly/api/server';
 import { isUiLocale, localizePath, type UiLocale } from '@oathly/i18n';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -48,6 +48,13 @@ export async function startCheckout(form: FormData): Promise<void> {
   if (!purchase) redirect(plans);
   // Only a plan whose price the page shows: the checkout charges that price.
   if (!isOnSale(await planPrices(), purchase.plan)) redirect(plans);
+  // A pass sells every question for one country: not while they are still being completed.
+  if (
+    purchase.plan === 'country_pass' &&
+    (await countryCompleteness(getDb(), [purchase.countryCode])).get(purchase.countryCode) !== true
+  ) {
+    redirect(plans);
+  }
   // Never take money for something already held.
   if (purchaseProblem(await accessUser(getDb(), user.userId), purchase)) redirect(plans);
 

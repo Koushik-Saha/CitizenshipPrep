@@ -39,10 +39,7 @@ export default async function PlansPage({
 }: PageProps<'/[locale]/study/plans'>) {
   const { locale, t } = await getT(params);
   const { me } = await requireMe(locale);
-  const summary = planSummary(
-    me,
-    me.studyCountries.map((country) => country.countryCode),
-  );
+  const summary = planSummary(me, me.studyCountries);
   const prices = await planPrices();
   const canBuy = isBillingConfigured();
   // A plan is sold only with its price beside it: the checkout charges that price.
@@ -227,7 +224,7 @@ export default async function PlansPage({
         </section>
       )}
 
-      {summary.passCountries.length > 0 && (
+      {(summary.passCountries.length > 0 || summary.betaCountries.length > 0) && (
         <section aria-labelledby="pass" className={`${card} mt-6`}>
           <h2 id="pass" className="font-display text-2xl font-semibold">
             {t('plans.countryPass')}
@@ -236,6 +233,11 @@ export default async function PlansPage({
           <p className="text-fg-muted mt-1 text-sm">
             {price(t, prices, 'country_pass', 'plans.once') ?? t('plans.passNote')}
           </p>
+          {summary.betaCountries.map((code) => (
+            <p key={code} className="mt-4" data-testid={`pass-beta-${code}`}>
+              {t('plans.passInBeta', { country: nameOf(code) })}
+            </p>
+          ))}
           <div className="mt-5 flex flex-wrap gap-3">
             {summary.passCountries.map((code) => (
               // One form per country: the country travels with the button pressed.

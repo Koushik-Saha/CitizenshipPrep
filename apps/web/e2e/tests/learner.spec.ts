@@ -271,6 +271,13 @@ test('a plan is offered on the landing page only with its price, and leads throu
   await page.getByRole('button', { name: t('onboarding.start') }).click();
   await page.waitForURL(/\/study\/plans\?plan=country_pass#pass$/);
   await expect(page.getByRole('heading', { name: t('plans.countryPass') })).toBeVisible();
+  // Testland is in Beta: its pass is explained, not offered.
+  await expect(page.getByTestId('pass-beta-ZZ')).toHaveText(
+    t('plans.passInBeta', { country: 'Testland' }),
+  );
+  await expect(
+    page.getByRole('button', { name: t('plans.getPass', { country: 'Testland' }) }),
+  ).toHaveCount(0);
 
   // Already set up: straight to the plan that was picked.
   await page.goto('/sign-in?plan=pro_yearly');

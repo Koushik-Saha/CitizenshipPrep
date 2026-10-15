@@ -20,6 +20,7 @@ export const ar: Messages = {
     footerNav: 'تذييل الصفحة',
     breadcrumb: 'مسار التنقل',
     comingSoon: 'قريبًا',
+    beta: 'تجريبي',
     notAffiliated: 'Oathly تطبيق دراسة مستقل. لا يتبع أي حكومة ولا يحظى بتأييد أي حكومة.',
     errorTitle: 'حدث خطأ ما',
     errorBody: 'تعذّر عرض هذه الصفحة. حاول مرة أخرى، وإذا استمرت المشكلة فعُد بعد قليل.',
@@ -117,6 +118,8 @@ export const ar: Messages = {
     planFree: 'مجاني',
     planFreeNote: 'لا حاجة إلى بطاقة.',
     planAiAllowance: 'يوميًا: {explanations} شرحًا للإجابات و{messages} رسالة للمعلّم',
+    passBetaNote:
+      'غير متاح للبيع بعد للدول المميزة بعلامة تجريبي، لأن أسئلتها ما زالت قيد الاستكمال.',
     planGroups: 'المدارس والمكتبات وخدمات الاستقرار: خطط المجموعات قادمة قريبًا.',
 
     storiesTitle: 'ماذا يقول المتعلمون',
@@ -155,6 +158,8 @@ export const ar: Messages = {
     countryLeadWithQuestions: 'أسئلة تدريب تم التحقق منها من الدليل الرسمي: {count}.',
     countryLeadNoQuestions: 'يجري التحقق من أسئلة التدريب من الدليل الرسمي.',
     studyForTest: 'ادرس لاختبار {country}',
+    betaNote:
+      'تجريبي: ما زالت أسئلة هذا الاختبار قيد الإضافة والتدقيق. سيُطرح Country Pass الخاص به للبيع عند اكتمالها، واشتراك Pro يشمله الآن.',
     theTest: 'الاختبار',
     formatBeingChecked: 'صيغة الاختبار قيد التحقق.',
     whatItCovers: 'ما الذي يغطيه',
@@ -539,6 +544,8 @@ export const ar: Messages = {
     kept: 'ستتجدد خطتك كما كانت.',
     changeFailed: 'لم يكتمل ذلك. حاول مرة أخرى، أو استخدم إدارة الفوترة.',
     getAPass: 'احصل على Country Pass',
+    passInBeta:
+      '{country} في المرحلة التجريبية: ما زالت أسئلتها قيد الاستكمال، لذلك لم يُطرح Country Pass الخاص بها للبيع بعد. اشتراك Pro يشملها الآن.',
     manageInStore: 'تم شراء هذا الاشتراك من {store}. غيّره أو ألغِه من هناك.',
     boughtOnWeb: 'تم شراء هذا الاشتراك من موقع Oathly على الويب. غيّره أو ألغِه من هناك.',
     unavailable: 'لا يمكن شراء الخطط هنا بعد.',

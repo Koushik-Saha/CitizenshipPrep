@@ -246,6 +246,7 @@ describe('createOathlyApi', () => {
         longitude: null,
         exams: [],
         publishedQuestions: 3,
+        complete: false,
       },
     ];
     const open = createOathlyApi({

@@ -4,6 +4,7 @@ import type pg from 'pg';
 import type { ExamCountry, Me } from '../me';
 import { onboardingSchema, type OnboardingInput } from '../onboarding';
 import { listEntitlements } from './billing';
+import { countryCompleteness } from './countries';
 import { listMemberships } from './org';
 
 // Server-side reads and writes for the signed-in learner. These run on the
@@ -97,6 +98,8 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
     ),
   ]);
 
+  const codes = countries.rows.map((country) => country.country_code);
+  const completeness = codes.length > 0 ? await countryCompleteness(db, codes) : new Map();
   const settingsRow = settings.rows[0];
   const progressRow = progress.rows[0]!;
   return {
@@ -115,6 +118,7 @@ export async function getMe(db: Db, userId: string): Promise<Me | null> {
       examDate: country.exam_date,
       studyLocale: country.study_locale,
       isPrimary: country.is_primary,
+      complete: completeness.get(country.country_code) ?? false,
     })),
     progress: {
       attempts: Number(progressRow.attempts),

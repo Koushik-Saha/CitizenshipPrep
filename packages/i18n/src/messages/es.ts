@@ -16,6 +16,7 @@ export const es: Messages = {
     footerNav: 'Pie de página',
     breadcrumb: 'Ruta de navegación',
     comingSoon: 'Próximamente',
+    beta: 'Beta',
     notAffiliated:
       'Oathly es una aplicación de estudio independiente. No está afiliada a ningún gobierno ni cuenta con su respaldo.',
     errorTitle: 'Algo salió mal',
@@ -117,6 +118,8 @@ export const es: Messages = {
     planFree: 'Gratis',
     planFreeNote: 'Sin tarjeta.',
     planAiAllowance: '{explanations} explicaciones y {messages} mensajes al tutor al día',
+    passBetaNote:
+      'Aún no se vende para los países marcados como Beta, cuyas preguntas todavía se están completando.',
     planGroups:
       'Escuelas, bibliotecas y servicios de acogida: los planes para grupos llegarán pronto.',
 
@@ -156,6 +159,8 @@ export const es: Messages = {
     countryLeadWithQuestions:
       '{count, plural, one {# pregunta de práctica, contrastada con la guía oficial.} other {# preguntas de práctica, cada una contrastada con la guía oficial.}}',
     countryLeadNoQuestions: 'Las preguntas de práctica se están contrastando con la guía oficial.',
+    betaNote:
+      'Beta: todavía se están añadiendo y revisando las preguntas de este examen. Su Country Pass saldrá a la venta cuando estén completas; Pro ya lo incluye.',
     studyForTest: 'Estudiar para el examen de {country}',
     theTest: 'El examen',
     formatBeingChecked: 'El formato del examen está en revisión.',
@@ -560,6 +565,8 @@ export const es: Messages = {
     kept: 'Tu plan se renovará como antes.',
     changeFailed: 'No se pudo completar. Inténtalo de nuevo o usa Gestionar la facturación.',
     getAPass: 'Obtener un Country Pass',
+    passInBeta:
+      '{country} está en Beta: sus preguntas todavía se están completando, así que su Country Pass aún no está a la venta. Pro ya lo incluye.',
     manageInStore: 'Esta suscripción se compró en {store}. Cámbiala o cancélala allí.',
     boughtOnWeb: 'Esta suscripción se compró en el sitio web de Oathly. Cámbiala o cancélala allí.',
     unavailable: 'Todavía no se pueden comprar planes aquí.',

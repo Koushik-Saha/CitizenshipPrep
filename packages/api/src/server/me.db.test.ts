@@ -93,6 +93,8 @@ describe.skipIf(!url)('learner data against the database', () => {
         examDate: '2027-03-15',
         studyLocale: 'es',
         isPrimary: true,
+        // The test database's handful of questions is not a whole country: Beta.
+        complete: false,
       },
     ]);
     expect(nextStep(me)).toBe('study');

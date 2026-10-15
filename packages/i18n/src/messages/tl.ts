@@ -16,6 +16,7 @@ export const tl: Messages = {
     footerNav: 'Footer',
     breadcrumb: 'Kinaroroonan',
     comingSoon: 'Malapit na',
+    beta: 'Beta',
     notAffiliated:
       'Ang Oathly ay isang independiyenteng app sa pag-aaral. Hindi ito kaugnay o ineendorso ng anumang gobyerno.',
     errorTitle: 'May nangyaring mali',
@@ -120,6 +121,8 @@ export const tl: Messages = {
     planFree: 'Libre',
     planFreeNote: 'Hindi kailangan ng card.',
     planAiAllowance: '{explanations} paliwanag ng sagot at {messages} mensahe sa tutor bawat araw',
+    passBetaNote:
+      'Hindi pa ibinebenta para sa mga bansang may markang Beta, na kinukumpleto pa ang mga tanong.',
     planGroups:
       'Mga paaralan, aklatan at settlement service: malapit nang dumating ang mga plan para sa grupo.',
 
@@ -160,6 +163,8 @@ export const tl: Messages = {
       '{count, plural, one {# tanong sa pagsasanay, sinuri laban sa opisyal na gabay.} other {# tanong sa pagsasanay, bawat isa ay sinuri laban sa opisyal na gabay.}}',
     countryLeadNoQuestions: 'Sinusuri pa ang mga tanong sa pagsasanay laban sa opisyal na gabay.',
     studyForTest: 'Mag-aral para sa pagsusulit ng {country}',
+    betaNote:
+      'Beta: idinadagdag at sinusuri pa ang mga tanong para sa pagsusulit na ito. Ibebenta ang Country Pass nito kapag kumpleto na ang mga ito; kasama na ito sa Pro.',
     theTest: 'Ang pagsusulit',
     formatBeingChecked: 'Sinusuri pa ang format ng pagsusulit.',
     whatItCovers: 'Ang saklaw nito',
@@ -568,6 +573,8 @@ export const tl: Messages = {
     kept: 'Magre-renew ang plan mo gaya ng dati.',
     changeFailed: 'Hindi ito natuloy. Subukan muli, o gamitin ang Pamahalaan ang billing.',
     getAPass: 'Kumuha ng Country Pass',
+    passInBeta:
+      'Nasa Beta ang {country}: kinukumpleto pa ang mga tanong nito, kaya hindi pa ibinebenta ang Country Pass nito. Kasama na ito sa Pro.',
     manageInStore: 'Binili ang subscription na ito sa {store}. Doon ito palitan o kanselahin.',
     boughtOnWeb:
       'Binili ang subscription na ito sa website ng Oathly. Doon ito palitan o kanselahin.',

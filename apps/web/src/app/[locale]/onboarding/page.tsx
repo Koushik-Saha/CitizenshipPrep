@@ -75,6 +75,7 @@ export default async function Onboarding({
           <I18nProvider locale={locale} messages={clientMessages(locale, ['onboarding'])}>
             <OnboardingForm
               countries={countries}
+              betaLabel={t('common.beta')}
               preselected={preselected}
               markers={toMarkers(countries, t)}
               adding={adding}

@@ -30,6 +30,11 @@ export interface CountryFacts {
   exams: ExamFacts[];
   /** Verified, published questions learners can practise. */
   publishedQuestions: number;
+  /**
+   * Its questions are complete (isCountryComplete in packages/core). While
+   * not, the country is shown as Beta and its Country Pass is not sold.
+   */
+  complete: boolean;
 }
 
 /**

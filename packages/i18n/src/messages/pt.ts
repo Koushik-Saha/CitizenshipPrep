@@ -16,6 +16,7 @@ export const pt: Messages = {
     footerNav: 'Rodapé',
     breadcrumb: 'Caminho de navegação',
     comingSoon: 'Em breve',
+    beta: 'Beta',
     notAffiliated:
       'O Oathly é um aplicativo de estudo independente. Não é afiliado a nenhum governo nem endossado por nenhum.',
     errorTitle: 'Algo deu errado',
@@ -117,6 +118,8 @@ export const pt: Messages = {
     planFree: 'Grátis',
     planFreeNote: 'Sem cartão.',
     planAiAllowance: '{explanations} explicações e {messages} mensagens ao tutor por dia',
+    passBetaNote:
+      'Ainda não está à venda para os países marcados como Beta, cujas perguntas ainda estão sendo completadas.',
     planGroups:
       'Escolas, bibliotecas e serviços de acolhimento: planos para grupos chegam em breve.',
 
@@ -157,6 +160,8 @@ export const pt: Messages = {
       '{count, plural, one {# pergunta de prática, conferida com o guia oficial.} other {# perguntas de prática, cada uma conferida com o guia oficial.}}',
     countryLeadNoQuestions: 'As perguntas de prática estão sendo conferidas com o guia oficial.',
     studyForTest: 'Estudar para o teste ({country})',
+    betaNote:
+      'Beta: as perguntas deste teste ainda estão sendo adicionadas e verificadas. O Country Pass dele estará à venda quando estiverem completas; o Pro já o inclui.',
     theTest: 'O teste',
     formatBeingChecked: 'O formato do exame está em verificação.',
     whatItCovers: 'O que ele cobre',
@@ -560,6 +565,8 @@ export const pt: Messages = {
     kept: 'Seu plano será renovado como antes.',
     changeFailed: 'Não foi possível concluir. Tente de novo ou use Gerenciar cobrança.',
     getAPass: 'Comprar um Country Pass',
+    passInBeta:
+      '{country} está em Beta: as perguntas ainda estão sendo completadas, então o Country Pass ainda não está à venda. O Pro já o inclui.',
     manageInStore: 'Esta assinatura foi comprada na {store}. Altere ou cancele por lá.',
     boughtOnWeb: 'Esta assinatura foi comprada no site do Oathly. Altere ou cancele por lá.',
     unavailable: 'Ainda não é possível comprar planos aqui.',

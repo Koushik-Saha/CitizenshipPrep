@@ -58,10 +58,7 @@ export default function Plans() {
   if (session.status === 'loading') return <LoadingScreen label={t('common.loading')} />;
   if (session.status !== 'signed-in') return <Redirect href="/" />;
   const { me } = session;
-  const summary = planSummary(
-    me,
-    me.studyCountries.map((country) => country.countryCode),
-  );
+  const summary = planSummary(me, me.studyCountries);
   const { pro } = summary;
   const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'long' });
   const nameOf = (code: string) =>
@@ -202,10 +199,15 @@ export default function Plans() {
         </Card>
       )}
 
-      {summary.passCountries.length > 0 && (
+      {(summary.passCountries.length > 0 || summary.betaCountries.length > 0) && (
         <Card>
           <Heading level={2}>{t('plans.countryPass')}</Heading>
           <Body>{t('plans.passSummary')}</Body>
+          {summary.betaCountries.map((code) => (
+            <Body key={code} muted>
+              {t('plans.passInBeta', { country: nameOf(code) })}
+            </Body>
+          ))}
           {passes.map(({ code, offer: pass }) => (
             <Button
               key={code}

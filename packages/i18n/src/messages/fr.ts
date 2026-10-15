@@ -16,6 +16,7 @@ export const fr: Messages = {
     footerNav: 'Pied de page',
     breadcrumb: 'Fil d’Ariane',
     comingSoon: 'Bientôt disponible',
+    beta: 'Bêta',
     notAffiliated:
       'Oathly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement ni approuvée par aucun.',
     errorTitle: 'Une erreur s’est produite',
@@ -118,6 +119,8 @@ export const fr: Messages = {
     planFree: 'Gratuit',
     planFreeNote: 'Sans carte bancaire.',
     planAiAllowance: '{explanations} explications et {messages} messages au tuteur par jour',
+    passBetaNote:
+      'Pas encore en vente pour les pays marqués Bêta, dont les questions sont encore en cours de complétion.',
     planGroups:
       'Écoles, bibliothèques et services d’accueil : des formules pour les groupes arrivent bientôt.',
 
@@ -159,6 +162,8 @@ export const fr: Messages = {
     countryLeadNoQuestions:
       'Les questions d’entraînement sont en cours de vérification à partir du guide officiel.',
     studyForTest: 'Étudier pour le test ({country})',
+    betaNote:
+      'Bêta : les questions de ce test sont encore en cours d’ajout et de vérification. Son Country Pass sera en vente une fois qu’elles seront complètes ; Pro l’inclut déjà.',
     theTest: 'Le test',
     formatBeingChecked: 'Le format de l’examen est en cours de vérification.',
     whatItCovers: 'Ce qu’il couvre',
@@ -568,6 +573,8 @@ export const fr: Messages = {
     kept: 'Votre abonnement sera renouvelé comme avant.',
     changeFailed: 'L’opération n’a pas abouti. Réessayez, ou utilisez Gérer la facturation.',
     getAPass: 'Obtenir un Country Pass',
+    passInBeta:
+      '{country} est en bêta : ses questions sont encore en cours de complétion, son Country Pass n’est donc pas encore en vente. Pro l’inclut déjà.',
     manageInStore: 'Cet abonnement a été acheté sur {store}. Modifiez-le ou résiliez-le là-bas.',
     boughtOnWeb:
       'Cet abonnement a été acheté sur le site web d’Oathly. Modifiez-le ou résiliez-le là-bas.',

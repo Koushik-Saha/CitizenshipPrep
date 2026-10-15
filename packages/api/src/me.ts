@@ -13,6 +13,12 @@ export const studyCountrySchema = z.object({
   examDate: z.nullable(z.string()),
   studyLocale: z.nullable(z.string()),
   isPrimary: z.boolean(),
+  /**
+   * Its questions are complete (isCountryComplete in packages/core); while
+   * not, it is in Beta and its Country Pass is not sold. Optional on the way
+   * in: a snapshot a phone saved before this existed still reads.
+   */
+  complete: z.optional(z.boolean()),
 });
 
 export const entitlementSchema = z.object({
