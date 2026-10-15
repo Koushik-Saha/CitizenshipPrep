@@ -160,6 +160,8 @@ export const pt: Messages = {
       '{count, plural, one {# pergunta de prática, conferida com o guia oficial.} other {# perguntas de prática, cada uma conferida com o guia oficial.}}',
     countryLeadNoQuestions: 'As perguntas de prática estão sendo conferidas com o guia oficial.',
     studyForTest: 'Estudar para o teste ({country})',
+    countryLeadOfPool:
+      'Por enquanto, {count} das {pool} perguntas do banco oficial, cada uma verificada com a fonte oficial. Mais são adicionadas à medida que são revisadas.',
     betaNote:
       'Beta: as perguntas deste teste ainda estão sendo adicionadas e verificadas. O Country Pass dele estará à venda quando estiverem completas; o Pro já o inclui.',
     theTest: 'O teste',

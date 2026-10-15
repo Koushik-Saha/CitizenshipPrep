@@ -162,6 +162,8 @@ export const en = {
     countryLeadWithQuestions:
       '{count, plural, one {# practice question, checked against the official guide.} other {# practice questions, each checked against the official guide.}}',
     countryLeadNoQuestions: 'Practice questions are being checked against the official guide.',
+    countryLeadOfPool:
+      '{count} of the {pool} questions in the official pool so far, each checked against the official source. More are added as they are reviewed.',
     betaNote:
       'Beta: questions for this test are still being added and checked. Its Country Pass goes on sale once they are complete; Pro includes it now.',
     studyForTest: 'Study for the {country} test',

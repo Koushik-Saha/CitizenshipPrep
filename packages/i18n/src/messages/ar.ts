@@ -158,6 +158,8 @@ export const ar: Messages = {
     countryLeadWithQuestions: 'أسئلة تدريب تم التحقق منها من الدليل الرسمي: {count}.',
     countryLeadNoQuestions: 'يجري التحقق من أسئلة التدريب من الدليل الرسمي.',
     studyForTest: 'ادرس لاختبار {country}',
+    countryLeadOfPool:
+      'حتى الآن {count} من أصل {pool} سؤالًا في البنك الرسمي، وكل سؤال مُدقَّق مقابل المصدر الرسمي. تُضاف أسئلة أخرى بعد مراجعتها.',
     betaNote:
       'تجريبي: ما زالت أسئلة هذا الاختبار قيد الإضافة والتدقيق. سيُطرح Country Pass الخاص به للبيع عند اكتمالها، واشتراك Pro يشمله الآن.',
     theTest: 'الاختبار',

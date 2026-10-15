@@ -9,6 +9,7 @@ import {
   parseCountryCode,
   searchCountries,
   testPath,
+  uncoveredPool,
   type CountryFacts,
 } from './countries';
 
@@ -149,5 +150,19 @@ describe('testPath', () => {
   it('addresses a country’s test page and each topic under it', () => {
     expect(testPath('united-states')).toBe('/united-states/citizenship-test');
     expect(testPath('canada', 'history')).toBe('/canada/citizenship-test/history');
+  });
+});
+
+describe('uncoveredPool', () => {
+  it('is the official pool while the bank has fewer questions than it', () => {
+    expect(uncoveredPool(67, [{ questionPoolSize: 310 }])).toBe(310);
+    expect(uncoveredPool(67, [{ questionPoolSize: null }, { questionPoolSize: 310 }])).toBe(310);
+  });
+
+  it('is null once the pool is covered, or where no pool is public', () => {
+    expect(uncoveredPool(310, [{ questionPoolSize: 310 }])).toBeNull();
+    expect(uncoveredPool(279, [{ questionPoolSize: 128 }])).toBeNull();
+    expect(uncoveredPool(48, [{ questionPoolSize: null }])).toBeNull();
+    expect(uncoveredPool(48, [])).toBeNull();
   });
 });

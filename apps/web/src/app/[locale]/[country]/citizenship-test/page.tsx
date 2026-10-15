@@ -1,4 +1,4 @@
-import { testPath } from '@oathly/api/countries';
+import { testPath, uncoveredPool } from '@oathly/api/countries';
 import { testFaq } from '@oathly/api/seo';
 import { getTestGuide, listTestPages } from '@oathly/api/server';
 import { breadcrumbSchema } from '@oathly/core';
@@ -65,6 +65,8 @@ export default async function TestPage({ params }: Props) {
   const path = testPath(guide.slug);
   const title = t('countries.countryTitle', { country });
   const signIn = localizePath(locale, `/sign-in?country=${guide.isoCode}`);
+  // Where the official question pool is public and not yet covered, say how much of it is here.
+  const officialPool = uncoveredPool(guide.publishedQuestions, guide.exams);
 
   return (
     <>
@@ -83,10 +85,15 @@ export default async function TestPage({ params }: Props) {
         <h1 className="font-display mt-4 text-4xl font-semibold text-balance sm:text-5xl">
           {title}
         </h1>
-        <p className="text-fg-muted mt-4 text-lg">
-          {guide.publishedQuestions > 0
-            ? t('countries.countryLeadWithQuestions', { count: guide.publishedQuestions })
-            : t('countries.countryLeadNoQuestions')}
+        <p className="text-fg-muted mt-4 text-lg" data-testid="country-lead">
+          {guide.publishedQuestions === 0
+            ? t('countries.countryLeadNoQuestions')
+            : officialPool
+              ? t('countries.countryLeadOfPool', {
+                  count: guide.publishedQuestions,
+                  pool: officialPool,
+                })
+              : t('countries.countryLeadWithQuestions', { count: guide.publishedQuestions })}
         </p>
         {guide.examLanguages.length > 0 && (
           <p className="text-fg-muted mt-1">

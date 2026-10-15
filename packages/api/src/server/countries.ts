@@ -1,4 +1,9 @@
-import { isCountryComplete, latestDate, type ExamSize } from '@oathly/core';
+import {
+  FREE_QUESTIONS_PER_COUNTRY,
+  isCountryComplete,
+  latestDate,
+  type ExamSize,
+} from '@oathly/core';
 import type pg from 'pg';
 
 import type {
@@ -15,8 +20,11 @@ import type {
 
 type Db = Pick<pg.Pool, 'query'>;
 
-/** How many sample questions a public page shows. */
-export const SAMPLE_QUESTIONS = 10;
+/**
+ * How many sample questions a public page shows: as many as the Free plan
+ * includes, so the page and the pricing promise the same number.
+ */
+export const SAMPLE_QUESTIONS = FREE_QUESTIONS_PER_COUNTRY;
 
 const isoDate = (value: Date | string | null) =>
   value === null ? null : new Date(value).toISOString();

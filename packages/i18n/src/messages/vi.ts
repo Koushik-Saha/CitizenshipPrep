@@ -155,6 +155,8 @@ export const vi: Messages = {
       '{count, plural, other {# câu hỏi luyện tập, mỗi câu đều được đối chiếu với tài liệu chính thức.}}',
     countryLeadNoQuestions: 'Câu hỏi luyện tập đang được đối chiếu với tài liệu chính thức.',
     studyForTest: 'Học cho kỳ thi {country}',
+    countryLeadOfPool:
+      'Hiện có {count} trên {pool} câu hỏi trong ngân hàng chính thức, mỗi câu đều được đối chiếu với nguồn chính thức. Sẽ có thêm câu hỏi khi được duyệt.',
     betaNote:
       'Beta: câu hỏi cho bài thi này vẫn đang được bổ sung và kiểm tra. Country Pass của nước này sẽ được bán khi câu hỏi đã đầy đủ; Pro đã bao gồm nước này.',
     theTest: 'Kỳ thi',

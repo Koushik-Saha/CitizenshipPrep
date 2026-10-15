@@ -144,6 +144,8 @@ export const zhHans: Messages = {
     countryLeadWithQuestions: '{count, plural, other {# 道练习题，每道都对照官方指南核对过。}}',
     countryLeadNoQuestions: '练习题正在对照官方指南核对。',
     studyForTest: '备考{country}入籍考试',
+    countryLeadOfPool:
+      '目前已有官方题库 {pool} 道题中的 {count} 道，每道都已对照官方来源核对。更多题目将在审核后陆续加入。',
     betaNote:
       '测试版：本考试的题目仍在添加和核对中。题目完整后才会开售其 Country Pass；Pro 现已包含该国家。',
     theTest: '考试',

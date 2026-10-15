@@ -162,6 +162,8 @@ export const fr: Messages = {
     countryLeadNoQuestions:
       'Les questions d’entraînement sont en cours de vérification à partir du guide officiel.',
     studyForTest: 'Étudier pour le test ({country})',
+    countryLeadOfPool:
+      'Pour l’instant, {count} des {pool} questions de la liste officielle, chacune vérifiée d’après la source officielle. D’autres sont ajoutées au fil des vérifications.',
     betaNote:
       'Bêta : les questions de ce test sont encore en cours d’ajout et de vérification. Son Country Pass sera en vente une fois qu’elles seront complètes ; Pro l’inclut déjà.',
     theTest: 'Le test',

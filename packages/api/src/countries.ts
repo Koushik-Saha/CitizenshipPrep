@@ -48,6 +48,21 @@ export function countriesWithQuestions<T extends Pick<CountryFacts, 'publishedQu
   return countries.filter((country) => country.publishedQuestions > 0);
 }
 
+/**
+ * The official question pool a country has not covered yet: the largest
+ * published pool among its exams, when it has fewer published questions than
+ * that. Null where no pool is public, or the bank covers it. The country's
+ * page then says "67 of the 310 questions in the official pool so far", so
+ * nobody takes a partial bank for the whole one.
+ */
+export function uncoveredPool(
+  publishedQuestions: number,
+  exams: readonly { questionPoolSize: number | null }[],
+): number | null {
+  const pool = Math.max(0, ...exams.map((exam) => exam.questionPoolSize ?? 0));
+  return pool > 0 && publishedQuestions < pool ? pool : null;
+}
+
 export interface TopicSummary {
   slug: string;
   name: string;

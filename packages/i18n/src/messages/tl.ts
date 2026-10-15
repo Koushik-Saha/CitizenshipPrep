@@ -163,6 +163,8 @@ export const tl: Messages = {
       '{count, plural, one {# tanong sa pagsasanay, sinuri laban sa opisyal na gabay.} other {# tanong sa pagsasanay, bawat isa ay sinuri laban sa opisyal na gabay.}}',
     countryLeadNoQuestions: 'Sinusuri pa ang mga tanong sa pagsasanay laban sa opisyal na gabay.',
     studyForTest: 'Mag-aral para sa pagsusulit ng {country}',
+    countryLeadOfPool:
+      '{count} sa {pool} tanong sa opisyal na listahan sa ngayon, bawat isa ay sinuri ayon sa opisyal na pinagmulan. Nadaragdagan pa habang sinusuri ang iba.',
     betaNote:
       'Beta: idinadagdag at sinusuri pa ang mga tanong para sa pagsusulit na ito. Ibebenta ang Country Pass nito kapag kumpleto na ang mga ito; kasama na ito sa Pro.',
     theTest: 'Ang pagsusulit',

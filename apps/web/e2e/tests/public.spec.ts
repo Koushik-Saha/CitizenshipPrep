@@ -1,3 +1,4 @@
+import { FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
 import { expect, test } from '@playwright/test';
 
 import { expectAccessibleInBothThemes, t } from './support';
@@ -34,15 +35,30 @@ test('a country whose questions are still being completed is marked Beta, and it
 
   await page.goto('/testland/citizenship-test');
   await expect(page.getByTestId('country-beta')).toHaveText(t('countries.betaNote'));
+  // Its official pool of 30 is all here, so the page does not speak of a partial pool.
+  await expect(page.getByTestId('country-lead')).toHaveText(
+    t('countries.countryLeadWithQuestions', { count: 30 }),
+  );
 });
 
-test('a country page shows the exam facts, ten samples with answers, and its topics', async ({
+test('a country page shows the exam facts, as many free samples as the Free plan promises, and its topics', async ({
   page,
 }) => {
+  // The pricing promises a sample of so many questions from each country...
+  await page.goto('/#pricing');
+  await expect(
+    page.getByText(t('plans.freeSummary', { count: FREE_QUESTIONS_PER_COUNTRY })),
+  ).toBeVisible();
+  // ...and the country's page gives that many.
   await page.goto('/testland/citizenship-test');
   await expect(page.getByRole('heading', { name: 'Testland written test' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      name: t('seo.samplesTitle', { count: FREE_QUESTIONS_PER_COUNTRY }),
+    }),
+  ).toBeVisible();
   const samples = page.locator('section[aria-labelledby="samples"] ol > li');
-  await expect(samples).toHaveCount(10);
+  await expect(samples).toHaveCount(FREE_QUESTIONS_PER_COUNTRY);
   // An answer is behind a disclosure until asked for.
   const first = samples.first();
   await expect(first.getByText(t('countries.answerLabel'))).toBeHidden();
@@ -55,6 +71,7 @@ test('a country page shows the exam facts, ten samples with answers, and its top
     .click();
   await expect(page).toHaveURL(/\/testland\/citizenship-test\/history$/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('History');
+  // A topic page shows its questions up to the same number: Testland's History has 10.
   await expect(page.locator('section[aria-labelledby="samples"] ol > li')).toHaveCount(10);
 });
 
