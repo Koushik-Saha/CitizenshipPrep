@@ -1,7 +1,7 @@
 import { applyStripeEvent, type StripeEvent } from '@oathly/api/server';
 import { revalidatePath } from 'next/cache';
 
-import { getStripe, stripePrices } from '@/lib/billing';
+import { endRefundedSubscription, getStripe, stripePrices } from '@/lib/billing';
 import { track } from '@/lib/analytics';
 import { getDb } from '@/lib/db';
 
@@ -34,6 +34,17 @@ export async function POST(request: Request) {
 
   // A failure here answers 500, and Stripe delivers the event again later.
   const outcome = await applyStripeEvent(getDb(), event, prices);
+  // A full refund of a subscription's payment: the subscription ends too
+  // (a pass's refund was recorded just now by applyStripeEvent).
+  const charge = event.data.object;
+  if (
+    event.type === 'charge.refunded' &&
+    outcome.kind !== 'applied' &&
+    charge.refunded === true &&
+    typeof charge.payment_intent === 'string'
+  ) {
+    await endRefundedSubscription(charge.payment_intent);
+  }
   if (outcome.kind === 'applied') {
     revalidatePath('/[locale]/study', 'layout');
     // A purchase starting, as opposed to renewing or changing, is an upgrade.

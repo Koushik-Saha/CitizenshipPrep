@@ -235,6 +235,36 @@ export async function setPlanCancellation(userId: string, cancel: boolean): Prom
   return true;
 }
 
+/**
+ * A payment refunded in full ends what it paid for, as the Refunds page
+ * says. A Country Pass is ended by the webhook itself, which recorded its
+ * payment. A payment towards a subscription (Pro, or an organization's
+ * seats) names its subscription only through the invoice it paid, which is
+ * asked of Stripe here, and that subscription is cancelled at once: it is not
+ * renewed and charged again. Stripe then reports the subscription ended, and
+ * the webhook takes the plan away as for any other ending. Returns whether a
+ * subscription was cancelled.
+ */
+export async function endRefundedSubscription(paymentIntentId: string): Promise<boolean> {
+  const stripe = getStripe();
+  const payments = await stripe.invoicePayments.list({
+    payment: { type: 'payment_intent', payment_intent: paymentIntentId },
+    expand: ['data.invoice'],
+    limit: 1,
+  });
+  const invoice = payments.data[0]?.invoice;
+  const subscription =
+    invoice && typeof invoice === 'object' && !('deleted' in invoice)
+      ? invoice.parent?.subscription_details?.subscription
+      : null;
+  const subscriptionId = typeof subscription === 'string' ? subscription : subscription?.id;
+  if (!subscriptionId) return false;
+  const current = await stripe.subscriptions.retrieve(subscriptionId);
+  if (current.status === 'canceled' || current.status === 'incomplete_expired') return false;
+  await stripe.subscriptions.cancel(subscriptionId);
+  return true;
+}
+
 /** What a seat costs, and how often. */
 export interface SeatPrice {
   amount: number;
