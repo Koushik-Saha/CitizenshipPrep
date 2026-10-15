@@ -66,7 +66,8 @@ export interface ExamFormatInput {
 }
 
 export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise<void> {
-  // Not stamped as verified: that is for a person who has read the source.
+  // Not stamped as verified: that is for a person who has read the source
+  // (markExamFormatChecked, from the admin area). New facts need a new check.
   await db.query(
     `insert into public.exam_formats
        (country_code, slug, name, format_type, question_count, pass_mark, time_limit_minutes,
@@ -82,7 +83,8 @@ export async function upsertExamFormat(db: Db, format: ExamFormatInput): Promise
            notes = excluded.notes,
            source_url = excluded.source_url,
            blueprint = excluded.blueprint,
-           last_verified_at = null`,
+           last_verified_at = null,
+           verified_by = null`,
     [
       format.countryCode,
       format.slug,

@@ -10,6 +10,7 @@ import {
   setupKey,
   signInAsReviewer,
   signInAsStaffAccount,
+  t,
 } from './support';
 
 // The reviewers' pages: getting in with an authenticator, the review queue with its filters,
@@ -589,4 +590,37 @@ test('the brand page is accessible', async ({ page }) => {
   await page.goto('/brand');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(/.+/);
   await expectAccessibleInBothThemes(page, 'brand');
+});
+
+test('a reviewer checks an exam’s facts against its source, and its public page says so', async ({
+  page,
+}) => {
+  await signInAsReviewer(page, '/admin/exams');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Exam facts');
+  const exam = page.getByTestId('exam-format').filter({ hasText: 'Testland written test' });
+  await expect(exam.getByRole('link', { name: /^https:\/\// })).toBeVisible();
+
+  // Nothing is marked without saying the official page was read.
+  await exam.getByRole('button', { name: /checked/i }).click();
+  await expect(page).toHaveURL(/\/admin\/exams$/);
+  await exam.getByRole('checkbox').check();
+  await exam.getByRole('button', { name: /checked/i }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'marked as checked' })).toContainText(
+    'Testland written test',
+  );
+  await expect(
+    page
+      .getByTestId('exam-format')
+      .filter({ hasText: 'Testland written test' })
+      .getByText(/^Checked [A-Z][a-z]{2} \d{1,2}, \d{4}/),
+  ).toBeVisible();
+  await expectAccessible(page, 'exam facts');
+
+  // The country's page now gives the date instead of "details being checked".
+  await page.goto('/testland/citizenship-test');
+  const card = page
+    .locator('article')
+    .filter({ has: page.getByRole('heading', { name: 'Testland written test' }) });
+  await expect(card).toContainText(/checked [A-Z][a-z]+ \d{1,2}, \d{4}/);
+  await expect(card).not.toContainText(t('exam.detailsBeingChecked'));
 });

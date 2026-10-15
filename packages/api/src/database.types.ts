@@ -721,6 +721,7 @@ export type Database = {
           source_url: string;
           time_limit_minutes: number | null;
           updated_at: string;
+          verified_by: string | null;
         };
         Insert: {
           blueprint?: Json | null;
@@ -739,6 +740,7 @@ export type Database = {
           source_url: string;
           time_limit_minutes?: number | null;
           updated_at?: string;
+          verified_by?: string | null;
         };
         Update: {
           blueprint?: Json | null;
@@ -757,6 +759,7 @@ export type Database = {
           source_url?: string;
           time_limit_minutes?: number | null;
           updated_at?: string;
+          verified_by?: string | null;
         };
         Relationships: [
           {
@@ -765,6 +768,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'countries';
             referencedColumns: ['iso_code'];
+          },
+          {
+            foreignKeyName: 'exam_formats_verified_by_fkey';
+            columns: ['verified_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
         ];
       };

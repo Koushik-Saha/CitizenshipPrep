@@ -53,6 +53,12 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
             >
               Reports{openReports > 0 ? ` (${openReports})` : ''}
             </Link>
+            <Link
+              href="/admin/exams"
+              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Exam facts
+            </Link>
             {reviewer.role === 'admin' &&
               adminPages.map(([href, label]) => (
                 <Link
