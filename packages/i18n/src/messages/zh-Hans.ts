@@ -35,6 +35,7 @@ export const zhHans: Messages = {
     factSeparator: '，',
     questionCount: '{count, plural, other {# 道题}}',
     toPass: '答对 {count} 题通过',
+    allMustBeCorrect: '“{section}”部分的 {count} 道题必须全部答对。',
     minutes: '{count, plural, other {# 分钟}}',
     noTimeLimit: '不限时',
     takenIn: '考试语言：{languages}',

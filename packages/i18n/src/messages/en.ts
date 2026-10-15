@@ -41,6 +41,7 @@ export const en = {
     factSeparator: ', ',
     questionCount: '{count, plural, one {# question} other {# questions}}',
     toPass: '{count} to pass',
+    allMustBeCorrect: 'All {count} questions on “{section}” must be correct.',
     minutes: '{count, plural, one {# minute} other {# minutes}}',
     noTimeLimit: 'no time limit',
     takenIn: 'Taken in {languages}',

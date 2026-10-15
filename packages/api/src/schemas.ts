@@ -28,6 +28,7 @@ export const countryFactsSchema = z.object({
       timeLimitMinutes: nullableNumber,
       sourceUrl: z.string(),
       lastVerifiedAt: nullableString,
+      allCorrect: z.optional(z.array(z.object({ label: z.string(), count: z.number() }))),
     }),
   ),
   publishedQuestions: z.number(),

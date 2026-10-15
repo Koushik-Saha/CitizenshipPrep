@@ -2,6 +2,7 @@
 
 import {
   testPath,
+  describeAllCorrect,
   describeExam,
   localCountryName,
   type CountryFacts,
@@ -85,6 +86,11 @@ export function ExamFactsList({ exams, t }: { exams: ExamFacts[]; t: Translator 
         <li key={exam.name}>
           <p className="font-medium">{exam.name}</p>
           {describeExam(exam, t) && <p className="text-fg-muted">{describeExam(exam, t)}</p>}
+          {describeAllCorrect(exam, t).map((rule) => (
+            <p key={rule} className="text-fg-muted">
+              {rule}
+            </p>
+          ))}
           <p className="text-fg-subtle text-sm">
             <a
               href={exam.sourceUrl}

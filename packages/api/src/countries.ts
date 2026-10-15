@@ -1,6 +1,7 @@
 // Public facts about the exams Oathly covers, for the landing page and the
 // globe. Everything here is safe to show signed-out visitors.
 
+import { parseBlueprint } from '@oathly/core';
 import { countryName, languageList, type Translator } from '@oathly/i18n';
 
 export { parseCountryCode, searchCountries } from './country-search';
@@ -15,6 +16,12 @@ export interface ExamFacts {
   sourceUrl: string;
   /** When someone last checked them against that page; null until they have. */
   lastVerifiedAt: string | null;
+  /**
+   * Parts of the exam where every question must be right, besides the pass
+   * mark (Australia: all 5 on Australian values). Optional on the way in: a
+   * copy saved before this existed still reads.
+   */
+  allCorrect?: { label: string; count: number }[];
 }
 
 export interface CountryFacts {
@@ -144,6 +151,27 @@ export function describeExam(
   if (exam.timeLimitMinutes !== null)
     parts.push(t('exam.minutes', { count: exam.timeLimitMinutes }));
   return parts.join(t('exam.factSeparator'));
+}
+
+/**
+ * The parts of an exam whose every question must be right, from its stored
+ * blueprint. Empty where there are none, or the blueprint cannot be read.
+ */
+export function allCorrectSections(blueprint: unknown): { label: string; count: number }[] {
+  try {
+    return (parseBlueprint(blueprint).sections ?? [])
+      .filter((section) => section.mustAllBeCorrect)
+      .map((section) => ({ label: section.label, count: section.count }));
+  } catch {
+    return [];
+  }
+}
+
+/** Each such part as a sentence: "All 5 questions on “Australian values” must be correct." */
+export function describeAllCorrect(exam: Pick<ExamFacts, 'allCorrect'>, t: Translator): string[] {
+  return (exam.allCorrect ?? []).map((section) =>
+    t('exam.allMustBeCorrect', { count: section.count, section: section.label }),
+  );
 }
 
 /** A country's name in the reader's language. */

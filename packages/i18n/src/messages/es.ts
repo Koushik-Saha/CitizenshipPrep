@@ -38,6 +38,7 @@ export const es: Messages = {
     factSeparator: ', ',
     questionCount: '{count, plural, one {# pregunta} other {# preguntas}}',
     toPass: '{count} para aprobar',
+    allMustBeCorrect: 'Las {count} preguntas sobre «{section}» deben ser todas correctas.',
     minutes: '{count, plural, one {# minuto} other {# minutos}}',
     noTimeLimit: 'sin límite de tiempo',
     takenIn: 'Se hace en {languages}',

@@ -40,6 +40,7 @@ export const ar: Messages = {
     questionCount:
       '{count, plural, one {سؤال واحد} two {سؤالان} few {# أسئلة} many {# سؤالًا} other {# سؤال}}',
     toPass: '{count} للنجاح',
+    allMustBeCorrect: 'يجب الإجابة بشكل صحيح عن جميع الأسئلة الـ{count} في «{section}».',
     minutes:
       '{count, plural, one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}}',
     noTimeLimit: 'بلا حد زمني',

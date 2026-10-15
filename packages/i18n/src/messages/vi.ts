@@ -37,6 +37,7 @@ export const vi: Messages = {
     factSeparator: ', ',
     questionCount: '{count, plural, other {# câu hỏi}}',
     toPass: 'cần đúng {count} câu để đạt',
+    allMustBeCorrect: 'Phải trả lời đúng cả {count} câu về “{section}”.',
     minutes: '{count, plural, other {# phút}}',
     noTimeLimit: 'không giới hạn thời gian',
     takenIn: 'Thi bằng {languages}',

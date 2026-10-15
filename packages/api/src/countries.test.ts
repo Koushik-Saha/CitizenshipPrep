@@ -2,8 +2,10 @@ import { translatorFor } from '@oathly/i18n/messages';
 import { describe, expect, it } from 'vitest';
 
 import {
+  allCorrectSections,
   countriesWithQuestions,
   countryHighlights,
+  describeAllCorrect,
   describeExam,
   localCountryName,
   parseCountryCode,
@@ -164,5 +166,34 @@ describe('uncoveredPool', () => {
     expect(uncoveredPool(279, [{ questionPoolSize: 128 }])).toBeNull();
     expect(uncoveredPool(48, [{ questionPoolSize: null }])).toBeNull();
     expect(uncoveredPool(48, [])).toBeNull();
+  });
+});
+
+describe('rules besides the pass mark', () => {
+  const australia = {
+    sections: [
+      {
+        id: 'values',
+        count: 5,
+        label: 'Australian values',
+        source: { topics: ['australian-values'] },
+        mustAllBeCorrect: true,
+      },
+      { id: 'general', count: 15, label: 'General knowledge', source: {} },
+    ],
+  };
+
+  it('names each part of an exam whose every question must be right', () => {
+    expect(allCorrectSections(australia)).toEqual([{ label: 'Australian values', count: 5 }]);
+    expect(describeAllCorrect({ allCorrect: allCorrectSections(australia) }, t)).toEqual([
+      'All 5 questions on “Australian values” must be correct.',
+    ]);
+  });
+
+  it('has nothing to say without such a part, or without a readable blueprint', () => {
+    expect(allCorrectSections(null)).toEqual([]);
+    expect(allCorrectSections({ stopEarly: true })).toEqual([]);
+    expect(allCorrectSections({ sections: 'nonsense' })).toEqual([]);
+    expect(describeAllCorrect({}, t)).toEqual([]);
   });
 });

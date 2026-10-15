@@ -38,6 +38,7 @@ export const hi: Messages = {
     factSeparator: ', ',
     questionCount: '{count, plural, one {# सवाल} other {# सवाल}}',
     toPass: 'पास होने के लिए {count}',
+    allMustBeCorrect: '“{section}” के सभी {count} प्रश्नों के उत्तर सही होने चाहिए।',
     minutes: '{count, plural, one {# मिनट} other {# मिनट}}',
     noTimeLimit: 'कोई समय सीमा नहीं',
     takenIn: '{languages} में होती है',

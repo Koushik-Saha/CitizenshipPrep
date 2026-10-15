@@ -131,6 +131,7 @@ describe.skipIf(!url)('public country facts against the database', () => {
           timeLimitMinutes: 45,
           sourceUrl: 'https://example.org/test',
           lastVerifiedAt: '2026-09-01T00:00:00.000Z',
+          allCorrect: [],
         },
         {
           name: 'Interview',
@@ -140,6 +141,7 @@ describe.skipIf(!url)('public country facts against the database', () => {
           timeLimitMinutes: null,
           sourceUrl: 'https://example.org/interview',
           lastVerifiedAt: null,
+          allCorrect: [],
         },
       ],
       publishedQuestions: 4,

@@ -38,6 +38,7 @@ export const tl: Messages = {
     factSeparator: ', ',
     questionCount: '{count, plural, one {# tanong} other {# tanong}}',
     toPass: '{count} para pumasa',
+    allMustBeCorrect: 'Dapat tama ang lahat ng {count} tanong tungkol sa “{section}”.',
     minutes: '{count, plural, one {# minuto} other {# minuto}}',
     noTimeLimit: 'walang limitasyon sa oras',
     takenIn: 'Isinasagawa sa {languages}',

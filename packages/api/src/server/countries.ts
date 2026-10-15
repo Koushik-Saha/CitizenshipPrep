@@ -17,6 +17,7 @@ import type {
   TopicGuide,
   TopicSummary,
 } from '../countries';
+import { allCorrectSections } from '../countries';
 
 type Db = Pick<pg.Pool, 'query'>;
 
@@ -89,7 +90,12 @@ export async function listCountryFacts(db: Db, isoCode?: string): Promise<Countr
       exam_languages: string[];
       latitude: string | null;
       longitude: string | null;
-      exams: (Omit<ExamFacts, 'lastVerifiedAt'> & { lastVerifiedAt: string | null })[] | null;
+      exams:
+        | (Omit<ExamFacts, 'lastVerifiedAt' | 'allCorrect'> & {
+            lastVerifiedAt: string | null;
+            blueprint: unknown;
+          })[]
+        | null;
       published_questions: string;
     }>(
       `select c.iso_code, c.slug, c.name, c.exam_languages, c.latitude, c.longitude,
@@ -100,7 +106,8 @@ export async function listCountryFacts(db: Db, isoCode?: string): Promise<Countr
                       'passMark', f.pass_mark,
                       'timeLimitMinutes', f.time_limit_minutes,
                       'sourceUrl', f.source_url,
-                      'lastVerifiedAt', f.last_verified_at)
+                      'lastVerifiedAt', f.last_verified_at,
+                      'blueprint', f.blueprint)
                     order by f.format_type <> 'written', f.slug)
              from public.exam_formats f
              where f.country_code = c.iso_code and f.is_current) as exams,
@@ -119,9 +126,10 @@ export async function listCountryFacts(db: Db, isoCode?: string): Promise<Countr
     examLanguages: row.exam_languages,
     latitude: row.latitude === null ? null : Number(row.latitude),
     longitude: row.longitude === null ? null : Number(row.longitude),
-    exams: (row.exams ?? []).map((exam) => ({
+    exams: (row.exams ?? []).map(({ blueprint, ...exam }) => ({
       ...exam,
       lastVerifiedAt: isoDate(exam.lastVerifiedAt),
+      allCorrect: allCorrectSections(blueprint),
     })),
     publishedQuestions: Number(row.published_questions),
     complete: completeness.get(row.iso_code) ?? false,

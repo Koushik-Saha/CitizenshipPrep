@@ -37,6 +37,7 @@ export const bn: Messages = {
     factSeparator: ', ',
     questionCount: '{count, plural, one {#টি প্রশ্ন} other {#টি প্রশ্ন}}',
     toPass: 'পাস করতে {count}টি',
+    allMustBeCorrect: '“{section}” বিষয়ের {count}টি প্রশ্নের সবগুলোর উত্তর সঠিক হতে হবে।',
     minutes: '{count, plural, one {# মিনিট} other {# মিনিট}}',
     noTimeLimit: 'সময়সীমা নেই',
     takenIn: '{languages} ভাষায় হয়',
