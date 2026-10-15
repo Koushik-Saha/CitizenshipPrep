@@ -52,7 +52,7 @@ export function SiteFooter({ t }: { t: Translator }) {
           <Link href={localizePath(t.locale, '/countries')} className={navLink}>
             {t('common.allCountries')}
           </Link>
-          {/* Behind sign-in: nothing to prefetch for a passer-by. */}
+          {/* Rarely followed: nothing to prefetch. */}
           <Link href={localizePath(t.locale, '/org')} prefetch={false} className={navLink}>
             {t('org.forOrganizations')}
           </Link>

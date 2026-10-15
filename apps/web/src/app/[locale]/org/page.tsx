@@ -4,16 +4,22 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { OrgLogo } from '@/components/org/brand';
+import { ForOrganizations } from '@/components/org/for-organizations';
 import { ProblemNotice } from '@/components/org/org-chrome';
 import { Badge, buttonClass, fieldClass, focusRing, labelClass } from '@/components/ui';
-import { getT } from '@/lib/i18n';
+import { alternates, getT } from '@/lib/i18n';
 import { logoSrc } from '@/lib/org';
-import { requireMe } from '@/lib/user';
+import { currentUser, requireMe } from '@/lib/user';
 
 import { createOrg, leave } from './actions';
 
 export async function generateMetadata({ params }: PageProps<'/[locale]/org'>): Promise<Metadata> {
-  return { title: (await getT(params)).t('org.metaTitle') };
+  const { locale, t } = await getT(params);
+  return {
+    title: t('org.metaTitle'),
+    description: t('org.intro'),
+    alternates: alternates(locale, '/org'),
+  };
 }
 
 const kindLabel = {
@@ -29,8 +35,10 @@ const roleLabel = {
 } as const;
 
 // The organizations someone runs or studies with, and the way to start one.
+// Signed out, what an organization gets, what it costs and who to ask.
 export default async function Organizations({ params, searchParams }: PageProps<'/[locale]/org'>) {
   const { locale, t } = await getT(params);
+  if (!(await currentUser())) return <ForOrganizations t={t} />;
   const { me } = await requireMe(locale);
   const card = 'bg-surface border-border rounded-lg border p-5 sm:p-6';
 

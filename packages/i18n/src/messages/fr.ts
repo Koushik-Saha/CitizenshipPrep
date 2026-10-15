@@ -597,6 +597,22 @@ export const fr: Messages = {
     metaTitle: 'Organisations | Oathly',
     title: 'Organisations',
     forOrganizations: 'Pour les organisations',
+    publicFeaturesTitle: 'Ce que reçoit une organisation',
+    publicInvite:
+      'Invitez vos apprenants par e-mail. Chacun reçoit une place, le pays pour lequel il se prépare et une date cible.',
+    publicDashboard:
+      'Une seule page montre le score de préparation et le temps d’étude de chaque apprenant, pour voir qui est prêt et qui a besoin d’aide.',
+    publicFull:
+      'Un apprenant avec une place a tout ce qu’offre Pro : toutes les questions, des examens blancs complets et plus d’aide de l’IA.',
+    publicPrivacy:
+      'Les apprenants choisissent de rejoindre et peuvent partir à tout moment. Les administrateurs voient la préparation et le temps d’étude, jamais les réponses individuelles.',
+    publicBrand: 'Le nom et le logo de votre organisation sur les pages que voient vos apprenants.',
+    publicPricingTitle: 'Tarifs',
+    publicPricingSoon:
+      'Les places ne sont pas encore en vente. Parlez-nous de votre organisation et du nombre de vos apprenants, et nous la mettrons en place.',
+    publicContact: 'Nous écrire',
+    publicStart: 'Se connecter pour créer une organisation',
+    publicInvited: 'Invité par une organisation ? Ouvrez le lien de votre e-mail d’invitation.',
     intro:
       'Pour les cabinets d’avocats, les écoles et les associations qui aident des personnes à se préparer. Invitez vos apprenants, donnez à chacun un pays et une date, et voyez qui est prêt et qui a besoin d’aide.',
     yours: 'Vos organisations',

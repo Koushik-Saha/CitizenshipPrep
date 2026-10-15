@@ -588,6 +588,23 @@ export const es: Messages = {
     metaTitle: 'Organizaciones | Oathly',
     title: 'Organizaciones',
     forOrganizations: 'Para organizaciones',
+    publicFeaturesTitle: 'Qué recibe una organización',
+    publicInvite:
+      'Invite a sus estudiantes por correo. Cada uno recibe una plaza, el país para el que se prepara y una fecha objetivo.',
+    publicDashboard:
+      'Una sola página muestra la puntuación de preparación y el tiempo de estudio de cada estudiante, para ver quién está listo y quién necesita ayuda.',
+    publicFull:
+      'Un estudiante con plaza tiene todo lo de Pro: todas las preguntas, exámenes de práctica completos y más ayuda de IA.',
+    publicPrivacy:
+      'Los estudiantes deciden unirse y pueden irse cuando quieran. Los administradores ven la preparación y el tiempo de estudio, nunca las respuestas individuales.',
+    publicBrand:
+      'El nombre y el logotipo de su organización en las páginas que ven sus estudiantes.',
+    publicPricingTitle: 'Precios',
+    publicPricingSoon:
+      'Las plazas aún no están a la venta. Cuéntenos sobre su organización y cuántos estudiantes tiene, y la pondremos en marcha.',
+    publicContact: 'Escríbanos',
+    publicStart: 'Inicie sesión para crear una organización',
+    publicInvited: '¿Le ha invitado una organización? Abra el enlace de su correo de invitación.',
     intro:
       'Para despachos de abogados, escuelas y organizaciones sin ánimo de lucro que ayudan a otras personas a prepararse. Invita a tus estudiantes, asigna a cada uno un país y una fecha, y mira quién está listo y quién necesita ayuda.',
     yours: 'Tus organizaciones',

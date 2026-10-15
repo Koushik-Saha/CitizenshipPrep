@@ -5,8 +5,9 @@ import { siteUrl } from '@/lib/site';
 
 // What a signed-out visitor cannot see is not worth a crawler's visit: every
 // one of these answers with a redirect to sign-in. Each has an address per
-// language.
-const privatePaths = ['/study', '/onboarding', '/welcome', '/org', '/join'];
+// language. /org itself is public (what organizations get); what is under it
+// is not.
+const privatePaths = ['/study', '/onboarding', '/welcome', '/org/', '/join'];
 
 export default function robots(): MetadataRoute.Robots {
   return {

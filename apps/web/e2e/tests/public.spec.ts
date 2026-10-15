@@ -145,7 +145,7 @@ test('search engines get a sitemap and are kept out of the signed-in pages', asy
 });
 
 test('signed-out visitors are sent to sign in from the learner pages', async ({ page }) => {
-  for (const path of ['/study', '/onboarding', '/org', '/study/plans']) {
+  for (const path of ['/study', '/onboarding', '/org/some-organization', '/study/plans']) {
     await page.goto(path);
     await expect(page, path).toHaveURL(/\/sign-in$/);
   }
@@ -153,9 +153,39 @@ test('signed-out visitors are sent to sign in from the learner pages', async ({ 
   await expect(page.getByLabel(t('auth.email'))).toBeVisible();
 });
 
+test('organizations see what they get, what it costs and who to ask, without signing in', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page
+    .getByRole('contentinfo')
+    .getByRole('link', { name: t('org.forOrganizations') })
+    .click();
+  await expect(page).toHaveURL(/\/org$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('org.forOrganizations'));
+  for (const feature of ['org.publicInvite', 'org.publicDashboard', 'org.publicPrivacy'] as const) {
+    await expect(page.getByText(t(feature))).toBeVisible();
+  }
+  // The tests' server sells no seats: it says so, and how to ask.
+  await expect(page.getByTestId('org-pricing')).toHaveText(t('org.publicPricingSoon'));
+  await expect(page.getByRole('link', { name: t('org.publicContact') })).toHaveAttribute(
+    'href',
+    '/contact',
+  );
+  await expect(page.getByRole('link', { name: t('org.publicStart') })).toHaveAttribute(
+    'href',
+    '/sign-in',
+  );
+  // Crawlers may read it; what is under it stays private.
+  const robots = await (await page.request.get('/robots.txt')).text();
+  expect(robots).toContain('Disallow: /org/');
+  expect(robots).not.toMatch(/Disallow: \/org$/m);
+});
+
 const publicPages = [
   ['/', 'landing'],
   ['/countries', 'country list'],
+  ['/org', 'for organizations'],
   ['/testland/citizenship-test', 'country test page'],
   ['/testland/citizenship-test/history', 'topic page'],
   ['/sign-in', 'sign-in'],

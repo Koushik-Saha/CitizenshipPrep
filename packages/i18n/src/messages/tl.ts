@@ -598,6 +598,24 @@ export const tl: Messages = {
     metaTitle: 'Mga organisasyon | Oathly',
     title: 'Mga organisasyon',
     forOrganizations: 'Para sa mga organisasyon',
+    publicFeaturesTitle: 'Ang makukuha ng isang organisasyon',
+    publicInvite:
+      'Imbitahan ang mga mag-aaral sa email. Bawat isa ay may puwesto, ang bansang pinaghahandaan nila at target na petsa.',
+    publicDashboard:
+      'Ipinapakita ng iisang pahina ang readiness score at oras ng pag-aaral ng bawat mag-aaral, para makita kung sino ang handa at sino ang kailangang tulungan.',
+    publicFull:
+      'Ang mag-aaral na may puwesto ay may lahat ng nasa Pro: bawat tanong, buong mock exam at mas maraming tulong ng AI.',
+    publicPrivacy:
+      'Ang mga mag-aaral ang pumipiling sumali at maaaring umalis anumang oras. Nakikita ng mga admin ang kahandaan at oras ng pag-aaral, hindi kailanman ang bawat sagot.',
+    publicBrand:
+      'Ang pangalan at logo ng inyong organisasyon sa mga pahinang nakikita ng inyong mga mag-aaral.',
+    publicPricingTitle: 'Presyo',
+    publicPricingSoon:
+      'Hindi pa ibinebenta ang mga puwesto. Sabihin sa amin ang tungkol sa inyong organisasyon at kung ilan ang inyong mag-aaral, at ise-set up namin kayo.',
+    publicContact: 'Sumulat sa amin',
+    publicStart: 'Mag-sign in para gumawa ng organisasyon',
+    publicInvited:
+      'Inimbitahan ng isang organisasyon? Buksan ang link sa inyong email ng imbitasyon.',
     intro:
       'Para sa mga law firm, paaralan at nonprofit na tumutulong sa mga taong naghahanda. Imbitahan ang iyong mga mag-aaral, bigyan ang bawat isa ng bansa at petsa, at tingnan kung sino ang handa na at sino ang nangangailangan ng tulong.',
     yours: 'Ang mga organisasyon mo',

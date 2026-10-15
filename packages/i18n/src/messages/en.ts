@@ -591,6 +591,22 @@ export const en = {
     metaTitle: 'Organizations | Oathly',
     title: 'Organizations',
     forOrganizations: 'For organizations',
+    publicFeaturesTitle: 'What an organization gets',
+    publicInvite:
+      'Invite learners by email. Each one gets a seat, the country they are preparing for and a target date.',
+    publicDashboard:
+      'One page shows each learner’s readiness score and study time, so you can see who is ready and who needs a hand.',
+    publicFull:
+      'A learner with a seat has everything in Pro: every question, full-length mock exams and more AI help.',
+    publicPrivacy:
+      'Learners choose to join and can leave at any time. Admins see readiness and study time, never individual answers.',
+    publicBrand: 'Your organization’s name and logo on the pages your learners see.',
+    publicPricingTitle: 'Pricing',
+    publicPricingSoon:
+      'Seats are not on sale yet. Tell us about your organization and how many learners you have, and we will set you up.',
+    publicContact: 'Write to us',
+    publicStart: 'Sign in to create an organization',
+    publicInvited: 'Invited by an organization? Open the link in your invitation email.',
     intro:
       'For law firms, schools and nonprofits helping people prepare. Invite your learners, give each a country and a date, and see who is ready and who needs a hand.',
     yours: 'Your organizations',

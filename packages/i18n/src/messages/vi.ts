@@ -574,6 +574,22 @@ export const vi: Messages = {
     metaTitle: 'Tổ chức | Oathly',
     title: 'Tổ chức',
     forOrganizations: 'Dành cho tổ chức',
+    publicFeaturesTitle: 'Tổ chức nhận được gì',
+    publicInvite:
+      'Mời học viên qua email. Mỗi người nhận một suất, nước họ đang chuẩn bị thi và một ngày mục tiêu.',
+    publicDashboard:
+      'Một trang cho thấy điểm sẵn sàng và thời gian học của từng học viên, để biết ai đã sẵn sàng và ai cần giúp đỡ.',
+    publicFull:
+      'Học viên có suất được dùng mọi thứ trong Pro: tất cả câu hỏi, bài thi thử đầy đủ và thêm trợ giúp AI.',
+    publicPrivacy:
+      'Học viên tự chọn tham gia và có thể rời đi bất cứ lúc nào. Quản trị viên thấy mức sẵn sàng và thời gian học, không bao giờ thấy từng câu trả lời.',
+    publicBrand: 'Tên và logo của tổ chức bạn trên các trang học viên nhìn thấy.',
+    publicPricingTitle: 'Giá',
+    publicPricingSoon:
+      'Suất học chưa được bán. Hãy cho chúng tôi biết về tổ chức của bạn và số học viên, chúng tôi sẽ thiết lập cho bạn.',
+    publicContact: 'Liên hệ với chúng tôi',
+    publicStart: 'Đăng nhập để tạo tổ chức',
+    publicInvited: 'Được một tổ chức mời? Hãy mở liên kết trong email mời.',
     intro:
       'Dành cho các công ty luật, trường học và tổ chức phi lợi nhuận đang giúp mọi người ôn thi. Mời học viên của bạn, giao cho mỗi người một quốc gia và một ngày, rồi xem ai đã sẵn sàng và ai cần hỗ trợ.',
     yours: 'Tổ chức của bạn',

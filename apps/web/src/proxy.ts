@@ -32,13 +32,15 @@ function adminGuard(request: NextRequest) {
   return NextResponse.redirect(signIn);
 }
 
-/** Pages only a signed-in learner sees, without their language prefix. */
+/**
+ * Pages only a signed-in learner sees, without their language prefix. /org
+ * itself is not one: signed out, it says what organizations get.
+ */
 const isLearnerPath = (path: string) =>
   path === '/welcome' ||
   path === '/onboarding' ||
   path === '/study' ||
   path.startsWith('/study/') ||
-  path === '/org' ||
   path.startsWith('/org/');
 
 // Learner pages: Neon Auth sends signed-out visitors to /sign-in and keeps
