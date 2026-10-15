@@ -2,9 +2,11 @@
 
 import {
   questionWording,
+  resumeSession,
   toMockExam,
   toQuizQuestion,
   type QuestionWording,
+  type SessionAnswer,
   type SessionQuestion,
   type StudySession as Session,
 } from '@oathly/api/study';
@@ -13,12 +15,12 @@ import { examDecision, isCorrect, type Answer } from '@oathly/core';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, languageName, textDirection, type MessageKey } from '@oathly/i18n';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
 import { buttonClass, focusRing } from '@/components/ui';
-import { completeSession, flushAnswers, recordAnswer } from '@/lib/answer-sync';
+import { completeSession, flushAnswers, queuedAnswers, recordAnswer } from '@/lib/answer-sync';
 import { useAudioPlatform } from '@/lib/audio-platform';
 import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
 
@@ -47,7 +49,32 @@ function isTyping(target: EventTarget | null): boolean {
   );
 }
 
+const toGiven = (answer: SessionAnswer): GivenAnswer => ({
+  ...answer,
+  answeredAt: new Date(answer.answeredAt),
+});
+
+const subscribeNothing = () => () => {};
+
+/**
+ * A session carries on where it was left: after a reload, or opened again,
+ * it starts at the first question not yet answered, with the answers given
+ * so far counted. Those come with the page from the server, and from this
+ * device's queue for any not sent yet. The queue is only readable in the
+ * browser, so the session is set up again, once, after the page has hydrated.
+ */
 export function StudySession({ session }: { session: Session }) {
+  const onDevice = useSyncExternalStore(
+    subscribeNothing,
+    () => true,
+    () => false,
+  );
+  return (
+    <SessionRunner key={onDevice ? 'device' : 'server'} session={session} onDevice={onDevice} />
+  );
+}
+
+function SessionRunner({ session, onDevice }: { session: Session; onDevice: boolean }) {
   const { questions } = session;
   const isExam = session.mode === 'mock_exam';
   const isFlashcards = session.mode === 'flashcards';
@@ -58,11 +85,20 @@ export function StudySession({ session }: { session: Session }) {
   const queryClient = useQueryClient();
   const t = useT();
 
-  const [index, setIndex] = useState(0);
+  const [resumed] = useState(() =>
+    resumeSession(
+      questions.map((question) => question.id),
+      [...(session.answered ?? []), ...(onDevice ? queuedAnswers(session.attemptId) : [])],
+    ),
+  );
+  const [index, setIndex] = useState(Math.min(resumed.index, questions.length - 1));
   const [selected, setSelected] = useState<string[]>([]);
-  const [phase, setPhase] = useState<Phase>(session.completedAt ? 'results' : 'answering');
+  // Every question answered but the results not yet seen: they are next.
+  const [phase, setPhase] = useState<Phase>(
+    session.completedAt || resumed.index >= questions.length ? 'results' : 'answering',
+  );
   const [flipped, setFlipped] = useState(false);
-  const [answers, setAnswers] = useState<GivenAnswer[]>([]);
+  const [answers, setAnswers] = useState<GivenAnswer[]>(() => resumed.answers.map(toGiven));
   const [stopNote, setStopNote] = useState<MessageKey | null>(null);
   // Study language or the exam's own, for questions that have both. The
   // choice carries on to the next question until it is changed back.

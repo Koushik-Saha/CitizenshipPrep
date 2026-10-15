@@ -553,7 +553,23 @@ export async function loadStudySession(
         ]
       : [];
   });
-  const questions = await attachAudio(db, worded);
+  const [questions, answered] = await Promise.all([
+    attachAudio(db, worded),
+    // The first answer to each question: one given again after a reload is not a second try.
+    db.query<{
+      question_id: string;
+      selected_answer: { keys?: string[] } | null;
+      correct: boolean;
+      time_ms: number;
+      created_at: Date;
+    }>(
+      `select distinct on (question_id) question_id, selected_answer, correct, time_ms, created_at
+       from public.answer_events
+       where attempt_id = $1 and user_id = $2
+       order by question_id, created_at, id`,
+      [attemptId, userId],
+    ),
+  ]);
 
   let exam: StudySession['exam'] = null;
   if (row.exam_format_id) {
@@ -606,6 +622,13 @@ export async function loadStudySession(
     completedAt: row.completed_at?.toISOString() ?? null,
     questions,
     exam,
+    answered: answered.rows.map((answer) => ({
+      questionId: answer.question_id,
+      selectedKeys: answer.selected_answer?.keys ?? [],
+      correct: answer.correct,
+      timeMs: answer.time_ms,
+      answeredAt: answer.created_at.toISOString(),
+    })),
   };
 }
 

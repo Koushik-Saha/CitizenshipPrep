@@ -101,6 +101,45 @@ export interface StudySession {
   completedAt: string | null;
   questions: SessionQuestion[];
   exam: SessionExam | null;
+  /**
+   * What has been answered in this session already, so a page that is
+   * reloaded (or opened again) carries on where the learner was. Optional:
+   * a session saved on a phone before this existed still reads.
+   */
+  answered?: SessionAnswer[];
+}
+
+/** One answer given in a session. */
+export interface SessionAnswer {
+  questionId: string;
+  selectedKeys: string[];
+  correct: boolean;
+  timeMs: number;
+  /** ISO 8601. */
+  answeredAt: string;
+}
+
+/**
+ * Where a session carries on from: the first answer given to each of its
+ * questions, in the session's order, and the first question still to answer
+ * (questions.length when every one has been). Answers come from the server
+ * and from the device's queue of answers not yet sent; one counted twice, or
+ * given to a question not in the session, is left out.
+ */
+export function resumeSession(
+  questionIds: readonly string[],
+  given: readonly SessionAnswer[],
+): { answers: SessionAnswer[]; index: number } {
+  const first = new Map<string, SessionAnswer>();
+  for (const answer of [...given].sort((a, b) => a.answeredAt.localeCompare(b.answeredAt))) {
+    if (!first.has(answer.questionId)) first.set(answer.questionId, answer);
+  }
+  const answers = questionIds.flatMap((id) => {
+    const answer = first.get(id);
+    return answer ? [answer] : [];
+  });
+  const index = questionIds.findIndex((id) => !first.has(id));
+  return { answers, index: index === -1 ? questionIds.length : index };
 }
 
 export interface TopicReadiness {

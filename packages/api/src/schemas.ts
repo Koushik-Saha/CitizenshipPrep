@@ -166,6 +166,17 @@ export const studySessionSchema = z.object({
       ),
     }),
   ),
+  answered: z.optional(
+    z.array(
+      z.object({
+        questionId: z.string(),
+        selectedKeys: z.array(z.string()),
+        correct: z.boolean(),
+        timeMs: z.number(),
+        answeredAt: z.string(),
+      }),
+    ),
+  ),
 }) satisfies z.ZodMiniType<StudySession>;
 
 export const countryPackSchema = z.object({

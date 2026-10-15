@@ -12,6 +12,13 @@ const largest = Math.max(...POSTER_SIZES);
 const notPhone = '(min-width: 640px)';
 
 /**
+ * A coordinate to a ten-thousandth of the poster's width: finer than a pixel,
+ * and the same on the server and in the browser, whose trigonometry can differ
+ * in the last digit (which React reports as a hydration mismatch).
+ */
+const round = (value: number) => Math.round(value * 1e4) / 1e4;
+
+/**
  * The static globe: a pre-rendered image plus the countries drawn over it
  * from data, at the positions the 3D globe puts them. This is what is in the
  * HTML, what devices without the 3D globe keep, and what reduced-motion
@@ -80,7 +87,7 @@ export function GlobePoster({
           return (
             <g
               key={marker.code}
-              transform={`translate(${x * POSTER_RADIUS} ${-y * POSTER_RADIUS}) scale(${scale})`}
+              transform={`translate(${round(x * POSTER_RADIUS)} ${round(-y * POSTER_RADIUS)}) scale(${scale})`}
             >
               <circle r={0.065 * POSTER_RADIUS} fill="url(#globe-marker-glow)" />
               <circle r={0.016 * POSTER_RADIUS} fill={GLOBE_COLORS.marker} />

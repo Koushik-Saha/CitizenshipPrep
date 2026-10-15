@@ -109,6 +109,46 @@ test('a practice session checks each answer and ends with results', async ({ pag
   await expect(page).toHaveURL(/\/study$/);
 });
 
+test('a session reloaded part-way carries on where it was, with the answers so far counted', async ({
+  page,
+}) => {
+  await signInAndOnboard(page);
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\/[0-9a-f-]{36}$/);
+  const total = Number(
+    /of (\d+)/.exec(await page.getByText(/^Question 1 of \d+$/).innerText())![1],
+  );
+
+  // Three answered (the second wrong), then the page is reloaded at once: the
+  // last answer may not have reached the server yet, and still counts.
+  for (let i = 0; i < 3; i += 1) {
+    const answer = await rightAnswer(page);
+    await (i === 1 ? otherOption(page, answer) : option(page, answer)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+  }
+  await page.reload();
+  await expect(page.getByText(t('session.questionOf', { current: 4, total }))).toBeVisible();
+
+  for (let i = 3; ; i += 1) {
+    await option(page, await rightAnswer(page)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    const last = page.getByRole('button', { name: t('session.seeResults'), exact: true });
+    if (await last.isVisible()) {
+      await last.click();
+      break;
+    }
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+    expect(i, 'the session ends').toBeLessThan(40);
+  }
+  // Every question once: the three before the reload, and the rest after.
+  await expect(page.getByText(t('results.correctOf', { total }))).toBeVisible();
+  await expect(page.getByText(String(total - 1), { exact: true }).first()).toBeVisible();
+  // Opened again once finished, it shows the same results rather than starting over.
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1, name: t('results.complete') })).toBeVisible();
+});
+
 test('answering never waits for the network', async ({ page }) => {
   await signInAndOnboard(page);
   await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();

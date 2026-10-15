@@ -88,6 +88,13 @@ export function flushAnswers(): void {
   schedule(0);
 }
 
+/** This session's answers that are still waiting on this device to be sent. */
+export function queuedAnswers(attemptId: string): QueuedAnswer[] {
+  return load()
+    .pending.map((entry) => entry.answer)
+    .filter((answer) => answer.attemptId === attemptId);
+}
+
 /** Answers not yet confirmed by the server. */
 export function subscribePending(listener: (pending: number) => void): () => void {
   listeners.add(listener);
