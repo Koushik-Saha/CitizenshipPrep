@@ -93,6 +93,52 @@ test('pages come in the reader’s language, with questions translated where rev
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 });
 
+test('the site can be installed as an app: every page links its manifest, and its icons load', async ({
+  page,
+  request,
+}) => {
+  await page.goto('/');
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
+    'href',
+    '/manifest.webmanifest',
+  );
+  const response = await request.get('/manifest.webmanifest');
+  expect(response.status()).toBe(200);
+  const manifest = await response.json();
+  expect(manifest).toMatchObject({
+    short_name: 'Oathly',
+    display: 'standalone',
+    start_url: '/study',
+  });
+  const sizes = manifest.icons.map((icon: { sizes: string }) => icon.sizes);
+  expect(sizes).toEqual(expect.arrayContaining(['192x192', '512x512']));
+  for (const icon of manifest.icons as { src: string }[]) {
+    const image = await request.get(icon.src);
+    expect(image.status(), icon.src).toBe(200);
+    expect(image.headers()['content-type'], icon.src).toBe('image/png');
+  }
+});
+
+test('a shared link in a language opens in that language, whatever was read before', async ({
+  page,
+}) => {
+  // Someone has been reading in Spanish: plain addresses now open in Spanish.
+  await page.goto('/es/countries');
+  await page.goto('/countries');
+  await expect(page).toHaveURL(/\/es\/countries$/);
+  // A link shared in English says so, and wins: it opens in English, and the
+  // plain addresses after it stay English.
+  await page.goto('/en/countries');
+  await expect(page).toHaveURL(/\/countries$/);
+  await expect(page).not.toHaveURL(/\/es\//);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  // So does a link shared in another language.
+  await page.goto('/ar/countries');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
+});
+
 test('the privacy policy, the terms and how to delete an account are a link away', async ({
   page,
 }) => {

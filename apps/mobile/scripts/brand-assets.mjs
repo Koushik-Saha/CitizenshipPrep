@@ -56,10 +56,22 @@ const webImages = [
   ['apple-icon.png', 180, svg(mark({ ring: WHITE, line: GOLD, share: 0.62 }), NAVY)],
 ];
 
+// The website as an installed app (app/manifest.ts): the sizes browsers ask
+// for, and a "maskable" one whose mark keeps to the middle, for launchers that
+// crop it to a circle or a squircle.
+const webApp = path.resolve(out, '../../../web/public/icons');
+mkdirSync(webApp, { recursive: true });
+const webAppImages = [
+  ['icon-192.png', 192, svg(mark({ ring: WHITE, line: GOLD, share: 0.62 }), NAVY)],
+  ['icon-512.png', 512, svg(mark({ ring: WHITE, line: GOLD, share: 0.62 }), NAVY)],
+  ['icon-maskable-512.png', 512, svg(mark({ ring: WHITE, line: GOLD, share: 0.5 }), NAVY)],
+];
+
 const browser = await chromium.launch();
 const all = [
   ...images.map((image) => [out, ...image]),
   ...webImages.map((image) => [web, ...image]),
+  ...webAppImages.map((image) => [webApp, ...image]),
 ];
 for (const [folder, name, size, source] of all) {
   const page = await browser.newPage({ viewport: { width: size, height: size } });
