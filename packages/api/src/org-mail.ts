@@ -67,10 +67,12 @@ export interface Sender {
 
 /**
  * Who email is from, as EMAIL_FROM gives it: "Oathly <invites@example.com>"
- * or a bare address. Null when it is neither.
+ * or a bare address. Null when it is neither. Quotes around the whole value,
+ * as a .env file writes it and a hosting dashboard keeps it when pasted, are
+ * not part of it.
  */
 export function parseSender(value: string | null | undefined): Sender | null {
-  const text = value?.trim() ?? '';
+  const text = (value?.trim() ?? '').replace(/^(["'])(.*)\1$/, '$2').trim();
   const named = /^(.*)<([^<>\s]+@[^<>\s]+\.[^<>\s]+)>$/.exec(text);
   if (named) {
     const name = named[1]!

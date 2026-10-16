@@ -66,6 +66,19 @@ describe('parseSender', () => {
     expect(parseSender('invites@example.com')).toEqual({ email: 'invites@example.com' });
   });
 
+  it('reads a value pasted with the quotes a .env file puts around it', () => {
+    expect(parseSender('"Oathly <invites@example.com>"')).toEqual({
+      email: 'invites@example.com',
+      name: 'Oathly',
+    });
+    expect(parseSender("'invites@example.com'")).toEqual({ email: 'invites@example.com' });
+    // A name in quotes, inside, is still a name.
+    expect(parseSender('"Oathly Team" <invites@example.com>')).toEqual({
+      email: 'invites@example.com',
+      name: 'Oathly Team',
+    });
+  });
+
   it('is null for anything that is not a sender', () => {
     for (const value of [
       '',
