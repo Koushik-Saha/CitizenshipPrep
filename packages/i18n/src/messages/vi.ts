@@ -159,7 +159,7 @@ export const vi: Messages = {
     countryLeadOfPool:
       'Hiện có {count} trên {pool} câu hỏi trong ngân hàng chính thức, mỗi câu đều được đối chiếu với nguồn chính thức. Sẽ có thêm câu hỏi khi được duyệt.',
     betaNote:
-      'Beta: câu hỏi cho bài thi này vẫn đang được bổ sung và kiểm tra. Country Pass của nước này sẽ được bán khi câu hỏi đã đầy đủ; Pro đã bao gồm nước này.',
+      'Beta: câu hỏi cho bài thi này vẫn đang được bổ sung và kiểm tra. Vé Quốc gia của nước này sẽ được bán khi câu hỏi đã đầy đủ; Pro đã bao gồm nước này.',
     theTest: 'Kỳ thi',
     formatBeingChecked: 'Hình thức thi đang được kiểm tra.',
     whatItCovers: 'Nội dung thi',
@@ -553,9 +553,9 @@ export const vi: Messages = {
     cancelled: 'Gói của bạn đã được hủy. Bạn vẫn dùng Pro đến hết kỳ đã thanh toán.',
     kept: 'Gói của bạn sẽ gia hạn như trước.',
     changeFailed: 'Thao tác chưa hoàn tất. Hãy thử lại, hoặc dùng Quản lý thanh toán.',
-    getAPass: 'Mua Country Pass',
+    getAPass: 'Mua Vé Quốc gia',
     passInBeta:
-      '{country} đang ở giai đoạn Beta: câu hỏi vẫn đang được hoàn thiện nên Country Pass chưa được bán. Pro đã bao gồm nước này.',
+      '{country} đang ở giai đoạn Beta: câu hỏi vẫn đang được hoàn thiện nên Vé Quốc gia chưa được bán. Pro đã bao gồm nước này.',
     manageInStore: 'Gói đăng ký này được mua trên {store}. Hãy thay đổi hoặc hủy tại đó.',
     boughtOnWeb: 'Gói đăng ký này được mua trên trang web Oathly. Hãy thay đổi hoặc hủy tại đó.',
     unavailable: 'Hiện chưa thể mua gói tại đây.',

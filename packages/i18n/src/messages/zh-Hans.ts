@@ -148,7 +148,7 @@ export const zhHans: Messages = {
     countryLeadOfPool:
       '目前已有官方题库 {pool} 道题中的 {count} 道，每道都已对照官方来源核对。更多题目将在审核后陆续加入。',
     betaNote:
-      '测试版：本考试的题目仍在添加和核对中。题目完整后才会开售其 Country Pass；Pro 现已包含该国家。',
+      '测试版：本考试的题目仍在添加和核对中。题目完整后才会开售其国家通行证；Pro 现已包含该国家。',
     theTest: '考试',
     formatBeingChecked: '考试形式正在核对中。',
     whatItCovers: '考试内容',
@@ -516,9 +516,9 @@ export const zhHans: Messages = {
     cancelled: '你的订阅已取消。在已付费的期限结束前，你仍可使用 Pro。',
     kept: '你的订阅将照常续订。',
     changeFailed: '操作未完成。请重试，或使用“管理账单”。',
-    getAPass: '购买 Country Pass',
+    getAPass: '购买国家通行证',
     passInBeta:
-      '{country}处于测试版：题目仍在完善中，因此其 Country Pass 暂不出售。Pro 现已包含该国家。',
+      '{country}处于测试版：题目仍在完善中，因此其国家通行证暂不出售。Pro 现已包含该国家。',
     manageInStore: '此订阅是在 {store} 购买的，请前往那里更改或取消。',
     boughtOnWeb: '此订阅是在 Oathly 网站上购买的，请前往那里更改或取消。',
     unavailable: '目前还无法在这里购买套餐。',

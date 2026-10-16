@@ -32,6 +32,16 @@ describe('message catalogs', () => {
         }
       });
 
+      it('calls the Country Pass by its own name in this language, everywhere', () => {
+        // A language that translates the plan's name uses that name on every
+        // page and button, not the English one in some of them.
+        const name = messages.get('plans.countryPass')!;
+        if (name === english.get('plans.countryPass')) return;
+        for (const [key, message] of messages) {
+          expect(message, key).not.toContain(english.get('plans.countryPass'));
+        }
+      });
+
       it('uses the same placeholders as the English', () => {
         for (const [key, message] of messages) {
           expect(messageShape(message).names, key).toEqual(messageShape(english.get(key)!).names);

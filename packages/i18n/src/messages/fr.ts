@@ -166,7 +166,7 @@ export const fr: Messages = {
     countryLeadOfPool:
       'Pour l’instant, {count} des {pool} questions de la liste officielle, chacune vérifiée d’après la source officielle. D’autres sont ajoutées au fil des vérifications.',
     betaNote:
-      'Bêta : les questions de ce test sont encore en cours d’ajout et de vérification. Son Country Pass sera en vente une fois qu’elles seront complètes ; Pro l’inclut déjà.',
+      'Bêta : les questions de ce test sont encore en cours d’ajout et de vérification. Son Pass Pays sera en vente une fois qu’elles seront complètes ; Pro l’inclut déjà.',
     theTest: 'Le test',
     formatBeingChecked: 'Le format de l’examen est en cours de vérification.',
     whatItCovers: 'Ce qu’il couvre',
@@ -575,9 +575,9 @@ export const fr: Messages = {
       'Votre abonnement est annulé. Vous gardez Pro jusqu’à la fin de la période déjà payée.',
     kept: 'Votre abonnement sera renouvelé comme avant.',
     changeFailed: 'L’opération n’a pas abouti. Réessayez, ou utilisez Gérer la facturation.',
-    getAPass: 'Obtenir un Country Pass',
+    getAPass: 'Obtenir un Pass Pays',
     passInBeta:
-      '{country} est en bêta : ses questions sont encore en cours de complétion, son Country Pass n’est donc pas encore en vente. Pro l’inclut déjà.',
+      '{country} est en bêta : ses questions sont encore en cours de complétion, son Pass Pays n’est donc pas encore en vente. Pro l’inclut déjà.',
     manageInStore: 'Cet abonnement a été acheté sur {store}. Modifiez-le ou résiliez-le là-bas.',
     boughtOnWeb:
       'Cet abonnement a été acheté sur le site web d’Oathly. Modifiez-le ou résiliez-le là-bas.',
