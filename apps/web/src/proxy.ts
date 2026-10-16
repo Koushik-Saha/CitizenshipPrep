@@ -84,8 +84,21 @@ export async function proxy(request: NextRequest) {
   if (pathname === '/brand') return NextResponse.next();
 
   const { locale: inUrl, path } = splitLocalePath(pathname);
-  // "/en/…" is not a public address: one URL per page per language.
-  if (inUrl === 'en') return NextResponse.redirect(sameUrl(request, path), 308);
+  // "/en/…" is not a public address: one URL per page per language. But it
+  // does say "in English", so it is remembered as the choice on the way to
+  // the plain address; otherwise a reader who once chose another language
+  // would be sent back to it, and a shared English link would not open in
+  // English. Temporary, so the browser asks again each time and the choice is
+  // set each time (a cached permanent redirect would skip it).
+  if (inUrl === 'en') {
+    const toEnglish = NextResponse.redirect(sameUrl(request, path), 307);
+    toEnglish.cookies.set(LOCALE_COOKIE, 'en', {
+      path: '/',
+      maxAge: LOCALE_COOKIE_MAX_AGE,
+      sameSite: 'lax',
+    });
+    return toEnglish;
+  }
 
   let locale: UiLocale | null = inUrl;
   if (!locale) {
