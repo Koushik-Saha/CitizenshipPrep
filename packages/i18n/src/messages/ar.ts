@@ -455,6 +455,7 @@ export const ar: Messages = {
     invalidEmail: 'اكتب بريدًا إلكترونيًا يمكننا الرد عليه.',
     invalidMessage: 'اكتب بضع كلمات عمّا تحتاج إليه.',
     direct: 'يمكنك أيضًا مراسلتنا على {email}.',
+    directOnly: 'راسلنا على {email}.',
     unavailable: 'نموذج الاتصال قيد الإعداد. عُد قريبًا.',
   },
 

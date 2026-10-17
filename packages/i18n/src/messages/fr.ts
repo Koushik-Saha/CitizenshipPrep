@@ -478,6 +478,7 @@ export const fr: Messages = {
     invalidEmail: 'Indiquez une adresse e-mail à laquelle nous pouvons répondre.',
     invalidMessage: 'Écrivez quelques mots sur ce dont vous avez besoin.',
     direct: 'Vous pouvez aussi nous écrire à {email}.',
+    directOnly: 'Écrivez-nous à {email}.',
     unavailable: 'Le formulaire de contact est en cours de mise en place. Revenez bientôt.',
   },
 

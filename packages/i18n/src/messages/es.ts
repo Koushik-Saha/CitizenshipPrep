@@ -474,6 +474,7 @@ export const es: Messages = {
     invalidEmail: 'Escribe un correo electrónico al que podamos responder.',
     invalidMessage: 'Escribe unas palabras sobre lo que necesitas.',
     direct: 'También puedes escribirnos a {email}.',
+    directOnly: 'Escríbenos a {email}.',
     unavailable: 'El formulario de contacto se está configurando. Vuelve pronto.',
   },
 

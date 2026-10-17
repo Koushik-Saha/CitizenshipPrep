@@ -458,6 +458,7 @@ export const vi: Messages = {
     invalidEmail: 'Nhập địa chỉ email mà chúng tôi có thể trả lời.',
     invalidMessage: 'Viết vài lời về điều bạn cần.',
     direct: 'Bạn cũng có thể viết cho chúng tôi tại {email}.',
+    directOnly: 'Hãy gửi email cho chúng tôi tại {email}.',
     unavailable: 'Biểu mẫu liên hệ đang được thiết lập. Hãy quay lại sau.',
   },
 

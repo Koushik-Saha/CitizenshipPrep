@@ -429,6 +429,7 @@ export const zhHans: Messages = {
     invalidEmail: '请填写我们可以回复的电子邮箱。',
     invalidMessage: '请简单写几句你的需求。',
     direct: '你也可以写信至 {email}。',
+    directOnly: '请发送电子邮件至 {email}。',
     unavailable: '联系表单正在设置中。请稍后再来。',
   },
 

@@ -478,6 +478,7 @@ export const tl: Messages = {
     invalidEmail: 'Maglagay ng email address na masasagot namin.',
     invalidMessage: 'Sumulat ng ilang salita tungkol sa kailangan mo.',
     direct: 'Maaari ka ring sumulat sa amin sa {email}.',
+    directOnly: 'Mag-email sa amin sa {email}.',
     unavailable: 'Inihahanda pa ang contact form. Bumalik sa lalong madaling panahon.',
   },
 

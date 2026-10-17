@@ -109,6 +109,18 @@ test('the contact page is reached from the footer, in the reader’s language', 
   await expect(page).toHaveURL(/\/contact$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('contact.title'));
   await expect(page.getByText(t('contact.notAdvice'))).toBeVisible();
+  // This server sends no email, so there is no form, and nothing says there is one.
+  await expect(page.getByRole('textbox')).toHaveCount(0);
+  await expect(
+    page.getByText(t('contact.direct', { email: '' }).replace(/\s*\.$/, '')),
+  ).toHaveCount(0);
+  const address = page.getByTestId('contact-address');
+  if (await address.count()) {
+    await expect(address).toHaveText(/^Email us at \S+@\S+\.$/);
+    await expect(address.getByRole('link')).toHaveAttribute('href', /^mailto:\S+@\S+$/);
+  } else {
+    await expect(page.getByText(t('contact.unavailable'))).toBeVisible();
+  }
   await expectAccessibleInBothThemes(page, 'contact');
 
   await page.goto('/es/contact');

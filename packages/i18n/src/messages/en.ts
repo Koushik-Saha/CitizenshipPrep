@@ -475,6 +475,7 @@ export const en = {
     invalidEmail: 'Enter an email address we can reply to.',
     invalidMessage: 'Write a few words about what you need.',
     direct: 'You can also write to us at {email}.',
+    directOnly: 'Email us at {email}.',
     unavailable: 'The contact form is being set up. Check back soon.',
   },
 

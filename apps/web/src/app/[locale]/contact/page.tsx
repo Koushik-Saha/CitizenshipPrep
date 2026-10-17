@@ -28,7 +28,10 @@ export default async function ContactPage({ params }: PageProps<'/[locale]/conta
   const open = isSupportFormOpen();
   // The sentence around the address, so the address itself can be a link.
   const SLOT = '\uE000';
-  const [before, after] = t('contact.direct', { email: SLOT }).split(SLOT);
+  // With the form, the address is a second way in; without it, the only one.
+  const [before, after] = t(open ? 'contact.direct' : 'contact.directOnly', {
+    email: SLOT,
+  }).split(SLOT);
   return (
     <>
       <SiteHeader t={t} path="/contact" />
@@ -36,17 +39,20 @@ export default async function ContactPage({ params }: PageProps<'/[locale]/conta
         <h1 className="font-display text-4xl font-semibold sm:text-5xl">{t('contact.title')}</h1>
         <p className="text-fg-muted mt-4 text-lg">{t('contact.intro')}</p>
         <p className="text-fg-muted mt-2">{t('contact.notAdvice')}</p>
-        <div className="mt-10">
-          {open ? (
+        {open ? (
+          <div className="mt-10">
             <I18nProvider locale={locale} messages={clientMessages(locale, ['contact'])}>
               <ContactForm />
             </I18nProvider>
-          ) : (
-            !address && <p className="text-fg-muted">{t('contact.unavailable')}</p>
-          )}
-        </div>
+          </div>
+        ) : (
+          !address && <p className="text-fg-muted mt-10">{t('contact.unavailable')}</p>
+        )}
         {address && (
-          <p className={open ? 'text-fg-muted mt-8 text-sm' : 'text-lg'}>
+          <p
+            className={open ? 'text-fg-muted mt-8 text-sm' : 'mt-8 text-lg'}
+            data-testid="contact-address"
+          >
             {before}
             <a
               href={`mailto:${address}`}
