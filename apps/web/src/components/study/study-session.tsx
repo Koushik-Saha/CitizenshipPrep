@@ -19,7 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 
 import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
-import { buttonClass, focusRing } from '@/components/ui';
+import { buttonClass, focusRing, textButtonClass } from '@/components/ui';
 import { completeSession, flushAnswers, queuedAnswers, recordAnswer } from '@/lib/answer-sync';
 import { useAudioPlatform } from '@/lib/audio-platform';
 import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
@@ -444,7 +444,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
             <button
               type="button"
               onClick={() => setTextShownFor(index)}
-              className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
+              className={textButtonClass}
             >
               {t('audio.showQuestion')}
             </button>
@@ -467,7 +467,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
           <button
             type="button"
             onClick={() => setInExamLanguage((current) => !current)}
-            className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
+            className={textButtonClass}
           >
             {inExamLanguage
               ? t('session.showInStudyLanguage', {
@@ -491,11 +491,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
       ) : hideChoices ? (
         // An interview: the answer is said aloud. The choices are there if wanted.
         <p className="mt-6 text-sm">
-          <button
-            type="button"
-            onClick={() => setChoicesShown(true)}
-            className={`${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`}
-          >
+          <button type="button" onClick={() => setChoicesShown(true)} className={textButtonClass}>
             {t('audio.showChoices')}
           </button>
         </p>

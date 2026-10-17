@@ -129,7 +129,7 @@ export function SampleQuestions({
             </ul>
             <details className="group mt-4">
               <summary
-                className={`${focusRing} text-primary-fg cursor-pointer rounded-xs font-medium`}
+                className={`${focusRing} text-primary-fg cursor-pointer rounded-xs py-2.5 font-medium`}
               >
                 {t('countries.showAnswer')}
               </summary>

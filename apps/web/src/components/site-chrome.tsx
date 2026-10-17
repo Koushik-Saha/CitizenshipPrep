@@ -7,7 +7,8 @@ import { LogoLockup } from '@/components/brand/logo';
 import { LanguageMenu } from '@/components/i18n/language-menu';
 import { focusRing } from '@/components/ui';
 
-const navLink = `${focusRing} rounded-xs text-fg-muted hover:text-fg`;
+// min-h-11: each link is 44px tall, an easy target on a phone.
+const navLink = `${focusRing} inline-flex min-h-11 items-center rounded-xs text-fg-muted hover:text-fg`;
 
 export function SiteHeader({
   t,
@@ -19,8 +20,11 @@ export function SiteHeader({
 }) {
   return (
     <header className="border-border border-b">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6">
-        <Link href={localizePath(t.locale, '/')} className={`${focusRing} rounded-xs`}>
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-2 sm:px-6">
+        <Link
+          href={localizePath(t.locale, '/')}
+          className={`${focusRing} inline-flex min-h-11 items-center rounded-xs`}
+        >
           <LogoLockup variant="meridian" layout="integrated" height={24} />
         </Link>
         <nav
@@ -33,7 +37,7 @@ export function SiteHeader({
           <LanguageMenu locale={t.locale} label={t('common.language')} path={path} />
           <Link
             href={localizePath(t.locale, '/sign-in')}
-            className={`${focusRing} text-fg rounded-xs underline-offset-4 hover:underline`}
+            className={`${focusRing} text-fg inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
           >
             {t('common.signIn')}
           </Link>
@@ -48,7 +52,7 @@ export function SiteFooter({ t }: { t: Translator }) {
     <footer className="border-border border-t">
       <div className="text-fg-muted mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 text-sm sm:flex-row sm:justify-between sm:px-6">
         <p>{t('common.notAffiliated')}</p>
-        <nav aria-label={t('common.footerNav')} className="flex shrink-0 flex-wrap gap-x-6 gap-y-2">
+        <nav aria-label={t('common.footerNav')} className="flex shrink-0 flex-wrap gap-x-6">
           <Link href={localizePath(t.locale, '/countries')} className={navLink}>
             {t('common.allCountries')}
           </Link>
@@ -94,7 +98,7 @@ export function LegalFooter({ t }: { t: Translator }) {
     <footer className="border-border mt-10 border-t">
       <div className="text-fg-muted mx-auto flex max-w-3xl flex-col gap-3 px-4 py-8 text-sm">
         <p>{t('common.notAffiliated')}</p>
-        <nav aria-label={t('common.footerNav')} className="flex flex-wrap gap-x-6 gap-y-2">
+        <nav aria-label={t('common.footerNav')} className="flex flex-wrap gap-x-6">
           {pages.map(([path, label]) => (
             <Link
               key={path}

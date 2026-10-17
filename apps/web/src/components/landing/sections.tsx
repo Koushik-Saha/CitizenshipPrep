@@ -132,7 +132,7 @@ export function CountryCards({
             <span className="bg-accent size-2.5 shrink-0 rounded-full" aria-hidden="true" />
             <Link
               href={localizePath(t.locale, testPath(country.slug))}
-              className={`${focusRing} rounded-xs underline-offset-4 hover:underline`}
+              className={`${focusRing} inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
             >
               {localCountryName(country, t)}
             </Link>
@@ -153,7 +153,7 @@ export function CountryCards({
           </p>
           <Link
             href={localizePath(t.locale, `/sign-in?country=${country.isoCode}`)}
-            className={`${focusRing} text-primary-fg mt-3 inline-block rounded-xs font-medium underline underline-offset-4`}
+            className={`${focusRing} text-primary-fg mt-1 inline-flex min-h-11 items-center rounded-xs font-medium underline underline-offset-4`}
           >
             {t('exam.studyFor', { country: localCountryName(country, t) })}
           </Link>

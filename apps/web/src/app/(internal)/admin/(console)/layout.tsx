@@ -30,32 +30,32 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-3 sm:px-8">
           <Link
             href="/admin/content"
-            className="font-display rounded-xs text-lg font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+            className="font-display inline-flex min-h-11 items-center rounded-xs text-lg font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
           >
             Oathly content review
           </Link>
-          <nav aria-label="Sections" className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium">
+          <nav aria-label="Sections" className="flex flex-wrap gap-x-4 text-sm font-medium">
             <Link
               href="/admin/content"
-              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Questions
             </Link>
             <Link
               href="/admin/community"
-              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Community
             </Link>
             <Link
               href="/admin/flags"
-              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Reports{openReports > 0 ? ` (${openReports})` : ''}
             </Link>
             <Link
               href="/admin/exams"
-              className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Exam facts
             </Link>
@@ -64,7 +64,7 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
                 <Link
                   key={href}
                   href={href}
-                  className="rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                   {label}
                 </Link>
@@ -78,7 +78,7 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
             <form action={signOut}>
               <button
                 type="submit"
-                className="border-border-strong hover:bg-surface-sunken rounded-md border px-3 py-1.5 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
+                className="border-border-strong hover:bg-surface-sunken min-h-11 rounded-md border px-3 py-1.5 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
               >
                 Sign out
               </button>

@@ -27,7 +27,7 @@ export function LanguageMenu({
     <SoftLanguageLinks>
       <details className="relative">
         <summary
-          className={`${focusRing} text-fg-muted hover:text-fg cursor-pointer list-none rounded-xs [&::-webkit-details-marker]:hidden`}
+          className={`${focusRing} text-fg-muted hover:text-fg block cursor-pointer list-none rounded-xs py-3 [&::-webkit-details-marker]:hidden`}
         >
           <span className="sr-only">{label}: </span>
           <span lang={locale}>{endonym(locale)}</span>
@@ -43,7 +43,7 @@ export function LanguageMenu({
                 hrefLang={option}
                 lang={option}
                 aria-current={option === locale ? 'true' : undefined}
-                className={`${focusRing} text-fg hover:bg-surface-sunken block px-4 py-2 focus-visible:-outline-offset-2 ${option === locale ? 'font-semibold' : ''}`}
+                className={`${focusRing} text-fg hover:bg-surface-sunken flex min-h-11 items-center px-4 py-2 focus-visible:-outline-offset-2 ${option === locale ? 'font-semibold' : ''}`}
               >
                 {endonym(option)}
               </a>

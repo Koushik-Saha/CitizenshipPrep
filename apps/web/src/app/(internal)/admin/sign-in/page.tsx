@@ -249,7 +249,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
             className="border-border mt-3 block rounded-md border bg-white"
           />
           <details className="mt-3">
-            <summary className="text-primary-fg cursor-pointer underline underline-offset-4">
+            <summary className="text-primary-fg cursor-pointer py-3 underline underline-offset-4">
               Cannot scan it? Enter the key instead
             </summary>
             <p className="mt-2">
@@ -264,7 +264,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
             </code>
             <a
               href={uri}
-              className="text-primary-fg mt-2 inline-block underline underline-offset-4"
+              className="text-primary-fg mt-2 inline-flex min-h-11 items-center underline underline-offset-4"
             >
               On the phone itself? Open it in your authenticator app
             </a>

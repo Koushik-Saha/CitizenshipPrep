@@ -42,7 +42,7 @@ export function ReportQuestion({ questionId, locale }: { questionId: string; loc
         <button
           type="button"
           onClick={() => setState({ step: 'open', sending: false, failed: false })}
-          className={`${focusRing} text-fg-muted hover:text-fg rounded-xs underline underline-offset-4`}
+          className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs underline underline-offset-4`}
         >
           {t('report.open')}
         </button>

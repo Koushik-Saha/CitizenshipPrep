@@ -55,13 +55,13 @@ export function DashboardView({
           <Link
             href="/study/plans"
             prefetch
-            className={`${focusRing} text-fg-muted hover:text-fg rounded-xs`}
+            className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs`}
           >
             {t('plans.title')}
           </Link>
           <Link
             href="/study/account"
-            className={`${focusRing} text-fg-muted hover:text-fg rounded-xs`}
+            className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs`}
           >
             {t('common.account')}
           </Link>

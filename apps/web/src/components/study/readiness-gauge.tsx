@@ -165,7 +165,7 @@ export function ReadinessPanel({
       )}
 
       <details className="mt-6">
-        <summary className="text-primary-fg cursor-pointer text-sm font-medium">
+        <summary className="text-primary-fg cursor-pointer py-3 text-sm font-medium">
           {t('readiness.byTopic')}
         </summary>
         <ul className="mt-3 space-y-3">

@@ -63,8 +63,11 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
   return (
     <>
       <div data-theme="dark" className="bg-canvas text-fg relative overflow-x-clip">
-        <header className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-5 sm:px-6">
-          <Link href={localizePath(t.locale, '/')} className={`${focusRing} rounded-xs`}>
+        <header className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 sm:px-6">
+          <Link
+            href={localizePath(t.locale, '/')}
+            className={`${focusRing} inline-flex min-h-11 items-center rounded-xs`}
+          >
             <LogoLockup variant="meridian" layout="integrated" height={26} />
           </Link>
           <nav
@@ -83,7 +86,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
             <LanguageMenu locale={t.locale} label={t('common.language')} path="/" />
             <Link
               href={localizePath(t.locale, '/sign-in')}
-              className={`${focusRing} text-fg rounded-xs underline-offset-4 hover:underline`}
+              className={`${focusRing} text-fg inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
             >
               {t('common.signIn')}
             </Link>
@@ -128,7 +131,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
               {countries.length > 0 && (
                 <a
                   href="#countries"
-                  className={`${focusRing} rounded-xs underline underline-offset-4`}
+                  className={`${focusRing} inline-flex min-h-11 items-center rounded-xs underline underline-offset-4`}
                 >
                   {t('landing.seeCountries', { count: countries.length })}
                 </a>

@@ -4,11 +4,15 @@ import { focusRing } from './focus-ring';
 
 export { focusRing };
 
-export const fieldClass = `bg-surface border-border-strong text-fg w-full rounded-sm border px-3 py-2 ${focusRing}`;
+// min-h-11: 44px, a comfortable target for a thumb.
+export const fieldClass = `bg-surface border-border-strong text-fg min-h-11 w-full rounded-sm border px-3 py-2 ${focusRing}`;
 
 export const labelClass = 'mb-1 block text-sm font-medium';
 
-const buttonBase = `duration-fast inline-flex items-center justify-center rounded-md px-4 py-2.5 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`;
+const buttonBase = `duration-fast inline-flex min-h-11 items-center justify-center rounded-md px-4 py-2.5 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`;
+
+/** A text button or link standing on its own: underlined, but as easy to tap as a button. */
+export const textButtonClass = `${focusRing} text-primary-fg inline-flex min-h-11 items-center rounded-xs font-medium underline underline-offset-4`;
 
 export const buttonClass = {
   primary: `${buttonBase} bg-primary text-on-primary hover:bg-primary-hover`,

@@ -4,9 +4,9 @@ import type { AudioSession } from '@oathly/api/audio-hooks';
 import { isolate } from '@oathly/i18n';
 
 import { useT } from '@/components/i18n/provider';
-import { buttonClass, focusRing } from '@/components/ui';
+import { buttonClass, textButtonClass } from '@/components/ui';
 
-const link = `${focusRing} text-primary-fg rounded-xs font-medium underline underline-offset-4`;
+const link = textButtonClass;
 
 /**
  * Audio mode's controls on a session screen: on and off, read it again,
@@ -79,12 +79,12 @@ export function AudioControls({
             </button>
           ))}
         {on && audio.canListen && (
-          <label className="ms-auto flex cursor-pointer items-center gap-2">
+          <label className="ms-auto flex min-h-11 cursor-pointer items-center gap-2">
             <input
               type="checkbox"
               checked={voice}
               onChange={(event) => onVoiceChange(event.target.checked)}
-              className="accent-primary size-4"
+              className="accent-primary size-5"
             />
             {t('audio.voiceAnswers')}
           </label>
