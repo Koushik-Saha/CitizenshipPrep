@@ -46,10 +46,21 @@ export function ExplainMore({ questionId }: { questionId: string }) {
     );
   }
   if (state.step === 'error') {
+    // A failure is often brief (a busy model, a dropped connection): asking
+    // again is one press away.
     return (
-      <p role="alert" className="text-error-fg mt-3 text-sm">
-        {state.message}
-      </p>
+      <div className="mt-3">
+        <p role="alert" className="text-error-fg text-sm">
+          {state.message}
+        </p>
+        <button
+          type="button"
+          onClick={() => void load()}
+          className={`${buttonClass.secondary} mt-2`}
+        >
+          {t('common.tryAgain')}
+        </button>
+      </div>
     );
   }
   return (

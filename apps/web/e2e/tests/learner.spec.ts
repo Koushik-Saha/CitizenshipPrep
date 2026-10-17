@@ -431,6 +431,23 @@ test('a learner is told plainly when AI help cannot be reached, and keeps their 
   });
   expect(explained.status()).toBe(503);
   expect((await explained.json()).code).toBe('AI_UNAVAILABLE');
+
+  // In a session, the learner is told so, and can ask again: a brief failure is not a dead end.
+  await page.goto('/study');
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\/[0-9a-f-]{36}$/);
+  await otherOption(page, await rightAnswer(page)).click();
+  await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+  await page.getByRole('button', { name: t('explain.more'), exact: true }).click();
+  const unavailable = page.getByRole('alert').filter({ hasText: t('explain.unavailable') });
+  await expect(unavailable).toBeVisible();
+  const again = page.getByRole('button', { name: t('common.tryAgain'), exact: true });
+  await expectAccessible(page, 'explanation not available');
+  const asked = page.waitForRequest((request) => request.url().endsWith('/api/explain'));
+  await again.click();
+  await asked;
+  await expect(unavailable).toBeVisible();
+  await expect(again).toBeVisible();
 });
 
 test('the study pages work in a right-to-left language', async ({ page }) => {
