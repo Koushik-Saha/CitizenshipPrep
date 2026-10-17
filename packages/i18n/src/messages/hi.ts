@@ -390,6 +390,8 @@ export const hi: Messages = {
     keysContinue: 'कुंजियाँ: आगे बढ़ने के लिए Enter',
     answer: 'जवाब',
     answerInHead: 'मन में जवाब सोचें, फिर कार्ड पलटें।',
+    sayAnswer: 'अपना जवाब ज़ोर से बोलें, फिर उसे स्वीकार्य जवाबों से मिलाएँ।',
+    acceptedAnswers: 'स्वीकार्य जवाब',
     didNotKnow: 'मुझे नहीं पता था',
     knewIt: 'मुझे पता था',
     showAnswer: 'जवाब दिखाएँ',

@@ -51,9 +51,36 @@ export function startRun(options: { completed?: boolean } = {}): RunState {
 const current = (config: RunConfig, state: RunState): QuizQuestion =>
   config.questions[state.index]!;
 
+/**
+ * Whether the learner marks the question themselves: they answer, turn it
+ * over to see the answer, and say whether they had it. True for every
+ * flashcard, and for a question answered in the learner's own words
+ * (free_response): its options are the accepted answers, every one of them
+ * right, so they cannot be offered as choices.
+ */
+export function isSelfMarked(mode: RunMode, question: Pick<QuizQuestion, 'type'>): boolean {
+  return mode === 'flashcards' || question.type === 'free_response';
+}
+
+/**
+ * The keys to record for a learner's own verdict. A flashcard records none.
+ * An open question records the first accepted answer when they had it and
+ * none when they did not, so scoring the keys gives the same verdict.
+ */
+export function selfMarkedKeys(
+  mode: RunMode,
+  question: Pick<QuizQuestion, 'type' | 'correctKeys'>,
+  knewIt: boolean,
+): string[] {
+  if (mode === 'flashcards' || !knewIt) return [];
+  return question.correctKeys.slice(0, 1);
+}
+
 /** Chooses an option: the only one for single-answer questions, on or off for multi-select. */
 export function toggleOption(config: RunConfig, state: RunState, key: string): RunState {
-  if (state.phase !== 'answering' || config.mode === 'flashcards') return state;
+  if (state.phase !== 'answering' || isSelfMarked(config.mode, current(config, state))) {
+    return state;
+  }
   const selected =
     current(config, state).type === 'multi_select'
       ? state.selected.includes(key)
@@ -63,9 +90,11 @@ export function toggleOption(config: RunConfig, state: RunState, key: string): R
   return { ...state, selected };
 }
 
-/** Turns a flashcard over to show its answer. */
+/** Turns a flashcard, or an open question, over to show its answer. */
 export function flipCard(config: RunConfig, state: RunState): RunState {
-  if (config.mode !== 'flashcards' || state.phase !== 'answering') return state;
+  if (!isSelfMarked(config.mode, current(config, state)) || state.phase !== 'answering') {
+    return state;
+  }
   return { ...state, flipped: true };
 }
 
@@ -83,7 +112,10 @@ export interface SubmitOptions {
   now: Date;
   /** When the question was shown, in ms since the epoch. */
   shownAt: number;
-  /** Flashcards: the learner's own verdict, since there is nothing to mark. */
+  /**
+   * The learner's own verdict, for a question they mark themselves (see
+   * isSelfMarked): a flashcard, or an open question once turned over.
+   */
   knewIt?: boolean;
   /**
    * An answer given aloud, in place of the options chosen on screen: the
@@ -94,9 +126,10 @@ export interface SubmitOptions {
 }
 
 /**
- * Submits the current question. Practice moves to feedback; flashcards and
- * exams move straight on (a real exam does not say whether you were right),
- * and an exam that stops early ends as soon as its result is certain.
+ * Submits the current question. Practice moves to feedback; flashcards, a
+ * learner's own verdict (they have just seen the answer) and exams move
+ * straight on (a real exam does not say whether you were right), and an exam
+ * that stops early ends as soon as its result is certain.
  * Returns the new state and the answer to record, or null if nothing was
  * submitted (nothing chosen, or not the moment for it).
  */
@@ -108,22 +141,30 @@ export function submitAnswer(
   if (state.phase !== 'answering') return { state, answer: null };
   const question = current(config, state);
   const isFlashcards = config.mode === 'flashcards';
-  const chosen = options.spoken ?? state.selected;
-  // Nothing chosen is not an answer, unless it was said aloud and matched no option.
-  if (isFlashcards ? options.knewIt === undefined : !options.spoken && chosen.length === 0) {
-    return { state, answer: null };
-  }
-  const selectedKeys = isFlashcards ? [] : [...chosen];
+  const selfMarked = isSelfMarked(config.mode, question);
+  // An open question said aloud is marked like one chosen on screen; the
+  // learner's verdict counts only for a question they mark themselves.
+  const spoken = isFlashcards ? undefined : options.spoken;
+  const verdict = selfMarked && !spoken ? options.knewIt : undefined;
+  let selectedKeys: string[];
+  if (verdict !== undefined) selectedKeys = selfMarkedKeys(config.mode, question, verdict);
+  // Said aloud and matching no option is a wrong answer, not a missing one.
+  else if (spoken) selectedKeys = [...spoken];
+  // Nothing chosen, or no verdict where one is needed, is not an answer.
+  else if (selfMarked || state.selected.length === 0) return { state, answer: null };
+  else selectedKeys = [...state.selected];
   const answer: GivenAnswer = {
     questionId: question.id,
     selectedKeys,
     timeMs: Math.min(Math.max(0, options.now.getTime() - options.shownAt), MAX_ANSWER_MS),
     answeredAt: options.now,
-    correct: isFlashcards ? options.knewIt! : isCorrect(question, selectedKeys),
+    correct: isFlashcards ? verdict! : isCorrect(question, selectedKeys),
   };
   const answered: RunState = { ...state, answers: [...state.answers, answer] };
 
-  if (config.mode === 'practice') return { state: { ...answered, phase: 'feedback' }, answer };
+  if (config.mode === 'practice' && verdict === undefined) {
+    return { state: { ...answered, phase: 'feedback' }, answer };
+  }
   if (config.mode === 'mock_exam' && config.exam?.stopEarly) {
     const decision = examDecision(config.exam, config.questions, answered.answers);
     if (decision) {

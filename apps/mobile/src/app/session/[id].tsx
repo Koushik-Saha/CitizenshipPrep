@@ -4,6 +4,7 @@ import { useStudySession } from '@oathly/api/hooks';
 import { queryKeys } from '@oathly/api/queries';
 import {
   flipCard,
+  isSelfMarked,
   nextQuestion,
   runDeadline,
   runResult,
@@ -106,6 +107,9 @@ function Runner({ session }: { session: StudySession }) {
   const wordingStyle = { writingDirection: textDirection(wording.locale) };
   const isExam = session.mode === 'mock_exam';
   const isFlashcards = session.mode === 'flashcards';
+  // Answered in the learner's own words: its options are all right answers,
+  // so they are shown after, and the learner marks it.
+  const openQuestion = !isFlashcards && isSelfMarked(session.mode, question);
 
   // A new question: start its clock.
   useEffect(() => {
@@ -178,6 +182,8 @@ function Runner({ session }: { session: StudySession }) {
   // to the written form.
   const hideText = interview && audioOn && textShownFor !== run.index;
   const hideChoices = interview && audioOn && audio.canListen && prefs.voice && !choicesShown;
+  // After an answer said aloud, its feedback shows the accepted answers marked.
+  const selfMarking = openQuestion && run.phase === 'answering' && !hideChoices;
 
   if (run.phase === 'results') {
     return (
@@ -361,9 +367,75 @@ function Runner({ session }: { session: StudySession }) {
               {wording.text}
             </Text>
           )}
+          {selfMarking && (
+            <>
+              {run.flipped ? (
+                <Card>
+                  <Body muted size="sm">
+                    {question.correctKeys.length > 1
+                      ? t('session.acceptedAnswers')
+                      : t('session.answer')}
+                  </Body>
+                  {wording.options
+                    .filter((option) => question.correctKeys.includes(option.key))
+                    .map((option) => (
+                      <Text
+                        key={option.key}
+                        accessibilityLanguage={wording.locale}
+                        style={[
+                          theme.text.lg,
+                          { color: theme.colors.fg, fontWeight: '600' },
+                          wordingStyle,
+                        ]}
+                      >
+                        {question.correctKeys.length > 1 ? `• ${option.text}` : option.text}
+                      </Text>
+                    ))}
+                  {wording.explanation && (
+                    <Text style={[theme.text.base, { color: theme.colors.fgMuted }, wordingStyle]}>
+                      {wording.explanation}
+                    </Text>
+                  )}
+                </Card>
+              ) : (
+                <Body muted>{t('session.sayAnswer')}</Body>
+              )}
+              {run.flipped ? (
+                <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
+                  <View style={{ flex: 1 }}>
+                    <Button
+                      label={t('session.didNotKnow')}
+                      variant="secondary"
+                      onPress={() => submit(false)}
+                      testID="did-not-know"
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Button
+                      label={t('session.knewIt')}
+                      onPress={() => submit(true)}
+                      testID="knew-it"
+                    />
+                  </View>
+                </View>
+              ) : (
+                <Button
+                  label={t('session.showAnswer')}
+                  onPress={() => {
+                    haptics.select();
+                    setRun((current) => flipCard(config, current));
+                  }}
+                  testID="show-answer"
+                />
+              )}
+            </>
+          )}
           <View
             accessibilityRole={question.type === 'multi_select' ? undefined : 'radiogroup'}
-            style={{ gap: theme.spacing[3], display: hideChoices ? 'none' : 'flex' }}
+            style={{
+              gap: theme.spacing[3],
+              display: hideChoices || selfMarking ? 'none' : 'flex',
+            }}
           >
             {question.type === 'multi_select' && <Body muted>{t('session.chooseAll')}</Body>}
             {wording.options.map((option, i) => (
@@ -415,7 +487,7 @@ function Runner({ session }: { session: StudySession }) {
               onPress={() => setRun((current) => nextQuestion(config, current))}
               testID="next"
             />
-          ) : hideChoices ? null : (
+          ) : hideChoices || selfMarking ? null : (
             <Button
               label={
                 isExam ? (last ? t('session.submitExam') : t('session.next')) : t('session.check')

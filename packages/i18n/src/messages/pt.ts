@@ -397,6 +397,8 @@ export const pt: Messages = {
     keysContinue: 'Teclas: Enter para continuar',
     answer: 'Resposta',
     answerInHead: 'Responda mentalmente e depois vire o cartão.',
+    sayAnswer: 'Diga sua resposta em voz alta e depois compare com as respostas aceitas.',
+    acceptedAnswers: 'Respostas aceitas',
     didNotKnow: 'Eu não sabia',
     knewIt: 'Eu sabia',
     showAnswer: 'Mostrar resposta',

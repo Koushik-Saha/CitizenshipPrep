@@ -23,6 +23,7 @@ export * from './question-report';
 export * from './random';
 export * from './rate-limit';
 export * from './readiness';
+export * from './question-check';
 export * from './scoring';
 export * from './seo';
 export * from './session-run';

@@ -11,7 +11,7 @@ import {
   type StudySession as Session,
 } from '@oathly/api/study';
 import { useAudioSession } from '@oathly/api/audio-hooks';
-import { examDecision, isCorrect, type Answer } from '@oathly/core';
+import { examDecision, isCorrect, isSelfMarked, selfMarkedKeys, type Answer } from '@oathly/core';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, languageName, textDirection, type MessageKey } from '@oathly/i18n';
 import { useQueryClient } from '@tanstack/react-query';
@@ -115,6 +115,9 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   const question = questions[index]!;
+  // A flashcard, or a question answered in the learner's own words: turned
+  // over and marked by the learner, since its options are all right answers.
+  const selfMarked = isSelfMarked(session.mode, question);
   const wording = questionWording(question, inExamLanguage);
   const wordingProps = { lang: wording.locale, dir: textDirection(wording.locale) };
   const deadline =
@@ -152,10 +155,14 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
     [finish, index, questions.length],
   );
 
+  /** `knewIt` is the learner's own verdict, for a question they mark themselves. */
   const submit = useCallback(
-    (selectedKeys: string[], correctOverride?: boolean) => {
+    (selectedKeys: string[], knewIt?: boolean) => {
       const now = new Date();
-      const correct = correctOverride ?? isCorrect(quizQuestions[index]!, selectedKeys);
+      const correct =
+        isFlashcards && knewIt !== undefined
+          ? knewIt
+          : isCorrect(quizQuestions[index]!, selectedKeys);
       const answer: GivenAnswer = {
         questionId: question.id,
         selectedKeys,
@@ -192,7 +199,8 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
         advance(given);
         return;
       }
-      if (isFlashcards) {
+      // The learner has just seen the answer: on to the next one.
+      if (isFlashcards || knewIt !== undefined) {
         advance(given);
         return;
       }
@@ -212,9 +220,15 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
     ],
   );
 
+  /** The learner's verdict on a question they marked themselves. */
+  const rate = useCallback(
+    (knewIt: boolean) => submit(selfMarkedKeys(session.mode, question, knewIt), knewIt),
+    [question, session.mode, submit],
+  );
+
   const toggle = useCallback(
     (key: string) => {
-      if (phase !== 'answering') return;
+      if (phase !== 'answering' || selfMarked) return;
       setSelected((current) =>
         question.type === 'multi_select'
           ? current.includes(key)
@@ -223,7 +237,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
           : [key],
       );
     },
-    [phase, question.type],
+    [phase, question.type, selfMarked],
   );
 
   const lastAnswer = answers[answers.length - 1];
@@ -257,13 +271,14 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
       if (phase === 'results') return;
       const onButton = event.target instanceof HTMLButtonElement;
 
-      if (isFlashcards) {
+      if (selfMarked && !hideChoices) {
+        if (phase !== 'answering') return;
         if (!flipped && (event.key === 'Enter' || event.key === ' ') && !onButton) {
           event.preventDefault();
           setFlipped(true);
         } else if (flipped && (event.key === '1' || event.key === '2')) {
           event.preventDefault();
-          submit([], event.key === '2');
+          rate(event.key === '2');
         }
         return;
       }
@@ -291,10 +306,11 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
     answers,
     flipped,
     hideChoices,
-    isFlashcards,
     phase,
     question.options,
+    rate,
     selected,
+    selfMarked,
     submit,
     toggle,
   ]);
@@ -470,7 +486,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
           wording={wording}
           flipped={flipped}
           onFlip={() => setFlipped(true)}
-          onRate={(knew) => submit([], knew)}
+          onRate={rate}
         />
       ) : hideChoices ? (
         // An interview: the answer is said aloud. The choices are there if wanted.
@@ -483,6 +499,18 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
             {t('audio.showChoices')}
           </button>
         </p>
+      ) : selfMarked && phase === 'answering' ? (
+        // Answered in the learner's own words, as on the day: every option is
+        // an accepted answer, so they are shown after, not offered as choices.
+        // (After an answer said aloud, the feedback below shows them marked.)
+        <Flashcard
+          open
+          question={question}
+          wording={wording}
+          flipped={flipped}
+          onFlip={() => setFlipped(true)}
+          onRate={rate}
+        />
       ) : (
         <>
           <fieldset className="mt-6">
@@ -585,12 +613,15 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
 }
 
 function Flashcard({
+  open = false,
   question,
   wording,
   flipped,
   onFlip,
   onRate,
 }: {
+  /** A question answered in the learner's own words, rather than a flashcard. */
+  open?: boolean;
   question: SessionQuestion;
   /** The question's words in the language being shown. */
   wording: QuestionWording;
@@ -605,10 +636,24 @@ function Flashcard({
     <div className="mt-6">
       {flipped ? (
         <div role="status" className="bg-surface border-border rounded-lg border p-5">
-          <p className="text-fg-muted text-sm">{t('session.answer')}</p>
-          <p className="mt-1 text-xl font-medium" {...wordingProps}>
-            {answers.map((option) => option.text).join('; ')}
+          <p className="text-fg-muted text-sm">
+            {open && answers.length > 1 ? t('session.acceptedAnswers') : t('session.answer')}
           </p>
+          {open && answers.length > 1 ? (
+            <ul
+              className="mt-1 list-disc space-y-1 ps-5 text-lg font-medium"
+              data-testid="accepted-answers"
+              {...wordingProps}
+            >
+              {answers.map((option) => (
+                <li key={option.key}>{option.text}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-1 text-xl font-medium" {...wordingProps}>
+              {answers.map((option) => option.text).join('; ')}
+            </p>
+          )}
           {wording.explanation && (
             <p className="text-fg-muted mt-3" {...wordingProps}>
               {wording.explanation}
@@ -616,7 +661,7 @@ function Flashcard({
           )}
         </div>
       ) : (
-        <p className="text-fg-muted">{t('session.answerInHead')}</p>
+        <p className="text-fg-muted">{t(open ? 'session.sayAnswer' : 'session.answerInHead')}</p>
       )}
       <div className="mt-6 flex flex-wrap items-center gap-3">
         {flipped ? (

@@ -4,6 +4,7 @@ import { parseArgs } from 'node:util';
 
 import { ExamFormatError, parseBlueprint } from '@oathly/core';
 
+import { auditQuestions } from './audit';
 import { createClaudeModel } from './claude';
 import { createPool } from './db';
 import { validateDataFiles, writeJsonSchemas } from './data-files';
@@ -104,6 +105,12 @@ Usage: pnpm content <command> [options]
 
   validate       Check every file in data/ against its schema: country profiles, their
                  index, and question files. Needs no database
+
+  audit          Check every published question, in every language learners see it in,
+                 for faults that make it unplayable: the wrong number of options, a blank
+                 or repeated option, a right answer that is not an option, no explanation,
+                 no source. Exits with an error if anything is flagged
+                   [--country US] [--status published[,in_review,draft]]
 
   status         Show sources and what is waiting for review
                  [--country US]   (with a country: also its questions by topic)
@@ -236,6 +243,7 @@ async function main(): Promise<void> {
       user: { type: 'string' },
       role: { type: 'string' },
       prune: { type: 'boolean' },
+      status: { type: 'string' },
     },
   });
 
@@ -559,6 +567,43 @@ async function main(): Promise<void> {
             );
           }
         }
+        break;
+      }
+
+      case 'audit': {
+        const country = optional(values, 'country')?.toUpperCase() ?? undefined;
+        const statuses = (optional(values, 'status') ?? 'published')
+          .split(',')
+          .map((status) => status.trim())
+          .filter(Boolean);
+        const known = ['draft', 'in_review', 'published', 'retired'];
+        const unknown = statuses.filter((status) => !known.includes(status));
+        if (unknown.length > 0) {
+          throw new UsageError(`--status takes ${known.join(', ')}; not ${unknown.join(', ')}.`);
+        }
+        const audit = await auditQuestions(pool, { countryCode: country, statuses });
+        const total = Object.values(audit.checked).reduce((sum, count) => sum + count, 0);
+        for (const [code, count] of Object.entries(audit.checked)) {
+          const flagged = audit.flagged.filter((question) => question.countryCode === code).length;
+          console.log(`${code}  ${count} checked, ${flagged} flagged`);
+        }
+        for (const question of audit.flagged) {
+          const number = question.officialNumber ? ` (official #${question.officialNumber})` : '';
+          console.log(`\n${question.countryCode}  ${question.id}${number}  ${question.status}`);
+          console.log(`  ${question.text}`);
+          for (const problem of question.problems) {
+            console.log(
+              `  - ${problem.code}${problem.locale ? ` [${problem.locale}]` : ''}: ${problem.detail}`,
+            );
+          }
+        }
+        console.log(
+          `\n${total} question(s) checked, ${audit.flagged.length} flagged.` +
+            (audit.flagged.length > 0
+              ? ' Fix or pull each one in the review queue at /admin/content.'
+              : ''),
+        );
+        if (audit.flagged.length > 0) process.exitCode = 1;
         break;
       }
 

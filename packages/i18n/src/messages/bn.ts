@@ -389,6 +389,8 @@ export const bn: Messages = {
     keysContinue: 'কি: এগিয়ে যেতে Enter',
     answer: 'উত্তর',
     answerInHead: 'মনে মনে উত্তর দিন, তারপর কার্ডটি উল্টান।',
+    sayAnswer: 'আপনার উত্তর জোরে বলুন, তারপর গ্রহণযোগ্য উত্তরগুলোর সঙ্গে মিলিয়ে দেখুন।',
+    acceptedAnswers: 'গ্রহণযোগ্য উত্তর',
     didNotKnow: 'আমি জানতাম না',
     knewIt: 'আমি জানতাম',
     showAnswer: 'উত্তর দেখান',

@@ -381,6 +381,8 @@ export const ar: Messages = {
     keysContinue: 'المفاتيح: Enter للمتابعة',
     answer: 'الإجابة',
     answerInHead: 'أجب في ذهنك، ثم اقلب البطاقة.',
+    sayAnswer: 'قل إجابتك بصوت عالٍ، ثم قارنها بالإجابات المقبولة.',
+    acceptedAnswers: 'الإجابات المقبولة',
     didNotKnow: 'لم أكن أعرف',
     knewIt: 'كنت أعرف',
     showAnswer: 'إظهار الإجابة',

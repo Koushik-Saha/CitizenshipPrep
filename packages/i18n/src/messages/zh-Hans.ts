@@ -359,6 +359,8 @@ export const zhHans: Messages = {
     keysContinue: '按键：Enter 继续',
     answer: '答案',
     answerInHead: '先在心里作答，再翻开卡片。',
+    sayAnswer: '先大声说出你的答案，再对照可接受的答案。',
+    acceptedAnswers: '可接受的答案',
     didNotKnow: '我不知道',
     knewIt: '我知道',
     showAnswer: '显示答案',

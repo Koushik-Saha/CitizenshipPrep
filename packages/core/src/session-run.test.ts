@@ -3,10 +3,12 @@ import { describe, expect, it } from 'vitest';
 import type { MockExam } from './mock-exam';
 import {
   flipCard,
+  isSelfMarked,
   MAX_ANSWER_MS,
   nextQuestion,
   runDeadline,
   runResult,
+  selfMarkedKeys,
   startRun,
   submitAnswer,
   timeUp,
@@ -149,6 +151,69 @@ describe('flashcards', () => {
     expect(runResult(flashcards, state, startedAt)).toEqual({ correct: 2, total: 4, passed: null });
     expect(flipCard(flashcards, state)).toBe(state);
     expect(flipCard(practice, startRun())).toEqual(startRun());
+  });
+});
+
+describe('open questions (answered in the learner’s own words)', () => {
+  // The options are the accepted answers, all of them right.
+  const open = question('o', { type: 'free_response', correctKeys: ['a', 'b'] });
+  const openPractice: RunConfig = { mode: 'practice', questions: [open, pool[0]!], exam: null };
+  const openExam: RunConfig = {
+    mode: 'mock_exam',
+    questions: [open, ...pool.slice(0, 3)],
+    exam: exam({ questionIds: ['o', 'q-0', 'q-1', 'q-2'], stopEarly: true, passMark: 3 }),
+  };
+
+  it('cannot be answered by picking an accepted answer: it is turned over and self-marked', () => {
+    expect(isSelfMarked('practice', open)).toBe(true);
+    expect(isSelfMarked('practice', pool[0]!)).toBe(false);
+    let state = startRun();
+    expect(toggleOption(openPractice, state, 'a')).toBe(state);
+    expect(submitAnswer(openPractice, state, { now: later(1), shownAt: 0 }).answer).toBeNull();
+
+    state = flipCard(openPractice, state);
+    expect(state.flipped).toBe(true);
+    const knew = submitAnswer(openPractice, state, { now: later(4), shownAt: 0, knewIt: true });
+    // Recorded as an accepted answer, so scoring the keys agrees with the verdict.
+    expect(knew.answer).toMatchObject({ selectedKeys: ['a'], correct: true });
+    // The answer was just seen: no feedback step, straight on.
+    expect(knew.state).toMatchObject({ index: 1, phase: 'answering', flipped: false });
+    // The next question is an ordinary choice again.
+    expect(flipCard(openPractice, knew.state)).toBe(knew.state);
+  });
+
+  it('records a miss as no answer given, and scores it wrong', () => {
+    const missed = submitAnswer(openPractice, flipCard(openPractice, startRun()), {
+      now: later(4),
+      shownAt: 0,
+      knewIt: false,
+    });
+    expect(missed.answer).toMatchObject({ selectedKeys: [], correct: false });
+    expect(selfMarkedKeys('practice', open, false)).toEqual([]);
+    expect(selfMarkedKeys('flashcards', open, true)).toEqual([]);
+  });
+
+  it('still takes an answer said aloud, marked against the accepted answers', () => {
+    const said = submitAnswer(openPractice, startRun(), {
+      now: later(4),
+      shownAt: 0,
+      spoken: ['b'],
+      knewIt: false,
+    });
+    expect(said.answer).toMatchObject({ selectedKeys: ['b'], correct: true });
+    expect(said.state.phase).toBe('feedback');
+  });
+
+  it('counts self-marked answers in a mock exam, including stopping early', () => {
+    let state = submitAnswer(openExam, flipCard(openExam, startRun()), {
+      now: later(4),
+      shownAt: 0,
+      knewIt: true,
+    }).state;
+    expect(state).toMatchObject({ index: 1, phase: 'answering' });
+    for (const key of ['a', 'a']) state = answer(openExam, state, key).state;
+    expect(state).toMatchObject({ phase: 'results', stopReason: 'passed-early' });
+    expect(runResult(openExam, state, startedAt)).toEqual({ correct: 3, total: 4, passed: true });
   });
 });
 

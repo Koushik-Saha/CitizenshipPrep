@@ -400,6 +400,8 @@ export const en = {
     keysContinue: 'Keys: Enter to continue',
     answer: 'Answer',
     answerInHead: 'Answer it in your head, then turn the card.',
+    sayAnswer: 'Say your answer out loud, then check it against the accepted answers.',
+    acceptedAnswers: 'Accepted answers',
     didNotKnow: 'I didn’t know',
     knewIt: 'I knew it',
     showAnswer: 'Show answer',

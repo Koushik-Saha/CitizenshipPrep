@@ -401,6 +401,8 @@ export const fr: Messages = {
     keysContinue: 'Touches : Entrée pour continuer',
     answer: 'Réponse',
     answerInHead: 'Répondez dans votre tête, puis retournez la carte.',
+    sayAnswer: 'Dites votre réponse à voix haute, puis comparez-la aux réponses acceptées.',
+    acceptedAnswers: 'Réponses acceptées',
     didNotKnow: 'Je ne savais pas',
     knewIt: 'Je le savais',
     showAnswer: 'Afficher la réponse',

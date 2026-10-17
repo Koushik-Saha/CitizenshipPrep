@@ -383,6 +383,8 @@ export const vi: Messages = {
     keysContinue: 'Phím: Enter để tiếp tục',
     answer: 'Đáp án',
     answerInHead: 'Hãy trả lời thầm trong đầu, rồi lật thẻ.',
+    sayAnswer: 'Hãy nói to câu trả lời của bạn, rồi so với các câu trả lời được chấp nhận.',
+    acceptedAnswers: 'Câu trả lời được chấp nhận',
     didNotKnow: 'Tôi chưa biết',
     knewIt: 'Tôi đã biết',
     showAnswer: 'Hiện đáp án',

@@ -403,6 +403,8 @@ export const tl: Messages = {
     keysContinue: 'Mga key: Enter para magpatuloy',
     answer: 'Sagot',
     answerInHead: 'Sagutin ito sa isip mo, saka baligtarin ang card.',
+    sayAnswer: 'Sabihin nang malakas ang sagot mo, saka ihambing ito sa mga tinatanggap na sagot.',
+    acceptedAnswers: 'Mga tinatanggap na sagot',
     didNotKnow: 'Hindi ko alam',
     knewIt: 'Alam ko',
     showAnswer: 'Ipakita ang sagot',
