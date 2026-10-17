@@ -78,11 +78,11 @@ export default async function DeleteAccountPage({ params }: PageProps<'/[locale]
         <List>
           <li>
             <strong>
-              A subscription bought in the App Store or on Google Play is not cancelled
+              A subscription bought in the App Store or on Google Play is not canceled
             </strong>{' '}
             by deleting your account: only you can cancel it, in your phone&apos;s subscription
             settings. Do that first, or you will keep being charged. A subscription bought on the
-            website is cancelled for you.
+            website is canceled for you.
           </li>
           <li>
             Our payment providers keep their own records of payments for as long as tax and

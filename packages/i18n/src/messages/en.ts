@@ -4,6 +4,7 @@
 
 export const en = {
   common: {
+    forOrganizations: 'For organizations',
     signIn: 'Sign in',
     signOut: 'Sign out',
     countries: 'Countries',
@@ -61,7 +62,7 @@ export const en = {
   landing: {
     metaTitle: 'Oathly: citizenship test practice for every country',
     metaDescription:
-      'Practise for your citizenship test with questions checked against official sources, answers explained in plain language, and an estimate of how ready you are. Independent: not affiliated with any government.',
+      'Practice for your citizenship test with questions checked against official sources, answers explained in plain language, and an estimate of how ready you are. Independent: not affiliated with any government.',
     heroTitle: 'Walk into your citizenship test ready.',
     heroBody:
       'Practice questions written from each country’s official study guide, answers explained in plain language, and an honest estimate of how ready you are.',
@@ -78,7 +79,7 @@ export const en = {
     step1Title: 'Choose your country and exam',
     step1Body:
       'Tell us which test you are taking, when, and which language you would like to study in.',
-    step2Title: 'Practise a little each day',
+    step2Title: 'Practice a little each day',
     step2Body:
       'Each session mixes the topics you find hardest, questions due for review, and new ones. Wrong answers come with an explanation and the passage from the official guide.',
     step3Title: 'Sit mock exams when you are close',
@@ -113,7 +114,7 @@ export const en = {
       'Choose from {count} languages. Questions switch to the exam’s language where a checked translation is not ready yet.',
     feature7Title: 'Study groups',
     feature7Body: 'Prepare alongside people taking the same test.',
-    feature8Title: 'For schools and organisations',
+    feature8Title: 'For schools and organizations',
     feature8Body:
       'Classes and settlement services will be able to track how their learners are doing.',
 
@@ -149,7 +150,7 @@ export const en = {
       'A sample of each country’s questions is free, with practice, flashcards, the readiness score and audio mode. Pro, monthly or yearly, opens every question in every country and adds more AI help. A Country Pass is one payment that opens one country for good.',
     faq6Question: 'My country is not listed. Will you add it?',
     faq6Answer:
-      'We are working towards every country that has a citizenship test. We add each one once its exam format and study material have been checked against official sources.',
+      'We are working toward every country that has a citizenship test. We add each one once its exam format and study material have been checked against official sources.',
   },
 
   countries: {
@@ -186,7 +187,7 @@ export const en = {
     source: 'Source',
     moreInApp:
       '{count, plural, one {# more {topic} question, with explanations and spaced review, is waiting in Oathly.} other {# more {topic} questions, with explanations and spaced review, are waiting in Oathly.}}',
-    practiseInApp: 'Practise with explanations, spaced review and mock exams in Oathly.',
+    practiseInApp: 'Practice with explanations, spaced review and mock exams in Oathly.',
     otherTopics: 'Other topics',
   },
 
@@ -234,7 +235,7 @@ export const en = {
     faqOfficialQ: 'Is Oathly an official government website?',
     faqOfficialA:
       'No. Oathly is an independent study app and is not affiliated with any government. To book the test or check the rules that apply to you, use the official website.',
-    faqTopicQ: 'How can I practise {topic} questions for the {country} citizenship test?',
+    faqTopicQ: 'How can I practice {topic} questions for the {country} citizenship test?',
     faqTopicA:
       '{count, plural, one {Oathly has # checked practice question on {topic}. The sample on this page is free, with the answer explained.} other {Oathly has # checked practice questions on {topic}. The sample on this page is free, with the answers explained; the rest are in the app.}}',
     ogAlt: '{country} citizenship test: practice questions on Oathly',
@@ -264,6 +265,7 @@ export const en = {
   },
 
   onboarding: {
+    starting: 'Setting up your study…',
     metaTitle: 'Set up your study | Oathly',
     title: 'Set up your study',
     titleAdd: 'Add another exam',
@@ -314,7 +316,7 @@ export const en = {
       '{count, plural, one {# question ready to study.} other {# questions ready to study.}}',
     questionsBeingChecked:
       'Questions for {country} are still being checked against the official guide. They appear here once a reviewer has verified them.',
-    practise: 'Practise',
+    practise: 'Practice',
     mockExam: 'Mock exam',
     askTutor: 'Ask the tutor about {country}',
     studyGroup: 'Study group for {country}',
@@ -327,7 +329,7 @@ export const en = {
     examResultFailed: 'Not this time',
     examResultCongrats: 'Congratulations on passing your {country} test.',
     examResultRetake:
-      'Thank you for telling us. Keep practising, and set your new date when you have one.',
+      'Thank you for telling us. Keep practicing, and set your new date when you have one.',
     examResultError: 'We could not save that. Try again.',
   },
 
@@ -338,7 +340,7 @@ export const en = {
     meter: '{score}%, estimated',
     meterEarly: '{score}%, estimated, early estimate',
     basedOn:
-      '{count, plural, one {Based on # question so far. It settles as you practise more.} other {Based on # questions so far. It settles as you practise more.}}',
+      '{count, plural, one {Based on # question so far. It settles as you practice more.} other {Based on # questions so far. It settles as you practice more.}}',
     disclaimer:
       'This is an estimate from your practice and any mock exams, weighted like the real exam. It is not a guarantee of your result, and it drops if you stop reviewing.',
     topicKnowledge: 'Topic knowledge',
@@ -347,7 +349,7 @@ export const en = {
     mockAverage: '{percent}% right',
     studyNext: 'What to study next',
     nothingStandsOut: 'Nothing stands out. Keep your daily practice going.',
-    suggestStart: 'Start practising',
+    suggestStart: 'Start practicing',
     suggestStartDetail: 'Your first set picks a mix of questions from every topic.',
     suggestReview:
       '{count, plural, one {Review # question you are about to forget} other {Review # questions you are about to forget}}',
@@ -372,7 +374,7 @@ export const en = {
     practiceIntro: 'Ten questions chosen for you: weak topics, reviews and new ones.',
     practiceIntroDue:
       'Ten questions chosen for you: weak topics, reviews ({count} due) and new ones.',
-    oneTopic: 'Practise one topic',
+    oneTopic: 'Practice one topic',
     hideTopics: 'Hide topics',
     topicWithMastery: '{topic} ({mastery}%)',
   },
@@ -583,8 +585,7 @@ export const en = {
       'You keep Pro until {date}. After that you are on the Free plan and are not charged again.',
     cancelYes: 'Yes, cancel my plan',
     keep: 'Keep my plan',
-    cancelled:
-      'Your plan is cancelled. You keep Pro until the end of the period you have paid for.',
+    cancelled: 'Your plan is canceled. You keep Pro until the end of the period you have paid for.',
     kept: 'Your plan will renew as before.',
     changeFailed: 'That did not go through. Try again, or use Manage billing.',
     getAPass: 'Get a Country Pass',
@@ -762,17 +763,17 @@ export const en = {
     saved: 'Saved.',
     branding: 'Your look on learners’ dashboards',
     brandingHelp:
-      'Optional. Your logo and colours appear on the dashboards of the learners you invite. Shades are adjusted where needed so text stays readable.',
-    brandColor: 'Main colour',
-    brandAccent: 'Accent colour',
-    colorHint: 'A hex colour such as #0b5fff. Leave empty to use Oathly’s.',
+      'Optional. Your logo and colors appear on the dashboards of the learners you invite. Shades are adjusted where needed so text stays readable.',
+    brandColor: 'Main color',
+    brandAccent: 'Accent color',
+    colorHint: 'A hex color such as #0b5fff. Leave empty to use Oathly’s.',
     logo: 'Logo',
     logoHint: 'PNG, JPEG or WebP, up to 256 KB.',
     logoUpload: 'Upload logo',
     logoRemove: 'Remove logo',
     logoAlt: '{organization} logo',
     preview: 'Preview',
-    previewButton: 'Start practising',
+    previewButton: 'Start practicing',
     previewLink: 'See your progress',
     team: 'People who run this organization',
 
@@ -820,9 +821,9 @@ export const en = {
   offline: {
     title: 'Study offline',
     saved:
-      '{count, plural, one {# question saved on this phone, as of {date}. You can practise and take mock exams with no connection.} other {# questions saved on this phone, as of {date}. You can practise and take mock exams with no connection.}}',
+      '{count, plural, one {# question saved on this phone, as of {date}. You can practice and take mock exams with no connection.} other {# questions saved on this phone, as of {date}. You can practice and take mock exams with no connection.}}',
     notSaved:
-      'Save this country to your phone to practise and take mock exams with no connection. Your answers are sent when you are back online.',
+      'Save this country to your phone to practice and take mock exams with no connection. Your answers are sent when you are back online.',
     save: 'Save for offline',
     update: 'Update saved questions',
     bannerOfflineWaiting:
@@ -866,7 +867,7 @@ export const en = {
     studyingIn: 'Studying in {language}.',
     offline: 'Offline',
     noPacks:
-      'No countries saved on this phone yet. Save one from the Study tab to practise with no connection.',
+      'No countries saved on this phone yet. Save one from the Study tab to practice with no connection.',
     packLine:
       '{count, plural, one {{country}: # question, saved {date}.} other {{country}: # questions, saved {date}.}}',
     removePack: 'Remove from this phone',
@@ -882,8 +883,8 @@ export const en = {
     deleteIntro:
       'This removes your account and everything you have done in Oathly: your study plan, your answers and progress, your purchases and your memberships. It cannot be undone.',
     deleteStores:
-      'A subscription bought in the App Store or on Google Play is not cancelled by deleting your account. Cancel it in your phone’s subscription settings first, or you will keep being charged.',
-    deleteStripe: 'A subscription bought on the website is cancelled as part of this.',
+      'A subscription bought in the App Store or on Google Play is not canceled by deleting your account. Cancel it in your phone’s subscription settings first, or you will keep being charged.',
+    deleteStripe: 'A subscription bought on the website is canceled as part of this.',
     deleteConfirm: 'I understand that this cannot be undone',
     deleteButton: 'Delete my account',
     deleteBlockedOrganization:

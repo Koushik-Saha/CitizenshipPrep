@@ -2,6 +2,7 @@ import type { Messages } from './en';
 
 export const zhHans: Messages = {
   common: {
+    forOrganizations: '机构版',
     signIn: '登录',
     signOut: '退出登录',
     countries: '国家',
@@ -235,6 +236,7 @@ export const zhHans: Messages = {
   },
 
   onboarding: {
+    starting: '正在设置你的学习…',
     metaTitle: '设置学习计划 | Oathly',
     title: '设置学习计划',
     titleAdd: '添加另一项考试',

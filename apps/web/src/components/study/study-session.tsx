@@ -14,7 +14,7 @@ import { useAudioSession } from '@oathly/api/audio-hooks';
 import { examDecision, isCorrect, isSelfMarked, selfMarkedKeys, type Answer } from '@oathly/core';
 import { queryKeys } from '@oathly/api/queries';
 import { countryName, languageName, textDirection, type MessageKey } from '@oathly/i18n';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useT } from '@/components/i18n/provider';
@@ -55,6 +55,17 @@ const toGiven = (answer: SessionAnswer): GivenAnswer => ({
 });
 
 const subscribeNothing = () => () => {};
+
+/**
+ * Drops the cached dashboard once a session has changed what it shows. Only
+ * marking it stale is not enough: a dashboard already in the cache is drawn
+ * first with its old numbers (a readiness of 0, say) and corrected a moment
+ * later, because the page's fresh data is applied to an existing entry only
+ * after rendering. With no entry, the fresh data is drawn from the start.
+ */
+function forgetDashboard(client: QueryClient) {
+  client.removeQueries({ queryKey: queryKeys.dashboard, exact: true });
+}
 
 /**
  * A session carries on where it was left: after a reload, or opened again,
@@ -134,6 +145,9 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
   const remaining = useCountdown(deadline, phase !== 'results', () =>
     finish(answers, 'results.timeUp'),
   );
+
+  // Answering changes the dashboard's numbers, even in a session left part-way.
+  useEffect(() => forgetDashboard(queryClient), [queryClient]);
 
   // A new question: start its clock and move focus to it for screen readers.
   useEffect(() => {
@@ -331,8 +345,7 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
         [...strict].every((id) => right.has(id));
     }
     completeSession(session.attemptId, { correct, total: questions.length, passed });
-    // The cached dashboard is now out of date: it refetches when next shown.
-    void queryClient.invalidateQueries({ queryKey: queryKeys.dashboard });
+    forgetDashboard(queryClient);
   }, [
     answers,
     isExam,

@@ -91,7 +91,7 @@ test('a signed-out visitor is redirected away from every admin route', async ({ 
   }
 });
 
-test('a signed-in learner with no staff role is redirected away from every admin route', async ({
+test('a signed-in learner with no staff role is turned away from every admin route', async ({
   page,
 }) => {
   test.slow();
@@ -100,16 +100,21 @@ test('a signed-in learner with no staff role is redirected away from every admin
     for (const method of ['GET', 'POST'] as const) {
       const result = await endsAt(page.request, method, address);
       const where = `${method} ${address}`;
-      expect([303, 307], `${where}: ${result.first}`).toContain(result.first);
-      // To the front page, with nothing said about why.
-      expect(new URL(result.final).pathname, where).toBe('/');
+      // Sent to the sign-in page (which is where they already are, for that one)...
+      if (address !== '/admin/sign-in') {
+        expect([303, 307], `${where}: ${result.first}`).toContain(result.first);
+      }
+      // ...which only tells them they have no access.
+      expect(new URL(result.final).pathname, where).toBe('/admin/sign-in');
     }
   }
-  // In a browser too: no admin page is ever drawn for them.
+  // In a browser too: no admin page is ever drawn for them, only that message.
   for (const { address, isPage } of adminRoutes) {
     if (!isPage) continue;
     await page.goto(address);
-    await expect(page, address).toHaveURL(/\/$/);
+    await expect(page, address).toHaveURL(/\/admin\/sign-in(\?|$)/);
+    await expect(page.getByTestId('no-access'), address).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Sections' }), address).toHaveCount(0);
   }
   // And nothing they tried was done: the record has no action of theirs.
   expect(await auditTrail(`test:${user}`)).toEqual([]);
@@ -139,7 +144,8 @@ test('a session earned by one account is no use to another', async ({ page, brow
   await signInAndOnboard(learner, { user: newLearner() });
   await learnerContext.addCookies([stolen]);
   await learner.goto('/admin/content');
-  await expect(learner).toHaveURL(/\/$/);
+  await expect(learner).toHaveURL(/\/admin\/sign-in(\?|$)/);
+  await expect(learner.getByTestId('no-access')).toBeVisible();
 
   // Another member of staff who has not entered their own code.
   const staffContext = await browser.newContext();
@@ -232,7 +238,9 @@ test('losing the role ends the session at once', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Review queue');
   await removeStaff(userId);
   await page.goto('/admin/content');
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/admin\/sign-in(\?|$)/);
+  await expect(page.getByTestId('no-access')).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Sections' })).toHaveCount(0);
 });
 
 test('an admin can read the record of what staff have done', async ({ page }) => {

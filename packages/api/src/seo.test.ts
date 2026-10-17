@@ -190,7 +190,7 @@ describe('topicFaq', () => {
   it('starts with the topic, then the exam, then Oathly', () => {
     const faq = faqOf(topicFaq(topicGuide, 'Canada', t));
     expect(faq[0]).toEqual([
-      'How can I practise History questions for the Canada citizenship test?',
+      'How can I practice History questions for the Canada citizenship test?',
       'Oathly has 12 checked practice questions on History. The sample on this page is free, ' +
         'with the answers explained; the rest are in the app.',
     ]);

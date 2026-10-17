@@ -86,9 +86,14 @@ test.describe('a learner who is not a reviewer', () => {
     page,
     baseURL,
   }) => {
-    // Not even their sign-in page is drawn for someone with no staff role.
+    // Only a page saying they have no access is drawn for someone with no staff role.
+    const turnedAway = async () => {
+      await expect(page).toHaveURL(/\/admin\/sign-in(\?|$)/);
+      await expect(page.getByTestId('no-access')).toBeVisible();
+      await expect(page.getByRole('navigation', { name: 'Sections' })).toHaveCount(0);
+    };
     await page.goto('/admin/content');
-    await expect(page).toHaveURL(/localhost:\d+\/$/);
+    await turnedAway();
 
     // A made-up session of each kind the area has ever used.
     for (const value of [
@@ -97,11 +102,11 @@ test.describe('a learner who is not a reviewer', () => {
     ]) {
       await page.context().addCookies([{ name: 'oathly_admin', value, url: `${baseURL}/admin` }]);
       await page.goto('/admin/content');
-      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await turnedAway();
       await page.goto('/admin/community');
-      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await turnedAway();
       await page.goto('/admin/activity');
-      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await turnedAway();
     }
   });
 

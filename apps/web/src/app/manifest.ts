@@ -12,7 +12,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Oathly: citizenship test practice',
     short_name: 'Oathly',
     description:
-      'Practise for your citizenship test with questions checked against official sources. Independent, not a government service.',
+      'Practice for your citizenship test with questions checked against official sources. Independent, not a government service.',
     start_url: '/study',
     scope: '/',
     display: 'standalone',

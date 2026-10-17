@@ -6,6 +6,7 @@ import type { Messages } from './en';
 
 export const ar: Messages = {
   common: {
+    forOrganizations: 'للمؤسسات',
     signIn: 'تسجيل الدخول',
     signOut: 'تسجيل الخروج',
     countries: 'الدول',
@@ -252,6 +253,7 @@ export const ar: Messages = {
   },
 
   onboarding: {
+    starting: 'جارٍ إعداد دراستك…',
     metaTitle: 'جهّز دراستك | Oathly',
     title: 'جهّز دراستك',
     titleAdd: 'أضف اختبارًا آخر',

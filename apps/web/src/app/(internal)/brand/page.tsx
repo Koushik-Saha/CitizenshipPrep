@@ -293,7 +293,7 @@ export default function BrandPage() {
           Tailwind for the web and as a theme object for mobile.
         </p>
 
-        <h3 className="font-display mt-12 text-2xl font-medium">Colour</h3>
+        <h3 className="font-display mt-12 text-2xl font-medium">Color</h3>
         <Ramps />
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           {themeNames.map((theme) => (

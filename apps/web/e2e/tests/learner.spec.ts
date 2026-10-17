@@ -62,7 +62,12 @@ test('a new learner sets up their study and lands on the dashboard', async ({ pa
   );
 
   await accept.check();
-  await page.getByRole('button', { name: t('onboarding.start') }).click();
+  // Complete, and said so to assistive technology; while it is sent it is busy, never a dead button.
+  const start = page.getByRole('button', { name: t('onboarding.start') });
+  await expect(start).toBeEnabled();
+  expect(await start.ariaSnapshot()).toBe(`- button "${t('onboarding.start')}"`);
+  await start.click();
+  await expect(start).not.toHaveAttribute('disabled');
   await expect(page).toHaveURL(/\/study$/);
   await expect(page.getByRole('heading', { level: 2, name: 'Testland' })).toBeVisible();
   // Asked once: adding another exam later does not ask again.
@@ -488,4 +493,54 @@ test('a learner deletes their account, and it is gone', async ({ page }) => {
   await page.goto('/study');
   await expect(page).toHaveURL(/\/sign-in$/);
   expect((await page.request.get('/api/me')).status()).toBe(401);
+});
+
+test('back from a session, the dashboard shows the new readiness at once, not the old one first', async ({
+  page,
+}) => {
+  await signInAndOnboard(page);
+  await expect(page.getByRole('meter')).toHaveAttribute('aria-valuenow', '0');
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\//);
+  for (let i = 0; ; i += 1) {
+    await option(page, await rightAnswer(page)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    const last = page.getByRole('button', { name: t('session.seeResults'), exact: true });
+    if (await last.isVisible()) {
+      await last.click();
+      break;
+    }
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+    expect(i, 'the session ends').toBeLessThan(40);
+  }
+  await expect(page.getByRole('heading', { level: 1, name: t('results.complete') })).toBeVisible();
+
+  // Every value the meter shows on the way back, in order.
+  await page.evaluate(() => {
+    const seen: string[] = [];
+    (window as unknown as { meterValues: string[] }).meterValues = seen;
+    const note = () => {
+      const value = document.querySelector('[role=meter]')?.getAttribute('aria-valuenow');
+      if (value && seen.at(-1) !== value) seen.push(value);
+    };
+    new MutationObserver(note).observe(document, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+    });
+  });
+  await page
+    .getByRole('link', { name: t('common.backToStudy') })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/study$/);
+  const meter = page.getByRole('meter');
+  await expect(meter).not.toHaveAttribute('aria-valuenow', '0');
+  const score = await meter.getAttribute('aria-valuenow');
+  expect(
+    await page.evaluate(() => (window as unknown as { meterValues: string[] }).meterValues),
+  ).toEqual([score]);
+  // And the same on a fresh load.
+  await page.reload();
+  await expect(meter).toHaveAttribute('aria-valuenow', score!);
 });

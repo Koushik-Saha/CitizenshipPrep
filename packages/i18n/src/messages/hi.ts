@@ -2,6 +2,7 @@ import type { Messages } from './en';
 
 export const hi: Messages = {
   common: {
+    forOrganizations: 'संगठनों के लिए',
     signIn: 'साइन इन करें',
     signOut: 'साइन आउट करें',
     countries: 'देश',
@@ -257,6 +258,7 @@ export const hi: Messages = {
   },
 
   onboarding: {
+    starting: 'आपकी पढ़ाई तैयार की जा रही है…',
     metaTitle: 'अपनी पढ़ाई सेट करें | Oathly',
     title: 'अपनी पढ़ाई सेट करें',
     titleAdd: 'एक और परीक्षा जोड़ें',

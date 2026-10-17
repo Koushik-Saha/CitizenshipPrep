@@ -403,3 +403,33 @@ test('the landing page offers each country with questions a round to try', async
   await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
   await expect(page.getByRole('radio')).toHaveCount(4);
 });
+
+test('an address with no page says so inside the site, with its header and footer', async ({
+  page,
+}) => {
+  const response = await page.goto('/nonexistent-page-qa-test');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('common.notFoundTitle'));
+  await expect(page.getByRole('banner')).toBeVisible();
+  await expect(page.getByRole('contentinfo')).toBeVisible();
+  await expectAccessible(page, 'not found');
+  // The navigation works from here, in the reader's language too.
+  await page
+    .getByRole('navigation', { name: t('common.mainNav') })
+    .getByRole('link', { name: t('common.countries') })
+    .click();
+  await expect(page).toHaveURL(/\/countries$/);
+  await page.goto('/es/nonexistent-page-qa-test');
+  await expect(
+    page.getByRole('contentinfo').getByRole('link', { name: 'Contacto' }),
+  ).toHaveAttribute('href', '/es/contact');
+});
+
+test('the pricing section has no empty bullet, in any language', async ({ page }) => {
+  for (const prefix of ['', '/es', '/ar', '/zh-Hans']) {
+    await page.goto(`${prefix}/`);
+    for (const item of await page.locator('#pricing li').all()) {
+      expect((await item.innerText()).trim(), `${prefix || 'en'} pricing`).not.toBe('');
+    }
+  }
+});

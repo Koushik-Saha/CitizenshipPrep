@@ -46,7 +46,7 @@ export async function deleteUserOnRequest(form: FormData): Promise<void> {
   if (plan.stripeSubscriptionIds.length > 0) {
     if (!process.env.STRIPE_SECRET_KEY) {
       back(
-        'This account has a subscription and Stripe is not set up here, so it cannot be cancelled.',
+        'This account has a subscription and Stripe is not set up here, so it cannot be canceled.',
       );
     }
     try {
@@ -55,7 +55,7 @@ export async function deleteUserOnRequest(form: FormData): Promise<void> {
       }
     } catch (error) {
       reportError(error, { where: 'admin-user-delete', step: 'cancel-subscription' });
-      back('The subscription could not be cancelled, so nothing was deleted. Try again.');
+      back('The subscription could not be canceled, so nothing was deleted. Try again.');
     }
   }
 

@@ -61,7 +61,7 @@ describe('examSections', () => {
 
   it('refuses a format with no fixed number of questions', () => {
     expect(() => examSections(format({ name: 'Interview', questionCount: null }))).toThrow(
-      '"Interview" has no fixed number of questions to practise.',
+      '"Interview" has no fixed number of questions to practice.',
     );
   });
 });

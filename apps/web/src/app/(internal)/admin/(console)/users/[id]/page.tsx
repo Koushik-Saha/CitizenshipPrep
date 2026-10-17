@@ -195,7 +195,7 @@ export default async function User({ params, searchParams }: PageProps<'/admin/u
         </h2>
         <p className="text-fg-muted mt-2 max-w-3xl">
           Only when the account’s owner has asked for it. Their progress, answers, posts and plan
-          are removed, any subscription is cancelled so they are not charged again, and the record
+          are removed, any subscription is canceled so they are not charged again, and the record
           they sign in with is removed. This cannot be undone.
         </p>
         {deletion.blocker ? (
@@ -209,7 +209,7 @@ export default async function User({ params, searchParams }: PageProps<'/admin/u
             <input type="hidden" name="id" value={user.id} />
             {deletion.stripeSubscriptionIds.length > 0 && (
               <p className="text-sm">
-                Their Stripe subscription will be cancelled now. Refund anything owed in Stripe
+                Their Stripe subscription will be canceled now. Refund anything owed in Stripe
                 first: after this the account is gone from here.
               </p>
             )}

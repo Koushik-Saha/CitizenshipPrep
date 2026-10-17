@@ -61,7 +61,7 @@ export function parseBlueprint(value: unknown): ExamBlueprint {
 /** The sections a mock exam is built from: the blueprint's, or one section for the whole exam. */
 export function examSections(format: ExamFormat): ExamSection[] {
   if (format.questionCount == null) {
-    throw new ExamFormatError(`"${format.name}" has no fixed number of questions to practise.`);
+    throw new ExamFormatError(`"${format.name}" has no fixed number of questions to practice.`);
   }
   const sections = format.blueprint.sections ?? [
     {

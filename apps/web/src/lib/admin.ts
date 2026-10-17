@@ -76,8 +76,8 @@ export async function requireStaff(need: StaffRole = 'reviewer'): Promise<Staff>
   // The sign-in page sends a signed-out visitor on to the site's own sign-in.
   if (!user) redirect('/admin/sign-in');
   const member = await staffMember(getDb(), user.userId);
-  // Not staff: there is nothing here for them, and nothing to tell them.
-  if (!member) redirect('/');
+  // Not staff: the sign-in page tells them they have no access.
+  if (!member) redirect('/admin/sign-in');
   // A session from another account's code is nobody's here, and one from
   // before they signed out, or before their authenticator was reset, is over.
   if (

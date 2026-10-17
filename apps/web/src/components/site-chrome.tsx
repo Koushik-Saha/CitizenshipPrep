@@ -1,4 +1,6 @@
-// Header and footer for the public pages. Server Components.
+// Header and footer for the public pages. Server Components, which the
+// not-found page also renders on the client: everything they say is in the
+// `common` messages every page is sent.
 
 import { localizePath, type Translator } from '@oathly/i18n';
 import Link from 'next/link';
@@ -58,7 +60,7 @@ export function SiteFooter({ t }: { t: Translator }) {
           </Link>
           {/* Rarely followed: nothing to prefetch. */}
           <Link href={localizePath(t.locale, '/org')} prefetch={false} className={navLink}>
-            {t('org.forOrganizations')}
+            {t('common.forOrganizations')}
           </Link>
           <Link href={localizePath(t.locale, '/sign-in')} className={navLink}>
             {t('common.signIn')}

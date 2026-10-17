@@ -68,7 +68,14 @@ export function OnboardingForm({
   const visible = searchCountries(named, query);
 
   return (
-    <form action={action} className="space-y-10">
+    <form
+      action={action}
+      // One submission at a time: the button stays focusable while it is sent.
+      onSubmit={(event) => {
+        if (pending) event.preventDefault();
+      }}
+      className="space-y-10"
+    >
       {plan && <input type="hidden" name="plan" value={plan} />}
       {state.error && (
         <Notice tone="error" role="alert">
@@ -251,9 +258,21 @@ export function OnboardingForm({
         </div>
       )}
 
-      <button type="submit" disabled={pending} className={buttonClass.primary}>
-        {adding ? t('onboarding.add') : t('onboarding.start')}
-      </button>
+      <div className="flex flex-wrap items-center gap-4">
+        {/* Not `disabled` while sending: a screen reader would meet a dead button
+            and no reason. It is marked busy, and the status says what is happening. */}
+        <button
+          type="submit"
+          aria-disabled={pending || undefined}
+          aria-busy={pending || undefined}
+          className={`${buttonClass.primary} ${pending ? 'cursor-wait opacity-70' : ''}`}
+        >
+          {adding ? t('onboarding.add') : t('onboarding.start')}
+        </button>
+        <p role="status" className="text-fg-muted text-sm">
+          {pending ? t('onboarding.starting') : ''}
+        </p>
+      </div>
     </form>
   );
 }

@@ -80,6 +80,13 @@ describe('message catalogs', () => {
     });
   }
 
+  it('spells English the US way throughout', () => {
+    const british =
+      /\b(practis(e|es|ed|ing)|cancell(ed|ing)|colours?|organis(e|ed|ing|ation|ations)|towards)\b/i;
+    const found = [...english].filter(([, message]) => british.test(message));
+    expect(found).toEqual([]);
+  });
+
   it('reads right to left only for Arabic among the UI languages', () => {
     expect(uiLocales.filter((locale) => textDirection(locale) === 'rtl')).toEqual(['ar']);
   });

@@ -143,7 +143,7 @@ function SharedAccountForm({ next }: { next: string }) {
 // The way into the reviewers' area. Staff arrive already signed in to the
 // site with their own account; this asks for a code from their authenticator,
 // or sets one up the first time. Anyone else is sent away: signed out, to
-// the site's sign-in; signed in without a staff role, to the front page.
+// the site's sign-in; signed in without a staff role, they are told so here.
 export default async function AdminSignIn({ searchParams }: PageProps<'/admin/sign-in'>) {
   if (!isAdminConfigured()) notFound();
   const params = await searchParams;
@@ -157,8 +157,27 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
   const user = await currentUser();
   const member = user ? await staffMember(getDb(), user.userId) : null;
 
+  // Signed in, but the account holds no staff role: say so, rather than send
+  // them away without a word. A locked-out reviewer learns what to ask for.
+  if (user && !member && !sharedOpen) {
+    return (
+      <Frame
+        title="No reviewer access"
+        intro={`You are signed in${user.email ? ` as ${user.email}` : ''}, but this account does not have reviewer access.`}
+      >
+        <p className="mt-5 text-sm" data-testid="no-access">
+          If it should, ask an Oathly admin to give this account a role, then open this page again.
+          If you meant to use another account, sign out of Oathly first and sign in with that one.
+        </p>
+        <Link href="/" className={`${buttonClass.secondary} mt-6 w-full`}>
+          Back to Oathly
+        </Link>
+      </Frame>
+    );
+  }
+
   if (!user || !member) {
-    if (!sharedOpen) redirect(user ? '/' : '/sign-in?admin=1');
+    if (!sharedOpen) redirect('/sign-in?admin=1');
     // Only until the first admin has set up an authenticator.
     return (
       <Frame

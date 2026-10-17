@@ -2,6 +2,7 @@ import type { Messages } from './en';
 
 export const vi: Messages = {
   common: {
+    forOrganizations: 'Dành cho tổ chức',
     signIn: 'Đăng nhập',
     signOut: 'Đăng xuất',
     countries: 'Quốc gia',
@@ -249,6 +250,7 @@ export const vi: Messages = {
   },
 
   onboarding: {
+    starting: 'Đang thiết lập việc học của bạn…',
     metaTitle: 'Thiết lập việc học | Oathly',
     title: 'Thiết lập việc học',
     titleAdd: 'Thêm kỳ thi khác',

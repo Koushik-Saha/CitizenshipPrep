@@ -2,6 +2,7 @@ import type { Messages } from './en';
 
 export const tl: Messages = {
   common: {
+    forOrganizations: 'Para sa mga organisasyon',
     signIn: 'Mag-sign in',
     signOut: 'Mag-sign out',
     countries: 'Mga bansa',
@@ -264,6 +265,7 @@ export const tl: Messages = {
   },
 
   onboarding: {
+    starting: 'Inihahanda ang iyong pag-aaral…',
     metaTitle: 'I-set up ang iyong pag-aaral | Oathly',
     title: 'I-set up ang iyong pag-aaral',
     titleAdd: 'Magdagdag ng isa pang pagsusulit',
