@@ -912,6 +912,9 @@ export const tl: Messages = {
     unreachable: 'Hindi namin maabot ang Oathly. Suriin ang iyong koneksyon at subukan ulit.',
   },
   community: {
+    noCountry:
+      'May sariling study group ang bawat test. Piliin ang test na pinaghahandaan mo para sumali sa grupo nito.',
+    chooseTest: 'Piliin ang iyong test',
     metaTitle: 'Grupo sa pag-aaral | Oathly',
     title: 'Grupo sa pag-aaral',
     intro:

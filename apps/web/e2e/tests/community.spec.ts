@@ -1,9 +1,11 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 
+import { sql } from '../database';
 import {
   expectAccessible,
   expectAccessibleInBothThemes,
   newLearner,
+  signIn,
   signInAndOnboard,
   signInAsReviewer,
   t,
@@ -145,4 +147,23 @@ test('a study group is for signed-in learners who study that country', async ({
     await page.goto(`/study/community/${id}`);
     await expect(page.getByRole('heading', { level: 1 }), id).toHaveText(t('common.notFoundTitle'));
   }
+});
+
+test('someone who has not chosen a test is told how to join a study group', async ({ page }) => {
+  // Set up, but with no test chosen: an account that came in another way, such as staff.
+  const user = newLearner();
+  await sql('insert into public.profiles (id) values ($1)', [`test:${user}`]);
+  await sql(
+    'insert into public.user_settings (user_id, daily_goal_minutes, onboarded_at) values ($1, 10, now())',
+    [`test:${user}`],
+  );
+  await signIn(page, user);
+  await page.goto('/study/community');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('community.title'));
+  await expect(page.getByText(t('community.noCountry'))).toBeVisible();
+  await expect(page.getByRole('link', { name: t('community.chooseTest') })).toHaveAttribute(
+    'href',
+    '/onboarding',
+  );
+  await expectAccessible(page, 'study group, no test chosen');
 });

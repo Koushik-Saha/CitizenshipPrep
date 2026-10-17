@@ -43,9 +43,10 @@ export default async function CommunityPage({
     return (
       <main className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
         <h1 className="font-display text-4xl font-semibold">{t('community.title')}</h1>
-        <p className="mt-4">
+        <p className="text-fg-muted mt-3">{t('community.noCountry')}</p>
+        <p className="mt-6">
           <Link href={localizePath(locale, '/onboarding')} className={buttonClass.primary}>
-            {t('common.backToStudy')}
+            {t('community.chooseTest')}
           </Link>
         </p>
       </main>
@@ -72,7 +73,7 @@ export default async function CommunityPage({
     return localizePath(locale, `/study/community?${search}`);
   };
   const pill = (active: boolean) =>
-    `${focusRing} rounded-full border px-3 py-1.5 text-sm font-medium ${
+    `${focusRing} inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
       active
         ? 'bg-primary text-on-primary border-primary'
         : 'border-border-strong hover:bg-surface-sunken'
@@ -85,7 +86,7 @@ export default async function CommunityPage({
         <Link
           href={localizePath(locale, '/study')}
           prefetch
-          className={`${focusRing} text-fg-muted hover:text-fg rounded-xs underline-offset-4 hover:underline`}
+          className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
         >
           ← {t('common.backToStudy')}
         </Link>
@@ -114,7 +115,7 @@ export default async function CommunityPage({
       )}
 
       <details className={`${card} mt-6`}>
-        <summary className={`${focusRing} cursor-pointer rounded-xs text-lg font-semibold`}>
+        <summary className={`${focusRing} cursor-pointer rounded-xs py-2 text-lg font-semibold`}>
           {t('community.newPost')}
         </summary>
         <form action={submitPost} className="mt-4 space-y-4">
@@ -217,7 +218,7 @@ export default async function CommunityPage({
               <h2 className="mt-2 text-xl font-semibold">
                 <Link
                   href={localizePath(locale, `/study/community/${post.id}`)}
-                  className={`${focusRing} rounded-xs underline-offset-4 hover:underline`}
+                  className={`${focusRing} inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
                 >
                   {post.title}
                 </Link>

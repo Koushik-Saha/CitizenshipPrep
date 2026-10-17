@@ -105,6 +105,18 @@ test('studying fits a small phone and is done by tapping', async ({ page }) => {
   await page.goto('/study/plans');
   await expectFitsAPhone(page, 'plans');
 
+  // The study group, and a post in it.
+  await page.goto('/study/community');
+  await expectFitsAPhone(page, 'study group');
+  await page.getByText(t('community.newPost'), { exact: true }).tap();
+  await page.getByLabel(t('community.titleLabel')).fill('How long did you study each day?');
+  await page
+    .getByLabel(t('community.bodyLabel'))
+    .fill('I have six weeks before my test. How long did you study each day?');
+  await page.getByRole('button', { name: t('community.post'), exact: true }).tap();
+  await expect(page).toHaveURL(/\/study\/community\/[0-9a-f-]{36}/);
+  await expectFitsAPhone(page, 'study group post');
+
   // Right to left: the same, mirrored.
   await page.goto('/ar/study');
   const practise = page.getByRole('button', { name: ar('dashboard.practise'), exact: true });

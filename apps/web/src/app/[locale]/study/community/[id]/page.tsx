@@ -51,7 +51,9 @@ function ReportForm({
 }) {
   return (
     <details className="text-sm">
-      <summary className={`${focusRing} text-fg-muted hover:text-fg cursor-pointer rounded-xs`}>
+      <summary
+        className={`${focusRing} text-fg-muted hover:text-fg cursor-pointer rounded-xs py-3`}
+      >
         {t('community.report')}
       </summary>
       <form action={action} className="mt-2 flex flex-wrap items-end gap-2">
@@ -96,7 +98,7 @@ export default async function PostPage({
         <Link
           href={localizePath(locale, `/study/community?country=${post.countryCode}`)}
           prefetch
-          className={`${focusRing} text-fg-muted hover:text-fg rounded-xs underline-offset-4 hover:underline`}
+          className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
         >
           ← {t('community.back')}
         </Link>
