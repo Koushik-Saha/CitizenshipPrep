@@ -1,7 +1,7 @@
-import { FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
+import { FREE_QUESTIONS_PER_COUNTRY, TRIAL_QUESTIONS } from '@oathly/core';
 import { expect, test } from '@playwright/test';
 
-import { expectAccessibleInBothThemes, t } from './support';
+import { expectAccessible, expectAccessibleInBothThemes, t } from './support';
 
 // What a visitor sees before signing in: the landing page, the country list,
 // a country's test page and a topic's. The fixture country is "Testland".
@@ -335,4 +335,71 @@ test('the refunds page is linked from the footer and from the terms', async ({ p
     'href',
     '/refunds',
   );
+});
+
+test('a visitor plays a round of real practice without an account', async ({ page }) => {
+  await page.goto('/testland/citizenship-test');
+  await page
+    .getByRole('link', { name: t('trial.cta', { count: TRIAL_QUESTIONS }) })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    t('trial.title', { country: 'Testland' }),
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+
+  // The first answer wrong, the rest right; each is checked and explained at once.
+  for (let i = 0; i < TRIAL_QUESTIONS; i += 1) {
+    await expect(
+      page.getByText(t('session.questionOf', { current: i + 1, total: TRIAL_QUESTIONS })),
+    ).toBeVisible();
+    const text = await page.getByRole('heading', { level: 2 }).first().innerText();
+    const n = Number(/what is (\d+) plus/.exec(text)?.[1]);
+    const answer = page.locator('span[lang]').getByText(String(2 * n), { exact: true });
+    const pick =
+      i === 0
+        ? page.getByRole('radio').filter({ hasNot: answer }).first()
+        : page.getByRole('radio').filter({ has: answer });
+    await pick.click();
+    if (i === 0) await expectAccessibleInBothThemes(page, 'trial question');
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    await expect(
+      page.getByText(i === 0 ? t('session.notQuite') : t('session.correct')).first(),
+    ).toBeVisible();
+    await expect(page.getByText(`${n} plus ${n} is ${2 * n}.`).first()).toBeVisible();
+    await page
+      .getByRole('button', {
+        name: i + 1 === TRIAL_QUESTIONS ? t('session.seeResults') : t('session.nextQuestion'),
+        exact: true,
+      })
+      .click();
+  }
+
+  const results = page.getByTestId('trial-results');
+  await expect(results.getByRole('heading')).toHaveText(
+    t('trial.doneTitle', { correct: TRIAL_QUESTIONS - 1, total: TRIAL_QUESTIONS }),
+  );
+  await expectAccessible(page, 'trial results');
+  await expect(results.getByRole('link', { name: t('trial.signUp') })).toHaveAttribute(
+    'href',
+    '/sign-in?country=ZZ',
+  );
+  // Nothing was asked of the visitor, and the round can be played again.
+  await results.getByRole('button', { name: t('common.tryAgain') }).click();
+  await expect(
+    page.getByText(t('session.questionOf', { current: 1, total: TRIAL_QUESTIONS })),
+  ).toBeVisible();
+});
+
+test('the landing page offers each country with questions a round to try', async ({ page }) => {
+  await page.goto('/');
+  await page
+    .locator('#countries li')
+    .filter({ hasText: 'Testland' })
+    .first()
+    .getByRole('link', { name: t('trial.cta', { count: TRIAL_QUESTIONS }) })
+    .click();
+  await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
+  await expect(page.getByRole('radio')).toHaveCount(4);
 });

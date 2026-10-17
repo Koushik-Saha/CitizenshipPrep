@@ -181,6 +181,7 @@ export const en = {
     topicLead: 'Practice questions for the {country} citizenship test.',
     showAnswer: 'Show the answer',
     answerLabel: 'Answer:',
+    acceptedAnswersLabel: 'Accepted answers:',
     fromGuide: 'From the official guide: “{quote}”',
     source: 'Source',
     moreInApp:
@@ -455,6 +456,19 @@ export const en = {
       'The AI explanation is not available right now. You can keep studying and try again later.',
     aiNote:
       'Written by AI from the official guide’s passage. It has not been checked by a reviewer and may contain mistakes.',
+  },
+
+  trial: {
+    cta: 'Try {count} questions now',
+    metaTitle: 'Try the {country} citizenship test: {count} questions | Oathly',
+    title: 'Try the {country} citizenship test',
+    intro:
+      '{count} real questions from our checked bank, with the answer and why after each. No account needed, and nothing is saved.',
+    doneTitle: 'You got {correct} of {total} right',
+    doneBody:
+      'A free account saves your progress and gives you {free} questions for each country, with practice, flashcards, the readiness score and audio mode.',
+    signUp: 'Create a free account',
+    back: 'Back to the {country} test page',
   },
 
   contact: {

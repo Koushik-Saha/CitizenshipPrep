@@ -161,6 +161,7 @@ export const zhHans: Messages = {
     topicLead: '{country}入籍考试练习题。',
     showAnswer: '显示答案',
     answerLabel: '答案：',
+    acceptedAnswersLabel: '可接受的答案：',
     fromGuide: '摘自官方指南：“{quote}”',
     source: '来源',
     moreInApp:
@@ -411,6 +412,19 @@ export const zhHans: Messages = {
     writing: '正在撰写讲解…',
     unavailable: 'AI 讲解暂时无法使用。你可以继续学习，稍后再试。',
     aiNote: '由 AI 根据官方指南的段落撰写，未经审核员核对，可能有误。',
+  },
+
+  trial: {
+    cta: '立即试做 {count} 道题',
+    metaTitle: '试做{country}入籍考试：{count} 道题 | Oathly',
+    title: '试做{country}入籍考试',
+    intro:
+      '来自我们已核对题库的 {count} 道真题，每题之后都有答案和解释。无需账户，不会保存任何内容。',
+    doneTitle: '你答对了 {total} 题中的 {correct} 题',
+    doneBody:
+      '免费账户会保存你的进度，并为每个国家提供 {free} 道题，包括练习、记忆卡、备考评分和音频模式。',
+    signUp: '创建免费账户',
+    back: '返回{country}考试页面',
   },
 
   contact: {

@@ -180,6 +180,7 @@ export const fr: Messages = {
     topicLead: 'Questions d’entraînement pour le test de citoyenneté ({country}).',
     showAnswer: 'Afficher la réponse',
     answerLabel: 'Réponse :',
+    acceptedAnswersLabel: 'Réponses acceptées :',
     fromGuide: 'D’après le guide officiel : « {quote} »',
     source: 'Source',
     moreInApp:
@@ -458,6 +459,19 @@ export const fr: Messages = {
       'L’explication par IA n’est pas disponible pour le moment. Vous pouvez continuer à étudier et réessayer plus tard.',
     aiNote:
       'Rédigé par IA à partir du passage du guide officiel. Non vérifié par un relecteur, peut contenir des erreurs.',
+  },
+
+  trial: {
+    cta: 'Essayer {count} questions',
+    metaTitle: 'Essayez le test de citoyenneté de {country} : {count} questions | Oathly',
+    title: 'Essayez le test de citoyenneté de {country}',
+    intro:
+      '{count} vraies questions de notre banque vérifiée, avec la réponse et son explication après chacune. Aucun compte nécessaire, rien n’est enregistré.',
+    doneTitle: 'Vous avez {correct} bonnes réponses sur {total}',
+    doneBody:
+      'Un compte gratuit enregistre votre progression et vous donne {free} questions par pays, avec l’entraînement, les cartes mémoire, le score de préparation et le mode audio.',
+    signUp: 'Créer un compte gratuit',
+    back: 'Retour à la page du test de {country}',
   },
 
   contact: {

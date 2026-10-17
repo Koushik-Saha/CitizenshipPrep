@@ -173,6 +173,7 @@ export const vi: Messages = {
     topicLead: 'Câu hỏi luyện tập cho kỳ thi quốc tịch {country}.',
     showAnswer: 'Hiện đáp án',
     answerLabel: 'Đáp án:',
+    acceptedAnswersLabel: 'Câu trả lời được chấp nhận:',
     fromGuide: 'Trích tài liệu chính thức: “{quote}”',
     source: 'Nguồn',
     moreInApp:
@@ -438,6 +439,19 @@ export const vi: Messages = {
     unavailable: 'Phần giải thích bằng AI hiện chưa dùng được. Bạn có thể học tiếp và thử lại sau.',
     aiNote:
       'Do AI viết từ đoạn trích của tài liệu chính thức. Chưa được người duyệt kiểm tra và có thể có sai sót.',
+  },
+
+  trial: {
+    cta: 'Thử {count} câu hỏi ngay',
+    metaTitle: 'Thử bài thi quốc tịch {country}: {count} câu hỏi | Oathly',
+    title: 'Thử bài thi quốc tịch {country}',
+    intro:
+      '{count} câu hỏi thật từ ngân hàng câu hỏi đã kiểm tra của chúng tôi, kèm đáp án và giải thích sau mỗi câu. Không cần tài khoản, không lưu lại gì.',
+    doneTitle: 'Bạn trả lời đúng {correct} trên {total} câu',
+    doneBody:
+      'Tài khoản miễn phí lưu tiến độ của bạn và cho bạn {free} câu hỏi cho mỗi nước, với luyện tập, thẻ ghi nhớ, điểm sẵn sàng và chế độ âm thanh.',
+    signUp: 'Tạo tài khoản miễn phí',
+    back: 'Quay lại trang bài thi {country}',
   },
 
   contact: {

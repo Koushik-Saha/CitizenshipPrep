@@ -235,6 +235,7 @@ async function sampleQuestions(
 ): Promise<GuideQuestion[]> {
   const { rows } = await db.query<{
     id: string;
+    type: GuideQuestion['type'];
     topic_slug: string;
     topic_name: string;
     shown: GuideWording & { explanation: string | null };
@@ -245,7 +246,8 @@ async function sampleQuestions(
     last_verified_at: Date;
   }>(
     `with ranked as (
-       select q.id, q.topic_id, q.correct_answer, q.source_url, q.source_quote, q.last_verified_at,
+       select q.id, q.type, q.topic_id, q.correct_answer, q.source_url, q.source_quote,
+              q.last_verified_at,
               t.slug as topic_slug, t.name as topic_name, t.sort_order,
               json_build_object('locale', o.locale, 'text', o.text, 'options', o.options) as original,
               row_number() over (
@@ -259,7 +261,7 @@ async function sampleQuestions(
        where q.country_code = $1 and q.status = 'published'
          and ($4::text is null or t.slug = $4)
      )
-     select r.id, r.topic_slug, r.topic_name, r.original, r.correct_answer, r.source_url,
+     select r.id, r.type::text as type, r.topic_slug, r.topic_name, r.original, r.correct_answer, r.source_url,
             r.source_quote, r.last_verified_at,
             (select json_build_object('locale', tr.locale, 'text', tr.text,
                                       'options', tr.options, 'explanation', tr.explanation)
@@ -275,6 +277,7 @@ async function sampleQuestions(
   );
   return rows.map((row) => ({
     id: row.id,
+    type: row.type,
     topic: { slug: row.topic_slug, name: row.topic_name },
     locale: row.shown.locale,
     text: row.shown.text,

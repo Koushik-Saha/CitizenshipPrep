@@ -57,6 +57,10 @@ test('the public pages fit a small phone', async ({ page }) => {
     await answer.tap();
   }
   await expectFitsAPhone(page, 'country page, every sample open');
+  await page.goto('/testland/citizenship-test/try');
+  await page.getByRole('radio').first().tap();
+  await page.getByRole('button', { name: t('session.check'), exact: true }).tap();
+  await expectFitsAPhone(page, 'trial, answered');
   await page.goto('/sign-in');
   await expectFitsAPhone(page, 'sign-in');
   await page.goto('/ar');

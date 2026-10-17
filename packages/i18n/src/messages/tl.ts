@@ -181,6 +181,7 @@ export const tl: Messages = {
     topicLead: 'Mga tanong sa pagsasanay para sa citizenship test ng {country}.',
     showAnswer: 'Ipakita ang sagot',
     answerLabel: 'Sagot:',
+    acceptedAnswersLabel: 'Mga tinatanggap na sagot:',
     fromGuide: 'Mula sa opisyal na gabay: “{quote}”',
     source: 'Pinagmulan',
     moreInApp:
@@ -458,6 +459,19 @@ export const tl: Messages = {
       'Hindi available ang paliwanag ng AI sa ngayon. Maaari kang magpatuloy sa pag-aaral at subukan ulit mamaya.',
     aiNote:
       'Isinulat ng AI mula sa sipi ng opisyal na gabay. Hindi pa ito nasuri ng reviewer at maaaring may mga mali.',
+  },
+
+  trial: {
+    cta: 'Subukan ang {count} tanong ngayon',
+    metaTitle: 'Subukan ang citizenship test ng {country}: {count} tanong | Oathly',
+    title: 'Subukan ang citizenship test ng {country}',
+    intro:
+      '{count} totoong tanong mula sa aming sinuring bangko ng tanong, may sagot at paliwanag pagkatapos ng bawat isa. Hindi kailangan ng account, at walang nase-save.',
+    doneTitle: 'Tama ang {correct} sa {total}',
+    doneBody:
+      'Sine-save ng libreng account ang progreso mo at binibigyan ka ng {free} tanong para sa bawat bansa, may practice, flashcards, readiness score at audio mode.',
+    signUp: 'Gumawa ng libreng account',
+    back: 'Bumalik sa pahina ng test ng {country}',
   },
 
   contact: {

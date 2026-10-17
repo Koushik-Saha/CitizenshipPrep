@@ -59,6 +59,12 @@ const unlockedBy: Record<Feature, { pro: boolean; countryPass: boolean }> = {
 export const FREE_QUESTIONS_PER_COUNTRY = 20;
 
 /**
+ * How many questions a visitor without an account can play, from the
+ * country's public samples, before being asked to sign up.
+ */
+export const TRIAL_QUESTIONS = 5;
+
+/**
  * How long past its end date a running subscription is still honoured. The
  * end date moves forward when a renewal is reported; if that report is late
  * or lost, the learner should not be locked out the same minute.

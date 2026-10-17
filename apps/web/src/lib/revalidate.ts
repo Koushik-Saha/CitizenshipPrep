@@ -25,11 +25,16 @@ export function revalidatePublicContent(countrySlug?: string): string[] {
 
   if (countrySlug) {
     const path = testPath(countrySlug);
-    for (const locale of uiLocales) revalidatePath(`/${locale}${path}`);
+    for (const locale of uiLocales) {
+      revalidatePath(`/${locale}${path}`);
+      // Its trial plays the page's first sample questions.
+      revalidatePath(`/${locale}${path}/try`);
+    }
     revalidatePath(ogImagePath(countrySlug));
-    paths.push(path, ogImagePath(countrySlug));
+    paths.push(path, `${path}/try`, ogImagePath(countrySlug));
   } else {
     revalidatePath('/[locale]/[country]/citizenship-test', 'page');
+    revalidatePath('/[locale]/[country]/citizenship-test/try', 'page');
     revalidatePath('/og/[image]', 'page');
     paths.push(testPath('[country]'), ogImagePath('[country]'));
   }

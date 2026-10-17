@@ -9,7 +9,7 @@ import {
   type ExamFacts,
 } from '@oathly/api/countries';
 import { formatPrice, type PlanPrice } from '@oathly/api/billing';
-import { aiLimits, FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
+import { aiLimits, FREE_QUESTIONS_PER_COUNTRY, TRIAL_QUESTIONS } from '@oathly/core';
 import {
   languageList,
   offeredStudyLocales,
@@ -151,12 +151,22 @@ export function CountryCards({
               <span className="text-fg-muted">{t('exam.questionsBeingChecked')}</span>
             )}
           </p>
-          <Link
-            href={localizePath(t.locale, `/sign-in?country=${country.isoCode}`)}
-            className={`${focusRing} text-primary-fg mt-1 inline-flex min-h-11 items-center rounded-xs font-medium underline underline-offset-4`}
-          >
-            {t('exam.studyFor', { country: localCountryName(country, t) })}
-          </Link>
+          <div className="mt-1 flex flex-wrap gap-x-5">
+            {country.publishedQuestions > 0 && (
+              <Link
+                href={localizePath(t.locale, `${testPath(country.slug)}/try`)}
+                className={`${focusRing} text-primary-fg inline-flex min-h-11 items-center rounded-xs font-medium underline underline-offset-4`}
+              >
+                {t('trial.cta', { count: TRIAL_QUESTIONS })}
+              </Link>
+            )}
+            <Link
+              href={localizePath(t.locale, `/sign-in?country=${country.isoCode}`)}
+              className={`${focusRing} text-primary-fg inline-flex min-h-11 items-center rounded-xs font-medium underline underline-offset-4`}
+            >
+              {t('exam.studyFor', { country: localCountryName(country, t) })}
+            </Link>
+          </div>
         </li>
       ))}
     </ul>

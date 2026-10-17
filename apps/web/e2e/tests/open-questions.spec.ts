@@ -123,3 +123,27 @@ test('an open question is answered aloud, then checked against the accepted answ
     })
     .toEqual({ correct: 1, total: 2 });
 });
+
+test('a visitor sees an open question’s accepted answers only when they ask', async ({ page }) => {
+  // The public samples: the accepted answers are the answer, so they are not listed first.
+  await page.goto('/openland/citizenship-test');
+  const sample = page
+    .locator('section[aria-labelledby="samples"] ol > li')
+    .filter({ hasText: 'Name one reason settlers came to Openland.' });
+  await expect(sample.getByText('Religious freedom')).toBeHidden();
+  await sample.getByText(t('countries.showAnswer')).click();
+  await expect(sample.getByText(t('countries.acceptedAnswersLabel'))).toBeVisible();
+  await expect(sample.getByText(/Religious freedom/)).toBeVisible();
+
+  // The trial: said aloud, then marked.
+  await page.goto('/openland/citizenship-test/try');
+  await expect(page.getByText(t('session.sayAnswer'))).toBeVisible();
+  await expect(page.getByRole('radio')).toHaveCount(0);
+  for (let i = 0; i < 2; i += 1) {
+    await page.getByRole('button', { name: t('session.showAnswer'), exact: true }).click();
+    await page.getByRole('button', { name: t('session.knewIt'), exact: true }).click();
+  }
+  await expect(page.getByTestId('trial-results').getByRole('heading')).toHaveText(
+    t('trial.doneTitle', { correct: 2, total: 2 }),
+  );
+});

@@ -120,13 +120,16 @@ export function SampleQuestions({
                 {question.text}
               </span>
             </p>
-            <ul {...own} className="mt-3 space-y-1.5">
-              {question.options.map((option) => (
-                <li key={option.key} className="text-fg-muted">
-                  {option.text}
-                </li>
-              ))}
-            </ul>
+            {/* An open question's options are its accepted answers: they are the answer. */}
+            {question.type !== 'free_response' && (
+              <ul {...own} className="mt-3 space-y-1.5">
+                {question.options.map((option) => (
+                  <li key={option.key} className="text-fg-muted">
+                    {option.text}
+                  </li>
+                ))}
+              </ul>
+            )}
             <details className="group mt-4">
               <summary
                 className={`${focusRing} text-primary-fg cursor-pointer rounded-xs py-2.5 font-medium`}
@@ -135,7 +138,11 @@ export function SampleQuestions({
               </summary>
               <div className="mt-3 space-y-2">
                 <p>
-                  <span className="font-medium">{t('countries.answerLabel')} </span>
+                  <span className="font-medium">
+                    {question.type === 'free_response' && question.correctKeys.length > 1
+                      ? t('countries.acceptedAnswersLabel')
+                      : t('countries.answerLabel')}{' '}
+                  </span>
                   <bdi lang={question.locale}>{answerText(question, question.correctKeys)}</bdi>
                 </p>
                 {question.explanation && (

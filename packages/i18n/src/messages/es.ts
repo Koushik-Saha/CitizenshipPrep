@@ -178,6 +178,7 @@ export const es: Messages = {
     topicLead: 'Preguntas de práctica para el examen de ciudadanía de {country}.',
     showAnswer: 'Mostrar la respuesta',
     answerLabel: 'Respuesta:',
+    acceptedAnswersLabel: 'Respuestas aceptadas:',
     fromGuide: 'De la guía oficial: «{quote}»',
     source: 'Fuente',
     moreInApp:
@@ -454,6 +455,19 @@ export const es: Messages = {
       'La explicación con IA no está disponible en este momento. Puedes seguir estudiando e intentarlo más tarde.',
     aiNote:
       'Escrito por IA a partir del pasaje de la guía oficial. No lo ha revisado una persona y puede contener errores.',
+  },
+
+  trial: {
+    cta: 'Prueba {count} preguntas ahora',
+    metaTitle: 'Prueba el examen de ciudadanía de {country}: {count} preguntas | Oathly',
+    title: 'Prueba el examen de ciudadanía de {country}',
+    intro:
+      '{count} preguntas reales de nuestro banco revisado, con la respuesta y su explicación después de cada una. No necesitas cuenta y no se guarda nada.',
+    doneTitle: 'Acertaste {correct} de {total}',
+    doneBody:
+      'Una cuenta gratuita guarda tu progreso y te da {free} preguntas de cada país, con práctica, tarjetas, la puntuación de preparación y el modo audio.',
+    signUp: 'Crear una cuenta gratuita',
+    back: 'Volver a la página del examen de {country}',
   },
 
   contact: {

@@ -178,6 +178,7 @@ export const pt: Messages = {
     topicLead: 'Perguntas de prática para o teste de cidadania ({country}).',
     showAnswer: 'Mostrar a resposta',
     answerLabel: 'Resposta:',
+    acceptedAnswersLabel: 'Respostas aceitas:',
     fromGuide: 'Do guia oficial: “{quote}”',
     source: 'Fonte',
     moreInApp:
@@ -454,6 +455,19 @@ export const pt: Messages = {
       'A explicação por IA não está disponível no momento. Você pode continuar estudando e tentar de novo mais tarde.',
     aiNote:
       'Escrito por IA a partir do trecho do guia oficial. Não foi verificado por um revisor e pode conter erros.',
+  },
+
+  trial: {
+    cta: 'Experimente {count} perguntas agora',
+    metaTitle: 'Experimente o teste de cidadania de {country}: {count} perguntas | Oathly',
+    title: 'Experimente o teste de cidadania de {country}',
+    intro:
+      '{count} perguntas reais do nosso banco verificado, com a resposta e o porquê depois de cada uma. Não precisa de conta, e nada é salvo.',
+    doneTitle: 'Você acertou {correct} de {total}',
+    doneBody:
+      'Uma conta gratuita salva seu progresso e dá {free} perguntas de cada país, com prática, cartões, a pontuação de preparo e o modo áudio.',
+    signUp: 'Criar uma conta gratuita',
+    back: 'Voltar à página do teste de {country}',
   },
 
   contact: {

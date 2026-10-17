@@ -1,7 +1,7 @@
 // Public facts about the exams Oathly covers, for the landing page and the
 // globe. Everything here is safe to show signed-out visitors.
 
-import { parseBlueprint } from '@oathly/core';
+import { parseBlueprint, type QuestionType } from '@oathly/core';
 import { countryName, languageList, type Translator } from '@oathly/i18n';
 
 export { parseCountryCode, searchCountries } from './country-search';
@@ -94,6 +94,11 @@ export interface GuideWording {
 /** A published question as a public page shows it. */
 export interface GuideQuestion extends GuideWording {
   id: string;
+  /**
+   * For free_response, the options are the accepted answers (all right), so
+   * they are never listed as choices.
+   */
+  type: QuestionType;
   topic: { slug: string; name: string };
   correctKeys: string[];
   explanation: string | null;

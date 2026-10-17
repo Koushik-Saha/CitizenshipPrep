@@ -1,7 +1,7 @@
 import { testPath, uncoveredPool } from '@oathly/api/countries';
 import { testFaq } from '@oathly/api/seo';
 import { getTestGuide, listTestPages } from '@oathly/api/server';
-import { breadcrumbSchema } from '@oathly/core';
+import { breadcrumbSchema, TRIAL_QUESTIONS } from '@oathly/core';
 import { countryName, languageList, localizePath } from '@oathly/i18n';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ import {
   SampleQuestions,
 } from '@/components/seo/test-page';
 import { Breadcrumbs, SiteFooter, SiteHeader } from '@/components/site-chrome';
-import { focusRing, Notice } from '@/components/ui';
+import { buttonClass, focusRing, Notice } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
 import { loadPublic } from '@/lib/public-content';
@@ -65,6 +65,8 @@ export default async function TestPage({ params }: Props) {
   const path = testPath(guide.slug);
   const title = t('countries.countryTitle', { country });
   const signIn = localizePath(locale, `/sign-in?country=${guide.isoCode}`);
+  // A round of real practice, no account needed, once there are questions to play.
+  const tryIt = guide.questions.length > 0 ? localizePath(locale, `${path}/try`) : null;
   // Where the official question pool is public and not yet covered, say how much of it is here.
   const officialPool = uncoveredPool(guide.publishedQuestions, guide.exams);
 
@@ -106,10 +108,15 @@ export default async function TestPage({ params }: Props) {
             <Notice tone="warning">{t('countries.betaNote')}</Notice>
           </div>
         )}
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap gap-3">
+          {tryIt && (
+            <Link href={tryIt} className={`${buttonClass.primary} px-5 py-3`}>
+              {t('trial.cta', { count: TRIAL_QUESTIONS })}
+            </Link>
+          )}
           <Link
             href={signIn}
-            className={`${focusRing} bg-primary text-on-primary hover:bg-primary-hover inline-flex rounded-md px-5 py-3 font-semibold`}
+            className={`${tryIt ? buttonClass.secondary : buttonClass.primary} px-5 py-3`}
           >
             {t('countries.studyForTest', { country })}
           </Link>
@@ -145,12 +152,19 @@ export default async function TestPage({ params }: Props) {
             </div>
             <div className="border-border mt-8 border-t pt-8">
               <p className="text-lg">{t('countries.practiseInApp')}</p>
-              <Link
-                href={signIn}
-                className={`${focusRing} bg-primary text-on-primary hover:bg-primary-hover mt-4 inline-flex rounded-md px-5 py-3 font-semibold`}
-              >
-                {t('countries.studyForTest', { country })}
-              </Link>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {tryIt && (
+                  <Link href={tryIt} className={`${buttonClass.primary} px-5 py-3`}>
+                    {t('trial.cta', { count: TRIAL_QUESTIONS })}
+                  </Link>
+                )}
+                <Link
+                  href={signIn}
+                  className={`${tryIt ? buttonClass.secondary : buttonClass.primary} px-5 py-3`}
+                >
+                  {t('countries.studyForTest', { country })}
+                </Link>
+              </div>
             </div>
           </section>
         )}
