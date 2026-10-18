@@ -544,3 +544,66 @@ test('back from a session, the dashboard shows the new readiness at once, not th
   await page.reload();
   await expect(meter).toHaveAttribute('aria-valuenow', score!);
 });
+
+/** What the readiness panel says: the score, and how well the topics are known. */
+async function readinessShown(page: Page): Promise<string> {
+  const knowledge = page.locator('dt', { hasText: t('readiness.topicKnowledge') }).locator('+ dd');
+  return `${await page.getByRole('meter').getAttribute('aria-valuenow')} / ${await knowledge.innerText()}`;
+}
+
+/** Waits a moment, then expects the dashboard to say what a fresh load of it says. */
+async function expectDashboardCurrent(page: Page, where: string): Promise<string> {
+  await expect(page).toHaveURL(/\/study$/);
+  await expect(page.getByRole('meter')).toBeVisible();
+  // Longer than a refetch would take: a stale dashboard is still stale after it.
+  await page.waitForTimeout(1500);
+  const shown = await readinessShown(page);
+  await page.reload();
+  expect(shown, where).toBe(await readinessShown(page));
+  return shown;
+}
+
+// In a production build a link prefetches the page it leads to; a dashboard
+// prefetched while a session was under way showed the readiness from before it.
+test('the dashboard is up to date after practice and after flashcards, however the learner gets back', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await signInAndOnboard(page);
+  const before = await readinessShown(page);
+
+  await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\//);
+  for (let i = 0; ; i += 1) {
+    await option(page, await rightAnswer(page)).click();
+    await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    const last = page.getByRole('button', { name: t('session.seeResults'), exact: true });
+    if (await last.isVisible()) {
+      await last.click();
+      break;
+    }
+    await page.getByRole('button', { name: t('session.nextQuestion'), exact: true }).click();
+    expect(i, 'the session ends').toBeLessThan(40);
+  }
+  await expect(page.getByRole('heading', { level: 1, name: t('results.complete') })).toBeVisible();
+  await page
+    .getByRole('link', { name: t('common.backToStudy') })
+    .first()
+    .click();
+  const afterPractice = await expectDashboardCurrent(page, 'back from practice by the link');
+  expect(afterPractice).not.toBe(before);
+
+  // Flashcards, none known, then the browser's Back button to the dashboard
+  // (which it keeps from before): the score drops, and the drop is shown.
+  await page.getByRole('button', { name: t('start.flashcards'), exact: true }).click();
+  await expect(page).toHaveURL(/\/study\/session\//);
+  const complete = page.getByRole('heading', { level: 1, name: t('results.complete') });
+  for (let i = 0; !(await complete.isVisible()); i += 1) {
+    await page.getByRole('button', { name: t('session.showAnswer'), exact: true }).click();
+    await page.getByRole('button', { name: new RegExp(t('session.didNotKnow')) }).click();
+    expect(i, 'the session ends').toBeLessThan(40);
+  }
+  await page.goBack();
+  const afterCards = await expectDashboardCurrent(page, 'back from flashcards by Back');
+  expect(afterCards).not.toBe(afterPractice);
+});

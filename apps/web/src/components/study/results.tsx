@@ -234,7 +234,10 @@ export function Results({
         </ol>
       </section>
 
-      <Link href="/study" prefetch className={`${buttonClass.primary} mt-10`}>
+      {/* Not prefetched in full: a prefetch made now would carry the dashboard as it
+          was before this session's last answers, and be shown on the way back. The
+          default prefetches the dashboard's loading state only. */}
+      <Link href="/study" className={`${buttonClass.primary} mt-10`}>
         {t('common.backToStudy')}
       </Link>
     </main>

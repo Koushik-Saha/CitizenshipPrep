@@ -25,6 +25,7 @@ import { useAudioPlatform } from '@/lib/audio-platform';
 import { setAudioPrefs, useAudioPrefs } from '@/lib/audio-prefs';
 
 import { AudioControls } from './audio-controls';
+import { markDashboardChanged } from './dashboard-freshness';
 import { ExplainMore } from './explain-more';
 import { ReportQuestion } from './report-question';
 import { Results } from './results';
@@ -57,14 +58,15 @@ const toGiven = (answer: SessionAnswer): GivenAnswer => ({
 const subscribeNothing = () => () => {};
 
 /**
- * Drops the cached dashboard once a session has changed what it shows. Only
- * marking it stale is not enough: a dashboard already in the cache is drawn
- * first with its old numbers (a readiness of 0, say) and corrected a moment
- * later, because the page's fresh data is applied to an existing entry only
- * after rendering. With no entry, the fresh data is drawn from the start.
+ * Drops the cached dashboard once a session has changed what it shows, and
+ * says so, so the dashboard fetches itself again before showing a number.
+ * Only marking the cache stale is not enough: a dashboard already in it, or
+ * the page as the browser's Back button brings it back, is drawn first with
+ * its old numbers (a readiness of 0, say) and corrected a moment later.
  */
 function forgetDashboard(client: QueryClient) {
   client.removeQueries({ queryKey: queryKeys.dashboard, exact: true });
+  markDashboardChanged();
 }
 
 /**
@@ -362,7 +364,8 @@ function SessionRunner({ session, onDevice }: { session: Session; onDevice: bool
       <main className="mx-auto max-w-2xl px-4 py-16">
         <h1 className="font-display text-3xl font-semibold">{t('session.finishedTitle')}</h1>
         <p className="text-fg-muted mt-3">{t('session.finishedBody')}</p>
-        <Link href="/study" prefetch className={`${buttonClass.primary} mt-6`}>
+        {/* Not prefetched in full, for the reason in results.tsx. */}
+        <Link href="/study" className={`${buttonClass.primary} mt-6`}>
           {t('common.backToStudy')}
         </Link>
       </main>

@@ -9,7 +9,10 @@ import { SignOutButton } from '@/components/auth/sign-out-button';
 import { LanguageMenu } from '@/components/i18n/language-menu';
 import { useT } from '@/components/i18n/provider';
 import Link from '@/components/link';
+import { PageSkeleton } from '@/components/page-skeleton';
 import { Badge, buttonClass, focusRing } from '@/components/ui';
+
+import { useOutdatedDashboard } from './dashboard-freshness';
 
 import { ExamResult } from './exam-result';
 import { ReadinessPanel } from './readiness-gauge';
@@ -26,7 +29,8 @@ function countdown(days: number | null, t: Translator): string {
 /**
  * The dashboard, drawn from the query cache: the server seeds it, a return
  * visit shows what is cached at once, and anything older than half a minute
- * is refreshed in the background (stale-while-revalidate).
+ * is refreshed in the background (stale-while-revalidate). After a session
+ * it is fetched again first (see dashboard-freshness).
  */
 export function DashboardView({
   displayName,
@@ -36,7 +40,10 @@ export function DashboardView({
   timeZone: string;
 }) {
   const t = useT();
-  const { data: dashboard } = useDashboard();
+  const { data: dashboard, refetch } = useDashboard();
+  // Just back from a session: its numbers are fetched again before any are shown.
+  const outdated = useOutdatedDashboard(refetch);
+  if (outdated) return <PageSkeleton label={t('dashboard.loadingPlan')} />;
   // The server always seeds the cache; this only guards a cleared cache.
   if (!dashboard) return null;
   const goalProgress = Math.min(
