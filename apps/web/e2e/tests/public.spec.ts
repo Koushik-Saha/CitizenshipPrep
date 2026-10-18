@@ -176,6 +176,17 @@ test('old country addresses go to the new pages, and unknown ones are not found'
   expect((await request.get('/testland/citizenship-test/no-such-topic')).status()).toBe(404);
 });
 
+test('the guessed "/quiz/quick-start" goes to the countries, in the reader\'s language', async ({
+  page,
+  request,
+}) => {
+  const response = await request.get('/quiz/quick-start', { maxRedirects: 0 });
+  expect(response.status()).toBe(308);
+  expect(response.headers().location).toBe('/countries');
+  await page.goto('/es/quiz/quick-start');
+  await expect(page).toHaveURL(/\/es\/countries$/);
+});
+
 test('search engines get a sitemap and are kept out of the signed-in pages', async ({
   request,
 }) => {
