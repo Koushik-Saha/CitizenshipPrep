@@ -7,21 +7,22 @@ import { ensureReviewer } from './review';
 
 // Needs the local database (`pnpm db:start`); skipped when the URL is not set.
 const url = process.env.TEST_DATABASE_URL;
-// A code no real country uses, and unlike the other test files' codes.
+// A code and a name no real country uses, and unlike the other test files'
+// (the slug comes from the name, and the api tests run alongside these).
 const COUNTRY = 'ZE';
 const REVIEWER = { id: 'test:exam-check-reviewer', displayName: 'Exam Checker' };
 
 const format = {
   countryCode: COUNTRY,
   slug: 'test',
-  name: 'Examland test',
+  name: 'Formatland test',
   formatType: 'written' as const,
   questionCount: 20,
   passMark: 15,
   timeLimitMinutes: 45,
   questionPoolSize: null,
   notes: null,
-  sourceUrl: 'https://example.org/examland',
+  sourceUrl: 'https://example.org/formatland',
   blueprint: null,
 };
 
@@ -41,7 +42,7 @@ describe.skipIf(!url)('checking exam formats against their sources', () => {
     await ensureReviewer(pool, REVIEWER, 'reviewer');
     await pool.query(
       `insert into public.countries (iso_code, name, has_exam, exam_languages)
-       values ($1, 'Examland', true, '{en}')`,
+       values ($1, 'Formatland', true, '{en}')`,
       [COUNTRY],
     );
     await upsertExamFormat(pool, format);
@@ -55,8 +56,8 @@ describe.skipIf(!url)('checking exam formats against their sources', () => {
   it('lists a format as not checked until a reviewer checks it, and then by whom', async () => {
     const before = await mine();
     expect(before).toMatchObject({
-      countryName: 'Examland',
-      countrySlug: 'examland',
+      countryName: 'Formatland',
+      countrySlug: 'formatland',
       questionCount: 20,
       lastVerifiedAt: null,
       verifiedByName: null,
@@ -65,8 +66,8 @@ describe.skipIf(!url)('checking exam formats against their sources', () => {
     const now = new Date('2026-10-15T09:00:00Z');
     expect(await markExamFormatChecked(pool, before.id, REVIEWER.id, now)).toEqual({
       countryCode: COUNTRY,
-      countrySlug: 'examland',
-      name: 'Examland test',
+      countrySlug: 'formatland',
+      name: 'Formatland test',
     });
     expect(await mine()).toMatchObject({
       lastVerifiedAt: now.toISOString(),
