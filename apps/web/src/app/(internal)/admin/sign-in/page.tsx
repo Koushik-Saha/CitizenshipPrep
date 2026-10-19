@@ -22,7 +22,7 @@ import { currentUser } from '@/lib/user';
 import { confirmAuthenticator, enterCode, enterSharedAccount } from './actions';
 
 export const metadata: Metadata = {
-  title: 'Sign in | Oathly content review',
+  title: 'Sign in | Swornly content review',
   robots: { index: false, follow: false },
 };
 
@@ -69,7 +69,7 @@ function Frame({
           {children}
         </div>
         <p className="text-fg-muted mt-6 text-center text-sm">
-          For Oathly staff. Learners sign in at{' '}
+          For Swornly staff. Learners sign in at{' '}
           <Link href="/sign-in" className="text-primary-fg underline underline-offset-4">
             the study app
           </Link>
@@ -166,11 +166,11 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
         intro={`You are signed in${user.email ? ` as ${user.email}` : ''}, but this account does not have reviewer access.`}
       >
         <p className="mt-5 text-sm" data-testid="no-access">
-          If it should, ask an Oathly admin to give this account a role, then open this page again.
-          If you meant to use another account, sign out of Oathly first and sign in with that one.
+          If it should, ask an Swornly admin to give this account a role, then open this page again.
+          If you meant to use another account, sign out of Swornly first and sign in with that one.
         </p>
         <Link href="/" className={`${buttonClass.secondary} mt-6 w-full`}>
-          Back to Oathly
+          Back to Swornly
         </Link>
       </Frame>
     );
@@ -182,12 +182,12 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
     return (
       <Frame
         title="Content review"
-        intro="Sign in with your own Oathly account. The shared account below stops working as soon as an admin has set up an authenticator."
+        intro="Sign in with your own Swornly account. The shared account below stops working as soon as an admin has set up an authenticator."
         notice={notice}
       >
         {!user && (
           <Link href="/sign-in?admin=1" className={`${buttonClass.primary} mt-6 w-full`}>
-            Sign in with your Oathly account
+            Sign in with your Swornly account
           </Link>
         )}
         <SharedAccountForm next={next} />
@@ -224,7 +224,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
     return (
       <Frame
         title="Enter your code"
-        intro={`Signed in as ${member.displayName || user.email || 'staff'}. Open your authenticator app and enter the code for Oathly.`}
+        intro={`Signed in as ${member.displayName || user.email || 'staff'}. Open your authenticator app and enter the code for Swornly.`}
         notice={notice}
       >
         <form action={enterCode} className="mt-6 space-y-4">
@@ -261,7 +261,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={qrDataUri(uri)}
-            alt="QR code to add Oathly to your authenticator app"
+            alt="QR code to add Swornly to your authenticator app"
             width={208}
             height={208}
             data-testid="totp-qr"
@@ -272,7 +272,7 @@ export default async function AdminSignIn({ searchParams }: PageProps<'/admin/si
               Cannot scan it? Enter the key instead
             </summary>
             <p className="mt-2">
-              Choose “enter a setup key” in the app, name the account <strong>Oathly</strong>, pick
+              Choose “enter a setup key” in the app, name the account <strong>Swornly</strong>, pick
               time-based, and type:
             </p>
             <code

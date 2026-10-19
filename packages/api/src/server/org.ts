@@ -588,7 +588,7 @@ async function applyAssignment(
   countryCode: string,
   targetDate: string | null,
 ): Promise<boolean> {
-  // Someone who has not set Oathly up yet does that first, with the country
+  // Someone who has not set Swornly up yet does that first, with the country
   // filled in for them; there is no plan to add it to.
   const settings = await db.query(
     'select 1 from public.user_settings where user_id = $1 and onboarded_at is not null',
@@ -617,7 +617,7 @@ export interface JoinResult {
   role: OrgRole;
   countryCode: string | null;
   targetDate: string | null;
-  /** False when the learner has yet to set Oathly up: send them to do that, country in hand. */
+  /** False when the learner has yet to set Swornly up: send them to do that, country in hand. */
   onStudyPlan: boolean;
 }
 

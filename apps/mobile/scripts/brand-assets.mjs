@@ -1,4 +1,4 @@
-// Draws the app's icons and splash mark from the Oathly logo, so they are
+// Draws the app's icons and splash mark from the Swornly logo, so they are
 // never edited by hand: change the drawing or the colours here and run
 //
 //   pnpm --filter @oathly/mobile brand:assets

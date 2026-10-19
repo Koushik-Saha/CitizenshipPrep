@@ -1,4 +1,4 @@
-// Creates what Oathly sells in a Stripe account: the Pro product with a
+// Creates what Swornly sells in a Stripe account: the Pro product with a
 // monthly and a yearly price, the Country Pass with a one-time price, and a
 // customer portal that lets a subscriber change their card or cancel at the
 // end of the period. Prints the three price ids to put in the environment.
@@ -84,11 +84,11 @@ const wanted = [
 ];
 const products = {
   pro: {
-    name: 'Oathly Pro',
+    name: 'Swornly Pro',
     description: 'Every question in every country, full-length mock exams and more AI help.',
   },
   pass: {
-    name: 'Oathly Country Pass',
+    name: 'Swornly Country Pass',
     description: 'Every question for one country. One payment, no subscription.',
   },
 };
@@ -99,7 +99,14 @@ const currency = values.currency.toLowerCase();
 async function productFor(kind) {
   const found = await stripe.products.search({ query: `metadata['oathly']:'${kind}'` });
   const active = found.data.find((product) => product.active);
-  if (active) return active.id;
+  if (active) {
+    // Named as it is sold now (the name and description show at checkout).
+    const { name, description } = products[kind];
+    if (active.name !== name || active.description !== description) {
+      await stripe.products.update(active.id, { name, description });
+    }
+    return active.id;
+  }
   const created = await stripe.products.create({ ...products[kind], metadata: { oathly: kind } });
   return created.id;
 }
@@ -131,12 +138,21 @@ for (const want of wanted) {
   lines.push(`${want.env}="${id}"`);
 }
 
+// Each product, named as it is sold now, even when no price had to change.
+for (const kind of Object.keys(products)) await productFor(kind);
+
 // The portal behind "Manage billing". Without a configuration Stripe refuses
 // to open it.
 const portals = await stripe.billingPortal.configurations.list({ limit: 100 });
-if (!portals.data.some((portal) => portal.is_default && portal.active)) {
+const portal = portals.data.find((candidate) => candidate.is_default && candidate.active);
+if (portal && portal.business_profile.headline !== 'Swornly') {
+  await stripe.billingPortal.configurations.update(portal.id, {
+    business_profile: { headline: 'Swornly' },
+  });
+}
+if (!portal) {
   await stripe.billingPortal.configurations.create({
-    business_profile: { headline: 'Oathly' },
+    business_profile: { headline: 'Swornly' },
     features: {
       payment_method_update: { enabled: true },
       invoice_history: { enabled: true },

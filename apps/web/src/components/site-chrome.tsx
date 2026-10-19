@@ -85,7 +85,7 @@ export function SiteFooter({ t }: { t: Translator }) {
 }
 
 /**
- * The footer of the signed-in pages: that Oathly is not a government's, and
+ * The footer of the signed-in pages: that Swornly is not a government's, and
  * the pages about the service. Wherever answers and a readiness estimate are
  * shown, this is underneath.
  */

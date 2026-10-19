@@ -66,7 +66,7 @@ export interface Sender {
 }
 
 /**
- * Who email is from, as EMAIL_FROM gives it: "Oathly <invites@example.com>"
+ * Who email is from, as EMAIL_FROM gives it: "Swornly <invites@example.com>"
  * or a bare address. Null when it is neither. Quotes around the whole value,
  * as a .env file writes it and a hosting dashboard keeps it when pasted, are
  * not part of it.

@@ -15,7 +15,7 @@ the first admin has set up an authenticator; after that the shared password is r
    sign-in on the live site: if it does not work, the live address is not yet a trusted domain in
    Neon Auth (Neon console > Auth). Fix that first; the shared password keeps working meanwhile.
 3. On your machine: `pnpm content staff-grant --email you@example.org --role admin`
-4. Open `https://oathly.vercel.app/admin`. It shows a QR code: scan it with an authenticator app
+4. Open `https://swornly.vercel.app/admin`. It shows a QR code: scan it with an authenticator app
    (Google Authenticator, Microsoft Authenticator, 1Password, Authy), then type the six-digit
    code.
 5. On Vercel, delete `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
@@ -52,17 +52,17 @@ Nothing was found leaked: the git history was scanned and is clean. So nothing h
 today because of a leak. None can be rotated from this repository either: each is issued by a
 service you sign in to, and the live values are on Vercel.
 
-| Credential                                                                                 | Do                                                                                                                                                                  |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD`                                                         | Delete from Vercel and `.env.local` after step 1. They are retired, not rotated                                                                                     |
-| `ADMIN_SECRET`                                                                             | New. Generate and set on Vercel (step 1)                                                                                                                            |
-| `STRIPE_SECRET_KEY` (test)                                                                 | The sandbox is shared with another project. Give Oathly its own Stripe account, or roll the key if anyone else has had it                                           |
-| `NEON_AUTH_COOKIE_SECRET`                                                                  | Rotate when convenient. It signs everyone out; if `ADMIN_SECRET` is not set, staff set their authenticators up again too                                            |
-| `DATABASE_URL` (Neon password)                                                             | Rotate if it has ever been pasted anywhere but Vercel and `.env.local`. Neon console > Roles                                                                        |
-| `ANTHROPIC_API_KEY`                                                                        | The same. Set a monthly spend limit in the Anthropic console whether or not you rotate it                                                                           |
-| `REVALIDATE_SECRET`                                                                        | The same; it must match on Vercel and in `.env.local`                                                                                                               |
-| `MAILTRAP_TOKEN`                                                                           | The same                                                                                                                                                            |
-| `PAYPAL_*`, `AWS_*`, `BREVO_API_KEY`, `SMTP_*`, `STRIPE_PRICE_BASIC/PREMIUM/INSTITUTIONAL` | Not Oathly's: they are another project's, sitting in this project's `.env.local`, and every local server and script here is handed them. Take them out of this file |
+| Credential                                                                                 | Do                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD`                                                         | Delete from Vercel and `.env.local` after step 1. They are retired, not rotated                                                                                      |
+| `ADMIN_SECRET`                                                                             | New. Generate and set on Vercel (step 1)                                                                                                                             |
+| `STRIPE_SECRET_KEY` (test)                                                                 | The sandbox is shared with another project. Give Swornly its own Stripe account, or roll the key if anyone else has had it                                           |
+| `NEON_AUTH_COOKIE_SECRET`                                                                  | Rotate when convenient. It signs everyone out; if `ADMIN_SECRET` is not set, staff set their authenticators up again too                                             |
+| `DATABASE_URL` (Neon password)                                                             | Rotate if it has ever been pasted anywhere but Vercel and `.env.local`. Neon console > Roles                                                                         |
+| `ANTHROPIC_API_KEY`                                                                        | The same. Set a monthly spend limit in the Anthropic console whether or not you rotate it                                                                            |
+| `REVALIDATE_SECRET`                                                                        | The same; it must match on Vercel and in `.env.local`                                                                                                                |
+| `MAILTRAP_TOKEN`                                                                           | The same                                                                                                                                                             |
+| `PAYPAL_*`, `AWS_*`, `BREVO_API_KEY`, `SMTP_*`, `STRIPE_PRICE_BASIC/PREMIUM/INSTITUTIONAL` | Not Swornly's: they are another project's, sitting in this project's `.env.local`, and every local server and script here is handed them. Take them out of this file |
 
 ## 5. Content
 
@@ -94,7 +94,7 @@ service you sign in to, and the live values are on Vercel.
 ## 6. Smaller things
 
 - Point an uptime monitor (UptimeRobot, Better Stack or similar) at
-  `https://oathly.vercel.app/api/health`, and set `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` on
+  `https://swornly.vercel.app/api/health`, and set `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` on
   Vercel so errors reach you.
 - In Stripe, once Stripe Tax is on, set `STRIPE_TAX=1` on Vercel; once the address of your terms
   is in Stripe's public details, set `STRIPE_TERMS_CONSENT=1`. Setting either before Stripe is

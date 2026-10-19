@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ApiError, createOathlyApi } from './client';
+import { ApiError, createSwornlyApi } from './client';
 import type { Me } from './me';
 
 const me: Me = {
@@ -22,10 +22,10 @@ function fakeFetch(status: number, body: unknown, seen: Request[] = []): typeof 
   };
 }
 
-describe('createOathlyApi', () => {
+describe('createSwornlyApi', () => {
   it('sends the token and parses the response', async () => {
     const seen: Request[] = [];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 'jwt-123',
       fetch: fakeFetch(200, me, seen),
@@ -37,7 +37,7 @@ describe('createOathlyApi', () => {
 
   it('posts onboarding answers as JSON', async () => {
     const seen: Request[] = [];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(200, me, seen),
@@ -56,7 +56,7 @@ describe('createOathlyApi', () => {
   it('sends queued answers and returns what the server stored', async () => {
     const seen: Request[] = [];
     const outcome = { accepted: ['e1'], rejected: [] };
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(200, outcome, seen),
@@ -80,7 +80,7 @@ describe('createOathlyApi', () => {
   });
 
   it('surfaces the server’s error message', async () => {
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(400, { error: 'Choose a country.' }),
@@ -90,7 +90,7 @@ describe('createOathlyApi', () => {
 
   it('does not call the server when signed out', async () => {
     const seen: Request[] = [];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => null,
       fetch: fakeFetch(200, me, seen),
@@ -100,7 +100,7 @@ describe('createOathlyApi', () => {
   });
 
   it('rejects a response that does not have the expected shape', async () => {
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(200, { nope: true }),
@@ -110,7 +110,7 @@ describe('createOathlyApi', () => {
 
   it('relies on the session cookie when no token source is given (the web app)', async () => {
     const seen: RequestInit[] = [];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       fetch: async (_input, init) => {
         seen.push(init!);
@@ -140,7 +140,7 @@ describe('createOathlyApi', () => {
       [200, session],
       [204, null],
     ];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: async (input, init) => {
@@ -183,7 +183,7 @@ describe('createOathlyApi', () => {
       [204, null],
       [500, 'oops'],
     ];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: async (input, init) => {
@@ -209,7 +209,7 @@ describe('createOathlyApi', () => {
   it('reports an exam result and returns the dashboard it now gives', async () => {
     const seen: Request[] = [];
     const dashboard = { streakDays: 1, minutesToday: 0, dailyGoalMinutes: 15, countries: [] };
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(200, dashboard, seen),
@@ -221,7 +221,7 @@ describe('createOathlyApi', () => {
 
   it('sends a report of a problem with a question', async () => {
     const seen: Request[] = [];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(201, { received: true }, seen),
@@ -249,7 +249,7 @@ describe('createOathlyApi', () => {
         complete: false,
       },
     ];
-    const open = createOathlyApi({
+    const open = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       fetch: fakeFetch(200, facts, seen),
     });
@@ -257,14 +257,14 @@ describe('createOathlyApi', () => {
     expect(seen[0]!.url).toBe('https://oathly.test/api/public/countries');
     expect(seen[0]!.headers.get('authorization')).toBeNull();
 
-    const down = createOathlyApi({ baseUrl: 'https://oathly.test', fetch: fakeFetch(503, {}) });
+    const down = createSwornlyApi({ baseUrl: 'https://oathly.test', fetch: fakeFetch(503, {}) });
     await expect(down.publicCountries()).rejects.toMatchObject({ status: 503 });
   });
 
   it('lists exam countries, sets the time zone, and fetches a country to keep offline', async () => {
     const seen: Request[] = [];
     const countries = [{ isoCode: 'ZZ', name: 'Testland', examLanguages: ['en'] }];
-    const api = createOathlyApi({
+    const api = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(200, countries, seen),
@@ -281,7 +281,7 @@ describe('createOathlyApi', () => {
 
   it('deletes the account, and says why when it cannot yet', async () => {
     const seen: Request[] = [];
-    const gone = createOathlyApi({
+    const gone = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: async (input, init) => {
@@ -293,7 +293,7 @@ describe('createOathlyApi', () => {
     expect(seen[0]!.method).toBe('DELETE');
     expect(seen[0]!.url).toBe('https://oathly.test/api/me');
 
-    const blocked = createOathlyApi({
+    const blocked = createSwornlyApi({
       baseUrl: 'https://oathly.test',
       getToken: async () => 't',
       fetch: fakeFetch(409, { error: 'Not yet.', reason: 'organization' }),

@@ -332,7 +332,7 @@ test('a plan is offered on the landing page only with its price, and leads throu
   await page.waitForURL(/\/study$/);
 });
 
-test('wherever a learner studies, the page says Oathly is independent and links to its terms', async ({
+test('wherever a learner studies, the page says Swornly is independent and links to its terms', async ({
   page,
 }) => {
   await signInAndOnboard(page);

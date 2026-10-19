@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Oathly",
+    "name": "Swornly",
     "slug": "oathly",
     "description": "Practice for your citizenship test with questions checked against official sources. Independent: not affiliated with any government.",
     "version": "1.0.0",
@@ -129,8 +129,8 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Oathly listens only when you choose to answer a question aloud.",
-          "speechRecognitionPermission": "Oathly turns your spoken answer into text to check it against the right answer."
+          "microphonePermission": "Swornly listens only when you choose to answer a question aloud.",
+          "speechRecognitionPermission": "Swornly turns your spoken answer into text to check it against the right answer."
         }
       ]
     ],

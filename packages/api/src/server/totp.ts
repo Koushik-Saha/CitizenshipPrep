@@ -111,7 +111,7 @@ export function matchTotp(
 }
 
 /** The address an authenticator app opens (or reads from a QR code) to add the account. */
-export function otpauthUri(secret: string, account: string, issuer = 'Oathly'): string {
+export function otpauthUri(secret: string, account: string, issuer = 'Swornly'): string {
   const label = encodeURIComponent(`${issuer}:${account}`);
   const query = new URLSearchParams({
     secret,

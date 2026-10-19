@@ -19,7 +19,7 @@ export const vi: Messages = {
     comingSoon: 'Sắp ra mắt',
     beta: 'Beta',
     notAffiliated:
-      'Oathly là ứng dụng học tập độc lập. Ứng dụng không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ.',
+      'Swornly là ứng dụng học tập độc lập. Ứng dụng không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ.',
     errorTitle: 'Đã xảy ra lỗi',
     errorBody: 'Không thể hiển thị trang này. Hãy thử lại, nếu vẫn lỗi thì quay lại sau ít phút.',
     notFoundTitle: 'Không tìm thấy trang',
@@ -55,7 +55,7 @@ export const vi: Messages = {
   },
 
   landing: {
-    metaTitle: 'Oathly: luyện thi quốc tịch cho mọi quốc gia',
+    metaTitle: 'Swornly: luyện thi quốc tịch cho mọi quốc gia',
     metaDescription:
       'Luyện thi quốc tịch với câu hỏi đã được đối chiếu với nguồn chính thức, đáp án được giải thích dễ hiểu và ước tính mức độ sẵn sàng của bạn. Độc lập: không liên kết với bất kỳ chính phủ nào.',
     heroTitle: 'Bước vào kỳ thi quốc tịch với sự sẵn sàng.',
@@ -86,7 +86,7 @@ export const vi: Messages = {
 
     featuresTitle: 'Dành cho đúng kỳ thi bạn sẽ dự',
     featuresIntro:
-      'Hầu hết ứng dụng thi quốc tịch chỉ dành cho một quốc gia với danh sách câu hỏi cố định. Oathly được xây dựng dựa trên nguồn chính thức và cách con người thực sự học.',
+      'Hầu hết ứng dụng thi quốc tịch chỉ dành cho một quốc gia với danh sách câu hỏi cố định. Swornly được xây dựng dựa trên nguồn chính thức và cách con người thực sự học.',
     feature1Title: 'Kỳ thi của mọi quốc gia trong một ứng dụng',
     feature1Body:
       'Bạn chuẩn bị cho kỳ thi của nhiều nước? Học cho từng kỳ thi trong cùng một tài khoản, tiến độ được lưu riêng.',
@@ -124,15 +124,15 @@ export const vi: Messages = {
 
     storiesTitle: 'Học viên nói gì',
     storiesBody:
-      'Oathly còn mới nên chưa có đánh giá nào. Khi những người học ở đây đã dự thi, lời của họ sẽ xuất hiện tại đây. Chỉ những đánh giá thật, với sự cho phép của họ.',
+      'Swornly còn mới nên chưa có đánh giá nào. Khi những người học ở đây đã dự thi, lời của họ sẽ xuất hiện tại đây. Chỉ những đánh giá thật, với sự cho phép của họ.',
 
     faqTitle: 'Câu hỏi thường gặp',
-    faq1Question: 'Oathly có phải là ứng dụng chính thức của chính phủ không?',
+    faq1Question: 'Swornly có phải là ứng dụng chính thức của chính phủ không?',
     faq1Answer:
-      'Không. Oathly hoạt động độc lập, không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ. Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức của chính phủ nước bạn.',
+      'Không. Swornly hoạt động độc lập, không liên kết với bất kỳ chính phủ nào và không được chính phủ nào bảo trợ. Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức của chính phủ nước bạn.',
     faq2Question: 'Đây có phải là câu hỏi thi thật không?',
     faq2Answer:
-      'Một số nước công bố đúng những câu hỏi họ dùng; những nước khác công bố tài liệu ôn thi và giữ kín câu hỏi. Dù thế nào, mỗi câu hỏi của Oathly đều được soạn từ tài liệu chính thức, dẫn đến trang nguồn và được một người kiểm tra trước khi bạn thấy.',
+      'Một số nước công bố đúng những câu hỏi họ dùng; những nước khác công bố tài liệu ôn thi và giữ kín câu hỏi. Dù thế nào, mỗi câu hỏi của Swornly đều được soạn từ tài liệu chính thức, dẫn đến trang nguồn và được một người kiểm tra trước khi bạn thấy.',
     faq3Question: 'Điểm sẵn sàng chính xác đến mức nào?',
     faq3Answer:
       'Đó là ước tính, không phải dự đoán kết quả của bạn. Điểm dựa trên mức độ bạn nắm từng chủ đề, tính trọng số giống kỳ thi của bạn, và các bài thi thử gần đây. Điểm giảm nếu bạn ngừng học, vì chúng ta sẽ quên.',
@@ -148,11 +148,11 @@ export const vi: Messages = {
   },
 
   countries: {
-    indexMetaTitle: 'Thi quốc tịch theo quốc gia | Oathly',
+    indexMetaTitle: 'Thi quốc tịch theo quốc gia | Swornly',
     indexMetaDescription:
-      'Các kỳ thi quốc tịch mà Oathly giúp bạn chuẩn bị: hình thức, điểm đạt, ngôn ngữ và chủ đề, tất cả đều được đối chiếu với nguồn chính thức.',
+      'Các kỳ thi quốc tịch mà Swornly giúp bạn chuẩn bị: hình thức, điểm đạt, ngôn ngữ và chủ đề, tất cả đều được đối chiếu với nguồn chính thức.',
     countryTitle: 'Thi quốc tịch {country}',
-    countryMetaTitle: 'Thi quốc tịch {country}: hình thức, chủ đề và luyện tập | Oathly',
+    countryMetaTitle: 'Thi quốc tịch {country}: hình thức, chủ đề và luyện tập | Swornly',
     countryMetaDescription:
       'Kỳ thi quốc tịch {country} gồm những gì, bao quát nội dung nào, cùng câu hỏi luyện tập đã được đối chiếu với tài liệu chính thức.',
     countryLeadWithQuestions:
@@ -169,8 +169,8 @@ export const vi: Messages = {
     topicBeingChecked: 'Đang kiểm tra',
     topicsBeingAdded: 'Các chủ đề đang được bổ sung.',
     bookingNote:
-      'Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức được dẫn ở trên. Oathly là ứng dụng học tập độc lập và không liên kết với bất kỳ chính phủ nào.',
-    topicMetaTitle: '{topic}: luyện thi quốc tịch {country} | Oathly',
+      'Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức được dẫn ở trên. Swornly là ứng dụng học tập độc lập và không liên kết với bất kỳ chính phủ nào.',
+    topicMetaTitle: '{topic}: luyện thi quốc tịch {country} | Swornly',
     topicMetaDescription:
       'Câu hỏi luyện tập về {topic} cho kỳ thi quốc tịch {country}, mỗi câu đều được đối chiếu với tài liệu chính thức.',
     topicLead: 'Câu hỏi luyện tập cho kỳ thi quốc tịch {country}.',
@@ -180,8 +180,8 @@ export const vi: Messages = {
     fromGuide: 'Trích tài liệu chính thức: “{quote}”',
     source: 'Nguồn',
     moreInApp:
-      '{count, plural, other {Còn # câu hỏi về {topic}, kèm lời giải thích và ôn tập ngắt quãng, đang chờ bạn trong Oathly.}}',
-    practiseInApp: 'Luyện tập với lời giải thích, ôn tập ngắt quãng và thi thử trong Oathly.',
+      '{count, plural, other {Còn # câu hỏi về {topic}, kèm lời giải thích và ôn tập ngắt quãng, đang chờ bạn trong Swornly.}}',
+    practiseInApp: 'Luyện tập với lời giải thích, ôn tập ngắt quãng và thi thử trong Swornly.',
     otherTopics: 'Chủ đề khác',
   },
 
@@ -216,22 +216,22 @@ export const vi: Messages = {
     faqLanguageQ: 'Bài thi quốc tịch {country} bằng ngôn ngữ nào?',
     faqLanguageA: 'Bài thi được làm bằng {languages}.',
     faqTopicsQ: 'Bài thi quốc tịch {country} gồm những nội dung gì?',
-    faqTopicsA: '{count, plural, other {Câu hỏi luyện tập của Oathly gồm # chủ đề: {topics}.}}',
+    faqTopicsA: '{count, plural, other {Câu hỏi luyện tập của Swornly gồm # chủ đề: {topics}.}}',
     faqSourceQ: 'Những câu hỏi luyện tập này lấy từ đâu?',
     faqSourceA:
       'Mỗi câu hỏi được soạn từ tài liệu học chính thức, được người duyệt đối chiếu và có liên kết đến nguồn. Đây là câu hỏi để luyện tập: câu hỏi trong ngày thi có thể được diễn đạt khác.',
-    faqOfficialQ: 'Oathly có phải là trang web chính thức của chính phủ không?',
+    faqOfficialQ: 'Swornly có phải là trang web chính thức của chính phủ không?',
     faqOfficialA:
-      'Không. Oathly là ứng dụng học tập độc lập, không liên kết với bất kỳ chính phủ nào. Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức.',
+      'Không. Swornly là ứng dụng học tập độc lập, không liên kết với bất kỳ chính phủ nào. Để đăng ký thi hoặc xem quy định áp dụng cho bạn, hãy dùng trang web chính thức.',
     faqTopicQ: 'Làm sao luyện câu hỏi về {topic} cho bài thi quốc tịch {country}?',
     faqTopicA:
-      '{count, plural, other {Oathly có # câu hỏi luyện tập đã kiểm tra về {topic}. Các câu mẫu trên trang này miễn phí, có giải thích đáp án; phần còn lại nằm trong ứng dụng.}}',
-    ogAlt: 'Thi quốc tịch {country}: câu hỏi luyện tập trên Oathly',
+      '{count, plural, other {Swornly có # câu hỏi luyện tập đã kiểm tra về {topic}. Các câu mẫu trên trang này miễn phí, có giải thích đáp án; phần còn lại nằm trong ứng dụng.}}',
+    ogAlt: 'Thi quốc tịch {country}: câu hỏi luyện tập trên Swornly',
   },
 
   auth: {
-    metaTitle: 'Đăng nhập | Oathly',
-    title: 'Đăng nhập vào Oathly',
+    metaTitle: 'Đăng nhập | Swornly',
+    title: 'Đăng nhập vào Swornly',
     intro:
       'Bạn mới đến? Đăng nhập sẽ tạo tài khoản cho bạn. Tiến độ được lưu vào tài khoản, nên bạn có thể tiếp tục trên điện thoại hoặc máy tính khác.',
     notConfigured: 'Tính năng đăng nhập chưa được thiết lập trên máy chủ này.',
@@ -253,20 +253,20 @@ export const vi: Messages = {
 
   onboarding: {
     starting: 'Đang thiết lập việc học của bạn…',
-    metaTitle: 'Thiết lập việc học | Oathly',
+    metaTitle: 'Thiết lập việc học | Swornly',
     title: 'Thiết lập việc học',
     titleAdd: 'Thêm kỳ thi khác',
     intro: 'Bốn câu hỏi là bạn có thể bắt đầu. Bạn có thể thay đổi mọi thứ sau này.',
     introAdd:
       'Bạn có thể chuẩn bị cho nhiều kỳ thi quốc tịch cùng lúc. Tiến độ được lưu riêng cho từng kỳ thi.',
-    allCovered: 'Bạn đã đang học cho mọi kỳ thi mà Oathly hỗ trợ.',
+    allCovered: 'Bạn đã đang học cho mọi kỳ thi mà Swornly hỗ trợ.',
     whichExam: 'Bạn đang chuẩn bị cho kỳ thi nào?',
     searchCountries: 'Tìm quốc gia',
     countryCount: '{count, plural, other {# quốc gia}}',
     countryCountFiltered: '{shown} trong {total} quốc gia',
     inLanguages: 'bằng {languages}',
     noCountryMatch:
-      'Không có quốc gia nào khớp với “{query}”. Oathly bổ sung quốc gia khi đã xác minh kỳ thi.',
+      'Không có quốc gia nào khớp với “{query}”. Swornly bổ sung quốc gia khi đã xác minh kỳ thi.',
     countriesFailed:
       'Chúng tôi không tải được danh sách quốc gia. Hãy kiểm tra kết nối và thử lại.',
     examDate: 'Khi nào bạn thi?',
@@ -291,7 +291,7 @@ export const vi: Messages = {
   },
 
   dashboard: {
-    metaTitle: 'Học | Oathly',
+    metaTitle: 'Học | Swornly',
     greeting: 'Chào {name}',
     title: 'Việc học của bạn',
     todaysGoal: 'Mục tiêu hôm nay',
@@ -367,7 +367,7 @@ export const vi: Messages = {
   },
 
   session: {
-    metaTitle: 'Buổi học | Oathly',
+    metaTitle: 'Buổi học | Swornly',
     practice: 'Luyện tập',
     flashcards: 'Thẻ ghi nhớ',
     mockExam: 'Thi thử',
@@ -449,7 +449,7 @@ export const vi: Messages = {
 
   trial: {
     cta: 'Thử {count} câu hỏi ngay',
-    metaTitle: 'Thử bài thi quốc tịch {country}: {count} câu hỏi | Oathly',
+    metaTitle: 'Thử bài thi quốc tịch {country}: {count} câu hỏi | Swornly',
     title: 'Thử bài thi quốc tịch {country}',
     intro:
       '{count} câu hỏi thật từ ngân hàng câu hỏi đã kiểm tra của chúng tôi, kèm đáp án và giải thích sau mỗi câu. Không cần tài khoản, không lưu lại gì.',
@@ -461,7 +461,7 @@ export const vi: Messages = {
   },
 
   contact: {
-    metaTitle: 'Liên hệ | Oathly',
+    metaTitle: 'Liên hệ | Swornly',
     title: 'Liên hệ với chúng tôi',
     intro:
       'Bạn có câu hỏi về tài khoản, thanh toán hoặc điều gì đó không hoạt động? Hãy viết cho chúng tôi và chúng tôi sẽ trả lời qua email.',
@@ -497,7 +497,7 @@ export const vi: Messages = {
   },
 
   tutor: {
-    metaTitle: 'Hỏi gia sư | Oathly',
+    metaTitle: 'Hỏi gia sư | Swornly',
     title: 'Hỏi gia sư',
     intro:
       'Câu hỏi về kỳ thi quốc tịch {country} và tài liệu ôn thi. Gia sư chỉ trả lời dựa trên tài liệu chính thức và là AI: hãy đối chiếu mọi điều quan trọng với tài liệu. Gia sư không thể tư vấn về hồ sơ của riêng bạn.',
@@ -531,7 +531,7 @@ export const vi: Messages = {
     hideQuestion: 'Ẩn câu hỏi bằng chữ',
     listenToQuestion: 'Hãy nghe câu hỏi',
     micBlocked:
-      'Oathly không dùng được micrô. Hãy cho phép trong phần cài đặt, hoặc trả lời bằng cách chạm.',
+      'Swornly không dùng được micrô. Hãy cho phép trong phần cài đặt, hoặc trả lời bằng cách chạm.',
     voiceUnavailable:
       'Thiết bị này không nhận câu trả lời bằng giọng nói. Hãy trả lời bằng cách chạm.',
     correct: 'Đúng.',
@@ -544,7 +544,7 @@ export const vi: Messages = {
 
   plans: {
     title: 'Các gói',
-    metaTitle: 'Các gói | Oathly',
+    metaTitle: 'Các gói | Swornly',
     yourPlan: 'Gói của bạn',
     free: 'Miễn phí',
     pro: 'Pro',
@@ -580,7 +580,7 @@ export const vi: Messages = {
     passInBeta:
       '{country} đang ở giai đoạn Beta: câu hỏi vẫn đang được hoàn thiện nên Vé Quốc gia chưa được bán. Pro đã bao gồm nước này.',
     manageInStore: 'Gói đăng ký này được mua trên {store}. Hãy thay đổi hoặc hủy tại đó.',
-    boughtOnWeb: 'Gói đăng ký này được mua trên trang web Oathly. Hãy thay đổi hoặc hủy tại đó.',
+    boughtOnWeb: 'Gói đăng ký này được mua trên trang web Swornly. Hãy thay đổi hoặc hủy tại đó.',
     unavailable: 'Hiện chưa thể mua gói tại đây.',
     thanks: 'Cảm ơn bạn. Gói của bạn sẽ hiển thị ở đây trong giây lát.',
     freeLimit: 'Gói Miễn phí gồm {available} trên {total} câu hỏi.',
@@ -595,7 +595,7 @@ export const vi: Messages = {
 
   org: {
     open: 'Mở',
-    metaTitle: 'Tổ chức | Oathly',
+    metaTitle: 'Tổ chức | Swornly',
     title: 'Tổ chức',
     forOrganizations: 'Dành cho tổ chức',
     publicFeaturesTitle: 'Tổ chức nhận được gì',
@@ -643,7 +643,7 @@ export const vi: Messages = {
     seatsOver: '{count, plural, other {# học viên chưa có suất và đang dùng gói Miễn phí.}}',
     seatsNone: 'Tổ chức này chưa có suất học nào. Cần có suất để mời học viên.',
     seatsExplain: 'Mỗi học viên dùng một suất và học với gói Pro: mọi câu hỏi, ở mọi quốc gia.',
-    seatsGranted: '{count, plural, other {# suất do Oathly cấp.}}',
+    seatsGranted: '{count, plural, other {# suất do Swornly cấp.}}',
     seatCount: 'Số suất',
     buySeats: 'Mua suất',
     perSeatMonth: '{price} mỗi suất, mỗi tháng',
@@ -724,7 +724,7 @@ export const vi: Messages = {
     inviteLine: 'Dòng {line}: {value}',
     problemBadEmail: 'không phải địa chỉ email',
     problemDuplicate: 'bị ghi hai lần',
-    problemUnknownCountry: 'không phải quốc gia Oathly có hỗ trợ',
+    problemUnknownCountry: 'không phải quốc gia Swornly có hỗ trợ',
     problemBadDate: 'hãy viết ngày theo dạng YYYY-MM-DD',
     problemPastDate: 'đã quá ngày',
     inviteOverLimit: 'Còn {count} người bị bỏ lại: một danh sách mời được {limit} người.',
@@ -745,7 +745,7 @@ export const vi: Messages = {
       'Không bắt buộc. Logo và màu của bạn xuất hiện trên trang tổng quan của những học viên bạn mời. Sắc độ được điều chỉnh khi cần để chữ luôn dễ đọc.',
     brandColor: 'Màu chính',
     brandAccent: 'Màu nhấn',
-    colorHint: 'Mã màu hex, ví dụ #0b5fff. Để trống để dùng màu của Oathly.',
+    colorHint: 'Mã màu hex, ví dụ #0b5fff. Để trống để dùng màu của Swornly.',
     logo: 'Logo',
     logoHint: 'PNG, JPEG hoặc WebP, tối đa 256 KB.',
     logoUpload: 'Tải logo lên',
@@ -764,11 +764,11 @@ export const vi: Messages = {
       'Lời mời này được gửi tới một địa chỉ email khác. Hãy mở liên kết trong email.',
     errorBadLogo: 'Logo phải là ảnh PNG, JPEG hoặc WebP, tối đa 256 KB.',
     joinTitle: 'Tham gia {organization}',
-    joinInvited: '{organization} mời bạn học cùng họ trên Oathly.',
-    joinInvitedAdmin: '{organization} mời bạn cùng điều hành tổ chức của họ trên Oathly.',
+    joinInvited: '{organization} mời bạn học cùng họ trên Swornly.',
+    joinInvitedAdmin: '{organization} mời bạn cùng điều hành tổ chức của họ trên Swornly.',
     joinAssigned: 'Họ muốn bạn ôn cho kỳ thi quốc tịch của quốc gia này: {country}.',
     joinTarget: 'Ngày mục tiêu: {date}.',
-    joinIncludes: 'Suất của bạn bao gồm Oathly Pro, bạn không phải trả phí.',
+    joinIncludes: 'Suất của bạn bao gồm Swornly Pro, bạn không phải trả phí.',
     joinConsent:
       'Nếu bạn tham gia, quản trị viên của {organization} sẽ xem được điểm sẵn sàng của bạn và mức độ bạn học cho kỳ thi đó. Họ không xem được từng câu trả lời của bạn, và bạn có thể rời đi bất cứ lúc nào.',
     joinButton: 'Tham gia',
@@ -780,16 +780,16 @@ export const vi: Messages = {
     reportTitle: 'Báo cáo mức sẵn sàng của học viên',
     reportGenerated: 'Tạo lúc {date}',
     reportBack: 'Quay lại danh sách học viên',
-    emailSubject: '{organization} mời bạn dùng Oathly',
+    emailSubject: '{organization} mời bạn dùng Swornly',
     emailHello: 'Xin chào,',
     emailHelloName: 'Xin chào {name},',
     emailBody:
-      '{organization} mời bạn ôn thi quốc tịch với Oathly. Suất của bạn đã được thanh toán.',
-    emailBodyAdmin: '{organization} mời bạn cùng điều hành tổ chức của họ trên Oathly.',
+      '{organization} mời bạn ôn thi quốc tịch với Swornly. Suất của bạn đã được thanh toán.',
+    emailBodyAdmin: '{organization} mời bạn cùng điều hành tổ chức của họ trên Swornly.',
     emailAction: 'Chấp nhận lời mời',
     emailExpires: 'Liên kết chỉ dùng được một lần và hết hạn sau {days} ngày.',
     emailFooter:
-      'Oathly là ứng dụng học tập độc lập, không liên kết với và không được chính phủ nào bảo trợ. Nếu bạn không chờ thư này, bạn có thể bỏ qua.',
+      'Swornly là ứng dụng học tập độc lập, không liên kết với và không được chính phủ nào bảo trợ. Nếu bạn không chờ thư này, bạn có thể bỏ qua.',
     inviteGoneTitle: 'Không tìm thấy lời mời',
   },
 
@@ -823,11 +823,11 @@ export const vi: Messages = {
     nameSaved: 'Tên của bạn đã được lưu.',
     nameProblem: 'Dùng tên tối đa 60 ký tự, không có liên kết, địa chỉ email hay số điện thoại.',
     exportTitle: 'Bản sao dữ liệu của bạn',
-    exportBody: 'Tải về trong một tệp mọi thứ Oathly lưu giữ về tài khoản của bạn.',
+    exportBody: 'Tải về trong một tệp mọi thứ Swornly lưu giữ về tài khoản của bạn.',
     exportButton: 'Tải dữ liệu của tôi',
     analyticsTitle: 'Thống kê sử dụng',
     analyticsBody:
-      'Chúng tôi đếm một vài sự kiện, như hoàn thành một buổi học, để biết Oathly được dùng thế nào. Chúng gắn với tài khoản của bạn, không bao giờ được bán và không bao giờ dùng cho quảng cáo.',
+      'Chúng tôi đếm một vài sự kiện, như hoàn thành một buổi học, để biết Swornly được dùng thế nào. Chúng gắn với tài khoản của bạn, không bao giờ được bán và không bao giờ dùng cho quảng cáo.',
     analyticsStop: 'Ngừng đếm của tôi',
     analyticsStart: 'Đếm lại của tôi',
     analyticsStopped: 'Việc sử dụng của bạn không được đếm.',
@@ -853,7 +853,7 @@ export const vi: Messages = {
       'Ngôn ngữ của các nút và menu. Ngôn ngữ bạn dùng để học câu hỏi được đặt riêng cho từng kỳ thi.',
     deleteTitle: 'Xóa tài khoản của bạn',
     deleteIntro:
-      'Thao tác này xóa tài khoản và mọi thứ bạn đã làm trong Oathly: kế hoạch học, câu trả lời và tiến độ, các giao dịch mua và tư cách thành viên. Không thể hoàn tác.',
+      'Thao tác này xóa tài khoản và mọi thứ bạn đã làm trong Swornly: kế hoạch học, câu trả lời và tiến độ, các giao dịch mua và tư cách thành viên. Không thể hoàn tác.',
     deleteStores:
       'Gói đăng ký mua trên App Store hoặc Google Play không bị hủy khi bạn xóa tài khoản. Hãy hủy trước trong phần cài đặt đăng ký của điện thoại, nếu không bạn vẫn sẽ bị tính phí.',
     deleteStripe: 'Gói đăng ký mua trên trang web sẽ được hủy trong quá trình này.',
@@ -865,20 +865,20 @@ export const vi: Messages = {
       'Tài khoản này đã duyệt nội dung, và hồ sơ đó cần được giữ lại. Hãy liên hệ với chúng tôi để đóng tài khoản.',
     deleteFailed: 'Chúng tôi không xóa được tài khoản của bạn, và chưa có gì bị xóa. Hãy thử lại.',
     deletedTitle: 'Tài khoản của bạn đã bị xóa',
-    deletedBody: 'Mọi thứ bạn đã làm trong Oathly đã được xóa. Bạn luôn được chào đón trở lại.',
+    deletedBody: 'Mọi thứ bạn đã làm trong Swornly đã được xóa. Bạn luôn được chào đón trở lại.',
   },
 
   welcome: {
     countriesSoFar: 'Hiện có {count} quốc gia.',
     getStarted: 'Bắt đầu',
-    unreachable: 'Chúng tôi không kết nối được với Oathly. Hãy kiểm tra kết nối và thử lại.',
+    unreachable: 'Chúng tôi không kết nối được với Swornly. Hãy kiểm tra kết nối và thử lại.',
   },
   community: {
     sending: 'Đang gửi…',
     noCountry:
       'Mỗi bài thi có nhóm học riêng. Hãy chọn bài thi bạn đang chuẩn bị để tham gia nhóm của bài thi đó.',
     chooseTest: 'Chọn bài thi của bạn',
-    metaTitle: 'Nhóm học | Oathly',
+    metaTitle: 'Nhóm học | Swornly',
     title: 'Nhóm học',
     intro:
       'Đặt câu hỏi, chia sẻ mẹo và kể câu chuyện của bạn với những người đang chuẩn bị cho bài thi {country}.',
@@ -921,7 +921,7 @@ export const vi: Messages = {
     removed: 'Người kiểm duyệt đã gỡ nội dung này. Chỉ bạn nhìn thấy.',
     legalTitle: 'Có vẻ đây là câu hỏi về hồ sơ của riêng bạn',
     legalNotice:
-      'Oathly không thể tư vấn pháp lý, và những người học khác cũng vậy. Với câu hỏi về trường hợp của riêng bạn, hãy gặp luật sư di trú có giấy phép hoặc người tư vấn được công nhận.',
+      'Swornly không thể tư vấn pháp lý, và những người học khác cũng vậy. Với câu hỏi về trường hợp của riêng bạn, hãy gặp luật sư di trú có giấy phép hoặc người tư vấn được công nhận.',
     back: 'Quay lại nhóm',
     tooMany: 'Bạn đã đăng quá nhiều trong thời gian ngắn. Hãy thử lại sau.',
     invalid: 'Hãy kiểm tra nội dung và thử lại.',

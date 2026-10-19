@@ -1,7 +1,7 @@
 'use client';
 
-import { createOathlyApi } from '@oathly/api/client';
-import { OathlyApiProvider } from '@oathly/api/hooks';
+import { createSwornlyApi } from '@oathly/api/client';
+import { SwornlyApiProvider } from '@oathly/api/hooks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -11,7 +11,7 @@ import { useState } from 'react';
 // refreshes them in the background.
 
 // In the browser the session cookie identifies the learner, so no token.
-const api = createOathlyApi({
+const api = createSwornlyApi({
   baseUrl: typeof window === 'undefined' ? 'http://localhost' : window.location.origin,
 });
 
@@ -22,7 +22,7 @@ export function StudyProviders({ children }: { children: React.ReactNode }) {
   );
   return (
     <QueryClientProvider client={client}>
-      <OathlyApiProvider api={api}>{children}</OathlyApiProvider>
+      <SwornlyApiProvider api={api}>{children}</SwornlyApiProvider>
     </QueryClientProvider>
   );
 }

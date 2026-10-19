@@ -1,13 +1,13 @@
 'use client';
 
 // React hooks over the API, for client components on the web and for the
-// mobile app. Wrap the tree in <QueryClientProvider> and <OathlyApiProvider>.
+// mobile app. Wrap the tree in <QueryClientProvider> and <SwornlyApiProvider>.
 
 import type { ExamOutcome } from '@oathly/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, createElement, useContext, type ReactNode } from 'react';
 
-import type { OathlyApi } from './client';
+import type { SwornlyApi } from './client';
 import type { OnboardingInput } from './onboarding';
 import {
   countriesQuery,
@@ -19,28 +19,28 @@ import {
 } from './queries';
 import type { SessionResult, StartSessionRequest } from './study';
 
-const ApiContext = createContext<OathlyApi | null>(null);
+const ApiContext = createContext<SwornlyApi | null>(null);
 
-export function OathlyApiProvider({ api, children }: { api: OathlyApi; children: ReactNode }) {
+export function SwornlyApiProvider({ api, children }: { api: SwornlyApi; children: ReactNode }) {
   return createElement(ApiContext.Provider, { value: api }, children);
 }
 
-export function useOathlyApi(): OathlyApi {
+export function useSwornlyApi(): SwornlyApi {
   const api = useContext(ApiContext);
-  if (!api) throw new Error('useOathlyApi needs an <OathlyApiProvider> above it.');
+  if (!api) throw new Error('useSwornlyApi needs an <SwornlyApiProvider> above it.');
   return api;
 }
 
-export const useMe = () => useQuery(meQuery(useOathlyApi()));
-export const useDashboard = () => useQuery(dashboardQuery(useOathlyApi()));
-export const useExamCountries = () => useQuery(countriesQuery(useOathlyApi()));
-export const usePublicCountries = () => useQuery(publicCountriesQuery(useOathlyApi()));
+export const useMe = () => useQuery(meQuery(useSwornlyApi()));
+export const useDashboard = () => useQuery(dashboardQuery(useSwornlyApi()));
+export const useExamCountries = () => useQuery(countriesQuery(useSwornlyApi()));
+export const usePublicCountries = () => useQuery(publicCountriesQuery(useSwornlyApi()));
 export const useStudySession = (attemptId: string) =>
-  useQuery(sessionQuery(useOathlyApi(), attemptId));
+  useQuery(sessionQuery(useSwornlyApi(), attemptId));
 
 /** Saves an onboarding answer; the learner and their dashboard update with it. */
 export function useSaveOnboarding() {
-  const api = useOathlyApi();
+  const api = useSwornlyApi();
   const client = useQueryClient();
   return useMutation({
     mutationFn: (input: OnboardingInput) => api.saveOnboarding(input),
@@ -53,7 +53,7 @@ export function useSaveOnboarding() {
 
 /** Reports how the real exam went; the dashboard shows it at once. */
 export function useReportExamResult() {
-  const api = useOathlyApi();
+  const api = useSwornlyApi();
   const client = useQueryClient();
   return useMutation({
     mutationFn: ({ countryCode, result }: { countryCode: string; result: ExamOutcome }) =>
@@ -64,7 +64,7 @@ export function useReportExamResult() {
 
 /** Starts a session on the server and loads it, ready to run. */
 export function useStartSession() {
-  const api = useOathlyApi();
+  const api = useSwornlyApi();
   const client = useQueryClient();
   return useMutation({
     mutationFn: async (request: StartSessionRequest) => {
@@ -76,7 +76,7 @@ export function useStartSession() {
 
 /** Records a finished session; the dashboard refreshes behind it. */
 export function useCompleteSession() {
-  const api = useOathlyApi();
+  const api = useSwornlyApi();
   const client = useQueryClient();
   return useMutation({
     mutationFn: ({ attemptId, result }: { attemptId: string; result: SessionResult }) =>

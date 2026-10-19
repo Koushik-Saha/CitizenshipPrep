@@ -170,7 +170,7 @@ describe.skipIf(!url)('organizations against the database', () => {
         [id, `Orgland question ${i}`, REVIEWER],
       );
     }
-    // Minh already uses Oathly; Maria and Lena have yet to set it up.
+    // Minh already uses Swornly; Maria and Lena have yet to set it up.
     await pool.query(
       `insert into public.user_settings (user_id, onboarded_at) values ($1, now())`,
       [MINH],
@@ -338,7 +338,7 @@ describe.skipIf(!url)('organizations against the database', () => {
     expect(await findInvite(pool, 'x'.repeat(43))).toBeNull();
     expect(await findInvite(pool, 'not a token')).toBeNull();
 
-    // Maria has not set Oathly up: she joins, and is sent to do that with her country in hand.
+    // Maria has not set Swornly up: she joins, and is sent to do that with her country in hand.
     expect(
       await acceptInvite(
         pool,

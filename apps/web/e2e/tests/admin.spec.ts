@@ -43,8 +43,8 @@ test('the review pages ask staff for a code from their authenticator, and take n
   const scanned = new URL((await scanSetupCode(page))!);
   expect(scanned.protocol).toBe('otpauth:');
   expect(scanned.host).toBe('totp');
-  expect(decodeURIComponent(scanned.pathname)).toMatch(/^\/Oathly:/);
-  expect(scanned.searchParams.get('issuer')).toBe('Oathly');
+  expect(decodeURIComponent(scanned.pathname)).toMatch(/^\/Swornly:/);
+  expect(scanned.searchParams.get('issuer')).toBe('Swornly');
   expect(scanned.searchParams.get('digits')).toBe('6');
   expect(scanned.searchParams.get('period')).toBe('30');
   // For a phone that cannot scan, the same key can be typed instead.

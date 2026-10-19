@@ -7,7 +7,7 @@
 ## Summary
 
 - **677 questions**, all loaded from files on 9 October 2026: 195 official (the government's own
-  wording) and 482 written by Oathly from official material.
+  wording) and 482 written by Swornly from official material.
 - **None has no source.** Every question names its source document, where in it to look, and the
   words it rests on.
 - **None is flagged as a possible duplicate**, but that flag is only ever set when the drafting
@@ -26,14 +26,14 @@
 
 ### By country and origin
 
-| Country        | Questions | Official | Written by Oathly | Language |
-| -------------- | --------- | -------- | ----------------- | -------- |
-| United States  | 279       | 128      | 151               | English  |
-| Canada         | 168       | 0        | 168               | English  |
-| Australia      | 115       | 0        | 115               | English  |
-| Germany        | 67        | 67       | 0                 | German   |
-| United Kingdom | 48        | 0        | 48                | English  |
-| **All**        | **677**   | **195**  | **482**           |          |
+| Country        | Questions | Official | Written by Swornly | Language |
+| -------------- | --------- | -------- | ------------------ | -------- |
+| United States  | 279       | 128      | 151                | English  |
+| Canada         | 168       | 0        | 168                | English  |
+| Australia      | 115       | 0        | 115                | English  |
+| Germany        | 67        | 67       | 0                  | German   |
+| United Kingdom | 48        | 0        | 48                 | English  |
+| **All**        | **677**   | **195**  | **482**            |          |
 
 ### By topic
 
@@ -151,12 +151,12 @@ Compared here, each country's questions against each other, with the app's own m
 | United States | Official 91 and 100: one war fought in the 1800s / the 1900s                     | No                      |
 | United States | Official 98 and 102: when all men / all women got the right to vote              | No                      |
 | United States | Official 110 and 111: why the US entered the Korean War / the Vietnam War        | Yes, as published       |
-| United States | Two written by Oathly: on the flag, what blue / red is a symbol for              | No                      |
+| United States | Two written by Swornly: on the flag, what blue / red is a symbol for             | No                      |
 | Germany       | Official 143 and 144: „Ein Richter / eine Richterin gehört in Deutschland zur …“ | Same idea, two wordings |
 | Germany       | Official 81 and 83: who elects the Chancellor                                    | Yes, as published       |
-| Australia     | Two written by Oathly: the largest / the smallest state                          | No                      |
+| Australia     | Two written by Swornly: the largest / the smallest state                         | No                      |
 
-The official pairs are the governments' own, and a learner can be asked either. The Oathly pairs
+The official pairs are the governments' own, and a learner can be asked either. The Swornly pairs
 ask about different things.
 
 ## Coverage against each country's topic list
@@ -168,19 +168,19 @@ A topic or chapter with fewer than 10 questions is in **bold**.
 All 128 official questions are present, numbers 1 to 128 with none missing, and each sits under
 the topic the official list puts it in.
 
-| Topic                | Official section                               | Official questions | Written by Oathly, in the topic | Share of the bank | Share of the test (estimate) |
-| -------------------- | ---------------------------------------------- | ------------------ | ------------------------------- | ----------------- | ---------------------------- |
-| American Government  | A: Principles of American Government (1 to 15) | 15                 |                                 |                   |                              |
-| American Government  | B: System of Government (16 to 62)             | 47                 |                                 |                   |                              |
-| American Government  | C: Rights and Responsibilities (63 to 72)      | 10                 | 82                              | 55.2%             | 56.2%                        |
-| American History     | A: Colonial Period and Independence (73 to 89) | 17                 |                                 |                   |                              |
-| American History     | B: 1800s (90 to 99)                            | 10                 |                                 |                   |                              |
-| American History     | C: Recent American History (100 to 118)        | 19                 | 55                              | 36.2%             | 35.9%                        |
-| Symbols and Holidays | A: Symbols (119 to 124)                        | **6**              |                                 |                   |                              |
-| Symbols and Holidays | B: Holidays (125 to 128)                       | **4**              | 14                              | 8.6%              | 7.8%                         |
+| Topic                | Official section                               | Official questions | Written by Swornly, in the topic | Share of the bank | Share of the test (estimate) |
+| -------------------- | ---------------------------------------------- | ------------------ | -------------------------------- | ----------------- | ---------------------------- |
+| American Government  | A: Principles of American Government (1 to 15) | 15                 |                                  |                   |                              |
+| American Government  | B: System of Government (16 to 62)             | 47                 |                                  |                   |                              |
+| American Government  | C: Rights and Responsibilities (63 to 72)      | 10                 | 82                               | 55.2%             | 56.2%                        |
+| American History     | A: Colonial Period and Independence (73 to 89) | 17                 |                                  |                   |                              |
+| American History     | B: 1800s (90 to 99)                            | 10                 |                                  |                   |                              |
+| American History     | C: Recent American History (100 to 118)        | 19                 | 55                               | 36.2%             | 35.9%                        |
+| Symbols and Holidays | A: Symbols (119 to 124)                        | **6**              |                                  |                   |                              |
+| Symbols and Holidays | B: Holidays (125 to 128)                       | **4**              | 14                               | 8.6%              | 7.8%                         |
 
 The two short sections are short in the official list itself: there are only six questions on
-symbols and four on holidays. The questions written by Oathly come from the study guide's
+symbols and four on holidays. The questions written by Swornly come from the study guide's
 chapters 1 to 12, and five of those have fewer than 10: chapter 6 (**2**), chapter 10 (**7**),
 chapter 7 (**8**), chapter 9 (**8**) and chapter 8 (**9**).
 
@@ -265,7 +265,7 @@ learner can be asked either. Say so if you want one of each pair removed anyway.
 
 None of these was asked for, and none was acted on.
 
-- **Where the right answer sits.** In questions written by Oathly the right answer is not evenly
+- **Where the right answer sits.** In questions written by Swornly the right answer is not evenly
   spread everywhere. United Kingdom: option c is right in 18 of 45 (40%) and d in 7. United
   States: c in 46 of 138 (33%), d in 24 (17%). Canada and Australia are even. A learner who
   notices can guess; worth evening out before publishing. Germany's spread (b in 26 of 67) is

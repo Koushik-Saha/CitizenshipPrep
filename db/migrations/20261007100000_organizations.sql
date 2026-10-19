@@ -23,7 +23,7 @@ alter table public.organizations
   add column brand_accent text check (brand_accent ~ '^#[0-9a-f]{6}$');
 
 comment on column public.organizations.seat_limit is
-  'Seats granted by Oathly staff, on top of any bought through Stripe.';
+  'Seats granted by Swornly staff, on top of any bought through Stripe.';
 
 grant insert (kind), update (kind, brand_color, brand_accent)
   on table public.organizations to authenticated;

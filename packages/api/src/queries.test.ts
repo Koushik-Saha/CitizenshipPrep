@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { OathlyApi } from './client';
+import type { SwornlyApi } from './client';
 import {
   countriesQuery,
   dashboardQuery,
@@ -25,7 +25,7 @@ describe('dashboardQuery', () => {
     vi.useFakeTimers();
     try {
       const fetchDashboard = vi.fn(async () => dashboard);
-      const api = { dashboard: fetchDashboard } as unknown as OathlyApi;
+      const api = { dashboard: fetchDashboard } as unknown as SwornlyApi;
       const client = new QueryClient();
 
       await expect(client.fetchQuery(dashboardQuery(api))).resolves.toEqual(dashboard);
@@ -49,7 +49,7 @@ describe('dashboardQuery', () => {
 
   it('never refetches a session: its questions are fixed', async () => {
     const session = vi.fn(async () => ({ attemptId: 'a' }));
-    const api = { session } as unknown as OathlyApi;
+    const api = { session } as unknown as SwornlyApi;
     const client = new QueryClient();
     await client.fetchQuery(sessionQuery(api, 'a'));
     await client.fetchQuery(sessionQuery(api, 'a'));
@@ -66,7 +66,7 @@ describe('the other queries', () => {
       publicCountries: vi.fn(async () => [{ isoCode: 'ZZ', slug: 'testland' }]),
     };
     const client = new QueryClient();
-    const asApi = api as unknown as OathlyApi;
+    const asApi = api as unknown as SwornlyApi;
 
     await client.fetchQuery(meQuery(asApi));
     await client.fetchQuery(meQuery(asApi));

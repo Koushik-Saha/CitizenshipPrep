@@ -109,16 +109,18 @@ describe('checking a typed code', () => {
 describe('the address for an authenticator app', () => {
   it('names the service, the account and how codes are made', () => {
     const uri = otpauthUri('ABCDEFGH', 'maria@example.test');
-    expect(uri.startsWith('otpauth://totp/Oathly%3Amaria%40example.test?')).toBe(true);
+    expect(uri.startsWith('otpauth://totp/Swornly%3Amaria%40example.test?')).toBe(true);
     const query = new URL(uri).searchParams;
     expect(Object.fromEntries(query)).toEqual({
       secret: 'ABCDEFGH',
-      issuer: 'Oathly',
+      issuer: 'Swornly',
       algorithm: 'SHA1',
       digits: '6',
       period: '30',
     });
-    expect(otpauthUri('ABCDEFGH', 'someone', 'Oathly staging')).toContain('issuer=Oathly+staging');
+    expect(otpauthUri('ABCDEFGH', 'someone', 'Swornly staging')).toContain(
+      'issuer=Swornly+staging',
+    );
   });
 });
 

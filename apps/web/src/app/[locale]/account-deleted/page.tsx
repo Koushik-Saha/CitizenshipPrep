@@ -10,7 +10,7 @@ export async function generateMetadata({
   params,
 }: PageProps<'/[locale]/account-deleted'>): Promise<Metadata> {
   const { t } = await getT(params);
-  return { title: `${t('profile.deletedTitle')} | Oathly`, robots: { index: false } };
+  return { title: `${t('profile.deletedTitle')} | Swornly`, robots: { index: false } };
 }
 
 // Where the website lands after an account has been deleted.

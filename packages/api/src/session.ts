@@ -1,4 +1,4 @@
-import { ApiError, type OathlyApi } from './client';
+import { ApiError, type SwornlyApi } from './client';
 import { nextStep, type Me } from './me';
 
 // The session state machine a client app runs on: signed out, or signed in
@@ -16,7 +16,7 @@ export interface SessionAuth {
 /** Works out the session from the auth client and the API. An expired session counts as signed out. */
 export async function loadSession(
   auth: SessionAuth,
-  api: Pick<OathlyApi, 'me'>,
+  api: Pick<SwornlyApi, 'me'>,
 ): Promise<SessionState> {
   if (!(await auth.getToken())) return { status: 'signed-out' };
   try {

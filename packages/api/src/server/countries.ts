@@ -293,7 +293,7 @@ async function sampleQuestions(
 
 /**
  * The public page for one country's test: the exam's facts, its topics and a
- * sample of questions in the reader's language. Null if Oathly does not cover
+ * sample of questions in the reader's language. Null if Swornly does not cover
  * the country.
  */
 export async function getTestGuide(

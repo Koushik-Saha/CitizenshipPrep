@@ -114,7 +114,7 @@ export type InviteProblem =
   | 'bad-email'
   /** The same address appears earlier in the list. */
   | 'duplicate'
-  /** A country Oathly has no exam for, or does not recognise. */
+  /** A country Swornly has no exam for, or does not recognise. */
   | 'unknown-country'
   /** A date not written YYYY-MM-DD, or not a real day. */
   | 'bad-date'

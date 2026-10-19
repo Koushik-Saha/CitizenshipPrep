@@ -18,7 +18,7 @@ export const zhHans: Messages = {
     breadcrumb: '当前位置',
     comingSoon: '即将推出',
     beta: '测试版',
-    notAffiliated: 'Oathly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。',
+    notAffiliated: 'Swornly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。',
     errorTitle: '出了点问题',
     errorBody: '无法显示此页面。请重试；如果问题仍然存在，请稍后再来。',
     notFoundTitle: '找不到页面',
@@ -53,7 +53,7 @@ export const zhHans: Messages = {
   },
 
   landing: {
-    metaTitle: 'Oathly：各国入籍考试练习',
+    metaTitle: 'Swornly：各国入籍考试练习',
     metaDescription:
       '用对照官方来源核对过的题目、通俗易懂的答案讲解和备考程度估计来准备入籍考试。独立运营，与任何政府均无关联。',
     heroTitle: '做好准备，从容参加入籍考试。',
@@ -81,7 +81,7 @@ export const zhHans: Messages = {
 
     featuresTitle: '为你真正要参加的考试而设计',
     featuresIntro:
-      '大多数入籍考试应用只覆盖一个国家，题库也是固定的。Oathly 以官方来源和真实的学习规律为基础。',
+      '大多数入籍考试应用只覆盖一个国家，题库也是固定的。Swornly 以官方来源和真实的学习规律为基础。',
     feature1Title: '各国考试，一个应用',
     feature1Body: '要准备不止一个国家的考试？用同一个账号分别学习，进度各自保存。',
     feature2Title: '对照官方来源核对',
@@ -114,15 +114,15 @@ export const zhHans: Messages = {
 
     storiesTitle: '学员怎么说',
     storiesBody:
-      'Oathly 刚刚上线，所以还没有评价。等在这里学习的学员参加完考试，他们的话会出现在这里。只收录真实评价，并征得本人同意。',
+      'Swornly 刚刚上线，所以还没有评价。等在这里学习的学员参加完考试，他们的话会出现在这里。只收录真实评价，并征得本人同意。',
 
     faqTitle: '常见问题',
-    faq1Question: 'Oathly 是政府官方应用吗？',
+    faq1Question: 'Swornly 是政府官方应用吗？',
     faq1Answer:
-      '不是。Oathly 独立运营，与任何政府均无关联，也未获任何政府认可。预约考试或查询适用于你的规定，请使用所在国政府的官方网站。',
+      '不是。Swornly 独立运营，与任何政府均无关联，也未获任何政府认可。预约考试或查询适用于你的规定，请使用所在国政府的官方网站。',
     faq2Question: '这些是真实的考试题吗？',
     faq2Answer:
-      '有些国家会公布实际使用的考题；另一些只公布学习指南，考题不公开。无论哪种情况，Oathly 的每道题都依据官方资料编写，链接到来源页面，并在你看到之前经过人工核对。',
+      '有些国家会公布实际使用的考题；另一些只公布学习指南，考题不公开。无论哪种情况，Swornly 的每道题都依据官方资料编写，链接到来源页面，并在你看到之前经过人工核对。',
     faq3Question: '备考分数有多准确？',
     faq3Answer:
       '它是估计值，不是对成绩的预测。它根据你对各主题的掌握程度（按考试权重计算）以及近期的模拟考试得出。停止学习后分数会下降，因为人会遗忘。',
@@ -138,11 +138,11 @@ export const zhHans: Messages = {
   },
 
   countries: {
-    indexMetaTitle: '各国入籍考试 | Oathly',
+    indexMetaTitle: '各国入籍考试 | Swornly',
     indexMetaDescription:
-      'Oathly 帮你准备的入籍考试：形式、及格线、语言和主题，均对照官方来源核对。',
+      'Swornly 帮你准备的入籍考试：形式、及格线、语言和主题，均对照官方来源核对。',
     countryTitle: '{country}入籍考试',
-    countryMetaTitle: '{country}入籍考试：形式、主题与练习 | Oathly',
+    countryMetaTitle: '{country}入籍考试：形式、主题与练习 | Swornly',
     countryMetaDescription:
       '{country}入籍考试考什么、涵盖哪些内容，以及对照官方指南核对过的练习题。',
     countryLeadWithQuestions: '{count, plural, other {# 道练习题，每道都对照官方指南核对过。}}',
@@ -158,8 +158,8 @@ export const zhHans: Messages = {
     topicBeingChecked: '核对中',
     topicsBeingAdded: '主题正在添加中。',
     bookingNote:
-      '预约考试或查询适用于你的规定，请使用上方链接的官方网站。Oathly 是一款独立的学习应用，与任何政府均无关联。',
-    topicMetaTitle: '{topic}：{country}入籍考试练习 | Oathly',
+      '预约考试或查询适用于你的规定，请使用上方链接的官方网站。Swornly 是一款独立的学习应用，与任何政府均无关联。',
+    topicMetaTitle: '{topic}：{country}入籍考试练习 | Swornly',
     topicMetaDescription: '{country}入籍考试“{topic}”主题的练习题，每道都对照官方指南核对过。',
     topicLead: '{country}入籍考试练习题。',
     showAnswer: '显示答案',
@@ -168,8 +168,8 @@ export const zhHans: Messages = {
     fromGuide: '摘自官方指南：“{quote}”',
     source: '来源',
     moreInApp:
-      '{count, plural, other {Oathly 里还有 # 道“{topic}”题目等着你，附带讲解和间隔复习。}}',
-    practiseInApp: '在 Oathly 里配合讲解、间隔复习和模拟考试进行练习。',
+      '{count, plural, other {Swornly 里还有 # 道“{topic}”题目等着你，附带讲解和间隔复习。}}',
+    practiseInApp: '在 Swornly 里配合讲解、间隔复习和模拟考试进行练习。',
     otherTopics: '其他主题',
   },
 
@@ -204,22 +204,22 @@ export const zhHans: Messages = {
     faqLanguageQ: '{country}入籍考试使用什么语言？',
     faqLanguageA: '考试语言为{languages}。',
     faqTopicsQ: '{country}入籍考试考哪些内容？',
-    faqTopicsA: '{count, plural, other {Oathly 的练习题涵盖 # 个主题：{topics}。}}',
+    faqTopicsA: '{count, plural, other {Swornly 的练习题涵盖 # 个主题：{topics}。}}',
     faqSourceQ: '这些练习题从哪里来？',
     faqSourceA:
       '每道题都根据官方学习材料编写，由审核员对照核对，并附有来源链接。它们用于练习：考试当天的题目措辞可能不同。',
-    faqOfficialQ: 'Oathly 是政府的官方网站吗？',
+    faqOfficialQ: 'Swornly 是政府的官方网站吗？',
     faqOfficialA:
-      '不是。Oathly 是一款独立的学习应用，与任何政府都没有关联。如需预约考试或了解适用于你的规定，请使用官方网站。',
+      '不是。Swornly 是一款独立的学习应用，与任何政府都没有关联。如需预约考试或了解适用于你的规定，请使用官方网站。',
     faqTopicQ: '如何练习{country}入籍考试中“{topic}”的题目？',
     faqTopicA:
-      '{count, plural, other {Oathly 有 # 道经过核对的“{topic}”练习题。本页的样题免费，并附答案解析；其余题目在应用内。}}',
-    ogAlt: '{country}入籍考试：Oathly 上的练习题',
+      '{count, plural, other {Swornly 有 # 道经过核对的“{topic}”练习题。本页的样题免费，并附答案解析；其余题目在应用内。}}',
+    ogAlt: '{country}入籍考试：Swornly 上的练习题',
   },
 
   auth: {
-    metaTitle: '登录 | Oathly',
-    title: '登录 Oathly',
+    metaTitle: '登录 | Swornly',
+    title: '登录 Swornly',
     intro: '第一次来？登录即会创建账号。学习进度会保存在账号里，你可以在手机或另一台电脑上继续。',
     notConfigured: '此服务器尚未配置登录。',
     email: '电子邮箱',
@@ -239,18 +239,18 @@ export const zhHans: Messages = {
 
   onboarding: {
     starting: '正在设置你的学习…',
-    metaTitle: '设置学习计划 | Oathly',
+    metaTitle: '设置学习计划 | Swornly',
     title: '设置学习计划',
     titleAdd: '添加另一项考试',
     intro: '回答四个问题就可以开始，之后都可以修改。',
     introAdd: '你可以同时准备多项入籍考试，各项的进度分别保存。',
-    allCovered: 'Oathly 涵盖的所有考试你都已在学习。',
+    allCovered: 'Swornly 涵盖的所有考试你都已在学习。',
     whichExam: '你在准备哪项考试？',
     searchCountries: '搜索国家',
     countryCount: '{count, plural, other {# 个国家}}',
     countryCountFiltered: '共 {total} 个国家，显示 {shown} 个',
     inLanguages: '{languages}',
-    noCountryMatch: '没有与“{query}”匹配的国家。Oathly 会在核实考试后陆续添加国家。',
+    noCountryMatch: '没有与“{query}”匹配的国家。Swornly 会在核实考试后陆续添加国家。',
     countriesFailed: '国家列表加载失败。请检查网络连接后重试。',
     examDate: '你什么时候考试？',
     optional: '（选填）',
@@ -271,7 +271,7 @@ export const zhHans: Messages = {
   },
 
   dashboard: {
-    metaTitle: '学习 | Oathly',
+    metaTitle: '学习 | Swornly',
     greeting: '你好，{name}',
     title: '我的学习',
     todaysGoal: '今日目标',
@@ -343,7 +343,7 @@ export const zhHans: Messages = {
   },
 
   session: {
-    metaTitle: '学习 | Oathly',
+    metaTitle: '学习 | Swornly',
     practice: '练习',
     flashcards: '记忆卡片',
     mockExam: '模拟考试',
@@ -422,7 +422,7 @@ export const zhHans: Messages = {
 
   trial: {
     cta: '立即试做 {count} 道题',
-    metaTitle: '试做{country}入籍考试：{count} 道题 | Oathly',
+    metaTitle: '试做{country}入籍考试：{count} 道题 | Swornly',
     title: '试做{country}入籍考试',
     intro:
       '来自我们已核对题库的 {count} 道真题，每题之后都有答案和解释。无需账户，不会保存任何内容。',
@@ -434,7 +434,7 @@ export const zhHans: Messages = {
   },
 
   contact: {
-    metaTitle: '联系我们 | Oathly',
+    metaTitle: '联系我们 | Swornly',
     title: '联系我们',
     intro: '对账户、付款或无法正常使用的功能有疑问？给我们留言，我们会通过电子邮件回复。',
     notAdvice: '我们无法提供法律或移民建议。关于你个人的情况，请咨询持牌顾问。',
@@ -468,7 +468,7 @@ export const zhHans: Messages = {
   },
 
   tutor: {
-    metaTitle: '咨询辅导老师 | Oathly',
+    metaTitle: '咨询辅导老师 | Swornly',
     title: '咨询辅导老师',
     intro:
       '有关{country}入籍考试及其学习资料的问题。辅导老师只依据官方指南作答，而且它是 AI：重要内容请对照指南核实。它无法就你个人的申请提供建议。',
@@ -500,7 +500,7 @@ export const zhHans: Messages = {
     showQuestion: '显示题目文字',
     hideQuestion: '隐藏题目文字',
     listenToQuestion: '请听题',
-    micBlocked: 'Oathly 无法使用麦克风。请在设置中允许，或点选作答。',
+    micBlocked: 'Swornly 无法使用麦克风。请在设置中允许，或点选作答。',
     voiceUnavailable: '此设备不支持语音作答。请点选作答。',
     correct: '正确。',
     notQuite: '不太对。答案是：',
@@ -511,7 +511,7 @@ export const zhHans: Messages = {
 
   plans: {
     title: '套餐',
-    metaTitle: '套餐 | Oathly',
+    metaTitle: '套餐 | Swornly',
     yourPlan: '你的套餐',
     free: '免费版',
     pro: 'Pro',
@@ -543,7 +543,7 @@ export const zhHans: Messages = {
     passInBeta:
       '{country}处于测试版：题目仍在完善中，因此其国家通行证暂不出售。Pro 现已包含该国家。',
     manageInStore: '此订阅是在 {store} 购买的，请前往那里更改或取消。',
-    boughtOnWeb: '此订阅是在 Oathly 网站上购买的，请前往那里更改或取消。',
+    boughtOnWeb: '此订阅是在 Swornly 网站上购买的，请前往那里更改或取消。',
     unavailable: '目前还无法在这里购买套餐。',
     thanks: '谢谢。你的套餐稍后会显示在这里。',
     freeLimit: '免费版包含 {total} 道题中的 {available} 道。',
@@ -557,7 +557,7 @@ export const zhHans: Messages = {
 
   org: {
     open: '打开',
-    metaTitle: '机构 | Oathly',
+    metaTitle: '机构 | Swornly',
     title: '机构',
     forOrganizations: '机构版',
     publicFeaturesTitle: '机构可获得的功能',
@@ -600,7 +600,7 @@ export const zhHans: Messages = {
     seatsOver: '{count, plural, other {# 名学员没有席位，正在使用免费版。}}',
     seatsNone: '该机构还没有席位。邀请学员需要有席位。',
     seatsExplain: '每名学员占用一个席位，并使用 Pro 学习：所有国家的全部题目。',
-    seatsGranted: '{count, plural, other {# 个席位由 Oathly 提供。}}',
+    seatsGranted: '{count, plural, other {# 个席位由 Swornly 提供。}}',
     seatCount: '席位数量',
     buySeats: '购买席位',
     perSeatMonth: '每个席位每月 {price}',
@@ -680,7 +680,7 @@ export const zhHans: Messages = {
     inviteLine: '第 {line} 行：{value}',
     problemBadEmail: '不是电子邮箱地址',
     problemDuplicate: '重复出现',
-    problemUnknownCountry: '不是 Oathly 已覆盖的国家',
+    problemUnknownCountry: '不是 Swornly 已覆盖的国家',
     problemBadDate: '日期请写成 YYYY-MM-DD',
     problemPastDate: '日期已过',
     inviteOverLimit: '另有 {count} 人未处理：一份名单最多邀请 {limit} 人。',
@@ -700,7 +700,7 @@ export const zhHans: Messages = {
       '可选。你的标志和颜色会显示在你邀请的学员的主页上。必要时会调整色调，确保文字清晰易读。',
     brandColor: '主色',
     brandAccent: '强调色',
-    colorHint: '十六进制颜色，例如 #0b5fff。留空则使用 Oathly 的颜色。',
+    colorHint: '十六进制颜色，例如 #0b5fff。留空则使用 Swornly 的颜色。',
     logo: '标志',
     logoHint: 'PNG、JPEG 或 WebP，不超过 256 KB。',
     logoUpload: '上传标志',
@@ -717,11 +717,11 @@ export const zhHans: Messages = {
     errorWrongAddress: '该邀请发送到了另一个电子邮箱。请打开邮件中的链接。',
     errorBadLogo: '标志必须是 PNG、JPEG 或 WebP 图片，且不超过 256 KB。',
     joinTitle: '加入 {organization}',
-    joinInvited: '{organization} 邀请你在 Oathly 上跟随他们学习。',
-    joinInvitedAdmin: '{organization} 邀请你在 Oathly 上协助管理他们的机构。',
+    joinInvited: '{organization} 邀请你在 Swornly 上跟随他们学习。',
+    joinInvitedAdmin: '{organization} 邀请你在 Swornly 上协助管理他们的机构。',
     joinAssigned: '他们希望你准备{country}的入籍考试。',
     joinTarget: '目标日期：{date}。',
-    joinIncludes: '你的席位包含 Oathly Pro，无需你付费。',
+    joinIncludes: '你的席位包含 Swornly Pro，无需你付费。',
     joinConsent:
       '加入后，{organization} 的管理员将能看到你的备考程度分数，以及你为该考试学习了多少。他们看不到你每道题的作答，你也可以随时退出。',
     joinButton: '加入',
@@ -733,15 +733,15 @@ export const zhHans: Messages = {
     reportTitle: '学员备考程度报告',
     reportGenerated: '生成时间：{date}',
     reportBack: '返回学员列表',
-    emailSubject: '{organization} 邀请你使用 Oathly',
+    emailSubject: '{organization} 邀请你使用 Swornly',
     emailHello: '你好：',
     emailHelloName: '{name}，你好：',
-    emailBody: '{organization} 邀请你使用 Oathly 准备入籍考试。你的席位费用已付。',
-    emailBodyAdmin: '{organization} 邀请你在 Oathly 上协助管理他们的机构。',
+    emailBody: '{organization} 邀请你使用 Swornly 准备入籍考试。你的席位费用已付。',
+    emailBodyAdmin: '{organization} 邀请你在 Swornly 上协助管理他们的机构。',
     emailAction: '接受邀请',
     emailExpires: '链接只能使用一次，并将在 {days} 天后过期。',
     emailFooter:
-      'Oathly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。如果你没有预料到这封邮件，可以忽略它。',
+      'Swornly 是一款独立的学习应用，与任何政府均无关联，也未获任何政府认可。如果你没有预料到这封邮件，可以忽略它。',
     inviteGoneTitle: '找不到邀请',
   },
 
@@ -772,11 +772,11 @@ export const zhHans: Messages = {
     nameSaved: '你的名称已保存。',
     nameProblem: '名称最多 60 个字符，不能包含链接、电子邮箱或电话号码。',
     exportTitle: '你的数据副本',
-    exportBody: '将 Oathly 保存的与你账户有关的全部内容下载为一个文件。',
+    exportBody: '将 Swornly 保存的与你账户有关的全部内容下载为一个文件。',
     exportButton: '下载我的数据',
     analyticsTitle: '使用统计',
     analyticsBody:
-      '我们会统计少量事件（例如完成一次练习），以了解 Oathly 的使用情况。这些数据与你的账户关联，绝不出售，也绝不用于广告。',
+      '我们会统计少量事件（例如完成一次练习），以了解 Swornly 的使用情况。这些数据与你的账户关联，绝不出售，也绝不用于广告。',
     analyticsStop: '停止统计我的使用',
     analyticsStart: '重新统计我的使用',
     analyticsStopped: '你的使用不会被统计。',
@@ -800,7 +800,7 @@ export const zhHans: Messages = {
     appLanguageHint: '按钮和菜单的语言。学习题目所用的语言按每项考试分别设置。',
     deleteTitle: '删除你的账户',
     deleteIntro:
-      '这将删除你的账户以及你在 Oathly 中的一切：学习计划、答题记录和进度、购买记录以及组织成员身份。此操作无法撤销。',
+      '这将删除你的账户以及你在 Swornly 中的一切：学习计划、答题记录和进度、购买记录以及组织成员身份。此操作无法撤销。',
     deleteStores:
       '在 App Store 或 Google Play 购买的订阅不会因删除账户而取消。请先在手机的订阅设置中取消，否则仍会继续扣费。',
     deleteStripe: '在网站上购买的订阅会在此过程中一并取消。',
@@ -811,19 +811,19 @@ export const zhHans: Messages = {
     deleteBlockedStaff: '此账户审核过内容，相关记录必须保留。请联系我们关闭账户。',
     deleteFailed: '我们未能删除你的账户，没有任何内容被移除。请重试。',
     deletedTitle: '你的账户已删除',
-    deletedBody: '你在 Oathly 中的一切都已移除。随时欢迎你回来。',
+    deletedBody: '你在 Swornly 中的一切都已移除。随时欢迎你回来。',
   },
 
   welcome: {
     countriesSoFar: '目前已有 {count} 个国家。',
     getStarted: '开始使用',
-    unreachable: '无法连接到 Oathly。请检查网络连接后重试。',
+    unreachable: '无法连接到 Swornly。请检查网络连接后重试。',
   },
   community: {
     sending: '正在发送…',
     noCountry: '每个考试都有自己的学习小组。选择你正在准备的考试，即可加入它的小组。',
     chooseTest: '选择你的考试',
-    metaTitle: '学习小组 | Oathly',
+    metaTitle: '学习小组 | Swornly',
     title: '学习小组',
     intro: '与其他准备{country}考试的人一起提问、分享技巧、讲述你的经历。',
     group: '小组',
@@ -864,7 +864,7 @@ export const zhHans: Messages = {
     removed: '版主已移除此内容。只有你能看到。',
     legalTitle: '这看起来是关于你个人情况的问题',
     legalNotice:
-      'Oathly 不能提供法律建议，其他学习者也不能。关于你自己的情况，请咨询持牌移民律师或获认可的顾问。',
+      'Swornly 不能提供法律建议，其他学习者也不能。关于你自己的情况，请咨询持牌移民律师或获认可的顾问。',
     back: '返回小组',
     tooMany: '你在短时间内发布了太多内容。请稍后再试。',
     invalid: '请检查你写的内容后重试。',

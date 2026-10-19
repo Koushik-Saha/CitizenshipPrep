@@ -118,14 +118,14 @@ describe('testFaq', () => {
       [
         'What does the Canada citizenship test cover?',
         // Only topics with questions to practise.
-        'Oathly’s practice questions cover 2 topics: History and Rights.',
+        'Swornly’s practice questions cover 2 topics: History and Rights.',
       ],
       [
         'Where do these practice questions come from?',
         expect.stringContaining('written from the official study material'),
       ],
       [
-        'Is Oathly an official government website?',
+        'Is Swornly an official government website?',
         expect.stringContaining('not affiliated with any government'),
       ],
     ]);
@@ -157,7 +157,7 @@ describe('testFaq', () => {
       t,
     ).map((item) => item.question);
     // Nothing to practise yet, so no claim about where the questions come from.
-    expect(questions).toEqual(['Is Oathly an official government website?']);
+    expect(questions).toEqual(['Is Swornly an official government website?']);
   });
 
   it('states a pass mark without a share when the number of questions is not fixed', () => {
@@ -187,11 +187,11 @@ describe('topicFaq', () => {
     country: { isoCode: 'CA', slug: 'canada', name: 'Canada', examLanguages: ['en'] },
   };
 
-  it('starts with the topic, then the exam, then Oathly', () => {
+  it('starts with the topic, then the exam, then Swornly', () => {
     const faq = faqOf(topicFaq(topicGuide, 'Canada', t));
     expect(faq[0]).toEqual([
       'How can I practice History questions for the Canada citizenship test?',
-      'Oathly has 12 checked practice questions on History. The sample on this page is free, ' +
+      'Swornly has 12 checked practice questions on History. The sample on this page is free, ' +
         'with the answers explained; the rest are in the app.',
     ]);
     expect(faq.map(([question]) => question).slice(1)).toEqual([
@@ -200,14 +200,14 @@ describe('topicFaq', () => {
       'How long does the Canada citizenship test take?',
       'What language is the Canada citizenship test in?',
       'Where do these practice questions come from?',
-      'Is Oathly an official government website?',
+      'Is Swornly an official government website?',
     ]);
   });
 
   it('does not promise more in the app when the page shows the only question', () => {
     const one = { ...topicGuide, topic: { ...topicGuide.topic, publishedQuestions: 1 } };
     expect(faqOf(topicFaq(one, 'Canada', t))[0]![1]).toBe(
-      'Oathly has 1 checked practice question on History. The sample on this page is free, ' +
+      'Swornly has 1 checked practice question on History. The sample on this page is free, ' +
         'with the answer explained.',
     );
   });

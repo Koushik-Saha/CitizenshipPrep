@@ -45,7 +45,7 @@ export default async function JoinPage({
         </Notice>
         <p className="mt-6">
           <Link href={localizePath(locale, '/')} className={buttonClass.secondary}>
-            Oathly
+            Swornly
           </Link>
         </p>
       </main>

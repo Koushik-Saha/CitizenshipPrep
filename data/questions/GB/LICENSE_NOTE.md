@@ -10,7 +10,7 @@ Checked 9 October 2026. There is no `official.json` for the United Kingdom.
   its licence terms have not been read. It is recorded as `reuse_unclear` in
   `data/sources/GB/sources.json`.
 
-The questions here are written by Oathly from GOV.UK pages under the Open Government Licence
+The questions here are written by Swornly from GOV.UK pages under the Open Government Licence
 v3.0, which allows commercial reuse with attribution ("Contains public sector information
 licensed under the Open Government Licence v3.0"). They cover government, elections, juries,
 councils and bank holidays only. They have **not** been checked against the handbook: see

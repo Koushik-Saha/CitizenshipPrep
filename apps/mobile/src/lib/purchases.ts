@@ -46,7 +46,7 @@ const sdk = loadSdk();
 let identified: string | null = null;
 
 /**
- * Tells RevenueCat who is buying: the learner's Oathly id, which is how the
+ * Tells RevenueCat who is buying: the learner's Swornly id, which is how the
  * webhook knows whose purchase it is.
  */
 async function identify(userId: string): Promise<void> {

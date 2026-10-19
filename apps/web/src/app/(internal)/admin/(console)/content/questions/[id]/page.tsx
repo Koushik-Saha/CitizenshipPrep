@@ -444,7 +444,7 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
                 <dd className="font-medium">
                   {question.origin === 'official'
                     ? `The official question${question.officialNumber ? `, no. ${question.officialNumber}` : ''}, copied word for word`
-                    : 'Written by Oathly from the official material'}
+                    : 'Written by Swornly from the official material'}
                 </dd>
               </div>
             )}
@@ -524,7 +524,7 @@ function SourcePanel({ question }: { question: QuestionForReview }) {
             <p className="border-accent mt-1 border-l-4 pl-3 font-medium">“{sourceQuote}”</p>
             <p className="text-fg-muted mt-3" data-testid="no-passage">
               The passage around these words is not shown: the source document has not been loaded
-              into Oathly, or the words are not in it as quoted. Open the source to read them in
+              into Swornly, or the words are not in it as quoted. Open the source to read them in
               place.
             </p>
           </div>

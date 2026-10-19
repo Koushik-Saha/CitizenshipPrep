@@ -24,7 +24,7 @@ export async function fetchSource(url: string): Promise<LoadedSource> {
     redirect: 'follow',
     headers: {
       // Some government sites refuse requests with no browser-like agent.
-      'user-agent': 'Mozilla/5.0 (compatible; OathlyContentBot/1.0; study-guide ingestion)',
+      'user-agent': 'Mozilla/5.0 (compatible; SwornlyContentBot/1.0; study-guide ingestion)',
       accept: 'application/pdf,text/html;q=0.9,text/plain;q=0.8,*/*;q=0.5',
     },
   });

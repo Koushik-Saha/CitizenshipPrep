@@ -79,7 +79,7 @@ export async function GET(_request: Request, { params }: RouteContext<'/og/[imag
           />
           <circle cx="32" cy="32" r="27.5" stroke={white} strokeWidth="9" />
         </svg>
-        <div style={{ fontSize: 44, fontWeight: 600 }}>Oathly</div>
+        <div style={{ fontSize: 44, fontWeight: 600 }}>Swornly</div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -19,7 +19,7 @@ export const metadata: Metadata = { title: 'Subscriptions and payments' };
 const single = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
 function Owner({ owner }: { owner: AdminSubscription['owner'] | undefined }) {
-  if (!owner) return <span className="text-fg-muted">Not an Oathly customer</span>;
+  if (!owner) return <span className="text-fg-muted">Not an Swornly customer</span>;
   return owner.kind === 'user' ? (
     <UserLink id={owner.id} name={owner.name} />
   ) : (

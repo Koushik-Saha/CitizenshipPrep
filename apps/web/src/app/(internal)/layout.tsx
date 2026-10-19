@@ -6,7 +6,7 @@ import '../globals.css';
 
 // Reviewer and brand pages: internal tools, in English only.
 export const metadata: Metadata = {
-  title: 'Oathly',
+  title: 'Swornly',
   robots: { index: false, follow: false },
 };
 

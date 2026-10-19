@@ -45,7 +45,7 @@ export function hasBrand(brand: OrgBrand): boolean {
 
 /**
  * The organization whose look a learner's dashboard takes: the first one
- * they joined as a learner that has one. Admins see Oathly as it is.
+ * they joined as a learner that has one. Admins see Swornly as it is.
  */
 export function brandingMembership(memberships: readonly Membership[]): Membership | null {
   return (
@@ -71,7 +71,7 @@ export interface Organization {
 
 /** The seats an organization has, and the subscription behind them. */
 export interface OrgSeats extends SeatUsage {
-  /** Seats given by Oathly staff rather than bought. */
+  /** Seats given by Swornly staff rather than bought. */
   granted: number;
   /** The Stripe subscription, if there is one. */
   subscription: {
@@ -107,7 +107,7 @@ export interface OrgStaff {
 /** One learner, as their organization's admins see them. */
 export interface OrgLearner {
   userId: string;
-  /** The name the organization knows them by, or the one they gave Oathly. */
+  /** The name the organization knows them by, or the one they gave Swornly. */
   name: string | null;
   email: string | null;
   countryCode: string | null;

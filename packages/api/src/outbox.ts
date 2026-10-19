@@ -1,7 +1,7 @@
 import { syncQueue, type OfflineQueue } from '@oathly/core';
 import * as z from 'zod/mini';
 
-import { ApiError, type OathlyApi } from './client';
+import { ApiError, type SwornlyApi } from './client';
 import type { OfflineAttempt } from './pack';
 import { offlineAttemptsSchema, sessionResultSchema } from './schemas';
 import type { SessionResult } from './study';
@@ -99,7 +99,7 @@ export interface SyncResult {
  * keeps the rest for next time; drops only what the server refuses for good.
  */
 export async function syncAll(
-  api: Pick<OathlyApi, 'registerOfflineAttempts' | 'completeSession' | 'sendAnswers'>,
+  api: Pick<SwornlyApi, 'registerOfflineAttempts' | 'completeSession' | 'sendAnswers'>,
   outbox: Outbox,
   queue: OfflineQueue,
   now: number,

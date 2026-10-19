@@ -1,6 +1,6 @@
 # Production check, signed out
 
-12 October 2026, against `https://oathly.vercel.app`, with Playwright (a real browser for the
+12 October 2026, against `https://swornly.vercel.app`, with Playwright (a real browser for the
 pages, its request client for headers and endpoints). Every request was made as a visitor with
 no account. Nothing was signed in to and nothing was changed.
 

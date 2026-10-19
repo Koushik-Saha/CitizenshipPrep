@@ -114,7 +114,7 @@ anonymous`), with the policy "Anyone can read published questions".
   profiles", `using (true)`) and `:156` (insert and update of `display_name`, `avatar_url`).
 - **Exploit:** any account can read the id and name of every learner, which is a list of people
   preparing for citizenship. Any account can also set its own display name, unscreened, to
-  "Oathly moderator", an insult or an address, and that name is shown beside its posts.
+  "Swornly moderator", an insult or an address, and that name is shown beside its posts.
 - **Fix:** limit reading to one's own profile (the server already supplies authors' names for
   posts); revoke `update (display_name, avatar_url)` from `authenticated` until a screened
   "change name" exists on the server.
@@ -341,7 +341,7 @@ upvotes and reports (`packages/core/src/rate-limit.ts`).
 
 ### 1. Headers
 
-Read from `apps/web/next.config.ts` and from a live request to `https://oathly.vercel.app/`:
+Read from `apps/web/next.config.ts` and from a live request to `https://swornly.vercel.app/`:
 HSTS for two years with subdomains and preload; `X-Frame-Options: DENY` and
 `frame-ancestors 'none'`; `X-Content-Type-Options: nosniff`;
 `Referrer-Policy: strict-origin-when-cross-origin`; a `Permissions-Policy` that allows the

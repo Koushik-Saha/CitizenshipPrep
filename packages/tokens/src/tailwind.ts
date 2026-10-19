@@ -118,7 +118,7 @@ export function renderTailwindTheme(): string {
 
   return [
     '/*',
-    ' * Oathly design tokens for Tailwind CSS v4.',
+    ' * Swornly design tokens for Tailwind CSS v4.',
     ' * Generated from packages/tokens/src. Do not edit: run',
     ' * `pnpm --filter @oathly/tokens build` after changing a token.',
     ' *',

@@ -21,7 +21,7 @@ import { LOCALE_COOKIE } from './locale-cookie';
 /** For generateStaticParams: one entry per UI language. */
 export const localeParams = () => uiLocales.map((locale) => ({ locale }));
 
-/** The page's language and a lookup for its messages; 404 for a language Oathly does not have. */
+/** The page's language and a lookup for its messages; 404 for a language Swornly does not have. */
 export async function getT(
   params: Promise<{ locale: string }>,
 ): Promise<{ locale: UiLocale; t: Translator; messages: Messages }> {

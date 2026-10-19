@@ -33,7 +33,7 @@ import {
 } from './staff';
 import { createSpeaker, type Speaker } from './tts';
 
-const USAGE = `Oathly content pipeline
+const USAGE = `Swornly content pipeline
 
 Usage: pnpm content <command> [options]
 

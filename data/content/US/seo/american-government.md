@@ -1,9 +1,9 @@
 # American Government on the U.S. citizenship test
 
-- **Title:** American Government on the U.S. citizenship test | Oathly
+- **Title:** American Government on the U.S. citizenship test | Swornly
 - **Description:** What the 2025 U.S. civics test asks about American government: the Constitution, the three branches, and rights and responsibilities.
 
-Draft for the page at `/united-states/citizenship-test/american-government`. Oathly is an independent study
+Draft for the page at `/united-states/citizenship-test/american-government`. Swornly is an independent study
 app and is not affiliated with any government.
 
 ## Introduction

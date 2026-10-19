@@ -37,7 +37,7 @@ stays in force until the end of the period paid for, then ends.
    `--live` is added. The amounts live in Stripe and nowhere else: the
    landing page and the plans page read them from there.
 
-   By hand instead: create a product "Oathly Pro" with two recurring prices
+   By hand instead: create a product "Swornly Pro" with two recurring prices
    (monthly, yearly) and a product "Country Pass" with a one-time price.
 
 2. The customer portal ("Manage billing") must allow cancelling at the end of
@@ -74,7 +74,7 @@ stays in force until the end of the period paid for, then ends.
 4. Put RevenueCat's public SDK keys in `apps/mobile/.env.local` (see
    `apps/mobile/README.md`).
 
-The app tells RevenueCat who is buying by their Oathly user id, which is how
+The app tells RevenueCat who is buying by their Swornly user id, which is how
 a webhook event is matched to a learner. Sandbox purchases are accepted, as
 app review and TestFlight need them to be.
 

@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       }
     }
   }
-  // The pages are addressed by the country's slug. A code Oathly has no
+  // The pages are addressed by the country's slug. A code Swornly has no
   // country for refreshes everything, as no code does.
   const slug = country
     ? (await listTestPages(getDb())).find((page) => page.isoCode === country)?.slug

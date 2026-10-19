@@ -14,7 +14,7 @@ const input = {
 describe('inviteEmail', () => {
   it('says who is inviting, to what, and gives the link once', () => {
     const mail = inviteEmail(translatorFor('en'), input);
-    expect(mail.subject).toBe('Riverside Legal Aid invited you to Oathly');
+    expect(mail.subject).toBe('Riverside Legal Aid invited you to Swornly');
     expect(mail.text).toContain('Hello Maria Silva,');
     expect(mail.text).toContain('Accept the invitation: https://oathly.example/join/abc123');
     expect(mail.text).toContain('expires in 30 days');
@@ -54,28 +54,28 @@ describe('inviteEmail', () => {
 
 describe('parseSender', () => {
   it('reads a name and an address, or an address alone', () => {
-    expect(parseSender('Oathly <invites@example.com>')).toEqual({
+    expect(parseSender('Swornly <invites@example.com>')).toEqual({
       email: 'invites@example.com',
-      name: 'Oathly',
+      name: 'Swornly',
     });
-    expect(parseSender('  "Oathly Team"  <invites@example.com> ')).toEqual({
+    expect(parseSender('  "Swornly Team"  <invites@example.com> ')).toEqual({
       email: 'invites@example.com',
-      name: 'Oathly Team',
+      name: 'Swornly Team',
     });
     expect(parseSender('<invites@example.com>')).toEqual({ email: 'invites@example.com' });
     expect(parseSender('invites@example.com')).toEqual({ email: 'invites@example.com' });
   });
 
   it('reads a value pasted with the quotes a .env file puts around it', () => {
-    expect(parseSender('"Oathly <invites@example.com>"')).toEqual({
+    expect(parseSender('"Swornly <invites@example.com>"')).toEqual({
       email: 'invites@example.com',
-      name: 'Oathly',
+      name: 'Swornly',
     });
     expect(parseSender("'invites@example.com'")).toEqual({ email: 'invites@example.com' });
     // A name in quotes, inside, is still a name.
-    expect(parseSender('"Oathly Team" <invites@example.com>')).toEqual({
+    expect(parseSender('"Swornly Team" <invites@example.com>')).toEqual({
       email: 'invites@example.com',
-      name: 'Oathly Team',
+      name: 'Swornly Team',
     });
   });
 
@@ -83,8 +83,8 @@ describe('parseSender', () => {
     for (const value of [
       '',
       '   ',
-      'Oathly',
-      'Oathly <invites>',
+      'Swornly',
+      'Swornly <invites>',
       'a@b',
       'a b@example.com',
       null,
@@ -101,9 +101,9 @@ describe('mailBatchRequest', () => {
       { to: 'a@example.test', subject: 'One', text: 'one', html: '<p>one</p>' },
       { to: 'b@example.test', subject: 'Two', text: 'two', html: '<p>two</p>' },
     ];
-    expect(mailBatchRequest({ email: 'invites@example.com', name: 'Oathly' }, mails)).toEqual({
+    expect(mailBatchRequest({ email: 'invites@example.com', name: 'Swornly' }, mails)).toEqual({
       base: {
-        from: { email: 'invites@example.com', name: 'Oathly' },
+        from: { email: 'invites@example.com', name: 'Swornly' },
         category: 'Organization invitation',
       },
       requests: [

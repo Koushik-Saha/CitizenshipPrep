@@ -37,8 +37,8 @@ export class ApiError extends Error {
   }
 }
 
-export interface OathlyApiOptions {
-  /** The web app's origin, e.g. https://oathly.app. */
+export interface SwornlyApiOptions {
+  /** The web app's origin, e.g. https://swornly.app. */
   baseUrl: string;
   /**
    * The signed-in user's access token, or null when signed out. Leave out in
@@ -50,7 +50,7 @@ export interface OathlyApiOptions {
 
 const errorBodySchema = z.object({ error: z.string(), reason: z.optional(z.string()) });
 
-export function createOathlyApi(options: OathlyApiOptions) {
+export function createSwornlyApi(options: SwornlyApiOptions) {
   // Looked up per call, so tests and React Native can swap the global.
   const doFetch: typeof fetch = (input, init) => (options.fetch ?? fetch)(input, init);
 
@@ -91,7 +91,7 @@ export function createOathlyApi(options: OathlyApiOptions) {
   const id = encodeURIComponent;
 
   return {
-    /** The exams Oathly covers. Public: works signed out. */
+    /** The exams Swornly covers. Public: works signed out. */
     publicCountries: async (): Promise<CountryFacts[]> => {
       const response = await doFetch(new URL('/api/public/countries', options.baseUrl).toString(), {
         headers: { accept: 'application/json' },
@@ -150,4 +150,4 @@ export function createOathlyApi(options: OathlyApiOptions) {
   };
 }
 
-export type OathlyApi = ReturnType<typeof createOathlyApi>;
+export type SwornlyApi = ReturnType<typeof createSwornlyApi>;

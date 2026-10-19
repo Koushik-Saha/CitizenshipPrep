@@ -1,4 +1,4 @@
-# Oathly mobile
+# Swornly mobile
 
 The Expo app (iOS and Android). It runs the same quiz engine as the web app
 (`packages/core`) and reads the same API through the same hooks
@@ -168,7 +168,7 @@ happened: no traces, no screenshots, nothing that names the learner.
 ## Languages
 
 The app's text comes from `packages/i18n`, the same message files as the web
-app. It starts in the phone's language when Oathly has it, and the Profile
+app. It starts in the phone's language when Swornly has it, and the Profile
 tab has a picker that changes it at once, with no restart. Arabic lays the
 app out right to left through the `direction` style on the root view
 (`src/lib/i18n.tsx`), not `I18nManager.forceRTL`, which would need a restart.

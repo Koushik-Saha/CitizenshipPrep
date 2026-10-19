@@ -12,7 +12,7 @@ Checked 9 October 2026. There is no `official.json` for Australia, for two reaso
    address, so they do not settle it. It is recorded as `reuse_unclear` in
    `data/sources/AU/sources.json` and nothing was copied from it.
 
-Every question here is written by Oathly from the booklet, which is published under Creative
+Every question here is written by Swornly from the booklet, which is published under Creative
 Commons Attribution 4.0 International (© Commonwealth of Australia 2020). Each one cites the page
 it rests on and quotes fewer than 25 words from it.
 

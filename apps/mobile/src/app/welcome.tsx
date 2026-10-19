@@ -11,7 +11,7 @@ import { useT } from '@/lib/i18n';
 import { useSession } from '@/lib/session';
 
 // The first screen for someone who is not signed in: the globe, with every
-// country Oathly covers glowing on it. Always dark, like the web landing hero.
+// country Swornly covers glowing on it. Always dark, like the web landing hero.
 const theme = themeFor('dark');
 
 export default function Welcome() {

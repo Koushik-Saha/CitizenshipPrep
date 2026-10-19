@@ -797,7 +797,7 @@ export function changeFromRevenueCat(
 
 /**
  * Handles one authenticated RevenueCat webhook event. The app tells
- * RevenueCat who is buying by their Oathly user id, so the event's app user
+ * RevenueCat who is buying by their Swornly user id, so the event's app user
  * id is the learner.
  */
 export async function applyRevenueCatEvent(
@@ -821,7 +821,7 @@ async function applyRevenueCatEventOnce(
   const sandbox = event.environment?.toUpperCase() === 'SANDBOX';
   const letIn = (userId: string) => !sandbox || options.allowSandbox?.(userId) === true;
   if (event.type === 'TRANSFER') {
-    // The store account moved to another Oathly account ("restore purchases"
+    // The store account moved to another Swornly account ("restore purchases"
     // after signing in as someone else): what it bought moves with it.
     const from = event.transferred_from ?? [];
     let to: string | null = null;

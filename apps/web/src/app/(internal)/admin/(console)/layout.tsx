@@ -32,7 +32,7 @@ export default async function AdminLayout({ children }: LayoutProps<'/admin'>) {
             href="/admin/content"
             className="font-display inline-flex min-h-11 items-center rounded-xs text-lg font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring"
           >
-            Oathly content review
+            Swornly content review
           </Link>
           <nav aria-label="Sections" className="flex flex-wrap gap-x-4 text-sm font-medium">
             <Link

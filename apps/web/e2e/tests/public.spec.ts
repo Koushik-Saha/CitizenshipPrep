@@ -106,7 +106,7 @@ test('the site can be installed as an app: every page links its manifest, and it
   expect(response.status()).toBe(200);
   const manifest = await response.json();
   expect(manifest).toMatchObject({
-    short_name: 'Oathly',
+    short_name: 'Swornly',
     display: 'standalone',
     start_url: '/study',
   });
@@ -149,7 +149,7 @@ test('the privacy policy, the terms and how to delete an account are a link away
     .click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Privacy policy');
   await page.getByRole('link', { name: 'how to delete your account' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Delete your Oathly account');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Delete your Swornly account');
   await page
     .getByRole('contentinfo')
     .getByRole('link', { name: t('common.terms') })

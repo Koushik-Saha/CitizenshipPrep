@@ -6,13 +6,13 @@ import { Contact, LegalPage, legalLink, List, Section } from '@/components/legal
 import { getT } from '@/lib/i18n';
 import { operator } from '@/lib/legal';
 
-const title = 'Delete your Oathly account';
+const title = 'Delete your Swornly account';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${title} | Oathly`,
+    title: `${title} | Swornly`,
     description:
-      'How to delete your Oathly account and your data, in the app or on the website, and what is removed.',
+      'How to delete your Swornly account and your data, in the app or on the website, and what is removed.',
     alternates: { canonical: '/delete-account' },
   };
 }
@@ -26,7 +26,7 @@ export default async function DeleteAccountPage({ params }: PageProps<'/[locale]
   return (
     <LegalPage t={t} path="/delete-account" title={title} dated={false}>
       <p>
-        You can delete your Oathly account, and everything in it, yourself at any time. It takes
+        You can delete your Swornly account, and everything in it, yourself at any time. It takes
         effect at once and cannot be undone.
       </p>
 

@@ -1,6 +1,6 @@
 import { createAuthClient } from '@neondatabase/auth';
 import { BetterAuthVanillaAdapter } from '@neondatabase/auth/vanilla/adapters';
-import { createOathlyApi } from '@oathly/api/client';
+import { createSwornlyApi } from '@oathly/api/client';
 
 import { apiUrl, neonAuthUrl, testSession } from './env';
 
@@ -43,7 +43,7 @@ export async function getToken(): Promise<string | null> {
   return data?.session?.token ?? null;
 }
 
-export const api = createOathlyApi({ baseUrl: apiUrl, getToken });
+export const api = createSwornlyApi({ baseUrl: apiUrl, getToken });
 
 export async function sendSignInCode(email: string): Promise<string | null> {
   const { error } = await auth().emailOtp.sendVerificationOtp({ email, type: 'sign-in' });
@@ -57,7 +57,7 @@ export async function verifySignInCode(email: string, otp: string): Promise<stri
 
 /**
  * Removes the sign-in account itself, after the learner's data has been
- * deleted from Oathly. Best effort: if the sign-in service refuses, there is
+ * deleted from Swornly. Best effort: if the sign-in service refuses, there is
  * nothing of the learner's study left behind it either way.
  */
 export async function deleteSignInAccount(): Promise<void> {

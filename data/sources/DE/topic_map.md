@@ -17,7 +17,7 @@ for each Land:
 
 The first topic keeps the name the app already used; the annex calls it „Leben in der
 Demokratie“. The annex does **not** say which question belongs to which area. The topic of each
-imported question is Oathly's own reading of it.
+imported question is Swornly's own reading of it.
 
 ## Weights
 

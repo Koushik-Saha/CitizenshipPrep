@@ -1,6 +1,6 @@
 import { TERMS_VERSION } from '@oathly/core';
 
-// Who runs Oathly, for the privacy policy and the terms. Set on the host
+// Who runs Swornly, for the privacy policy and the terms. Set on the host
 // before going live: a policy has to say who is responsible and how to reach
 // them. The pages are built ahead of time, so these are read at build time.
 
@@ -19,7 +19,7 @@ const value = (name: string) => process.env[name]?.trim() || null;
 
 export function operator(): Operator {
   return {
-    name: value('LEGAL_OPERATOR') ?? 'Oathly',
+    name: value('LEGAL_OPERATOR') ?? 'Swornly',
     email: value('LEGAL_CONTACT_EMAIL'),
     address: value('LEGAL_ADDRESS'),
     jurisdiction: value('LEGAL_JURISDICTION'),

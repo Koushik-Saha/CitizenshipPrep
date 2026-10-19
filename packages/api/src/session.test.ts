@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ApiError, type OathlyApi } from './client';
+import { ApiError, type SwornlyApi } from './client';
 import type { Me } from './me';
 import { loadSession, looksLikeEmail, normalizeCode } from './session';
 
@@ -13,7 +13,7 @@ const me: Me = {
   organizations: [],
 };
 
-const api = (result: Me | Error): Pick<OathlyApi, 'me'> => ({
+const api = (result: Me | Error): Pick<SwornlyApi, 'me'> => ({
   me: async () => {
     if (result instanceof Error) throw result;
     return result;

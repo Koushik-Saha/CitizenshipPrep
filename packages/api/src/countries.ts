@@ -1,4 +1,4 @@
-// Public facts about the exams Oathly covers, for the landing page and the
+// Public facts about the exams Swornly covers, for the landing page and the
 // globe. Everything here is safe to show signed-out visitors.
 
 import { parseBlueprint, type QuestionType } from '@oathly/core';

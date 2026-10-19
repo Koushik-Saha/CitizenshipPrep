@@ -192,7 +192,7 @@ export function checkoutTerms(options: {
   existingCustomer: boolean;
 }) {
   const agreement =
-    `By paying you agree to Oathly's [terms](${options.termsUrl}) and ` +
+    `By paying you agree to Swornly's [terms](${options.termsUrl}) and ` +
     `[refund policy](${options.refundsUrl}), and ask for access to start now. ` +
     'If the law where you live gives you 14 days to withdraw, starting now can end that ' +
     'right once access has begun.';
@@ -202,7 +202,7 @@ export function checkoutTerms(options: {
       ...(options.requireConsent
         ? {
             terms_of_service_acceptance: {
-              message: `I agree to Oathly's [terms](${options.termsUrl}) and [refund policy](${options.refundsUrl}).`,
+              message: `I agree to Swornly's [terms](${options.termsUrl}) and [refund policy](${options.refundsUrl}).`,
             },
           }
         : {}),

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OathlyApiProvider } from '@oathly/api/hooks';
+import { SwornlyApiProvider } from '@oathly/api/hooks';
 import { queryKeys } from '@oathly/api/queries';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { focusManager, QueryClient } from '@tanstack/react-query';
@@ -59,7 +59,7 @@ export function DataProviders({ children }: { children: React.ReactNode }) {
         dehydrateOptions: { shouldDehydrateQuery: (query) => query.state.status === 'success' },
       }}
     >
-      <OathlyApiProvider api={api}>{children}</OathlyApiProvider>
+      <SwornlyApiProvider api={api}>{children}</SwornlyApiProvider>
     </PersistQueryClientProvider>
   );
 }

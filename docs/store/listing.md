@@ -7,14 +7,14 @@ below is within its limit.
 Two rules run through all of it, because both stores enforce them for apps
 about government services:
 
-- Never say or imply that Oathly is official, or connected to any government.
+- Never say or imply that Swornly is official, or connected to any government.
 - Say where the information comes from, with links.
 
 ## Both stores
 
 | Field                                   | Text                                                                            |
 | --------------------------------------- | ------------------------------------------------------------------------------- |
-| App name                                | Oathly: Citizenship Test Prep                                                   |
+| App name                                | Swornly: Citizenship Test Prep                                                  |
 | Category                                | Education                                                                       |
 | Support URL                             | `https://[your-domain]/delete-account` until you have a support page; then that |
 | Marketing URL                           | `https://[your-domain]`                                                         |
@@ -46,7 +46,7 @@ citizenship,test,naturalization,civics,exam,practice,quiz,immigration,study,flas
 **Description**
 
 ```
-Oathly helps you prepare for your citizenship test.
+Swornly helps you prepare for your citizenship test.
 
 Every practice question is written from the country's official study material, checked against it by a reviewer, and linked to its source. You see what you got wrong, why the right answer is right, and how ready you are for the day.
 
@@ -65,10 +65,10 @@ COUNTRIES
 [List the countries you have published, e.g. "United States, Canada, United Kingdom". Only list countries whose questions are live.]
 
 PLANS
-Oathly is free to start, with a sample of each country's questions. Pro (monthly or yearly) opens every question and mock exam, and gives you more AI help. A Country Pass opens one country for a single payment. Subscriptions renew automatically until cancelled; manage or cancel them in your Apple ID settings.
+Swornly is free to start, with a sample of each country's questions. Pro (monthly or yearly) opens every question and mock exam, and gives you more AI help. A Country Pass opens one country for a single payment. Subscriptions renew automatically until cancelled; manage or cancel them in your Apple ID settings.
 
 IMPORTANT
-Oathly is an independent study app. It is not affiliated with, or endorsed by, any government or government agency. It cannot book your test, and it is not legal advice. Always check the rules that apply to you on the official website. Sources for each country's test are linked in the app and at https://[your-domain]/countries.
+Swornly is an independent study app. It is not affiliated with, or endorsed by, any government or government agency. It cannot book your test, and it is not legal advice. Always check the rules that apply to you on the official website. Sources for each country's test are linked in the app and at https://[your-domain]/countries.
 
 Privacy policy: https://[your-domain]/privacy
 Terms of use: https://[your-domain]/terms
@@ -77,13 +77,13 @@ Terms of use: https://[your-domain]/terms
 **App Review notes**
 
 ```
-Oathly is an independent citizenship test study app. It is not affiliated with any government; this is stated on the first screen, in the description and in the terms.
+Swornly is an independent citizenship test study app. It is not affiliated with any government; this is stated on the first screen, in the description and in the terms.
 
 Sign-in is by a code sent to an email address. [Say here how the reviewer signs in: see "A sign-in for App Review" in docs/launch.md. This has to be solved before you submit.]
 
 Account deletion: Profile tab > Delete your account.
 Subscriptions are sold through in-app purchase (RevenueCat).
-The microphone is used only when the learner chooses to answer a question aloud. Speech is turned into text by the device's own speech recognition; Oathly receives the text and keeps no audio.
+The microphone is used only when the learner chooses to answer a question aloud. Speech is turned into text by the device's own speech recognition; Swornly receives the text and keeps no audio.
 ```
 
 **Age rating:** answer "None" to every content question. The result is 4+.
@@ -115,7 +115,7 @@ Citizenship test practice with checked questions, explanations and mock exams.
 **Full description**
 
 ```
-Oathly helps you prepare for your citizenship test.
+Swornly helps you prepare for your citizenship test.
 
 Every practice question is written from the country's official study material, checked against it by a reviewer, and linked to its source. You see what you got wrong, why the right answer is right, and how ready you are for the day.
 
@@ -134,13 +134,13 @@ COUNTRIES
 [List the countries you have published. Only list countries whose questions are live.]
 
 PLANS
-Oathly is free to start, with a sample of each country's questions. Pro (monthly or yearly) opens every question and mock exam, and gives you more AI help. A Country Pass opens one country for a single payment. Subscriptions renew automatically until cancelled; manage or cancel them in Google Play.
+Swornly is free to start, with a sample of each country's questions. Pro (monthly or yearly) opens every question and mock exam, and gives you more AI help. A Country Pass opens one country for a single payment. Subscriptions renew automatically until cancelled; manage or cancel them in Google Play.
 
 DISCLAIMER
-Oathly is an independent study app. It does not represent any government entity, and is not affiliated with or endorsed by any government or government agency. It cannot book your test and is not legal advice.
+Swornly is an independent study app. It does not represent any government entity, and is not affiliated with or endorsed by any government or government agency. It cannot book your test and is not legal advice.
 
 SOURCES
-The information in Oathly comes from each country's official study material and test information, linked in the app next to every exam and question, and listed at https://[your-domain]/countries.
+The information in Swornly comes from each country's official study material and test information, linked in the app next to every exam and question, and listed at https://[your-domain]/countries.
 [List the official source for each country you have published, one per line, e.g. "United States: https://www.uscis.gov/citizenship". Play asks for the links in the description itself.]
 
 Privacy policy: https://[your-domain]/privacy
@@ -173,7 +173,7 @@ Educational". Answer No to every content question.
 **Target audience:** 16 and over (the terms say so). Not designed for
 children.
 
-**Government apps declaration** (App content): Oathly is not a government
+**Government apps declaration** (App content): Swornly is not a government
 app. Declare that it provides information from government sources, without
 affiliation, and that the description carries the disclaimer and the sources
 (it does, above).

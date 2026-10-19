@@ -1,9 +1,9 @@
 # American symbols and holidays on the U.S. citizenship test
 
-- **Title:** American symbols and holidays on the U.S. citizenship test | Oathly
+- **Title:** American symbols and holidays on the U.S. citizenship test | Swornly
 - **Description:** What the 2025 U.S. civics test asks about the flag, the anthem, the Statue of Liberty and national holidays.
 
-Draft for the page at `/united-states/citizenship-test/symbols-and-holidays`. Oathly is an independent study
+Draft for the page at `/united-states/citizenship-test/symbols-and-holidays`. Swornly is an independent study
 app and is not affiliated with any government.
 
 ## Introduction

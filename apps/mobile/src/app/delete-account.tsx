@@ -63,7 +63,7 @@ export default function DeleteAccount() {
       setBusy(false);
       return;
     }
-    // Gone from Oathly. Now the sign-in account, what this phone has saved,
+    // Gone from Swornly. Now the sign-in account, what this phone has saved,
     // and the session itself.
     await deleteSignInAccount();
     await forgetEverything();

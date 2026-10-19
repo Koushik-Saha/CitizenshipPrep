@@ -19,7 +19,7 @@ export const tl: Messages = {
     comingSoon: 'Malapit na',
     beta: 'Beta',
     notAffiliated:
-      'Ang Oathly ay isang independiyenteng app sa pag-aaral. Hindi ito kaugnay o ineendorso ng anumang gobyerno.',
+      'Ang Swornly ay isang independiyenteng app sa pag-aaral. Hindi ito kaugnay o ineendorso ng anumang gobyerno.',
     errorTitle: 'May nangyaring mali',
     errorBody:
       'Hindi maipakita ang pahinang ito. Subukan muli, at kung patuloy pa rin, bumalik mamaya.',
@@ -58,7 +58,7 @@ export const tl: Messages = {
   },
 
   landing: {
-    metaTitle: 'Oathly: pagsasanay para sa citizenship test ng bawat bansa',
+    metaTitle: 'Swornly: pagsasanay para sa citizenship test ng bawat bansa',
     metaDescription:
       'Magsanay para sa iyong citizenship test gamit ang mga tanong na sinuri laban sa mga opisyal na pinagmulan, mga sagot na ipinaliwanag sa simpleng salita, at pagtatantiya kung gaano ka na kahanda. Independiyente: hindi kaugnay ng anumang gobyerno.',
     heroTitle: 'Pumasok sa iyong citizenship test nang handa.',
@@ -92,7 +92,7 @@ export const tl: Messages = {
 
     featuresTitle: 'Ginawa para sa pagsusulit na talagang kukunin mo',
     featuresIntro:
-      'Karamihan sa mga citizenship app ay para sa iisang bansa na may nakapirming listahan ng mga tanong. Ang Oathly ay binuo batay sa mga opisyal na pinagmulan at sa kung paano talaga natututo ang mga tao.',
+      'Karamihan sa mga citizenship app ay para sa iisang bansa na may nakapirming listahan ng mga tanong. Ang Swornly ay binuo batay sa mga opisyal na pinagmulan at sa kung paano talaga natututo ang mga tao.',
     feature1Title: 'Pagsusulit ng bawat bansa, iisang app',
     feature1Body:
       'Naghahanda para sa pagsusulit ng higit sa isang bansa? Mag-aral para sa bawat isa sa iisang account, na hiwalay ang progreso.',
@@ -132,15 +132,15 @@ export const tl: Messages = {
 
     storiesTitle: 'Ang sinasabi ng mga mag-aaral',
     storiesBody:
-      'Bago pa lang ang Oathly kaya wala pang mga review. Kapag nakakuha na ng pagsusulit ang mga nag-aral dito, ilalagay namin dito ang kanilang mga salita. Mga totoo lang, at may pahintulot nila.',
+      'Bago pa lang ang Swornly kaya wala pang mga review. Kapag nakakuha na ng pagsusulit ang mga nag-aral dito, ilalagay namin dito ang kanilang mga salita. Mga totoo lang, at may pahintulot nila.',
 
     faqTitle: 'Mga tanong',
-    faq1Question: 'Opisyal bang app ng gobyerno ang Oathly?',
+    faq1Question: 'Opisyal bang app ng gobyerno ang Swornly?',
     faq1Answer:
-      'Hindi. Independiyente ang Oathly at hindi ito kaugnay o ineendorso ng anumang gobyerno. Para mag-book ng pagsusulit o alamin ang mga patakarang para sa iyo, gamitin ang opisyal na website ng iyong gobyerno.',
+      'Hindi. Independiyente ang Swornly at hindi ito kaugnay o ineendorso ng anumang gobyerno. Para mag-book ng pagsusulit o alamin ang mga patakarang para sa iyo, gamitin ang opisyal na website ng iyong gobyerno.',
     faq2Question: 'Ito ba ang mga totoong tanong sa pagsusulit?',
     faq2Answer:
-      'Inilalathala ng ilang bansa ang mismong mga tanong; ang iba naman ay naglalathala ng gabay sa pag-aaral at inililihim ang mga tanong. Alinman dito, bawat tanong sa Oathly ay isinulat mula sa opisyal na materyal, may link sa pahinang pinagkunan nito, at sinusuri ng tao bago mo ito makita.',
+      'Inilalathala ng ilang bansa ang mismong mga tanong; ang iba naman ay naglalathala ng gabay sa pag-aaral at inililihim ang mga tanong. Alinman dito, bawat tanong sa Swornly ay isinulat mula sa opisyal na materyal, may link sa pahinang pinagkunan nito, at sinusuri ng tao bago mo ito makita.',
     faq3Question: 'Gaano katumpak ang readiness score?',
     faq3Answer:
       'Pagtatantiya ito, hindi hula sa iyong resulta. Nakabatay ito sa kung gaano mo kaalam ang bawat paksa, na tinimbang gaya ng iyong pagsusulit, at sa mga kamakailan mong mock exam. Bumababa ito kapag tumigil kang mag-aral, dahil nakakalimot tayo.',
@@ -156,11 +156,11 @@ export const tl: Messages = {
   },
 
   countries: {
-    indexMetaTitle: 'Mga citizenship test ayon sa bansa | Oathly',
+    indexMetaTitle: 'Mga citizenship test ayon sa bansa | Swornly',
     indexMetaDescription:
-      'Ang mga citizenship test na tinutulungan ka ng Oathly na paghandaan: format, pasadong marka, mga wika at paksa, na bawat isa ay sinuri laban sa opisyal na pinagmulan.',
+      'Ang mga citizenship test na tinutulungan ka ng Swornly na paghandaan: format, pasadong marka, mga wika at paksa, na bawat isa ay sinuri laban sa opisyal na pinagmulan.',
     countryTitle: 'Citizenship test ng {country}',
-    countryMetaTitle: 'Citizenship test ng {country}: format, mga paksa at pagsasanay | Oathly',
+    countryMetaTitle: 'Citizenship test ng {country}: format, mga paksa at pagsasanay | Swornly',
     countryMetaDescription:
       'Kung ano ang nilalaman ng citizenship test ng {country}, ano ang saklaw nito, at mga tanong sa pagsasanay na sinuri laban sa opisyal na gabay.',
     countryLeadWithQuestions:
@@ -177,8 +177,8 @@ export const tl: Messages = {
     topicBeingChecked: 'Sinusuri pa',
     topicsBeingAdded: 'Idinaragdag pa ang mga paksa.',
     bookingNote:
-      'Para mag-book ng pagsusulit o alamin ang mga patakarang para sa iyo, gamitin ang opisyal na website na naka-link sa itaas. Ang Oathly ay isang independiyenteng app sa pag-aaral at hindi kaugnay ng anumang gobyerno.',
-    topicMetaTitle: '{topic}: pagsasanay sa citizenship test ng {country} | Oathly',
+      'Para mag-book ng pagsusulit o alamin ang mga patakarang para sa iyo, gamitin ang opisyal na website na naka-link sa itaas. Ang Swornly ay isang independiyenteng app sa pag-aaral at hindi kaugnay ng anumang gobyerno.',
+    topicMetaTitle: '{topic}: pagsasanay sa citizenship test ng {country} | Swornly',
     topicMetaDescription:
       'Mga tanong sa pagsasanay tungkol sa {topic} para sa citizenship test ng {country}, bawat isa ay sinuri laban sa opisyal na gabay.',
     topicLead: 'Mga tanong sa pagsasanay para sa citizenship test ng {country}.',
@@ -188,8 +188,8 @@ export const tl: Messages = {
     fromGuide: 'Mula sa opisyal na gabay: “{quote}”',
     source: 'Pinagmulan',
     moreInApp:
-      '{count, plural, one {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Oathly.} other {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Oathly.}}',
-    practiseInApp: 'Magsanay nang may mga paliwanag, spaced review at mga mock exam sa Oathly.',
+      '{count, plural, one {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Swornly.} other {# pang tanong sa {topic}, may mga paliwanag at spaced review, ang naghihintay sa Swornly.}}',
+    practiseInApp: 'Magsanay nang may mga paliwanag, spaced review at mga mock exam sa Swornly.',
     otherTopics: 'Iba pang paksa',
   },
 
@@ -230,23 +230,23 @@ export const tl: Messages = {
     faqLanguageA: 'Ang pagsusulit ay kinukuha sa {languages}.',
     faqTopicsQ: 'Ano ang saklaw ng citizenship test ng {country}?',
     faqTopicsA:
-      '{count, plural, one {Saklaw ng mga tanong sa pagsasanay ng Oathly ang # paksa: {topics}.} other {Saklaw ng mga tanong sa pagsasanay ng Oathly ang # paksa: {topics}.}}',
+      '{count, plural, one {Saklaw ng mga tanong sa pagsasanay ng Swornly ang # paksa: {topics}.} other {Saklaw ng mga tanong sa pagsasanay ng Swornly ang # paksa: {topics}.}}',
     faqSourceQ: 'Saan galing ang mga tanong sa pagsasanay na ito?',
     faqSourceA:
       'Bawat tanong ay isinulat mula sa opisyal na materyal sa pag-aaral, sinuri ng tagasuri laban dito, at may link sa pinagmulan. Para ito sa pagsasanay: maaaring iba ang pagkakasabi ng mga tanong sa araw ng pagsusulit.',
-    faqOfficialQ: 'Opisyal na website ba ng gobyerno ang Oathly?',
+    faqOfficialQ: 'Opisyal na website ba ng gobyerno ang Swornly?',
     faqOfficialA:
-      'Hindi. Ang Oathly ay malayang app sa pag-aaral at walang kaugnayan sa anumang gobyerno. Para mag-book ng pagsusulit o alamin ang mga patakarang angkop sa iyo, gamitin ang opisyal na website.',
+      'Hindi. Ang Swornly ay malayang app sa pag-aaral at walang kaugnayan sa anumang gobyerno. Para mag-book ng pagsusulit o alamin ang mga patakarang angkop sa iyo, gamitin ang opisyal na website.',
     faqTopicQ:
       'Paano ako magsasanay sa mga tanong tungkol sa {topic} para sa citizenship test ng {country}?',
     faqTopicA:
-      '{count, plural, one {May # nasuring tanong sa pagsasanay ang Oathly tungkol sa {topic}. Libre ang halimbawa sa pahinang ito, may paliwanag ang sagot.} other {May # nasuring tanong sa pagsasanay ang Oathly tungkol sa {topic}. Libre ang mga halimbawa sa pahinang ito, may paliwanag ang mga sagot; nasa app ang iba pa.}}',
-    ogAlt: 'Citizenship test ng {country}: mga tanong sa pagsasanay sa Oathly',
+      '{count, plural, one {May # nasuring tanong sa pagsasanay ang Swornly tungkol sa {topic}. Libre ang halimbawa sa pahinang ito, may paliwanag ang sagot.} other {May # nasuring tanong sa pagsasanay ang Swornly tungkol sa {topic}. Libre ang mga halimbawa sa pahinang ito, may paliwanag ang mga sagot; nasa app ang iba pa.}}',
+    ogAlt: 'Citizenship test ng {country}: mga tanong sa pagsasanay sa Swornly',
   },
 
   auth: {
-    metaTitle: 'Mag-sign in | Oathly',
-    title: 'Mag-sign in sa Oathly',
+    metaTitle: 'Mag-sign in | Swornly',
+    title: 'Mag-sign in sa Swornly',
     intro:
       'Bago ka rito? Gagawa ng account mo ang pag-sign in. Doon nase-save ang iyong progreso, kaya maipagpapatuloy mo ito sa telepono o sa ibang computer.',
     notConfigured: 'Hindi pa naka-set up ang pag-sign in sa server na ito.',
@@ -268,21 +268,21 @@ export const tl: Messages = {
 
   onboarding: {
     starting: 'Inihahanda ang iyong pag-aaral…',
-    metaTitle: 'I-set up ang iyong pag-aaral | Oathly',
+    metaTitle: 'I-set up ang iyong pag-aaral | Swornly',
     title: 'I-set up ang iyong pag-aaral',
     titleAdd: 'Magdagdag ng isa pang pagsusulit',
     intro:
       'Apat na tanong, pagkatapos ay makakapagsimula ka na. Mababago mo ang lahat ng ito mamaya.',
     introAdd:
       'Maaari kang maghanda para sa ilang citizenship test nang sabay-sabay. Hiwalay na itinatago ang progreso para sa bawat isa.',
-    allCovered: 'Nag-aaral ka na para sa bawat pagsusulit na sakop ng Oathly.',
+    allCovered: 'Nag-aaral ka na para sa bawat pagsusulit na sakop ng Swornly.',
     whichExam: 'Aling pagsusulit ang pinaghahandaan mo?',
     searchCountries: 'Maghanap ng bansa',
     countryCount: '{count, plural, one {# bansa} other {# bansa}}',
     countryCountFiltered: '{shown} sa {total} bansa',
     inLanguages: 'sa {languages}',
     noCountryMatch:
-      'Walang bansang tumutugma sa “{query}”. Nagdaragdag ang Oathly ng mga bansa habang nabe-verify ang kanilang mga pagsusulit.',
+      'Walang bansang tumutugma sa “{query}”. Nagdaragdag ang Swornly ng mga bansa habang nabe-verify ang kanilang mga pagsusulit.',
     countriesFailed:
       'Hindi namin na-load ang listahan ng mga bansa. Suriin ang iyong koneksyon at subukan ulit.',
     examDate: 'Kailan ang iyong pagsusulit?',
@@ -307,7 +307,7 @@ export const tl: Messages = {
   },
 
   dashboard: {
-    metaTitle: 'Pag-aaral | Oathly',
+    metaTitle: 'Pag-aaral | Swornly',
     greeting: 'Kumusta, {name}',
     title: 'Ang iyong pag-aaral',
     todaysGoal: 'Layunin ngayong araw',
@@ -386,7 +386,7 @@ export const tl: Messages = {
   },
 
   session: {
-    metaTitle: 'Sesyon ng pag-aaral | Oathly',
+    metaTitle: 'Sesyon ng pag-aaral | Swornly',
     practice: 'Pagsasanay',
     flashcards: 'Mga flashcard',
     mockExam: 'Mock exam',
@@ -469,7 +469,7 @@ export const tl: Messages = {
 
   trial: {
     cta: 'Subukan ang {count} tanong ngayon',
-    metaTitle: 'Subukan ang citizenship test ng {country}: {count} tanong | Oathly',
+    metaTitle: 'Subukan ang citizenship test ng {country}: {count} tanong | Swornly',
     title: 'Subukan ang citizenship test ng {country}',
     intro:
       '{count} totoong tanong mula sa aming sinuring bangko ng tanong, may sagot at paliwanag pagkatapos ng bawat isa. Hindi kailangan ng account, at walang nase-save.',
@@ -481,7 +481,7 @@ export const tl: Messages = {
   },
 
   contact: {
-    metaTitle: 'Makipag-ugnayan | Oathly',
+    metaTitle: 'Makipag-ugnayan | Swornly',
     title: 'Makipag-ugnayan sa amin',
     intro:
       'May tanong tungkol sa account mo, sa bayad, o sa bagay na hindi gumagana? Sumulat sa amin at sasagot kami sa email.',
@@ -517,7 +517,7 @@ export const tl: Messages = {
   },
 
   tutor: {
-    metaTitle: 'Magtanong sa tutor | Oathly',
+    metaTitle: 'Magtanong sa tutor | Swornly',
     title: 'Magtanong sa tutor',
     intro:
       'Mga tanong tungkol sa citizenship test ng {country} at sa mga materyales nito sa pag-aaral. Sumasagot lang ang tutor mula sa opisyal na gabay, at AI ito: i-check sa gabay ang anumang mahalaga. Hindi ito makapagpapayo tungkol sa sarili mong aplikasyon.',
@@ -552,7 +552,7 @@ export const tl: Messages = {
     hideQuestion: 'Itago ang nakasulat na tanong',
     listenToQuestion: 'Pakinggan ang tanong',
     micBlocked:
-      'Hindi magamit ng Oathly ang mikropono. Payagan ito sa iyong settings, o sumagot sa pag-tap.',
+      'Hindi magamit ng Swornly ang mikropono. Payagan ito sa iyong settings, o sumagot sa pag-tap.',
     voiceUnavailable:
       'Hindi tumatanggap ng binigkas na sagot ang device na ito. Sumagot sa pag-tap.',
     correct: 'Tama.',
@@ -565,7 +565,7 @@ export const tl: Messages = {
 
   plans: {
     title: 'Mga plan',
-    metaTitle: 'Mga plan | Oathly',
+    metaTitle: 'Mga plan | Swornly',
     yourPlan: 'Ang plan mo',
     free: 'Libre',
     pro: 'Pro',
@@ -603,7 +603,7 @@ export const tl: Messages = {
       'Nasa Beta ang {country}: kinukumpleto pa ang mga tanong nito, kaya hindi pa ibinebenta ang Country Pass nito. Kasama na ito sa Pro.',
     manageInStore: 'Binili ang subscription na ito sa {store}. Doon ito palitan o kanselahin.',
     boughtOnWeb:
-      'Binili ang subscription na ito sa website ng Oathly. Doon ito palitan o kanselahin.',
+      'Binili ang subscription na ito sa website ng Swornly. Doon ito palitan o kanselahin.',
     unavailable: 'Hindi pa mabibili ang mga plan dito.',
     thanks: 'Salamat. Lalabas dito ang plan mo sa ilang sandali.',
     freeLimit: 'Kasama sa Libreng plan ang {available} sa {total} tanong.',
@@ -619,7 +619,7 @@ export const tl: Messages = {
 
   org: {
     open: 'Buksan',
-    metaTitle: 'Mga organisasyon | Oathly',
+    metaTitle: 'Mga organisasyon | Swornly',
     title: 'Mga organisasyon',
     forOrganizations: 'Para sa mga organisasyon',
     publicFeaturesTitle: 'Ang makukuha ng isang organisasyon',
@@ -674,7 +674,7 @@ export const tl: Messages = {
     seatsExplain:
       'Isang upuan ang bawat mag-aaral, at nag-aaral sila sa Pro: lahat ng tanong, sa lahat ng bansa.',
     seatsGranted:
-      '{count, plural, one {# upuan ang bigay ng Oathly.} other {# upuan ang bigay ng Oathly.}}',
+      '{count, plural, one {# upuan ang bigay ng Swornly.} other {# upuan ang bigay ng Swornly.}}',
     seatCount: 'Bilang ng upuan',
     buySeats: 'Bumili ng upuan',
     perSeatMonth: '{price} bawat upuan, bawat buwan',
@@ -757,7 +757,7 @@ export const tl: Messages = {
     inviteLine: 'Linya {line}: {value}',
     problemBadEmail: 'hindi email address',
     problemDuplicate: 'dalawang beses nakalista',
-    problemUnknownCountry: 'hindi bansang saklaw ng Oathly',
+    problemUnknownCountry: 'hindi bansang saklaw ng Swornly',
     problemBadDate: 'isulat ang petsa bilang YYYY-MM-DD',
     problemPastDate: 'lumipas na ang petsa',
     inviteOverLimit:
@@ -779,7 +779,7 @@ export const tl: Messages = {
       'Opsyonal. Lalabas ang logo at mga kulay mo sa dashboard ng mga mag-aaral na inimbitahan mo. Inaayos ang tingkad ng kulay kung kailangan para madaling mabasa ang teksto.',
     brandColor: 'Pangunahing kulay',
     brandAccent: 'Kulay na pang-diin',
-    colorHint: 'Hex na kulay gaya ng #0b5fff. Iwanang blangko para gamitin ang sa Oathly.',
+    colorHint: 'Hex na kulay gaya ng #0b5fff. Iwanang blangko para gamitin ang sa Swornly.',
     logo: 'Logo',
     logoHint: 'PNG, JPEG o WebP, hanggang 256 KB.',
     logoUpload: 'Mag-upload ng logo',
@@ -798,13 +798,13 @@ export const tl: Messages = {
       'Ipinadala ang imbitasyong ito sa ibang email address. Buksan ang link na nasa email.',
     errorBadLogo: 'Dapat PNG, JPEG o WebP na larawan ang logo, hanggang 256 KB.',
     joinTitle: 'Sumali sa {organization}',
-    joinInvited: 'Inimbitahan ka ng {organization} na mag-aral kasama nila sa Oathly.',
+    joinInvited: 'Inimbitahan ka ng {organization} na mag-aral kasama nila sa Swornly.',
     joinInvitedAdmin:
-      'Inimbitahan ka ng {organization} na tumulong sa pagpapatakbo ng kanilang organisasyon sa Oathly.',
+      'Inimbitahan ka ng {organization} na tumulong sa pagpapatakbo ng kanilang organisasyon sa Swornly.',
     joinAssigned:
       'Gusto nilang maghanda ka para sa pagsusulit sa pagkamamamayan ng bansang ito: {country}.',
     joinTarget: 'Target na petsa: {date}.',
-    joinIncludes: 'Kasama sa upuan mo ang Oathly Pro, nang wala kang babayaran.',
+    joinIncludes: 'Kasama sa upuan mo ang Swornly Pro, nang wala kang babayaran.',
     joinConsent:
       'Kapag sumali ka, makikita ng mga admin ng {organization} ang iyong marka ng kahandaan at kung gaano ka nag-aaral para sa pagsusulit na iyon. Hindi nila makikita ang bawat sagot mo, at puwede kang umalis anumang oras.',
     joinButton: 'Sumali',
@@ -816,17 +816,17 @@ export const tl: Messages = {
     reportTitle: 'Ulat ng kahandaan ng mga mag-aaral',
     reportGenerated: 'Ginawa noong {date}',
     reportBack: 'Bumalik sa mga mag-aaral',
-    emailSubject: 'Inimbitahan ka ng {organization} sa Oathly',
+    emailSubject: 'Inimbitahan ka ng {organization} sa Swornly',
     emailHello: 'Kumusta,',
     emailHelloName: 'Kumusta, {name},',
     emailBody:
-      'Inimbitahan ka ng {organization} na maghanda para sa iyong pagsusulit sa pagkamamamayan gamit ang Oathly. Bayad na ang upuan mo.',
+      'Inimbitahan ka ng {organization} na maghanda para sa iyong pagsusulit sa pagkamamamayan gamit ang Swornly. Bayad na ang upuan mo.',
     emailBodyAdmin:
-      'Inimbitahan ka ng {organization} na tumulong sa pagpapatakbo ng kanilang organisasyon sa Oathly.',
+      'Inimbitahan ka ng {organization} na tumulong sa pagpapatakbo ng kanilang organisasyon sa Swornly.',
     emailAction: 'Tanggapin ang imbitasyon',
     emailExpires: 'Isang beses lang gumagana ang link at mag-e-expire sa loob ng {days} araw.',
     emailFooter:
-      'Ang Oathly ay isang independiyenteng app sa pag-aaral. Hindi ito kaanib ng, o ineendorso ng, anumang pamahalaan. Kung hindi mo inaasahan ang mensaheng ito, puwede mo itong balewalain.',
+      'Ang Swornly ay isang independiyenteng app sa pag-aaral. Hindi ito kaanib ng, o ineendorso ng, anumang pamahalaan. Kung hindi mo inaasahan ang mensaheng ito, puwede mo itong balewalain.',
     inviteGoneTitle: 'Hindi nakita ang imbitasyon',
   },
 
@@ -864,11 +864,11 @@ export const tl: Messages = {
     nameProblem:
       'Gumamit ng pangalang hanggang 60 character, walang link, email address o numero ng telepono.',
     exportTitle: 'Kopya ng data mo',
-    exportBody: 'I-download sa isang file ang lahat ng hawak ng Oathly tungkol sa account mo.',
+    exportBody: 'I-download sa isang file ang lahat ng hawak ng Swornly tungkol sa account mo.',
     exportButton: 'I-download ang data ko',
     analyticsTitle: 'Estadistika ng paggamit',
     analyticsBody:
-      'Binibilang namin ang ilang pangyayari, gaya ng pagtatapos ng isang session, para makita kung paano ginagamit ang Oathly. Nakaugnay ang mga ito sa account mo, hindi kailanman ibinebenta, at hindi kailanman ginagamit sa advertising.',
+      'Binibilang namin ang ilang pangyayari, gaya ng pagtatapos ng isang session, para makita kung paano ginagamit ang Swornly. Nakaugnay ang mga ito sa account mo, hindi kailanman ibinebenta, at hindi kailanman ginagamit sa advertising.',
     analyticsStop: 'Itigil ang pagbilang sa akin',
     analyticsStart: 'Bilangin akong muli',
     analyticsStopped: 'Hindi binibilang ang paggamit mo.',
@@ -896,7 +896,7 @@ export const tl: Messages = {
       'Ang wika ng mga button at menu. Ang wikang ginagamit mo sa pag-aaral ng mga tanong ay itinatakda para sa bawat pagsusulit.',
     deleteTitle: 'Burahin ang iyong account',
     deleteIntro:
-      'Buburahin nito ang iyong account at lahat ng ginawa mo sa Oathly: ang plano mo sa pag-aaral, mga sagot at progreso, mga binili at mga membership. Hindi na ito maibabalik.',
+      'Buburahin nito ang iyong account at lahat ng ginawa mo sa Swornly: ang plano mo sa pag-aaral, mga sagot at progreso, mga binili at mga membership. Hindi na ito maibabalik.',
     deleteStores:
       'Ang subscription na binili sa App Store o Google Play ay hindi nakakansela kapag binura ang account. Kanselahin muna ito sa subscription settings ng iyong telepono, kung hindi ay patuloy kang sisingilin.',
     deleteStripe: 'Ang subscription na binili sa website ay kakanselahin bilang bahagi nito.',
@@ -909,20 +909,20 @@ export const tl: Messages = {
     deleteFailed: 'Hindi namin nabura ang iyong account, at walang inalis. Subukan muli.',
     deletedTitle: 'Nabura na ang iyong account',
     deletedBody:
-      'Inalis na ang lahat ng ginawa mo sa Oathly. Malugod kang tatanggapin kung babalik ka.',
+      'Inalis na ang lahat ng ginawa mo sa Swornly. Malugod kang tatanggapin kung babalik ka.',
   },
 
   welcome: {
     countriesSoFar: '{count} bansa sa ngayon.',
     getStarted: 'Magsimula',
-    unreachable: 'Hindi namin maabot ang Oathly. Suriin ang iyong koneksyon at subukan ulit.',
+    unreachable: 'Hindi namin maabot ang Swornly. Suriin ang iyong koneksyon at subukan ulit.',
   },
   community: {
     sending: 'Ipinapadala…',
     noCountry:
       'May sariling study group ang bawat test. Piliin ang test na pinaghahandaan mo para sumali sa grupo nito.',
     chooseTest: 'Piliin ang iyong test',
-    metaTitle: 'Grupo sa pag-aaral | Oathly',
+    metaTitle: 'Grupo sa pag-aaral | Swornly',
     title: 'Grupo sa pag-aaral',
     intro:
       'Magtanong, magbahagi ng tip at ikuwento ang iyong karanasan sa iba pang naghahanda para sa pagsusulit ng {country}.',
@@ -966,7 +966,7 @@ export const tl: Messages = {
     removed: 'Inalis ito ng moderator. Ikaw lang ang makakakita nito.',
     legalTitle: 'Mukhang tanong ito tungkol sa sarili mong kaso',
     legalNotice:
-      'Hindi makapagbibigay ng payong legal ang Oathly, at ganoon din ang ibang nag-aaral. Para sa mga tanong tungkol sa sarili mong sitwasyon, kumonsulta sa lisensiyadong abogado sa imigrasyon o akreditadong tagapayo.',
+      'Hindi makapagbibigay ng payong legal ang Swornly, at ganoon din ang ibang nag-aaral. Para sa mga tanong tungkol sa sarili mong sitwasyon, kumonsulta sa lisensiyadong abogado sa imigrasyon o akreditadong tagapayo.',
     back: 'Bumalik sa grupo',
     tooMany: 'Marami ka nang nai-post sa maikling panahon. Subukan ulit mamaya.',
     invalid: 'Suriin ang isinulat mo at subukan ulit.',

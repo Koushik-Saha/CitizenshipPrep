@@ -136,8 +136,8 @@ function examFaq(
   return items;
 }
 
-/** Where the practice questions come from, and that Oathly is not the government. */
-function aboutOathly(exams: ExamDetails[], hasQuestions: boolean, t: Translator): FaqEntry[] {
+/** Where the practice questions come from, and that Swornly is not the government. */
+function aboutSwornly(exams: ExamDetails[], hasQuestions: boolean, t: Translator): FaqEntry[] {
   const items: FaqEntry[] = [];
   if (hasQuestions) {
     items.push({ question: t('seo.faqSourceQ'), answer: t('seo.faqSourceA') });
@@ -170,7 +170,7 @@ export function testFaq(
       }),
     });
   }
-  return [...items, ...aboutOathly(guide.exams, guide.publishedQuestions > 0, t)];
+  return [...items, ...aboutSwornly(guide.exams, guide.publishedQuestions > 0, t)];
 }
 
 /** The common questions on a topic's page. */
@@ -186,7 +186,7 @@ export function topicFaq(
       answer: t('seo.faqTopicA', { topic, count: guide.topic.publishedQuestions }),
     },
     ...examFaq(country, guide.exams, guide.country.examLanguages, t),
-    ...aboutOathly(guide.exams, true, t),
+    ...aboutSwornly(guide.exams, true, t),
   ];
 }
 

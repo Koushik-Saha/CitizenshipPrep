@@ -9,8 +9,8 @@ const NAVY = '#132244';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
-    name: 'Oathly: citizenship test practice',
-    short_name: 'Oathly',
+    name: 'Swornly: citizenship test practice',
+    short_name: 'Swornly',
     description:
       'Practice for your citizenship test with questions checked against official sources. Independent, not a government service.',
     start_url: '/study',

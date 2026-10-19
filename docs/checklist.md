@@ -22,10 +22,13 @@ Two standing differences from the playbook's wording: the database is Neon, not 
 - [~] **MCP servers.** Playwright and Context7 connect. Supabase is configured but fails to connect
   (and is not the database any more). The GitHub server is present but not signed in; the `gh`
   tool is used instead.
-- [~] **Name chosen and checked.** Checked on 8 October 2026: `docs/proof/name-check.md`. It
-  found a problem: another app, "Oathly: Habit Accountability", has been on the App Store and
-  Google Play since 14 September 2026, and oathly.com is held by a name marketplace. Trademark
-  registers were not searched. Yours to decide before store submission.
+- [~] **Name chosen and checked.** The first name, Oathly, was checked on 8 October 2026
+  (`docs/proof/name-check.md`): another app, "Oathly: Habit Accountability", has been on the App
+  Store and Google Play since 14 September 2026, and oathly.com is held by a name marketplace.
+  On 19 October 2026 the app was renamed **Swornly** everywhere a user sees it. Swornly itself has
+  not been checked yet (stores, domains, trademark registers): yours to do before store
+  submission. Internal names (`@oathly/*` packages, cookies, storage keys, the bundle ID
+  `app.oathly.mobile`, store product IDs) still say oathly and need renaming before the stores.
 
 ## Build phases (Section 5)
 

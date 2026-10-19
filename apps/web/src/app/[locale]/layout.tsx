@@ -16,7 +16,7 @@ export const generateStaticParams = localeParams;
 export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Promise<Metadata> {
   const { t } = await getT(params);
   return {
-    title: 'Oathly',
+    title: 'Swornly',
     description: t('common.notAffiliated'),
     // Makes the links in each page's <head> absolute: the canonical address,
     // its other languages, the preview image.

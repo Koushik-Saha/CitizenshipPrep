@@ -11,10 +11,10 @@ with answers. Those are not imported, because the Government of Canada's terms f
 > copyright administrator.
 
 <https://www.canada.ca/en/transparency/terms.html>. Reproduction for non-commercial purposes is
-allowed without permission; Oathly is a paid app, so that does not apply. The sources are recorded
+allowed without permission; Swornly is a paid app, so that does not apply. The sources are recorded
 as `all_rights_reserved`, commercial use `not_allowed`, in `data/sources/CA/sources.json`.
 
-Every question here is written by Oathly in its own words. Facts are taken from the guide; each
+Every question here is written by Swornly in its own words. Facts are taken from the guide; each
 question cites its page and quotes fewer than 25 words to show where the answer is. No question
 copies the wording or the answer choices of an official sample question.
 

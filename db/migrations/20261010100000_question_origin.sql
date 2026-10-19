@@ -12,7 +12,7 @@ alter table public.questions
   add column needs_freshness_check boolean not null default false;
 
 comment on column public.questions.origin is
-  'official: the government''s own published wording. original: written by Oathly. Null for drafts made by the pipeline before this column existed.';
+  'official: the government''s own published wording. original: written by Swornly. Null for drafts made by the pipeline before this column existed.';
 comment on column public.questions.source_locator is
   'Where in the source the answer is: a page, a section, a question number.';
 

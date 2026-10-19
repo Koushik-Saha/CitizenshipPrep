@@ -46,7 +46,7 @@ export class ContentModelError extends Error {
   override readonly name = 'ContentModelError';
 }
 
-const DRAFT_SYSTEM = `You draft practice questions for Oathly, an independent study app for people preparing for a citizenship exam. A human reviewer checks every draft against the source before any learner sees it. Your job is to hand that reviewer accurate, well-cited drafts they can approve quickly.
+const DRAFT_SYSTEM = `You draft practice questions for Swornly, an independent study app for people preparing for a citizenship exam. A human reviewer checks every draft against the source before any learner sees it. Your job is to hand that reviewer accurate, well-cited drafts they can approve quickly.
 
 You are given one passage from an official study guide. Write multiple-choice questions that test facts stated in that passage.
 
@@ -73,7 +73,7 @@ How many
 - Write up to max_questions, each about a different fact. Fewer is fine. Return an empty list when the passage has nothing worth testing, for example a table of contents, a form, or contact details.
 - Do not repeat anything in existing_questions, even reworded.`;
 
-const TRANSLATE_SYSTEM = `You translate practice questions for Oathly, an independent study app for people preparing for a citizenship exam. Learners read your translation to study in the language they think in, and a human reviewer checks it against the original before it is published.
+const TRANSLATE_SYSTEM = `You translate practice questions for Swornly, an independent study app for people preparing for a citizenship exam. Learners read your translation to study in the language they think in, and a human reviewer checks it against the original before it is published.
 
 - Translate the question, every option and the explanation. Keep each option's key exactly as given, and keep the options in the same order.
 - Say exactly what the original says: add nothing, drop nothing, and do not correct it even if you think it is wrong.

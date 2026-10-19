@@ -10,15 +10,15 @@ const title = 'Privacy policy';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${title} | Oathly`,
+    title: `${title} | Swornly`,
     description:
-      'What Oathly knows about you, why, who else handles it, how long it is kept, and how to see, correct or delete it.',
+      'What Swornly knows about you, why, who else handles it, how long it is kept, and how to see, correct or delete it.',
     // One text, in English, whichever language's address it is read at.
     alternates: { canonical: '/privacy' },
   };
 }
 
-// What Oathly collects and why. Keep it true: when the app starts collecting
+// What Swornly collects and why. Keep it true: when the app starts collecting
 // something new, or sending it somewhere new, this page changes with it (and
 // LEGAL_UPDATED in lib/legal.ts).
 export default async function PrivacyPage({ params }: PageProps<'/[locale]/privacy'>) {
@@ -27,7 +27,7 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
   return (
     <LegalPage t={t} path="/privacy" title={title}>
       <p>
-        Oathly is a study app for citizenship tests. It is independent: it is not run by, or
+        Swornly is a study app for citizenship tests. It is independent: it is not run by, or
         connected to, any government. This page says what the app knows about you, why, who else
         handles it, and what you can do about it.
       </p>
@@ -84,7 +84,7 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
         <p>
           We do not collect your location, your contacts or your photos. Speaking an answer aloud
           uses your device&apos;s own speech recognition, which may send the audio to Apple or
-          Google under their terms; Oathly receives only the resulting text and does not keep the
+          Google under their terms; Swornly receives only the resulting text and does not keep the
           audio.
         </p>
       </Section>
@@ -184,7 +184,7 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
 
       <Section title="Children">
         <p>
-          Oathly is for people preparing for a citizenship test and is not directed at children
+          Swornly is for people preparing for a citizenship test and is not directed at children
           under 16. If you believe a child has given us personal data, write to us and we will
           delete it.
         </p>

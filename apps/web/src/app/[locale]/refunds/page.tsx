@@ -10,9 +10,9 @@ const title = 'Refunds and cancelling';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${title} | Oathly`,
+    title: `${title} | Swornly`,
     description:
-      'How to cancel an Oathly plan, when a payment is refunded, who to ask, and what happens to your access.',
+      'How to cancel an Swornly plan, when a payment is refunded, who to ask, and what happens to your access.',
     alternates: { canonical: '/refunds' },
   };
 }

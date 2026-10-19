@@ -34,14 +34,14 @@ export default function NotFoundView() {
     <>
       <SiteHeader t={t} path={path} />
       <main className="mx-auto max-w-xl px-4 py-24 text-center">
-        <title>{`${title} | Oathly`}</title>
+        <title>{`${title} | Swornly`}</title>
         <h1 className="font-display text-3xl font-semibold">{title}</h1>
         <p className="text-fg-muted mt-4">{words?.notFoundBody}</p>
         <a
           href={home}
           className={`${focusRing} bg-primary text-on-primary hover:bg-primary-hover mt-8 inline-flex min-h-11 items-center rounded-md px-4 py-2.5 font-semibold`}
         >
-          {words?.backHome ?? 'Oathly'}
+          {words?.backHome ?? 'Swornly'}
         </a>
       </main>
       <SiteFooter t={t} />

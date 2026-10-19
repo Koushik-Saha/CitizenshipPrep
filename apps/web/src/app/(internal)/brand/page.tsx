@@ -21,7 +21,7 @@ import type { Metadata } from 'next';
 import { LogoLockup, LogoMark, type LogoVariant } from '@/components/brand/logo';
 
 export const metadata: Metadata = {
-  title: 'Oathly brand',
+  title: 'Swornly brand',
   robots: { index: false, follow: false },
 };
 
@@ -244,7 +244,7 @@ function Specimen() {
         </a>
       </div>
       <p className="bg-accent-soft text-accent-fg mt-5 rounded-md px-4 py-3 text-sm">
-        Checked against the official study guide. Oathly is independent and not a government
+        Checked against the official study guide. Swornly is independent and not a government
         service.
       </p>
     </div>
@@ -273,7 +273,7 @@ function MotionRow({ name, detail, timing }: { name: string; detail: string; tim
 export default function BrandPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
-      <h1 className="font-display text-5xl font-semibold">Oathly brand</h1>
+      <h1 className="font-display text-5xl font-semibold">Swornly brand</h1>
       <p className="text-fg-muted mt-4 max-w-[62ch] text-lg">
         Three logo candidates, each on the light and the dark theme. Pick one and the favicon, app
         icons and splash screen are generated from it. The tokens that style this page are listed

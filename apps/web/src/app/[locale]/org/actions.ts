@@ -422,7 +422,7 @@ export async function join(form: FormData): Promise<void> {
     const { slug } = joined.organization;
     if (isOrgAdmin(joined.role)) next = `/org/${slug}`;
     else if (!joined.onStudyPlan) {
-      // New to Oathly: set up, with the organization's country and date filled in.
+      // New to Swornly: set up, with the organization's country and date filled in.
       next = `/onboarding?country=${joined.countryCode}${joined.targetDate ? `&date=${joined.targetDate}` : ''}`;
     } else next = `/welcome?joined=${slug}`;
     next = localizePath(locale, next);

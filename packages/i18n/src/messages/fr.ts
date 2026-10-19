@@ -19,7 +19,7 @@ export const fr: Messages = {
     comingSoon: 'Bientôt disponible',
     beta: 'Bêta',
     notAffiliated:
-      'Oathly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement ni approuvée par aucun.',
+      'Swornly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement ni approuvée par aucun.',
     errorTitle: 'Une erreur s’est produite',
     errorBody:
       'Cette page n’a pas pu s’afficher. Réessayez et, si cela continue, revenez un peu plus tard.',
@@ -57,7 +57,7 @@ export const fr: Messages = {
   },
 
   landing: {
-    metaTitle: 'Oathly : s’entraîner au test de citoyenneté de chaque pays',
+    metaTitle: 'Swornly : s’entraîner au test de citoyenneté de chaque pays',
     metaDescription:
       'Entraînez-vous au test de citoyenneté avec des questions vérifiées à partir des sources officielles, des réponses expliquées simplement et une estimation de votre niveau de préparation. Indépendant : affilié à aucun gouvernement.',
     heroTitle: 'Arrivez prêt à votre test de citoyenneté.',
@@ -90,7 +90,7 @@ export const fr: Messages = {
 
     featuresTitle: 'Conçu pour le test que vous passez vraiment',
     featuresIntro:
-      'La plupart des applications de citoyenneté couvrent un seul pays avec une liste fixe de questions. Oathly s’appuie sur les sources officielles et sur la façon dont on apprend vraiment.',
+      'La plupart des applications de citoyenneté couvrent un seul pays avec une liste fixe de questions. Swornly s’appuie sur les sources officielles et sur la façon dont on apprend vraiment.',
     feature1Title: 'Le test de chaque pays, une seule application',
     feature1Body:
       'Vous préparez le test de plusieurs pays ? Étudiez pour chacun avec le même compte, avec une progression séparée.',
@@ -130,15 +130,15 @@ export const fr: Messages = {
 
     storiesTitle: 'Ce que disent les apprenants',
     storiesBody:
-      'Oathly est nouveau : il n’y a pas encore d’avis. Lorsque des personnes ayant étudié ici auront passé leur test, leurs mots apparaîtront ici. Uniquement de vrais avis, avec leur accord.',
+      'Swornly est nouveau : il n’y a pas encore d’avis. Lorsque des personnes ayant étudié ici auront passé leur test, leurs mots apparaîtront ici. Uniquement de vrais avis, avec leur accord.',
 
     faqTitle: 'Questions',
-    faq1Question: 'Oathly est-elle une application officielle du gouvernement ?',
+    faq1Question: 'Swornly est-elle une application officielle du gouvernement ?',
     faq1Answer:
-      'Non. Oathly est indépendante et n’est affiliée à aucun gouvernement ni approuvée par aucun. Pour réserver votre test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel de votre gouvernement.',
+      'Non. Swornly est indépendante et n’est affiliée à aucun gouvernement ni approuvée par aucun. Pour réserver votre test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel de votre gouvernement.',
     faq2Question: 'Est-ce que ce sont les vraies questions de l’examen ?',
     faq2Answer:
-      'Certains pays publient les questions exactes qu’ils posent ; d’autres publient un guide d’étude et gardent les questions confidentielles. Dans les deux cas, chaque question d’Oathly est rédigée à partir du matériel officiel, renvoie à la page dont elle est tirée et est vérifiée par une personne avant que vous ne la voyiez.',
+      'Certains pays publient les questions exactes qu’ils posent ; d’autres publient un guide d’étude et gardent les questions confidentielles. Dans les deux cas, chaque question d’Swornly est rédigée à partir du matériel officiel, renvoie à la page dont elle est tirée et est vérifiée par une personne avant que vous ne la voyiez.',
     faq3Question: 'Le score de préparation est-il fiable ?',
     faq3Answer:
       'C’est une estimation, pas une prédiction de votre résultat. Elle repose sur votre maîtrise de chaque sujet, pondérée comme votre examen, et sur vos examens blancs récents. Elle baisse si vous arrêtez d’étudier, parce qu’on oublie.',
@@ -154,11 +154,11 @@ export const fr: Messages = {
   },
 
   countries: {
-    indexMetaTitle: 'Tests de citoyenneté par pays | Oathly',
+    indexMetaTitle: 'Tests de citoyenneté par pays | Swornly',
     indexMetaDescription:
-      'Les tests de citoyenneté auxquels Oathly vous aide à vous préparer : format, note de passage, langues et sujets, chacun vérifié à partir de la source officielle.',
+      'Les tests de citoyenneté auxquels Swornly vous aide à vous préparer : format, note de passage, langues et sujets, chacun vérifié à partir de la source officielle.',
     countryTitle: 'Test de citoyenneté : {country}',
-    countryMetaTitle: 'Test de citoyenneté ({country}) : format, sujets et entraînement | Oathly',
+    countryMetaTitle: 'Test de citoyenneté ({country}) : format, sujets et entraînement | Swornly',
     countryMetaDescription:
       'En quoi consiste le test de citoyenneté ({country}), ce qu’il couvre, et des questions d’entraînement vérifiées à partir du guide officiel.',
     countryLeadWithQuestions:
@@ -176,8 +176,8 @@ export const fr: Messages = {
     topicBeingChecked: 'En cours de vérification',
     topicsBeingAdded: 'Les sujets sont en cours d’ajout.',
     bookingNote:
-      'Pour réserver le test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel indiqué ci-dessus. Oathly est une application d’étude indépendante, affiliée à aucun gouvernement.',
-    topicMetaTitle: '{topic} : entraînement au test de citoyenneté ({country}) | Oathly',
+      'Pour réserver le test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel indiqué ci-dessus. Swornly est une application d’étude indépendante, affiliée à aucun gouvernement.',
+    topicMetaTitle: '{topic} : entraînement au test de citoyenneté ({country}) | Swornly',
     topicMetaDescription:
       'Questions d’entraînement sur {topic} pour le test de citoyenneté ({country}), chacune vérifiée à partir du guide officiel.',
     topicLead: 'Questions d’entraînement pour le test de citoyenneté ({country}).',
@@ -187,9 +187,9 @@ export const fr: Messages = {
     fromGuide: 'D’après le guide officiel : « {quote} »',
     source: 'Source',
     moreInApp:
-      '{count, plural, one {# autre question sur {topic}, avec explications et révision espacée, vous attend dans Oathly.} other {# autres questions sur {topic}, avec explications et révision espacée, vous attendent dans Oathly.}}',
+      '{count, plural, one {# autre question sur {topic}, avec explications et révision espacée, vous attend dans Swornly.} other {# autres questions sur {topic}, avec explications et révision espacée, vous attendent dans Swornly.}}',
     practiseInApp:
-      'Entraînez-vous avec des explications, la révision espacée et des examens blancs dans Oathly.',
+      'Entraînez-vous avec des explications, la révision espacée et des examens blancs dans Swornly.',
     otherTopics: 'Autres sujets',
   },
 
@@ -230,22 +230,22 @@ export const fr: Messages = {
     faqLanguageA: 'Le test se passe en {languages}.',
     faqTopicsQ: 'Sur quoi porte le test de citoyenneté ({country}) ?',
     faqTopicsA:
-      '{count, plural, one {Les questions d’entraînement d’Oathly couvrent # sujet : {topics}.} other {Les questions d’entraînement d’Oathly couvrent # sujets : {topics}.}}',
+      '{count, plural, one {Les questions d’entraînement d’Swornly couvrent # sujet : {topics}.} other {Les questions d’entraînement d’Swornly couvrent # sujets : {topics}.}}',
     faqSourceQ: 'D’où viennent ces questions d’entraînement ?',
     faqSourceA:
       'Chaque question est rédigée à partir du matériel d’étude officiel, vérifiée par un relecteur et reliée à sa source. Elles servent à s’entraîner : les questions posées le jour du test peuvent être formulées autrement.',
-    faqOfficialQ: 'Oathly est-il un site officiel du gouvernement ?',
+    faqOfficialQ: 'Swornly est-il un site officiel du gouvernement ?',
     faqOfficialA:
-      'Non. Oathly est une application d’étude indépendante, sans lien avec aucun gouvernement. Pour réserver le test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel.',
+      'Non. Swornly est une application d’étude indépendante, sans lien avec aucun gouvernement. Pour réserver le test ou vérifier les règles qui s’appliquent à vous, utilisez le site officiel.',
     faqTopicQ: 'Comment s’entraîner aux questions « {topic} » du test de citoyenneté ({country}) ?',
     faqTopicA:
-      '{count, plural, one {Oathly propose # question d’entraînement vérifiée sur « {topic} ». L’exemple de cette page est gratuit, avec la réponse expliquée.} other {Oathly propose # questions d’entraînement vérifiées sur « {topic} ». Les exemples de cette page sont gratuits, avec les réponses expliquées ; les autres sont dans l’application.}}',
-    ogAlt: 'Test de citoyenneté ({country}) : questions d’entraînement sur Oathly',
+      '{count, plural, one {Swornly propose # question d’entraînement vérifiée sur « {topic} ». L’exemple de cette page est gratuit, avec la réponse expliquée.} other {Swornly propose # questions d’entraînement vérifiées sur « {topic} ». Les exemples de cette page sont gratuits, avec les réponses expliquées ; les autres sont dans l’application.}}',
+    ogAlt: 'Test de citoyenneté ({country}) : questions d’entraînement sur Swornly',
   },
 
   auth: {
-    metaTitle: 'Se connecter | Oathly',
-    title: 'Connectez-vous à Oathly',
+    metaTitle: 'Se connecter | Swornly',
+    title: 'Connectez-vous à Swornly',
     intro:
       'Nouveau ici ? La connexion crée votre compte. Votre progression y est enregistrée : vous pouvez continuer depuis votre téléphone ou un autre ordinateur.',
     notConfigured: 'La connexion n’est pas encore configurée sur ce serveur.',
@@ -267,20 +267,20 @@ export const fr: Messages = {
 
   onboarding: {
     starting: 'Préparation de votre étude…',
-    metaTitle: 'Configurez votre étude | Oathly',
+    metaTitle: 'Configurez votre étude | Swornly',
     title: 'Configurez votre étude',
     titleAdd: 'Ajouter un autre examen',
     intro: 'Quatre questions, puis vous pouvez commencer. Tout reste modifiable ensuite.',
     introAdd:
       'Vous pouvez préparer plusieurs tests de citoyenneté à la fois. La progression est conservée séparément pour chacun.',
-    allCovered: 'Vous étudiez déjà pour tous les examens couverts par Oathly.',
+    allCovered: 'Vous étudiez déjà pour tous les examens couverts par Swornly.',
     whichExam: 'Quel examen préparez-vous ?',
     searchCountries: 'Rechercher un pays',
     countryCount: '{count, plural, one {# pays} other {# pays}}',
     countryCountFiltered: '{shown} pays sur {total}',
     inLanguages: 'en {languages}',
     noCountryMatch:
-      'Aucun pays ne correspond à « {query} ». Oathly ajoute des pays à mesure qu’il vérifie leurs examens.',
+      'Aucun pays ne correspond à « {query} ». Swornly ajoute des pays à mesure qu’il vérifie leurs examens.',
     countriesFailed:
       'Nous n’avons pas pu charger la liste des pays. Vérifiez votre connexion et réessayez.',
     examDate: 'Quand a lieu votre examen ?',
@@ -305,7 +305,7 @@ export const fr: Messages = {
   },
 
   dashboard: {
-    metaTitle: 'Étudier | Oathly',
+    metaTitle: 'Étudier | Swornly',
     greeting: 'Bonjour, {name}',
     title: 'Votre étude',
     todaysGoal: 'Objectif du jour',
@@ -385,7 +385,7 @@ export const fr: Messages = {
   },
 
   session: {
-    metaTitle: 'Séance d’étude | Oathly',
+    metaTitle: 'Séance d’étude | Swornly',
     practice: 'Entraînement',
     flashcards: 'Cartes mémoire',
     mockExam: 'Examen blanc',
@@ -470,7 +470,7 @@ export const fr: Messages = {
 
   trial: {
     cta: 'Essayer {count} questions',
-    metaTitle: 'Essayez le test de citoyenneté de {country} : {count} questions | Oathly',
+    metaTitle: 'Essayez le test de citoyenneté de {country} : {count} questions | Swornly',
     title: 'Essayez le test de citoyenneté de {country}',
     intro:
       '{count} vraies questions de notre banque vérifiée, avec la réponse et son explication après chacune. Aucun compte nécessaire, rien n’est enregistré.',
@@ -482,7 +482,7 @@ export const fr: Messages = {
   },
 
   contact: {
-    metaTitle: 'Contact | Oathly',
+    metaTitle: 'Contact | Swornly',
     title: 'Nous contacter',
     intro:
       'Une question sur votre compte, un paiement ou quelque chose qui ne fonctionne pas ? Écrivez-nous et nous vous répondrons par e-mail.',
@@ -518,7 +518,7 @@ export const fr: Messages = {
   },
 
   tutor: {
-    metaTitle: 'Interroger le tuteur | Oathly',
+    metaTitle: 'Interroger le tuteur | Swornly',
     title: 'Interroger le tuteur',
     intro:
       'Des questions sur le test de citoyenneté ({country}) et son matériel d’étude. Le tuteur répond uniquement à partir du guide officiel et c’est une IA : vérifiez tout point important dans le guide. Il ne peut pas vous conseiller sur votre propre demande.',
@@ -553,7 +553,7 @@ export const fr: Messages = {
     hideQuestion: 'Masquer la question écrite',
     listenToQuestion: 'Écoutez la question',
     micBlocked:
-      'Oathly ne peut pas utiliser le micro. Autorisez-le dans vos réglages, ou répondez en touchant l’écran.',
+      'Swornly ne peut pas utiliser le micro. Autorisez-le dans vos réglages, ou répondez en touchant l’écran.',
     voiceUnavailable:
       'Cet appareil ne prend pas en charge les réponses orales. Répondez en touchant l’écran.',
     correct: 'Correct.',
@@ -566,7 +566,7 @@ export const fr: Messages = {
 
   plans: {
     title: 'Offres',
-    metaTitle: 'Offres | Oathly',
+    metaTitle: 'Offres | Swornly',
     yourPlan: 'Votre offre',
     free: 'Gratuit',
     pro: 'Pro',
@@ -604,7 +604,7 @@ export const fr: Messages = {
       '{country} est en bêta : ses questions sont encore en cours de complétion, son Pass Pays n’est donc pas encore en vente. Pro l’inclut déjà.',
     manageInStore: 'Cet abonnement a été acheté sur {store}. Modifiez-le ou résiliez-le là-bas.',
     boughtOnWeb:
-      'Cet abonnement a été acheté sur le site web d’Oathly. Modifiez-le ou résiliez-le là-bas.',
+      'Cet abonnement a été acheté sur le site web d’Swornly. Modifiez-le ou résiliez-le là-bas.',
     unavailable: 'Les offres ne peuvent pas encore être achetées ici.',
     thanks: 'Merci. Votre offre apparaîtra ici dans un instant.',
     freeLimit: 'L’offre Gratuit comprend {available} questions sur {total}.',
@@ -619,7 +619,7 @@ export const fr: Messages = {
 
   org: {
     open: 'Ouvrir',
-    metaTitle: 'Organisations | Oathly',
+    metaTitle: 'Organisations | Swornly',
     title: 'Organisations',
     forOrganizations: 'Pour les organisations',
     publicFeaturesTitle: 'Ce que reçoit une organisation',
@@ -672,7 +672,7 @@ export const fr: Messages = {
     seatsExplain:
       'Chaque apprenant occupe une place et étudie avec Pro : toutes les questions, de tous les pays.',
     seatsGranted:
-      '{count, plural, one {# place offerte par Oathly.} other {# places offertes par Oathly.}}',
+      '{count, plural, one {# place offerte par Swornly.} other {# places offertes par Swornly.}}',
     seatCount: 'Nombre de places',
     buySeats: 'Acheter des places',
     perSeatMonth: '{price} par place et par mois',
@@ -755,7 +755,7 @@ export const fr: Messages = {
     inviteLine: 'Ligne {line} : {value}',
     problemBadEmail: 'ce n’est pas une adresse e-mail',
     problemDuplicate: 'indiquée deux fois',
-    problemUnknownCountry: 'ce n’est pas un pays couvert par Oathly',
+    problemUnknownCountry: 'ce n’est pas un pays couvert par Swornly',
     problemBadDate: 'écrivez les dates au format AAAA-MM-JJ',
     problemPastDate: 'la date est passée',
     inviteOverLimit:
@@ -778,7 +778,7 @@ export const fr: Messages = {
     brandColor: 'Couleur principale',
     brandAccent: 'Couleur d’accent',
     colorHint:
-      'Une couleur hexadécimale, par exemple #0b5fff. Laissez vide pour utiliser celles d’Oathly.',
+      'Une couleur hexadécimale, par exemple #0b5fff. Laissez vide pour utiliser celles d’Swornly.',
     logo: 'Logo',
     logoHint: 'PNG, JPEG ou WebP, 256 Ko maximum.',
     logoUpload: 'Importer un logo',
@@ -797,13 +797,13 @@ export const fr: Messages = {
       'Cette invitation a été envoyée à une autre adresse e-mail. Ouvrez plutôt le lien reçu par e-mail.',
     errorBadLogo: 'Le logo doit être une image PNG, JPEG ou WebP de 256 Ko maximum.',
     joinTitle: 'Rejoindre {organization}',
-    joinInvited: '{organization} vous invite à étudier avec eux sur Oathly.',
+    joinInvited: '{organization} vous invite à étudier avec eux sur Swornly.',
     joinInvitedAdmin:
-      '{organization} vous invite à participer à la gestion de leur organisation sur Oathly.',
+      '{organization} vous invite à participer à la gestion de leur organisation sur Swornly.',
     joinAssigned:
       'Ils souhaitent que vous vous prépariez à l’examen de citoyenneté de ce pays : {country}.',
     joinTarget: 'Date cible : {date}.',
-    joinIncludes: 'Votre place comprend Oathly Pro, sans frais pour vous.',
+    joinIncludes: 'Votre place comprend Swornly Pro, sans frais pour vous.',
     joinConsent:
       'Si vous rejoignez {organization}, ses administrateurs verront votre score de préparation et le temps que vous consacrez à cet examen. Ils ne verront pas vos réponses individuelles, et vous pouvez partir à tout moment.',
     joinButton: 'Rejoindre',
@@ -815,17 +815,17 @@ export const fr: Messages = {
     reportTitle: 'Rapport de préparation des apprenants',
     reportGenerated: 'Généré le {date}',
     reportBack: 'Retour aux apprenants',
-    emailSubject: '{organization} vous invite sur Oathly',
+    emailSubject: '{organization} vous invite sur Swornly',
     emailHello: 'Bonjour,',
     emailHelloName: 'Bonjour {name},',
     emailBody:
-      '{organization} vous invite à préparer votre examen de citoyenneté avec Oathly. Votre place est payée.',
+      '{organization} vous invite à préparer votre examen de citoyenneté avec Swornly. Votre place est payée.',
     emailBodyAdmin:
-      '{organization} vous invite à participer à la gestion de leur organisation sur Oathly.',
+      '{organization} vous invite à participer à la gestion de leur organisation sur Swornly.',
     emailAction: 'Accepter l’invitation',
     emailExpires: 'Le lien fonctionne une seule fois et expire dans {days} jours.',
     emailFooter:
-      'Oathly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement et n’est approuvée par aucun. Si vous n’attendiez pas ce message, vous pouvez l’ignorer.',
+      'Swornly est une application d’étude indépendante. Elle n’est affiliée à aucun gouvernement et n’est approuvée par aucun. Si vous n’attendiez pas ce message, vous pouvez l’ignorer.',
     inviteGoneTitle: 'Invitation introuvable',
   },
 
@@ -863,11 +863,11 @@ export const fr: Messages = {
     nameProblem:
       'Utilisez un nom de 60 caractères au plus, sans lien, adresse e-mail ni numéro de téléphone.',
     exportTitle: 'Une copie de vos données',
-    exportBody: 'Téléchargez en un seul fichier tout ce qu’Oathly conserve sur votre compte.',
+    exportBody: 'Téléchargez en un seul fichier tout ce qu’Swornly conserve sur votre compte.',
     exportButton: 'Télécharger mes données',
     analyticsTitle: 'Statistiques d’utilisation',
     analyticsBody:
-      'Nous comptons quelques événements, comme la fin d’une séance, pour voir comment Oathly est utilisé. Ils sont liés à votre compte, ne sont jamais vendus et ne servent jamais à la publicité.',
+      'Nous comptons quelques événements, comme la fin d’une séance, pour voir comment Swornly est utilisé. Ils sont liés à votre compte, ne sont jamais vendus et ne servent jamais à la publicité.',
     analyticsStop: 'Ne plus compter les miens',
     analyticsStart: 'Compter à nouveau les miens',
     analyticsStopped: 'Votre utilisation n’est pas comptée.',
@@ -895,7 +895,7 @@ export const fr: Messages = {
       'La langue des boutons et des menus. La langue dans laquelle vous étudiez les questions se règle pour chaque examen.',
     deleteTitle: 'Supprimer votre compte',
     deleteIntro:
-      'Cela supprime votre compte et tout ce que vous avez fait dans Oathly : votre plan d’étude, vos réponses et votre progression, vos achats et vos adhésions. C’est irréversible.',
+      'Cela supprime votre compte et tout ce que vous avez fait dans Swornly : votre plan d’étude, vos réponses et votre progression, vos achats et vos adhésions. C’est irréversible.',
     deleteStores:
       'Un abonnement acheté sur l’App Store ou Google Play n’est pas résilié par la suppression du compte. Résiliez-le d’abord dans les réglages d’abonnements de votre téléphone, sinon vous continuerez à être facturé.',
     deleteStripe: 'Un abonnement acheté sur le site est résilié au passage.',
@@ -908,20 +908,20 @@ export const fr: Messages = {
     deleteFailed: 'Nous n’avons pas pu supprimer votre compte, et rien n’a été effacé. Réessayez.',
     deletedTitle: 'Votre compte a été supprimé',
     deletedBody:
-      'Tout ce que vous avez fait dans Oathly a été effacé. Vous serez toujours le bienvenu.',
+      'Tout ce que vous avez fait dans Swornly a été effacé. Vous serez toujours le bienvenu.',
   },
 
   welcome: {
     countriesSoFar: '{count} pays pour l’instant.',
     getStarted: 'Commencer',
-    unreachable: 'Impossible de joindre Oathly. Vérifiez votre connexion et réessayez.',
+    unreachable: 'Impossible de joindre Swornly. Vérifiez votre connexion et réessayez.',
   },
   community: {
     sending: 'Envoi en cours…',
     noCountry:
       'Chaque test a son propre groupe d’étude. Choisissez le test que vous préparez pour rejoindre son groupe.',
     chooseTest: 'Choisir votre test',
-    metaTitle: 'Groupe d’étude | Oathly',
+    metaTitle: 'Groupe d’étude | Swornly',
     title: 'Groupe d’étude',
     intro:
       'Posez des questions, partagez des conseils et racontez votre expérience avec d’autres personnes qui préparent l’examen de {country}.',
@@ -965,7 +965,7 @@ export const fr: Messages = {
     removed: 'Un modérateur a retiré ce contenu. Vous seul pouvez le voir.',
     legalTitle: 'Cela ressemble à une question sur votre propre dossier',
     legalNotice:
-      'Oathly ne peut pas donner de conseil juridique, et les autres apprenants non plus. Pour toute question sur votre situation, adressez-vous à un avocat en droit des étrangers ou à un conseiller agréé.',
+      'Swornly ne peut pas donner de conseil juridique, et les autres apprenants non plus. Pour toute question sur votre situation, adressez-vous à un avocat en droit des étrangers ou à un conseiller agréé.',
     back: 'Retour au groupe',
     tooMany: 'Vous avez beaucoup publié en peu de temps. Réessayez plus tard.',
     invalid: 'Vérifiez votre texte et réessayez.',

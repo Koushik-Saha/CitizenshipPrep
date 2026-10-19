@@ -65,7 +65,7 @@ describe('white-label', () => {
     expect(brandingMembership([])).toBeNull();
   });
 
-  it('leaves an admin’s dashboard as Oathly', () => {
+  it('leaves an admin’s dashboard as Swornly', () => {
     const admin = membership({
       role: 'admin',
       brand: { color: '#0b5fff', accent: null, logoVersion: 'abc' },

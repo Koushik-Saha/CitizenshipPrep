@@ -188,7 +188,7 @@ describe.skipIf(!url)('learner data against the database', () => {
         studyLocale: 'en',
         dailyGoalMinutes: 20,
       }),
-    ).rejects.toThrow('Oathly does not cover that country yet.');
+    ).rejects.toThrow('Swornly does not cover that country yet.');
     await pool.query(`delete from public.countries where iso_code = 'ZV'`);
   });
 

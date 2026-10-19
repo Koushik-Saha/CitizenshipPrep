@@ -310,7 +310,7 @@ export async function getDashboard(
           } catch (error) {
             unavailableReason =
               error instanceof Error && /region/.test(error.message)
-                ? 'Needs your state or region, which Oathly does not ask for yet.'
+                ? 'Needs your state or region, which Swornly does not ask for yet.'
                 : `Needs ${format.questionCount} published questions; ${pool.length} are ready.`;
             // Would the whole bank do? Then it is the plan that is short, not the content.
             if (bank.length > pool.length) {

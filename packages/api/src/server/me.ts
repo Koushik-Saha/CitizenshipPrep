@@ -164,7 +164,7 @@ export async function saveOnboarding(
       'select 1 from public.countries where iso_code = $1 and has_exam',
       [answer.countryCode],
     );
-    if (!country.rowCount) throw new OnboardingError('Oathly does not cover that country yet.');
+    if (!country.rowCount) throw new OnboardingError('Swornly does not cover that country yet.');
 
     // Nobody starts studying without confirming their age and accepting the
     // terms. Asked once: after that it is on record, with the version agreed to.

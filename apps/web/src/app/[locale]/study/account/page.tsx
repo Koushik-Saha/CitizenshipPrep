@@ -16,7 +16,7 @@ export async function generateMetadata({
   params,
 }: PageProps<'/[locale]/study/account'>): Promise<Metadata> {
   const { t } = await getT(params);
-  return { title: `${t('common.account')} | Oathly`, robots: { index: false } };
+  return { title: `${t('common.account')} | Swornly`, robots: { index: false } };
 }
 
 // The learner's account: who they are signed in as, what they hold, and the

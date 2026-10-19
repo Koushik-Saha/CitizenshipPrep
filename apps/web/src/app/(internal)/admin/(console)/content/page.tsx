@@ -50,7 +50,7 @@ const flagLabels: Record<QueueFlag, string> = {
 
 const originLabels: Record<QueueOrigin, string> = {
   official: 'Official questions',
-  original: 'Written by Oathly',
+  original: 'Written by Swornly',
   pipeline: 'Drafted from a guide',
 };
 
@@ -723,7 +723,7 @@ function QuestionList({
                       Official{question.officialNumber ? ` no. ${question.officialNumber}` : ''}
                     </Badge>
                   )}
-                  {question.origin === 'original' && <Badge>Written by Oathly</Badge>}
+                  {question.origin === 'original' && <Badge>Written by Swornly</Badge>}
                   {question.sourceLocator && <span>{question.sourceLocator}</span>}
                   {question.needsFreshnessCheck && <Badge tone="warning">Answer changes</Badge>}
                   {question.isPossibleDuplicate && <Badge tone="warning">Possible duplicate</Badge>}

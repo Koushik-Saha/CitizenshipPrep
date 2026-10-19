@@ -416,7 +416,7 @@ describe.skipIf(!url)('billing against the database', () => {
       kind: 'ignored',
     });
 
-    // The same store account is now used with the other Oathly account.
+    // The same store account is now used with the other Swornly account.
     const transfer = storeEvent({
       type: 'TRANSFER',
       transferred_from: [PHONE],

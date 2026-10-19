@@ -24,7 +24,7 @@ select throws_ok(
   $$ insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id)
      values ('a0000000-0000-0000-0000-00000000000a', 'gold', 'active', 'stripe', 'sub_x') $$,
   '23514', null,
-  'a subscription names a plan Oathly has'
+  'a subscription names a plan Swornly has'
 );
 select throws_ok(
   $$ insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id)

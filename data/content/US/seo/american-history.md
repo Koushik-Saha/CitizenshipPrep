@@ -1,9 +1,9 @@
 # American history on the U.S. citizenship test
 
-- **Title:** American history on the U.S. citizenship test | Oathly
+- **Title:** American history on the U.S. citizenship test | Swornly
 - **Description:** What the 2025 U.S. civics test asks about American history, from the colonies and independence to September 11, 2001.
 
-Draft for the page at `/united-states/citizenship-test/american-history`. Oathly is an independent study
+Draft for the page at `/united-states/citizenship-test/american-history`. Swornly is an independent study
 app and is not affiliated with any government.
 
 ## Introduction

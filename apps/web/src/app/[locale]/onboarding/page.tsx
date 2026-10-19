@@ -22,7 +22,7 @@ export async function generateMetadata({
   return { title: (await getT(params)).t('onboarding.metaTitle') };
 }
 
-/** The browser's preferred language, if it is one Oathly offers. */
+/** The browser's preferred language, if it is one Swornly offers. */
 async function preferredLocale(): Promise<string | null> {
   const accepted = (await headers()).get('accept-language') ?? '';
   for (const entry of accepted.split(',')) {

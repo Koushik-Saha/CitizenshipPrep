@@ -23,7 +23,7 @@ import { kv } from './storage';
 
 const STORAGE_KEY = 'oathly.app-locale';
 
-/** The first of the phone's preferred languages that Oathly has. */
+/** The first of the phone's preferred languages that Swornly has. */
 function deviceLocale(): UiLocale {
   for (const locale of getLocales()) {
     const match = matchUiLocale(locale.languageTag);

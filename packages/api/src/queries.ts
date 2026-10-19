@@ -4,7 +4,7 @@
 
 import { queryOptions } from '@tanstack/react-query';
 
-import type { OathlyApi } from './client';
+import type { SwornlyApi } from './client';
 
 export const queryKeys = {
   me: ['me'] as const,
@@ -24,10 +24,10 @@ export const DASHBOARD_STALE_MS = 30_000;
 /** How long unused data stays in memory for an instant return visit. */
 export const CACHE_MS = 30 * 60_000;
 
-export const meQuery = (api: OathlyApi) =>
+export const meQuery = (api: SwornlyApi) =>
   queryOptions({ queryKey: queryKeys.me, queryFn: () => api.me(), staleTime: DASHBOARD_STALE_MS });
 
-export const dashboardQuery = (api: OathlyApi) =>
+export const dashboardQuery = (api: SwornlyApi) =>
   queryOptions({
     queryKey: queryKeys.dashboard,
     queryFn: () => api.dashboard(),
@@ -36,7 +36,7 @@ export const dashboardQuery = (api: OathlyApi) =>
   });
 
 /** The list of countries changes when content is published, not minute to minute. */
-export const countriesQuery = (api: OathlyApi) =>
+export const countriesQuery = (api: SwornlyApi) =>
   queryOptions({
     queryKey: queryKeys.countries,
     queryFn: () => api.countries(),
@@ -44,7 +44,7 @@ export const countriesQuery = (api: OathlyApi) =>
   });
 
 /** A session's questions are fixed once it starts. */
-export const sessionQuery = (api: OathlyApi, attemptId: string) =>
+export const sessionQuery = (api: SwornlyApi, attemptId: string) =>
   queryOptions({
     queryKey: queryKeys.session(attemptId),
     queryFn: () => api.session(attemptId),
@@ -52,7 +52,7 @@ export const sessionQuery = (api: OathlyApi, attemptId: string) =>
   });
 
 /** The public list of exams, for the signed-out welcome screen. */
-export const publicCountriesQuery = (api: OathlyApi) =>
+export const publicCountriesQuery = (api: SwornlyApi) =>
   queryOptions({
     queryKey: queryKeys.publicCountries,
     queryFn: () => api.publicCountries(),

@@ -31,7 +31,7 @@ export function shareMetadata(page: {
     alternates: alternates(page.locale, page.path),
     openGraph: {
       type: 'website',
-      siteName: 'Oathly',
+      siteName: 'Swornly',
       title: page.heading,
       description: page.description,
       url: localizePath(page.locale, page.path),

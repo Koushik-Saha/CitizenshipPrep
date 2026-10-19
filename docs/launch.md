@@ -29,7 +29,7 @@ These are baked into things that are hard to change later.
 | ------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | The app's identifier                       | `apps/mobile/app.json`: `ios.bundleIdentifier`, `android.package`                       | `app.oathly.mobile`            | Permanent once an app is created in either store. Change it now if you want another (use a domain you own, reversed).                                    |
 | Your domain                                | DNS, `SITE_URL`                                                                         | none                           | Canonical links, the sitemap and the store listings all carry it.                                                                                        |
-| Who runs Oathly                            | `LEGAL_OPERATOR`, `LEGAL_CONTACT_EMAIL`, optional `LEGAL_ADDRESS`, `LEGAL_JURISDICTION` | "Oathly", no contact           | The privacy policy and terms name you and give this address. Without the email they give no way to reach you, which is not acceptable for a live policy. |
+| Who runs Swornly                           | `LEGAL_OPERATOR`, `LEGAL_CONTACT_EMAIL`, optional `LEGAL_ADDRESS`, `LEGAL_JURISDICTION` | "Swornly", no contact          | The privacy policy and terms name you and give this address. Without the email they give no way to reach you, which is not acceptable for a live policy. |
 | Minimum age                                | `/terms`, `/privacy`, store forms                                                       | 16                             | Stated in the terms and the Play "target audience" form.                                                                                                 |
 | Have a lawyer read `/privacy` and `/terms` | `apps/web/src/app/[locale]/privacy` and `/terms`                                        | Drafted from what the app does | They are accurate to the code, but they are a draft, not legal advice.                                                                                   |
 
@@ -178,7 +178,7 @@ All optional; the app runs without each.
 
 - **Mailtrap** (organization invitations): verify a sending domain (Sending
   Domains), create an API token (`MAILTRAP_TOKEN`), and set `EMAIL_FROM` to an
-  address on that domain, e.g. `Oathly <invites@your-domain>`. Without it,
+  address on that domain, e.g. `Swornly <invites@your-domain>`. Without it,
   admins are shown invitation links to send themselves. Do not set
   `MAILTRAP_INBOX_ID` on the host: it sends everything to a test inbox.
 - **Sentry:** create a Next.js project and a React Native project. The DSN of
@@ -268,7 +268,7 @@ eas init          # creates the Expo project and writes its id into app.json: co
      `https://<your-domain>/api/billing/revenuecat/webhook` with the
      Authorization header set to the value of `REVENUECAT_WEBHOOK_SECRET`
      (generate it: `openssl rand -hex 32`, and set it in Vercel too).
-4. **Icons and splash** are already generated from the Oathly mark
+4. **Icons and splash** are already generated from the Swornly mark
    (`pnpm --filter @oathly/mobile brand:assets` redraws them).
 
 ## 9. iOS: TestFlight
@@ -276,7 +276,7 @@ eas init          # creates the Expo project and writes its id into app.json: co
 Needs the Apple Developer Program membership to be active.
 
 1. App Store Connect > Apps > New App: platform iOS, your bundle identifier,
-   name "Oathly: Citizenship Test Prep" (or what is free), primary language
+   name "Swornly: Citizenship Test Prep" (or what is free), primary language
    English.
 2. Build and upload. EAS creates the signing certificate and profile for
    you; say yes when it asks, and sign in with your Apple ID:
@@ -296,7 +296,7 @@ Needs the Apple Developer Program membership to be active.
    encryption).
 4. TestFlight > Internal Testing > create a group, add yourself.
 5. On your iPhone: install the **TestFlight** app, accept the email
-   invitation, install Oathly.
+   invitation, install Swornly.
 
 ## 10. Android: Play internal test
 
@@ -350,7 +350,7 @@ does.
       account. Decide, then say how in the review notes.
 - [ ] **Test purchases for App Review.** Reviewers buy with store test
       accounts, and the server ignores test purchases unless told otherwise.
-      Put the review account's Oathly id in `REVENUECAT_SANDBOX_USERS` on
+      Put the review account's Swornly id in `REVENUECAT_SANDBOX_USERS` on
       Vercel (comma separated for more than one) before you submit. Never
       set `REVENUECAT_ALLOW_SANDBOX` on production: it lets every test
       purchase count.

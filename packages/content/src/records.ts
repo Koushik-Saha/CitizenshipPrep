@@ -137,7 +137,7 @@ const questionBase = {
   origin: z
     .enum(questionOrigins)
     .describe(
-      '"official": the wording is the government\'s own published question. "original": written by Oathly from the official material.',
+      '"official": the wording is the government\'s own published question. "original": written by Swornly from the official material.',
     ),
   region: regionCode
     .nullable()

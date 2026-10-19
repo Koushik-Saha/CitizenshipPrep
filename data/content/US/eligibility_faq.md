@@ -58,5 +58,5 @@ Congress. [1]
 3. USCIS, 128 Civics Questions and Answers (2025 version), page 1: <https://www.uscis.gov/sites/default/files/document/questions-and-answers/2025-Civics-Test-128-Questions-and-Answers.pdf>
 4. 8 CFR 312.2(b): <https://www.ecfr.gov/api/versioner/v1/full/2026-01-01/title-8.xml?part=312&section=312.2>
 
-**Again: this is not legal advice.** Oathly is an independent study app and is not affiliated
+**Again: this is not legal advice.** Swornly is an independent study app and is not affiliated
 with any government.
