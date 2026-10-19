@@ -25,6 +25,8 @@ export const MAX_MATCHES = 6;
  */
 export interface SearchText {
   label: string;
+  /** A few of the countries as examples, listed the reader's way ("A, B, or C"). */
+  placeholder: string;
   /** With QUERY_SLOT where the typed text goes. */
   noMatch: string;
   statusNone: string;
@@ -68,10 +70,7 @@ export function CountrySearch({
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder={countries
-          .slice(0, 3)
-          .map((country) => country.name)
-          .join(', ')}
+        placeholder={text.placeholder}
         autoComplete="off"
         aria-describedby={statusId}
         className={`bg-surface border-border-strong text-fg placeholder:text-fg-subtle w-full rounded-md border px-4 py-3 text-lg ${focusRing}`}

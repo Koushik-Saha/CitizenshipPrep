@@ -109,10 +109,17 @@ export function countryName(isoCode: string, inLocale: string, fallback: string)
   }
 }
 
+/** "A, B, or C", with the reader's language's own commas and "or". */
+export function orList(items: readonly string[], inLocale: string): string {
+  return new Intl.ListFormat(inLocale, { type: 'disjunction' }).format(items);
+}
+
 /** "English or French", in the reader's language. */
 export function languageList(languages: readonly string[], inLocale: string): string {
-  const names = languages.map((language) => languageName(language, inLocale));
-  return new Intl.ListFormat(inLocale, { type: 'disjunction' }).format(names);
+  return orList(
+    languages.map((language) => languageName(language, inLocale)),
+    inLocale,
+  );
 }
 
 // Speech engines (a browser's or a phone's voices and recognisers) want a

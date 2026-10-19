@@ -1,4 +1,4 @@
-import { localizePath } from '@oathly/i18n';
+import { localizePath, orList } from '@oathly/i18n';
 import { countriesWithQuestions, describeExam } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
 import { localCountryName } from '@oathly/api/countries';
@@ -112,6 +112,10 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
                   startHref={startHref}
                   text={{
                     label: t('landing.searchLabel'),
+                    placeholder: orList(
+                      searchable.slice(0, 3).map((country) => country.name),
+                      t.locale,
+                    ),
                     noMatch: t('landing.searchNoMatch', { query: QUERY_SLOT }),
                     statusNone: t('landing.searchStatusNone'),
                     status: Array.from({ length: MAX_MATCHES }, (_, i) =>

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { formatMessage, isolate, messageShape } from './format';
 import { isUiLocale, localizePath, splitLocalePath } from './locales';
 import { matchUiLocale, negotiateLocale } from './negotiate';
-import { countryName, languageList, speechLocale, studyLocales } from './index';
+import { countryName, languageList, orList, speechLocale, studyLocales } from './index';
 import { createTranslator, pickMessages } from './translate';
 import { en } from './messages/en';
 
@@ -117,6 +117,14 @@ describe('names', () => {
   it('lists languages with "or"', () => {
     expect(languageList(['en', 'fr'], 'en')).toBe('English or French');
     expect(languageList(['en', 'fr'], 'es')).toBe('inglés o francés');
+  });
+
+  it('lists anything with "or" and the reader’s own commas, not English ones', () => {
+    const three = ['A', 'B', 'C'];
+    expect(orList(three, 'en')).toBe('A, B, or C');
+    expect(orList(three, 'ar')).toBe('A أو B أو C');
+    expect(orList(three, 'zh-Hans')).toBe('A、B或C');
+    expect(orList(['A'], 'ar')).toBe('A');
   });
 });
 
