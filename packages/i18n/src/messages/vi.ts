@@ -116,6 +116,8 @@ export const vi: Messages = {
     planFree: 'Miễn phí',
     planFreeNote: 'Không cần thẻ.',
     planAiAllowance: '{explanations} lời giải thích và {messages} tin nhắn cho gia sư mỗi ngày',
+    passAiAllowance:
+      'Trợ giúp AI như gói Miễn phí: {explanations} lời giải thích và {messages} tin nhắn cho gia sư mỗi ngày',
     passBetaNote:
       'Chưa bán cho các nước được đánh dấu Beta, vì câu hỏi của các nước này vẫn đang được hoàn thiện.',
     planGroups: 'Trường học, thư viện và dịch vụ hỗ trợ định cư: gói cho nhóm sắp ra mắt.',

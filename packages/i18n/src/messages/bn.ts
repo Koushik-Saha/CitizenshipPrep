@@ -118,6 +118,8 @@ export const bn: Messages = {
     planFree: 'বিনামূল্যে',
     planFreeNote: 'কার্ড লাগবে না।',
     planAiAllowance: 'দিনে {explanations}টি ব্যাখ্যা এবং টিউটরকে {messages}টি বার্তা',
+    passAiAllowance:
+      'ফ্রি প্ল্যানের মতো AI সহায়তা: দিনে {explanations}টি ব্যাখ্যা এবং টিউটরকে {messages}টি বার্তা',
     passBetaNote:
       'বেটা চিহ্নিত দেশগুলোর জন্য এখনও বিক্রি হচ্ছে না, কারণ সেগুলোর প্রশ্ন এখনও সম্পূর্ণ করা হচ্ছে।',
     planGroups: 'স্কুল, গ্রন্থাগার ও পুনর্বাসন সেবা: দলের জন্য প্ল্যান শীঘ্রই আসছে।',

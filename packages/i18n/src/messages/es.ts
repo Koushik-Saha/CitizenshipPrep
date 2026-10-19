@@ -120,6 +120,8 @@ export const es: Messages = {
     planFree: 'Gratis',
     planFreeNote: 'Sin tarjeta.',
     planAiAllowance: '{explanations} explicaciones y {messages} mensajes al tutor al día',
+    passAiAllowance:
+      'Ayuda de IA como en el plan Gratis: {explanations} explicaciones y {messages} mensajes al tutor al día',
     passBetaNote:
       'Aún no se vende para los países marcados como Beta, cuyas preguntas todavía se están completando.',
     planGroups:

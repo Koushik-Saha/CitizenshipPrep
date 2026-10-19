@@ -123,6 +123,8 @@ export const tl: Messages = {
     planFree: 'Libre',
     planFreeNote: 'Hindi kailangan ng card.',
     planAiAllowance: '{explanations} paliwanag ng sagot at {messages} mensahe sa tutor bawat araw',
+    passAiAllowance:
+      'Tulong ng AI gaya ng sa Libre: {explanations} paliwanag ng sagot at {messages} mensahe sa tutor bawat araw',
     passBetaNote:
       'Hindi pa ibinebenta para sa mga bansang may markang Beta, na kinukumpleto pa ang mga tanong.',
     planGroups:

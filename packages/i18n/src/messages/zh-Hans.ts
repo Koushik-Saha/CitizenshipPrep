@@ -107,6 +107,8 @@ export const zhHans: Messages = {
     planFree: '免费',
     planFreeNote: '无需绑定银行卡。',
     planAiAllowance: '每天 {explanations} 次答案讲解和 {messages} 条辅导消息',
+    passAiAllowance:
+      '与免费版相同的 AI 帮助：每天 {explanations} 次答案讲解和 {messages} 条辅导消息',
     passBetaNote: '标为测试版的国家题目仍在完善中，暂不出售。',
     planGroups: '学校、图书馆和安置服务机构：团体方案即将推出。',
 

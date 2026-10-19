@@ -121,6 +121,8 @@ export const fr: Messages = {
     planFree: 'Gratuit',
     planFreeNote: 'Sans carte bancaire.',
     planAiAllowance: '{explanations} explications et {messages} messages au tuteur par jour',
+    passAiAllowance:
+      'Aide de l’IA comme avec l’offre gratuite : {explanations} explications et {messages} messages au tuteur par jour',
     passBetaNote:
       'Pas encore en vente pour les pays marqués Bêta, dont les questions sont encore en cours de complétion.',
     planGroups:

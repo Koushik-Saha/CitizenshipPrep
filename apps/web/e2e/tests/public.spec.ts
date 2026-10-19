@@ -436,11 +436,13 @@ test('an address with no page says so inside the site, with its header and foote
   ).toHaveAttribute('href', '/es/contact');
 });
 
-test('the pricing section has no empty bullet, in any language', async ({ page }) => {
+// Nor two bullets with the same words: a page reader that drops repeated text
+// showed the second of a pair as an empty bullet.
+test('the pricing section has no empty or repeated bullet, in any language', async ({ page }) => {
   for (const prefix of ['', '/es', '/ar', '/zh-Hans']) {
     await page.goto(`${prefix}/`);
-    for (const item of await page.locator('#pricing li').all()) {
-      expect((await item.innerText()).trim(), `${prefix || 'en'} pricing`).not.toBe('');
-    }
+    const bullets = (await page.locator('#pricing li').allInnerTexts()).map((text) => text.trim());
+    expect(bullets, `${prefix || 'en'} pricing`).not.toContain('');
+    expect(new Set(bullets).size, `${prefix || 'en'} pricing, all different`).toBe(bullets.length);
   }
 });

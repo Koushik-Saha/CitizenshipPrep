@@ -327,7 +327,14 @@ export function Pricing({
           </p>
           <ul className="mt-6 list-disc space-y-2 ps-5">
             <li>{t('plans.passSummary')}</li>
-            <li>{ai('free')}</li>
+            {/* Worded apart from Free's line, though the allowance is the same:
+                a page reader that drops repeated text showed this one empty. */}
+            <li>
+              {t('landing.passAiAllowance', {
+                explanations: aiLimits.free.explanation,
+                messages: aiLimits.free.tutor,
+              })}
+            </li>
             {hasBeta && <li>{t('landing.passBetaNote')}</li>}
           </ul>
           {onSale('country_pass') ? (

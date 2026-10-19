@@ -119,6 +119,8 @@ export const hi: Messages = {
     planFree: 'मुफ़्त',
     planFreeNote: 'कार्ड की ज़रूरत नहीं।',
     planAiAllowance: 'रोज़ {explanations} समझाइशें और ट्यूटर को {messages} संदेश',
+    passAiAllowance:
+      'मुफ़्त प्लान जैसी AI मदद: रोज़ {explanations} समझाइशें और ट्यूटर को {messages} संदेश',
     passBetaNote:
       'बीटा चिह्नित देशों के लिए अभी बिक्री पर नहीं है, क्योंकि उनके प्रश्न अभी पूरे किए जा रहे हैं।',
     planGroups: 'स्कूल, पुस्तकालय और पुनर्वास सेवाएँ: समूहों के लिए प्लान जल्द आ रहे हैं।',

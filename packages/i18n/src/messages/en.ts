@@ -124,6 +124,8 @@ export const en = {
     planFree: 'Free',
     planFreeNote: 'No card needed.',
     planAiAllowance: '{explanations} answer explanations and {messages} tutor messages a day',
+    passAiAllowance:
+      'AI help as on Free: {explanations} answer explanations and {messages} tutor messages a day',
     passBetaNote:
       'Not yet sold for countries marked Beta, whose questions are still being completed.',
     planGroups: 'Schools, libraries and settlement services: plans for groups are coming soon.',

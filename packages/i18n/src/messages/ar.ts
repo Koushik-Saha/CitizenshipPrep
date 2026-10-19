@@ -120,6 +120,8 @@ export const ar: Messages = {
     planFree: 'مجاني',
     planFreeNote: 'لا حاجة إلى بطاقة.',
     planAiAllowance: 'يوميًا: {explanations} شرحًا للإجابات و{messages} رسالة للمعلّم',
+    passAiAllowance:
+      'مساعدة الذكاء الاصطناعي كما في الخطة المجانية: يوميًا {explanations} شرحًا للإجابات و{messages} رسالة للمعلّم',
     passBetaNote:
       'غير متاح للبيع بعد للدول المميزة بعلامة تجريبي، لأن أسئلتها ما زالت قيد الاستكمال.',
     planGroups: 'المدارس والمكتبات وخدمات الاستقرار: خطط المجموعات قادمة قريبًا.',
