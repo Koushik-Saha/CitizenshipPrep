@@ -11,6 +11,10 @@ import { expectAccessible, newLearner, signIn, t } from './support';
 const COUNTRY = 'ZO';
 const learner = newLearner();
 
+// One country between them, set up once: the tests take turns. Run side by
+// side, one's setup removed the country from under the other's session.
+test.describe.configure({ mode: 'serial' });
+
 test.beforeAll(async () => {
   await cleanUp();
   await sql(
@@ -69,7 +73,10 @@ test.beforeAll(async () => {
 
 test.afterAll(cleanUp);
 
+/** Everything for the country, whoever studied it: a retry comes as a new learner. */
 async function cleanUp() {
+  await sql('delete from public.attempts where country_code = $1', [COUNTRY]);
+  await sql('delete from public.user_countries where country_code = $1', [COUNTRY]);
   await sql('delete from public.profiles where id = $1', [`test:${learner}`]);
   await sql('delete from public.questions where country_code = $1', [COUNTRY]);
   await sql('delete from public.countries where iso_code = $1', [COUNTRY]);
