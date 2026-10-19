@@ -874,6 +874,7 @@ export const vi: Messages = {
     unreachable: 'Chúng tôi không kết nối được với Oathly. Hãy kiểm tra kết nối và thử lại.',
   },
   community: {
+    sending: 'Đang gửi…',
     noCountry:
       'Mỗi bài thi có nhóm học riêng. Hãy chọn bài thi bạn đang chuẩn bị để tham gia nhóm của bài thi đó.',
     chooseTest: 'Chọn bài thi của bạn',

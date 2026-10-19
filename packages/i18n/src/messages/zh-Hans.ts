@@ -820,6 +820,7 @@ export const zhHans: Messages = {
     unreachable: '无法连接到 Oathly。请检查网络连接后重试。',
   },
   community: {
+    sending: '正在发送…',
     noCountry: '每个考试都有自己的学习小组。选择你正在准备的考试，即可加入它的小组。',
     chooseTest: '选择你的考试',
     metaTitle: '学习小组 | Oathly',

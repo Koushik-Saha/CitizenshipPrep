@@ -88,6 +88,47 @@ test('a learner posts, and others in the group read, mark it helpful and comment
   ).toBeVisible();
 });
 
+test('back from a new post the group lists it, and a comment sent twice is posted once', async ({
+  browser,
+}) => {
+  test.slow();
+  const tag = Math.random().toString(36).slice(2, 8);
+  const page = await learner(browser);
+  // The way a learner goes: from the dashboard to the group, and a post written there.
+  await page.getByRole('link', { name: /Study group for Testland/ }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(t('community.title'));
+  const title = `First week of study ${tag}`;
+  await page.getByText(t('community.newPost'), { exact: true }).click();
+  await page.getByLabel(t('community.titleLabel')).fill(title);
+  await page
+    .getByLabel(t('community.bodyLabel'))
+    .fill('Starting today. Any tips for the first week?');
+  await page.getByRole('button', { name: t('community.post'), exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
+  await page.getByRole('link', { name: t('community.back') }).click();
+  await expect(page).toHaveURL(/\/study\/community\?country=ZZ$/);
+  await expect(page.getByTestId('community-post').filter({ hasText: title })).toBeVisible();
+
+  // A slow answer from the server, and the button clicked again and again meanwhile.
+  await page.getByRole('link', { name: title }).click();
+  await page.route(/\/study\/community\//, async (route) => {
+    if (route.request().method() === 'POST') await new Promise((done) => setTimeout(done, 1_500));
+    await route.continue();
+  });
+  const body = `Read the guide first. ${tag}`;
+  await page.getByLabel(t('community.commentLabel')).fill(body);
+  const send = page.getByRole('button', { name: t('community.comment'), exact: true });
+  await send.dblclick();
+  await expect(page.getByRole('status').filter({ hasText: t('community.sending') })).toBeVisible();
+  await expect(send).toHaveAttribute('aria-busy', 'true');
+  await send.click();
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('community-comment')).toContainText(body);
+  await page.unroute(/\/study\/community\//);
+  await page.reload();
+  await expect(page.getByTestId('community-comment').filter({ hasText: body })).toHaveCount(1);
+});
+
 test('a post about the writer’s own case is hidden until a moderator has reviewed it', async ({
   browser,
 }) => {

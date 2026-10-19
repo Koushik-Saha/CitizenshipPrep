@@ -12,6 +12,7 @@ import {
   LegalNotice,
   OutcomeNotice,
 } from '@/components/study/community';
+import { SendButton } from '@/components/study/send-button';
 import { buttonClass, fieldClass, focusRing, labelClass } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
@@ -97,7 +98,6 @@ export default async function PostPage({
       <p className="text-sm">
         <Link
           href={localizePath(locale, `/study/community?country=${post.countryCode}`)}
-          prefetch
           className={`${focusRing} text-fg-muted hover:text-fg inline-flex min-h-11 items-center rounded-xs underline-offset-4 hover:underline`}
         >
           ← {t('community.back')}
@@ -185,9 +185,7 @@ export default async function PostPage({
                 className={fieldClass}
               />
             </div>
-            <button type="submit" className={buttonClass.primary}>
-              {t('community.comment')}
-            </button>
+            <SendButton label={t('community.comment')} sending={t('community.sending')} />
           </form>
         )}
       </section>

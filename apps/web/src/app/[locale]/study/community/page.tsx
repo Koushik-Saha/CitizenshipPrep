@@ -14,6 +14,7 @@ import {
   LegalNotice,
   OutcomeNotice,
 } from '@/components/study/community';
+import { SendButton } from '@/components/study/send-button';
 import { buttonClass, fieldClass, focusRing, labelClass } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
@@ -165,9 +166,7 @@ export default async function CommunityPage({
             </label>
             <input id="post-exam-date" name="examDate" type="date" className={fieldClass} />
           </div>
-          <button type="submit" className={buttonClass.primary}>
-            {t('community.post')}
-          </button>
+          <SendButton label={t('community.post')} sending={t('community.sending')} />
         </form>
       </details>
 

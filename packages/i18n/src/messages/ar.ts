@@ -867,6 +867,7 @@ export const ar: Messages = {
     unreachable: 'تعذّر الوصول إلى Oathly. تحقق من اتصالك وحاول مرة أخرى.',
   },
   community: {
+    sending: 'جارٍ الإرسال…',
     noCountry: 'لكل اختبار مجموعة دراسة خاصة به. اختر الاختبار الذي تستعد له لتنضم إلى مجموعته.',
     chooseTest: 'اختر اختبارك',
     metaTitle: 'مجموعة الدراسة | Oathly',

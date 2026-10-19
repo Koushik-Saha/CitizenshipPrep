@@ -9,6 +9,7 @@ import {
   toggleVote,
 } from '@oathly/api/server';
 import type { RateLimitName } from '@oathly/core';
+import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -44,6 +45,13 @@ async function signedIn(limit: RateLimitName, back: string): Promise<string> {
   return user.userId;
 }
 
+/**
+ * After anything that changes what a group shows: the pages a learner has
+ * already seen are fetched afresh, so going back to the group shows the new
+ * post, not the list as it was.
+ */
+const groupChanged = () => revalidatePath('/[locale]/study/community', 'layout');
+
 /** Where to go after writing: back with what happened to it. */
 const outcome = (posted: { heldFor: readonly string[]; legalNotice: boolean }) =>
   posted.legalNotice ? 'legal' : posted.heldFor.length > 0 ? 'held' : 'posted';
@@ -64,6 +72,7 @@ export async function submitPost(form: FormData): Promise<void> {
   let target: string;
   try {
     const posted = await createPost(getDb(), getScreener(), userId, parsed.data);
+    groupChanged();
     target = `/study/community/${posted.id}?notice=${outcome(posted)}`;
   } catch (error) {
     if (!(error instanceof CommunityError)) throw error;
@@ -81,6 +90,7 @@ export async function submitComment(postId: string, form: FormData): Promise<voi
   let notice: string;
   try {
     notice = outcome(await createComment(getDb(), getScreener(), userId, postId, parsed.data.body));
+    groupChanged();
   } catch (error) {
     if (!(error instanceof CommunityError)) throw error;
     notice = 'invalid';
@@ -94,6 +104,7 @@ export async function vote(postId: string): Promise<void> {
   const userId = await signedIn('communityVote', back);
   try {
     await toggleVote(getDb(), userId, postId);
+    groupChanged();
   } catch (error) {
     if (!(error instanceof CommunityError)) throw error;
   }
@@ -123,6 +134,7 @@ export async function report(
       commentId ? { commentId } : { postId },
       parsed.data,
     );
+    groupChanged();
     // The post itself is now hidden from this learner too: back to the group.
     if (hidden && !commentId) target = '/study/community?notice=reported';
   } catch (error) {

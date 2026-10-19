@@ -900,6 +900,7 @@ export const pt: Messages = {
     unreachable: 'Não conseguimos conectar ao Oathly. Confira sua conexão e tente de novo.',
   },
   community: {
+    sending: 'Enviando…',
     noCountry:
       'Cada teste tem seu próprio grupo de estudo. Escolha o teste para o qual você está se preparando para entrar no grupo.',
     chooseTest: 'Escolher seu teste',

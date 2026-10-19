@@ -907,6 +907,7 @@ export const en = {
     unreachable: 'We could not reach Oathly. Check your connection and try again.',
   },
   community: {
+    sending: 'Sending…',
     noCountry:
       'Each test has its own study group. Choose the test you are preparing for to join its group.',
     chooseTest: 'Choose your test',
