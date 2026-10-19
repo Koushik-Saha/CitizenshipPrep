@@ -324,8 +324,10 @@ export const vi: Messages = {
     earlyTitle: 'Ước tính ban đầu về mức độ sẵn sàng',
     meter: '{score}%, ước tính',
     meterEarly: '{score}%, ước tính, ước tính ban đầu',
-    basedOn:
-      '{count, plural, other {Dựa trên # câu hỏi cho đến nay. Con số sẽ ổn định dần khi bạn luyện thêm.}}',
+    basis: 'Dựa trên {answers} câu trả lời cho {questions} câu hỏi cho đến nay.',
+    settles: 'Con số sẽ ổn định dần khi bạn luyện thêm.',
+    spacing:
+      'Trả lời lại một câu hỏi trong cùng ngày không làm tăng điểm; nhớ được nó sau vài ngày mới làm tăng điểm.',
     disclaimer:
       'Đây là ước tính từ việc luyện tập và các bài thi thử của bạn, tính trọng số giống kỳ thi thật. Nó không bảo đảm kết quả của bạn và sẽ giảm nếu bạn ngừng ôn tập.',
     topicKnowledge: 'Kiến thức theo chủ đề',

@@ -181,6 +181,8 @@ export interface ReadinessView {
   /** Recent mock exams, recency-weighted, 0 to 100; null without any. */
   mockAverage: number | null;
   questionsSeen: number;
+  /** Every answer counted, repeats included: it moves with each session. */
+  answersGiven: number;
   /** The exam the score is measured against. */
   examName: string | null;
   /** Largest gap first. Share and mastery are 0 to 100. */

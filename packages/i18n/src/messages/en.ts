@@ -339,8 +339,11 @@ export const en = {
     earlyTitle: 'Early estimate of readiness',
     meter: '{score}%, estimated',
     meterEarly: '{score}%, estimated, early estimate',
-    basedOn:
-      '{count, plural, one {Based on # question so far. It settles as you practice more.} other {Based on # questions so far. It settles as you practice more.}}',
+    basis:
+      '{answers, plural, one {Based on # answer} other {Based on # answers}} to {questions, plural, one {# question} other {# questions}} so far.',
+    settles: 'It settles as you practice more.',
+    spacing:
+      'A question answered again on the same day does not raise the score; remembering it days later does.',
     disclaimer:
       'This is an estimate from your practice and any mock exams, weighted like the real exam. It is not a guarantee of your result, and it drops if you stop reviewing.',
     topicKnowledge: 'Topic knowledge',

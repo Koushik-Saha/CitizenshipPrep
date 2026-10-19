@@ -302,7 +302,9 @@ export const zhHans: Messages = {
     earlyTitle: '备考程度初步估计',
     meter: '{score}%，估计值',
     meterEarly: '{score}%，估计值，初步估计',
-    basedOn: '{count, plural, other {目前基于 # 道题。练习越多，估计越稳定。}}',
+    basis: '目前基于 {questions} 道题的 {answers} 次作答。',
+    settles: '练习越多，估计越稳定。',
+    spacing: '同一天内再次答同一道题不会提高分数；几天后仍记得才会提高。',
     disclaimer:
       '这是根据你的练习和模拟考试得出的估计，按真实考试的权重计算。它不保证你的成绩，停止复习后会下降。',
     topicKnowledge: '主题掌握度',

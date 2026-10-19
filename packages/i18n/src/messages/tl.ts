@@ -341,8 +341,10 @@ export const tl: Messages = {
     earlyTitle: 'Paunang tantiya ng kahandaan',
     meter: '{score}%, tantiya',
     meterEarly: '{score}%, tantiya, paunang tantiya',
-    basedOn:
-      '{count, plural, one {Batay sa # tanong sa ngayon. Titiyak ito habang nagsasanay ka pa.} other {Batay sa # tanong sa ngayon. Titiyak ito habang nagsasanay ka pa.}}',
+    basis: 'Batay sa {answers} sagot sa {questions} tanong sa ngayon.',
+    settles: 'Titiyak ito habang nagsasanay ka pa.',
+    spacing:
+      'Hindi tumataas ang iskor kapag sinagot mo ulit ang isang tanong sa parehong araw; tumataas ito kapag naaalala mo pa ito makalipas ang ilang araw.',
     disclaimer:
       'Ito ay tantiya mula sa iyong pagsasanay at mga mock exam, na tinimbang gaya ng totoong pagsusulit. Hindi ito garantiya ng iyong resulta, at bumababa ito kapag tumigil kang magbalik-aral.',
     topicKnowledge: 'Kaalaman sa mga paksa',

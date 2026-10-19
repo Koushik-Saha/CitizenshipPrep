@@ -143,6 +143,7 @@ describe('readinessScore', () => {
       mockAverage: null,
       isEarlyEstimate: true,
       questionsSeen: 0,
+      answersGiven: 0,
       suggestions: [{ kind: 'start' }],
     });
   });
@@ -246,6 +247,7 @@ describe('readinessScore', () => {
       now: day(1),
     });
     expect(score.questionsSeen).toBe(0);
+    expect(score.answersGiven).toBe(0);
   });
 
   it('does not reward cramming: answering everything five times in one day stays low', () => {
@@ -261,6 +263,8 @@ describe('readinessScore', () => {
     });
     expect(score.score).toBe(Math.round(100 * (1 - Math.exp(-1 / CONFIDENCE_DAYS))));
     expect(score.score).toBeLessThan(20);
+    // The work still shows: every answer is counted, though the score holds.
+    expect(score).toMatchObject({ questionsSeen: pool.length, answersGiven: 5 * pool.length });
   });
 
   it('rises through a week of correct daily practice, then falls after a month without study', () => {

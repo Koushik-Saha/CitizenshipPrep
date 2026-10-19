@@ -246,6 +246,7 @@ export async function getDashboard(
         knowledge: percent(estimate.knowledge),
         mockAverage: estimate.mockAverage === null ? null : percent(estimate.mockAverage),
         questionsSeen: estimate.questionsSeen,
+        answersGiven: estimate.answersGiven,
         examName: format?.name ?? null,
         topics: estimate.topics.map((topic) => ({
           topicId: topic.topicId,

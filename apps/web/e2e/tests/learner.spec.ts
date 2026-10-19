@@ -571,12 +571,19 @@ test('the dashboard is up to date after practice and after flashcards, however t
   test.setTimeout(120_000);
   await signInAndOnboard(page);
   const before = await readinessShown(page);
+  // What the score is built on: every session moves it, on the first load back.
+  const basis = page.getByTestId('readiness-basis');
+  await expect(basis).toHaveText(
+    t('readiness.basis', { answers: 0, questions: 0 }) + ' ' + t('readiness.settles'),
+  );
+  let answers = 0;
 
   await page.getByRole('button', { name: t('dashboard.practise'), exact: true }).click();
   await expect(page).toHaveURL(/\/study\/session\//);
   for (let i = 0; ; i += 1) {
     await option(page, await rightAnswer(page)).click();
     await page.getByRole('button', { name: t('session.check'), exact: true }).click();
+    answers += 1;
     const last = page.getByRole('button', { name: t('session.seeResults'), exact: true });
     if (await last.isVisible()) {
       await last.click();
@@ -592,6 +599,8 @@ test('the dashboard is up to date after practice and after flashcards, however t
     .click();
   const afterPractice = await expectDashboardCurrent(page, 'back from practice by the link');
   expect(afterPractice).not.toBe(before);
+  // A practice session asks each question once.
+  await expect(basis).toContainText(t('readiness.basis', { answers, questions: answers }));
 
   // Flashcards, none known, then the browser's Back button to the dashboard
   // (which it keeps from before): the score drops, and the drop is shown.
@@ -601,9 +610,12 @@ test('the dashboard is up to date after practice and after flashcards, however t
   for (let i = 0; !(await complete.isVisible()); i += 1) {
     await page.getByRole('button', { name: t('session.showAnswer'), exact: true }).click();
     await page.getByRole('button', { name: new RegExp(t('session.didNotKnow')) }).click();
+    answers += 1;
     expect(i, 'the session ends').toBeLessThan(40);
   }
   await page.goBack();
   const afterCards = await expectDashboardCurrent(page, 'back from flashcards by Back');
   expect(afterCards).not.toBe(afterPractice);
+  // Every card counts as an answer, though most were questions already seen.
+  await expect(basis).toContainText(new RegExp(`^Based on ${answers} answers to \\d+ questions`));
 });

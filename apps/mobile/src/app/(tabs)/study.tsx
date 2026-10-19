@@ -228,8 +228,16 @@ function CountrySection({
         <>
           <Card>
             <Readiness country={country} />
+            {/* What the score is built on: every session moves it. */}
+            <Body size="sm">
+              {t('readiness.basis', {
+                answers: country.readiness!.answersGiven,
+                questions: country.readiness!.questionsSeen,
+              })}
+              {country.readiness!.isEarlyEstimate && ` ${t('readiness.settles')}`}
+            </Body>
             <Body muted size="sm">
-              {t('readiness.disclaimer')}
+              {t('readiness.spacing')} {t('readiness.disclaimer')}
             </Body>
             {country.readiness!.suggestions.slice(0, 2).map((item) => {
               const { title, detail, action, request } = suggestion(code, item, t);

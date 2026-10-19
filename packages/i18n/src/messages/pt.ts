@@ -336,8 +336,11 @@ export const pt: Messages = {
     earlyTitle: 'Estimativa inicial do seu preparo',
     meter: '{score}%, estimado',
     meterEarly: '{score}%, estimado, estimativa inicial',
-    basedOn:
-      '{count, plural, one {Com base em # pergunta até agora. Ela se estabiliza à medida que você pratica.} other {Com base em # perguntas até agora. Ela se estabiliza à medida que você pratica.}}',
+    basis:
+      '{answers, plural, one {Com base em # resposta} other {Com base em # respostas}} a {questions, plural, one {# pergunta} other {# perguntas}} até agora.',
+    settles: 'Ela se estabiliza à medida que você pratica.',
+    spacing:
+      'Responder de novo a uma pergunta no mesmo dia não aumenta a pontuação; lembrar dela dias depois, sim.',
     disclaimer:
       'Esta é uma estimativa a partir da sua prática e dos seus simulados, ponderada como o exame real. Não é garantia do seu resultado e cai se você parar de revisar.',
     topicKnowledge: 'Conhecimento dos temas',

@@ -339,8 +339,11 @@ export const fr: Messages = {
     earlyTitle: 'Première estimation de votre préparation',
     meter: '{score} %, estimé',
     meterEarly: '{score} %, estimé, première estimation',
-    basedOn:
-      '{count, plural, one {Fondée sur # question pour l’instant. Elle se stabilise à mesure que vous vous entraînez.} other {Fondée sur # questions pour l’instant. Elle se stabilise à mesure que vous vous entraînez.}}',
+    basis:
+      '{answers, plural, one {Fondée sur # réponse} other {Fondée sur # réponses}} à {questions, plural, one {# question} other {# questions}} pour l’instant.',
+    settles: 'Elle se stabilise à mesure que vous vous entraînez.',
+    spacing:
+      'Répondre de nouveau à une question le même jour ne fait pas monter le score ; s’en souvenir quelques jours plus tard, si.',
     disclaimer:
       'C’est une estimation tirée de votre entraînement et de vos examens blancs, pondérée comme le vrai examen. Elle ne garantit pas votre résultat et baisse si vous arrêtez de réviser.',
     topicKnowledge: 'Maîtrise des sujets',

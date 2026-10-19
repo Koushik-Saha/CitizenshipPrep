@@ -55,6 +55,7 @@ const readinessSchema = z.object({
   knowledge: z.number(),
   mockAverage: nullableNumber,
   questionsSeen: z.number(),
+  answersGiven: z.number(),
   examName: nullableString,
   topics: z.array(
     z.object({ topicId: z.string(), name: z.string(), share: z.number(), mastery: z.number() }),

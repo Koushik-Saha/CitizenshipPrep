@@ -106,11 +106,17 @@ export function ReadinessPanel({
       <div className="mt-4">
         <Gauge score={readiness.score} early={readiness.isEarlyEstimate} />
       </div>
-      <p className="text-fg-muted mt-3 text-sm">
-        {readiness.isEarlyEstimate
-          ? `${t('readiness.basedOn', { count: readiness.questionsSeen })} `
-          : ''}
-        {t('readiness.disclaimer')}
+      {/* What the score is built on, which every session moves, even one whose
+          answers were too soon to raise the score itself. */}
+      <p className="text-fg mt-3 text-sm" data-testid="readiness-basis">
+        {t('readiness.basis', {
+          answers: readiness.answersGiven,
+          questions: readiness.questionsSeen,
+        })}
+        {readiness.isEarlyEstimate && ` ${t('readiness.settles')}`}
+      </p>
+      <p className="text-fg-muted mt-2 text-sm">
+        {t('readiness.spacing')} {t('readiness.disclaimer')}
       </p>
       <dl className="text-fg-muted mt-3 grid grid-cols-2 gap-2 text-sm">
         <div>

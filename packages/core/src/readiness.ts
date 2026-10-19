@@ -49,6 +49,11 @@ export interface ReadinessScore {
   isEarlyEstimate: boolean;
   /** Distinct questions answered at least once. */
   questionsSeen: number;
+  /**
+   * Every answer counted, repeats included: it grows with each session even
+   * when the score cannot (a question answered again before it is due).
+   */
+  answersGiven: number;
   topics: TopicReadiness[];
   /** At most three, most useful first. */
   suggestions: StudySuggestion[];
@@ -126,7 +131,8 @@ export function readinessScore(input: ReadinessInput): ReadinessScore {
   const mastery = topicMastery(pool, history, now);
   const shares = topicShares(pool, input.format);
   const poolIds = new Set(pool.map((question) => question.id));
-  const reviews = reviewsFromEvents(history.filter((event) => poolIds.has(event.questionId)));
+  const inPool = history.filter((event) => poolIds.has(event.questionId));
+  const reviews = reviewsFromEvents(inPool);
 
   const topics: TopicReadiness[] = [...shares.entries()]
     .map(([topicId, share]) => {
@@ -168,6 +174,7 @@ export function readinessScore(input: ReadinessInput): ReadinessScore {
     mockAverage: mock?.average ?? null,
     isEarlyEstimate,
     questionsSeen,
+    answersGiven: inPool.length,
     topics,
     suggestions: suggestions.slice(0, 3),
   };
