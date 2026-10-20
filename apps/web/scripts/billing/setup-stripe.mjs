@@ -98,15 +98,16 @@ const currency = values.currency.toLowerCase();
 
 async function productFor(kind) {
   const found = await stripe.products.search({ query: `metadata['oathly']:'${kind}'` });
-  const active = found.data.find((product) => product.active);
-  if (active) {
-    // Named as it is sold now (the name and description show at checkout).
-    const { name, description } = products[kind];
-    if (active.name !== name || active.description !== description) {
-      await stripe.products.update(active.id, { name, description });
+  const active = found.data.filter((product) => product.active);
+  // Named as it is sold now (the name and description show at checkout): every
+  // match, since an account set up twice can hold two, each with some prices.
+  const { name, description } = products[kind];
+  for (const product of active) {
+    if (product.name !== name || product.description !== description) {
+      await stripe.products.update(product.id, { name, description });
     }
-    return active.id;
   }
+  if (active[0]) return active[0].id;
   const created = await stripe.products.create({ ...products[kind], metadata: { oathly: kind } });
   return created.id;
 }
