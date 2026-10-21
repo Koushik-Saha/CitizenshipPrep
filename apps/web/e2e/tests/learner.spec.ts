@@ -396,12 +396,17 @@ test('a learner changes their name, takes a copy of their data, and opts out of 
   // Nobody signed out gets anyone's.
   expect((await request.get('/api/me/export')).status()).toBe(401);
 
-  // Their use is counted until they say otherwise, and again when they change their mind.
+  // Their use is counted until they say otherwise, and again when they change their mind;
+  // this device remembers it, so usage recording is not loaded for them meanwhile.
+  const usageOff = () => page.evaluate(() => localStorage.getItem('oathly.usage-off'));
+  expect(await usageOff()).toBeNull();
   await page.getByRole('button', { name: t('profile.analyticsStop') }).click();
   await expect(page.getByText(t('profile.analyticsStopped'))).toBeVisible();
+  await expect.poll(usageOff).toBe('1');
   await page.getByRole('button', { name: t('profile.analyticsStart') }).click();
   await expect(page.getByText(t('profile.analyticsStopped'))).toHaveCount(0);
   await expect(page.getByRole('button', { name: t('profile.analyticsStop') })).toBeVisible();
+  await expect.poll(usageOff).toBeNull();
 });
 
 test('the plans page and the tutor are reachable and accessible', async ({ page }) => {

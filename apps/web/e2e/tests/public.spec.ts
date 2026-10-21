@@ -436,6 +436,17 @@ test('an address with no page says so inside the site, with its header and foote
   ).toHaveAttribute('href', '/es/contact');
 });
 
+test('usage recording masks every word, and loads nothing without a project', async ({ page }) => {
+  for (const path of ['/', '/testland/citizenship-test/try']) {
+    await page.goto(path);
+    await expect(page.locator('body')).toHaveAttribute('data-clarity-mask', 'true');
+  }
+  // The test server has no Clarity project: nothing is loaded or called.
+  await page.waitForLoadState('load');
+  expect(await page.evaluate(() => 'clarity' in window)).toBe(false);
+  expect(await page.locator('script[src*="clarity.ms"]').count()).toBe(0);
+});
+
 // Nor two bullets with the same words: a page reader that drops repeated text
 // showed the second of a pair as an empty bullet.
 test('the pricing section has no empty or repeated bullet, in any language', async ({ page }) => {

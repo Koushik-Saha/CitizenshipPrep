@@ -776,7 +776,7 @@ export const zhHans: Messages = {
     exportButton: '下载我的数据',
     analyticsTitle: '使用统计',
     analyticsBody:
-      '我们会统计少量事件（例如完成一次练习），以了解 Swornly 的使用情况。这些数据与你的账户关联，绝不出售，也绝不用于广告。',
+      '我们会统计少量事件（例如完成一次练习），以了解 Swornly 的使用情况。这些数据与你的账户关联，绝不出售，也绝不用于广告。我们还会查看用户在页面上的点击和滚动位置，不使用 Cookie，也绝不查看页面上的文字。',
     analyticsStop: '停止统计我的使用',
     analyticsStart: '重新统计我的使用',
     analyticsStopped: '你的使用不会被统计。',

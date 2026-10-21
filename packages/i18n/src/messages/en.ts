@@ -858,7 +858,7 @@ export const en = {
     exportButton: 'Download my data',
     analyticsTitle: 'Usage statistics',
     analyticsBody:
-      'We count a few events, such as finishing a session, to see how Swornly is used. They are tied to your account, never sold, and never used for advertising.',
+      'We count a few events, such as finishing a session, to see how Swornly is used. They are tied to your account, never sold, and never used for advertising. We also look at where people click and scroll on our pages, without cookies and never the words on them.',
     analyticsStop: 'Stop counting mine',
     analyticsStart: 'Count mine again',
     analyticsStopped: 'Your use is not counted.',

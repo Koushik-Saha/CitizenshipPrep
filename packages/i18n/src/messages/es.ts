@@ -854,7 +854,7 @@ export const es: Messages = {
     exportButton: 'Descargar mis datos',
     analyticsTitle: 'Estadísticas de uso',
     analyticsBody:
-      'Contamos algunos eventos, como terminar una sesión, para ver cómo se usa Swornly. Están vinculados a tu cuenta, nunca se venden y nunca se usan para publicidad.',
+      'Contamos algunos eventos, como terminar una sesión, para ver cómo se usa Swornly. Están vinculados a tu cuenta, nunca se venden y nunca se usan para publicidad. También vemos dónde se hace clic y hasta dónde se desplaza la gente en nuestras páginas, sin cookies y nunca las palabras que hay en ellas.',
     analyticsStop: 'Dejar de contar los míos',
     analyticsStart: 'Volver a contar los míos',
     analyticsStopped: 'Tu uso no se cuenta.',

@@ -868,7 +868,7 @@ export const tl: Messages = {
     exportButton: 'I-download ang data ko',
     analyticsTitle: 'Estadistika ng paggamit',
     analyticsBody:
-      'Binibilang namin ang ilang pangyayari, gaya ng pagtatapos ng isang session, para makita kung paano ginagamit ang Swornly. Nakaugnay ang mga ito sa account mo, hindi kailanman ibinebenta, at hindi kailanman ginagamit sa advertising.',
+      'Binibilang namin ang ilang pangyayari, gaya ng pagtatapos ng isang session, para makita kung paano ginagamit ang Swornly. Nakaugnay ang mga ito sa account mo, hindi kailanman ibinebenta, at hindi kailanman ginagamit sa advertising. Tinitingnan din namin kung saan nagki-click at hanggang saan nag-i-scroll ang mga tao sa aming mga pahina, nang walang cookies at hindi kailanman ang mga salita roon.',
     analyticsStop: 'Itigil ang pagbilang sa akin',
     analyticsStart: 'Bilangin akong muli',
     analyticsStopped: 'Hindi binibilang ang paggamit mo.',

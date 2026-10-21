@@ -867,7 +867,7 @@ export const fr: Messages = {
     exportButton: 'Télécharger mes données',
     analyticsTitle: 'Statistiques d’utilisation',
     analyticsBody:
-      'Nous comptons quelques événements, comme la fin d’une séance, pour voir comment Swornly est utilisé. Ils sont liés à votre compte, ne sont jamais vendus et ne servent jamais à la publicité.',
+      'Nous comptons quelques événements, comme la fin d’une séance, pour voir comment Swornly est utilisé. Ils sont liés à votre compte, ne sont jamais vendus et ne servent jamais à la publicité. Nous regardons aussi où l’on clique et jusqu’où l’on fait défiler nos pages, sans cookies et jamais les mots qui s’y trouvent.',
     analyticsStop: 'Ne plus compter les miens',
     analyticsStart: 'Compter à nouveau les miens',
     analyticsStopped: 'Votre utilisation n’est pas comptée.',

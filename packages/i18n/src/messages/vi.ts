@@ -827,7 +827,7 @@ export const vi: Messages = {
     exportButton: 'Tải dữ liệu của tôi',
     analyticsTitle: 'Thống kê sử dụng',
     analyticsBody:
-      'Chúng tôi đếm một vài sự kiện, như hoàn thành một buổi học, để biết Swornly được dùng thế nào. Chúng gắn với tài khoản của bạn, không bao giờ được bán và không bao giờ dùng cho quảng cáo.',
+      'Chúng tôi đếm một vài sự kiện, như hoàn thành một buổi học, để biết Swornly được dùng thế nào. Chúng gắn với tài khoản của bạn, không bao giờ được bán và không bao giờ dùng cho quảng cáo. Chúng tôi cũng xem mọi người nhấp và cuộn đến đâu trên các trang của chúng tôi, không dùng cookie và không bao giờ xem chữ trên trang.',
     analyticsStop: 'Ngừng đếm của tôi',
     analyticsStart: 'Đếm lại của tôi',
     analyticsStopped: 'Việc sử dụng của bạn không được đếm.',

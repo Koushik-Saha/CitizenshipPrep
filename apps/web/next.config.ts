@@ -22,9 +22,11 @@ const isDev = process.env.NODE_ENV === 'development';
 // See docs/security.md.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ''}`,
+  // Microsoft Clarity (usage recording, components/usage-recording): its
+  // loader and script, and the pixels it may send. Its data goes over HTTPS.
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.clarity.ms https://scripts.clarity.ms${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://*.clarity.ms https://c.bing.com",
   "font-src 'self' data:",
   // The sign-in service, error reporting and payments are called over HTTPS.
   // "blob:" is the globe again: its model carries its textures inside it, and

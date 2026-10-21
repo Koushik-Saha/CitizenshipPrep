@@ -80,6 +80,12 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
             where it happened, not what you were typing), and a count of requests per account or per
             network address, kept under a one-way hash for a day, to stop abuse.
           </li>
+          <li>
+            <strong>How pages are used.</strong> Where people click, tap and scroll on the website,
+            and how far down a page they get, with the type of device and browser. The words on the
+            page and anything you type are hidden from this, and it uses no cookies, so one visit is
+            not linked to the next.
+          </li>
         </List>
         <p>
           We do not collect your location, your contacts or your photos. Speaking an answer aloud
@@ -99,7 +105,8 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
           <li>
             To count how the product is used, in aggregate: sign-ups, first questions answered, mock
             exams finished, plans bought, exams passed. These are recorded against your account
-            number, not your name or email.
+            number, not your name or email. And to see which parts of a page work and which confuse
+            people, from how pages are used.
           </li>
           <li>To find and fix faults, and to protect the service against abuse.</li>
         </List>
@@ -135,6 +142,7 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
           <li>Mailtrap: invitation emails sent on behalf of organizations.</li>
           <li>Sentry: error reports.</li>
           <li>PostHog: usage counts.</li>
+          <li>Microsoft (Clarity): how pages on the website are used, as described above.</li>
         </List>
         <p>
           Some of them are outside the country you live in, including in the United States. Where
@@ -169,8 +177,9 @@ export default async function PrivacyPage({ params }: PageProps<'/[locale]/priva
           </li>
           <li>
             <strong>Object or complain.</strong> You can ask us to stop a use of your data; your
-            account page has a switch that stops your use being counted in our usage statistics. You
-            have the right to complain to the data protection authority where you live.
+            account page has a switch that stops your use being counted in our usage statistics, and
+            how you use our pages being looked at, on the devices you are signed in on. You have the
+            right to complain to the data protection authority where you live.
           </li>
         </List>
       </Section>

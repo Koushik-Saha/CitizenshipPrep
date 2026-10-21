@@ -9,7 +9,7 @@ export const MINIMUM_AGE = 16;
  * accepts is recorded with this, so it is known which words they agreed to.
  * Change it with every change to their text.
  */
-export const TERMS_VERSION = '2026-10-13';
+export const TERMS_VERSION = '2026-10-21';
 
 /**
  * Whether a learner still has to confirm their age and accept the terms:

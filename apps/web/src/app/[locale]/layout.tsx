@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { SceneHost } from '@/components/globe/scene-host';
 import { I18nProvider } from '@/components/i18n/locale';
 import { RouteFade } from '@/components/route-fade';
+import { UsageRecording } from '@/components/usage-recording';
 import { fontVariables } from '@/lib/fonts';
 import { clientMessages, getT, localeParams } from '@/lib/i18n';
 import { siteUrl } from '@/lib/site';
@@ -28,7 +29,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   const { locale } = await getT(params);
   return (
     <html lang={locale} dir={textDirection(locale)} className={fontVariables}>
-      <body className="bg-canvas text-fg font-sans antialiased">
+      {/* data-clarity-mask: usage recording sees where people click, never the words. */}
+      <body className="bg-canvas text-fg font-sans antialiased" data-clarity-mask="true">
         {/* What Client Components on every page need; sections add their own. */}
         <I18nProvider locale={locale} messages={clientMessages(locale, ['common', 'exam'])}>
           {/* Page changes cross-fade: View Transitions API, or Motion without it. */}
@@ -36,6 +38,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           {/* The app's one WebGL canvas, shared by every page that shows the globe. */}
           <SceneHost />
         </I18nProvider>
+        <UsageRecording />
       </body>
     </html>
   );
