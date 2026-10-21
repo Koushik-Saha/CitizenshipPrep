@@ -56,6 +56,8 @@ export const rateLimitRules = {
   communityVote: { limit: 60, windowSeconds: 60 },
   /** Reports made by one learner: enough to flag a bad thread, not to bury a group. */
   communityReport: { limit: 10, windowSeconds: 60 * 60 },
+  /** Posts one learner deletes: their own, so a few, never a loop. */
+  communityDelete: { limit: 20, windowSeconds: 60 * 60 },
   /** Attempts to delete an account: the real one needs only one. */
   accountDeletion: { limit: 5, windowSeconds: 60 * 60 },
 } as const satisfies Record<string, RateLimitRule>;

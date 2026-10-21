@@ -918,6 +918,11 @@ export const fr: Messages = {
   },
   community: {
     sending: 'Envoi en cours…',
+    deletePost: 'Supprimer la publication',
+    deleteConfirm:
+      'Cela supprime votre publication et tous ses commentaires, pour tout le monde. C’est définitif.',
+    deleteSend: 'Supprimer définitivement',
+    deleted: 'Votre publication a été supprimée.',
     noCountry:
       'Chaque test a son propre groupe d’étude. Choisissez le test que vous préparez pour rejoindre son groupe.',
     chooseTest: 'Choisir votre test',

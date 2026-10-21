@@ -16,7 +16,16 @@ import { buttonClass } from '@/components/ui';
  * submit that passed the form's checks counts, so an empty field never leaves
  * the button stuck.
  */
-export function SendButton({ label, sending }: { label: string; sending: string }) {
+export function SendButton({
+  label,
+  sending,
+  tone = 'primary',
+}: {
+  label: string;
+  sending: string;
+  /** `danger` for a button that removes something. */
+  tone?: 'primary' | 'danger';
+}) {
   const { pending } = useFormStatus();
   const button = useRef<HTMLButtonElement>(null);
   const sent = useRef(false);
@@ -49,7 +58,7 @@ export function SendButton({ label, sending }: { label: string; sending: string 
         type="submit"
         aria-disabled={pending || undefined}
         aria-busy={pending || undefined}
-        className={`${buttonClass.primary} ${pending ? 'cursor-wait opacity-70' : ''}`}
+        className={`${buttonClass[tone]} ${pending ? 'cursor-wait opacity-70' : ''}`}
       >
         {label}
       </button>

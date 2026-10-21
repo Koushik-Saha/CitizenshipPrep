@@ -19,7 +19,7 @@ import { getT } from '@/lib/i18n';
 import { isCommunitySwitchedOff } from '@/lib/community';
 import { requireMe } from '@/lib/user';
 
-import { report, submitComment, vote } from '../actions';
+import { deletePost, report, submitComment, vote } from '../actions';
 
 export async function generateMetadata({
   params,
@@ -73,6 +73,30 @@ function ReportForm({
         <button type="submit" className={buttonClass.secondary}>
           {t('community.reportSend')}
         </button>
+      </form>
+    </details>
+  );
+}
+
+/**
+ * "Delete post", on the writer's own post: it opens to what deleting does and
+ * the button. A form of its own, with no script, like Report.
+ */
+function DeleteForm({ t, action }: { t: Translator; action: () => Promise<void> }) {
+  return (
+    <details className="text-sm">
+      <summary
+        className={`${focusRing} text-fg-muted hover:text-fg cursor-pointer rounded-xs py-3`}
+      >
+        {t('community.deletePost')}
+      </summary>
+      <form action={action} className="mt-2 space-y-3">
+        <p className="text-fg-muted max-w-prose">{t('community.deleteConfirm')}</p>
+        <SendButton
+          label={t('community.deleteSend')}
+          sending={t('community.sending')}
+          tone="danger"
+        />
       </form>
     </details>
   );
@@ -136,6 +160,7 @@ export default async function PostPage({
           {!post.mine && !held && (
             <ReportForm t={t} id={post.id} action={report.bind(null, post.id, null)} />
           )}
+          {post.mine && <DeleteForm t={t} action={deletePost.bind(null, post.id)} />}
         </div>
       </article>
 

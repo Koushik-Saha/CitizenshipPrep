@@ -908,6 +908,11 @@ export const en = {
   },
   community: {
     sending: 'Sending…',
+    deletePost: 'Delete post',
+    deleteConfirm:
+      'This deletes your post and every comment on it, for everyone. It can’t be undone.',
+    deleteSend: 'Delete for good',
+    deleted: 'Your post was deleted.',
     noCountry:
       'Each test has its own study group. Choose the test you are preparing for to join its group.',
     chooseTest: 'Choose your test',

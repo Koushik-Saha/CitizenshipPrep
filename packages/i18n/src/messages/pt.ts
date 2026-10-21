@@ -901,6 +901,11 @@ export const pt: Messages = {
   },
   community: {
     sending: 'Enviando…',
+    deletePost: 'Excluir publicação',
+    deleteConfirm:
+      'Isso exclui sua publicação e todos os comentários dela, para todos. Não é possível desfazer.',
+    deleteSend: 'Excluir de vez',
+    deleted: 'Sua publicação foi excluída.',
     noCountry:
       'Cada teste tem seu próprio grupo de estudo. Escolha o teste para o qual você está se preparando para entrar no grupo.',
     chooseTest: 'Escolher seu teste',

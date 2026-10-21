@@ -8,6 +8,7 @@ import {
   createComment,
   createPost,
   createScreener,
+  deletePost,
   getThread,
   listModerationQueue,
   listPosts,
@@ -350,5 +351,25 @@ describe.skipIf(!url)('study groups', () => {
       [COUNTRY],
     );
     expect(rows).toEqual([{ status: 'dismissed', n: 3 }]);
+  });
+
+  it('lets a writer delete their own post, with its comments and upvotes, and nobody else', async () => {
+    const mine = await createPost(pool, clean, MARIA, post({ title: 'Mine to delete' }));
+    await createComment(pool, clean, MINH, mine.id, 'Good luck!');
+    await toggleVote(pool, MINH, mine.id);
+
+    // Someone else's post is "not there" to delete, and stays.
+    await expect(deletePost(pool, MINH, mine.id)).rejects.toMatchObject({ status: 404 });
+    expect(await getThread(pool, MINH, mine.id)).not.toBeNull();
+
+    expect(await deletePost(pool, MARIA, mine.id)).toEqual({ countryCode: COUNTRY });
+    expect(await getThread(pool, MARIA, mine.id)).toBeNull();
+    const { rows } = await pool.query(
+      `select (select count(*)::int from public.community_comments where post_id = $1) as comments,
+              (select count(*)::int from public.community_votes where post_id = $1) as votes`,
+      [mine.id],
+    );
+    expect(rows).toEqual([{ comments: 0, votes: 0 }]);
+    await expect(deletePost(pool, MARIA, mine.id)).rejects.toMatchObject({ status: 404 });
   });
 });

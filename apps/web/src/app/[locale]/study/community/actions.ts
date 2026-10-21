@@ -5,6 +5,7 @@ import {
   CommunityError,
   createComment,
   createPost,
+  deletePost as deleteOwnPost,
   reportContent,
   toggleVote,
 } from '@oathly/api/server';
@@ -109,6 +110,22 @@ export async function vote(postId: string): Promise<void> {
     if (!(error instanceof CommunityError)) throw error;
   }
   redirect(await localizedPath(`/study/community/${postId}`));
+}
+
+/** Deletes the learner's own post, then goes back to its group. */
+export async function deletePost(postId: string): Promise<void> {
+  if (!ID.test(postId)) redirect(await localizedPath('/study/community'));
+  const userId = await signedIn('communityDelete', `/study/community/${postId}?`);
+  let target: string;
+  try {
+    const { countryCode } = await deleteOwnPost(getDb(), userId, postId);
+    groupChanged();
+    target = `/study/community?country=${countryCode}&notice=deleted`;
+  } catch (error) {
+    if (!(error instanceof CommunityError)) throw error;
+    target = '/study/community?notice=invalid';
+  }
+  redirect(await localizedPath(target));
 }
 
 export async function report(

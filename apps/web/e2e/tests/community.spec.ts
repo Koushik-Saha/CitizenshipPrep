@@ -129,6 +129,36 @@ test('back from a new post the group lists it, and a comment sent twice is poste
   await expect(page.getByTestId('community-comment').filter({ hasText: body })).toHaveCount(1);
 });
 
+test('a writer deletes their own post, and only they can', async ({ browser }) => {
+  test.slow();
+  const tag = Math.random().toString(36).slice(2, 8);
+  const title = `Posted by mistake ${tag}`;
+  const writer = await learner(browser);
+  const reader = await learner(browser);
+  await write(writer, title, 'I meant to post this in another group.');
+  const address = writer.url();
+
+  // Someone else is not offered it.
+  await reader.goto(address);
+  await expect(reader.getByRole('heading', { level: 1 })).toHaveText(title);
+  await expect(reader.getByText(t('community.deletePost'), { exact: true })).toHaveCount(0);
+
+  // The writer is, and is told what it does before it is done.
+  await writer.getByText(t('community.deletePost'), { exact: true }).click();
+  await expect(writer.getByText(t('community.deleteConfirm'))).toBeVisible();
+  await expectAccessible(writer, 'study group post, about to delete');
+  await writer.getByRole('button', { name: t('community.deleteSend'), exact: true }).click();
+  await expect(writer).toHaveURL(/\/study\/community\?country=ZZ&notice=deleted$/);
+  await expect(
+    writer.getByRole('status').filter({ hasText: t('community.deleted') }),
+  ).toBeVisible();
+  await expect(writer.getByTestId('community-post').filter({ hasText: title })).toHaveCount(0);
+
+  // Gone for everyone: its address says so.
+  await reader.goto(address);
+  await expect(reader.getByRole('heading', { level: 1 })).toHaveText(t('common.notFoundTitle'));
+});
+
 test('a post about the writer’s own case is hidden until a moderator has reviewed it', async ({
   browser,
 }) => {

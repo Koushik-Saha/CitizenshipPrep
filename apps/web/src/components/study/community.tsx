@@ -84,6 +84,7 @@ const outcomes: Record<
 > = {
   held: { key: 'community.held', tone: 'warning' },
   reported: { key: 'community.reported', tone: 'success' },
+  deleted: { key: 'community.deleted', tone: 'success' },
   wait: { key: 'community.tooMany', tone: 'error' },
   invalid: { key: 'community.invalid', tone: 'error' },
 };

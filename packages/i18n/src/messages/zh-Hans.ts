@@ -821,6 +821,10 @@ export const zhHans: Messages = {
   },
   community: {
     sending: '正在发送…',
+    deletePost: '删除帖子',
+    deleteConfirm: '这会为所有人删除你的帖子及其下的所有评论，且无法撤销。',
+    deleteSend: '永久删除',
+    deleted: '你的帖子已删除。',
     noCountry: '每个考试都有自己的学习小组。选择你正在准备的考试，即可加入它的小组。',
     chooseTest: '选择你的考试',
     metaTitle: '学习小组 | Swornly',

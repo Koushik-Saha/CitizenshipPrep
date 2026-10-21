@@ -875,6 +875,11 @@ export const vi: Messages = {
   },
   community: {
     sending: 'Đang gửi…',
+    deletePost: 'Xóa bài viết',
+    deleteConfirm:
+      'Thao tác này xóa bài viết của bạn và mọi bình luận trong đó, với tất cả mọi người. Không thể hoàn tác.',
+    deleteSend: 'Xóa vĩnh viễn',
+    deleted: 'Bài viết của bạn đã được xóa.',
     noCountry:
       'Mỗi bài thi có nhóm học riêng. Hãy chọn bài thi bạn đang chuẩn bị để tham gia nhóm của bài thi đó.',
     chooseTest: 'Chọn bài thi của bạn',

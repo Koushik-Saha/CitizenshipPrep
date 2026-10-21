@@ -868,6 +868,10 @@ export const ar: Messages = {
   },
   community: {
     sending: 'جارٍ الإرسال…',
+    deletePost: 'حذف المنشور',
+    deleteConfirm: 'سيُحذف منشورك وكل التعليقات عليه لدى الجميع. لا يمكن التراجع عن ذلك.',
+    deleteSend: 'حذف نهائي',
+    deleted: 'حُذف منشورك.',
     noCountry: 'لكل اختبار مجموعة دراسة خاصة به. اختر الاختبار الذي تستعد له لتنضم إلى مجموعته.',
     chooseTest: 'اختر اختبارك',
     metaTitle: 'مجموعة الدراسة | Swornly',

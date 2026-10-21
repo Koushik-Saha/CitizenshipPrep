@@ -279,6 +279,25 @@ export async function toggleVote(
   return { voted, upvotes: rows[0]!.upvotes };
 }
 
+/**
+ * Deletes a learner's own post, and with it its comments, upvotes and reports.
+ * Only the writer can: anyone else's post, or one that is not there, is "not
+ * there". Returns the group it was in, to go back to.
+ */
+export async function deletePost(
+  db: Db,
+  userId: string,
+  postId: string,
+): Promise<{ countryCode: string }> {
+  const { rows } = await db.query<{ country_code: string }>(
+    `delete from public.community_posts where id = $1 and author_id = $2
+     returning country_code`,
+    [postId, userId],
+  );
+  if (!rows[0]) throw new CommunityError('That post is not there.', 404);
+  return { countryCode: rows[0].country_code };
+}
+
 export type ReportTarget = { postId: string } | { commentId: string };
 
 /**

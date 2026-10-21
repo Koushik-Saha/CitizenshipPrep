@@ -919,6 +919,11 @@ export const tl: Messages = {
   },
   community: {
     sending: 'Ipinapadala…',
+    deletePost: 'Burahin ang post',
+    deleteConfirm:
+      'Mabubura ang iyong post at lahat ng komento rito, para sa lahat. Hindi na ito maibabalik.',
+    deleteSend: 'Burahin nang tuluyan',
+    deleted: 'Nabura na ang iyong post.',
     noCountry:
       'May sariling study group ang bawat test. Piliin ang test na pinaghahandaan mo para sumali sa grupo nito.',
     chooseTest: 'Piliin ang iyong test',

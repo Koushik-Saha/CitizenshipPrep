@@ -904,6 +904,11 @@ export const es: Messages = {
   },
   community: {
     sending: 'Enviando…',
+    deletePost: 'Eliminar publicación',
+    deleteConfirm:
+      'Esto elimina tu publicación y todos sus comentarios para todos. No se puede deshacer.',
+    deleteSend: 'Eliminar definitivamente',
+    deleted: 'Tu publicación se eliminó.',
     noCountry:
       'Cada examen tiene su propio grupo de estudio. Elige el examen que estás preparando para unirte a su grupo.',
     chooseTest: 'Elegir tu examen',
