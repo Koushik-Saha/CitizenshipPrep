@@ -10,6 +10,8 @@ import { focusRing } from '@/components/focus-ring';
 export interface SearchableCountry {
   isoCode: string;
   name: string;
+  /** Where choosing it goes, in the page's language: its trial. */
+  href: string;
   /** e.g. "Citizenship test: 20 questions, 15 to pass" */
   detail: string;
 }
@@ -34,19 +36,15 @@ export interface SearchText {
   status: string[];
 }
 
-/** The hero's country search: type a country, go straight to signing up for its exam. */
+/** The hero's country search: type a country, go straight to a round of its test. */
 export function CountrySearch({
   countries,
   text,
-  startHref,
 }: {
   countries: SearchableCountry[];
   text: SearchText;
-  /** Where choosing a country goes, with "{code}" for its ISO code, in the page's language. */
-  startHref: string;
 }) {
   const router = useRouter();
-  const hrefFor = (code: string) => startHref.replace('{code}', code);
   const [query, setQuery] = useState('');
   const inputId = useId();
   const statusId = useId();
@@ -59,7 +57,7 @@ export function CountrySearch({
       className="relative"
       onSubmit={(event) => {
         event.preventDefault();
-        if (matches[0]) router.push(hrefFor(matches[0].isoCode));
+        if (matches[0]) router.push(matches[0].href);
       }}
     >
       <label htmlFor={inputId} className="mb-2 block font-medium">
@@ -87,7 +85,7 @@ export function CountrySearch({
           {matches.map((country) => (
             <li key={country.isoCode}>
               <Link
-                href={hrefFor(country.isoCode)}
+                href={country.href}
                 className={`hover:bg-surface-sunken block px-4 py-3 ${focusRing} focus-visible:-outline-offset-2`}
               >
                 <span className="font-medium">{country.name}</span>

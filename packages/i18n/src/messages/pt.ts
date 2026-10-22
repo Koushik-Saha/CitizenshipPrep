@@ -63,7 +63,6 @@ export const pt: Messages = {
     heroTitle: 'Chegue preparado ao seu teste de cidadania.',
     heroBody:
       'Perguntas de prática escritas a partir do guia oficial de cada país, respostas explicadas em linguagem simples e uma estimativa honesta de quão preparado você está.',
-    startFree: 'Comece a estudar grátis',
     seeCountries: '{count, plural, one {Ver os países} other {Ver os # países}}',
     searchLabel: 'De qual país é o seu teste de cidadania?',
     searchNoMatch:
@@ -466,6 +465,12 @@ export const pt: Messages = {
 
   trial: {
     cta: 'Experimente {count} perguntas agora',
+    ctaNoAccount: 'Experimente {count} perguntas sem criar conta',
+    chooseMetaTitle: 'Experimente {count} perguntas do teste de cidadania, sem conta | Swornly',
+    chooseTitle: 'Experimente {count} perguntas, sem conta',
+    chooseIntro:
+      'Escolha o teste que você vai fazer. Cada pergunta mostra a resposta e o porquê, e nada é salvo.',
+    chooseOther: 'Vai fazer outro teste?',
     metaTitle: 'Experimente o teste de cidadania de {country}: {count} perguntas | Swornly',
     title: 'Experimente o teste de cidadania de {country}',
     intro:

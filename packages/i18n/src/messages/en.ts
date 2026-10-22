@@ -66,7 +66,6 @@ export const en = {
     heroTitle: 'Walk into your citizenship test ready.',
     heroBody:
       'Practice questions written from each country’s official study guide, answers explained in plain language, and an honest estimate of how ready you are.',
-    startFree: 'Start studying free',
     seeCountries: '{count, plural, one {See the countries} other {See all # countries}}',
     searchLabel: 'Which country’s citizenship test are you taking?',
     searchNoMatch:
@@ -467,6 +466,12 @@ export const en = {
 
   trial: {
     cta: 'Try {count} questions now',
+    ctaNoAccount: 'Try {count} questions without an account',
+    chooseMetaTitle: 'Try {count} citizenship test questions, no account needed | Swornly',
+    chooseTitle: 'Try {count} questions, no account needed',
+    chooseIntro:
+      'Choose the test you are taking. Each question shows the answer and why, and nothing is saved.',
+    chooseOther: 'Taking a different test?',
     metaTitle: 'Try the {country} citizenship test: {count} questions | Swornly',
     title: 'Try the {country} citizenship test',
     intro:

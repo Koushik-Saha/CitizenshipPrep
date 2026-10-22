@@ -58,7 +58,6 @@ export const zhHans: Messages = {
       '用对照官方来源核对过的题目、通俗易懂的答案讲解和备考程度估计来准备入籍考试。独立运营，与任何政府均无关联。',
     heroTitle: '做好准备，从容参加入籍考试。',
     heroBody: '练习题依据各国官方学习指南编写，答案讲解通俗易懂，并如实估计你的备考程度。',
-    startFree: '免费开始学习',
     seeCountries: '{count, plural, =1 {查看国家} other {查看全部 # 个国家}}',
     searchLabel: '你要参加哪个国家的入籍考试？',
     searchNoMatch: '暂时没有与“{query}”匹配的国家。我们会在对照官方来源核对考试后添加国家。',
@@ -422,6 +421,11 @@ export const zhHans: Messages = {
 
   trial: {
     cta: '立即试做 {count} 道题',
+    ctaNoAccount: '无需账户，试做 {count} 道题',
+    chooseMetaTitle: '试做 {count} 道入籍考试题，无需账户 | Swornly',
+    chooseTitle: '试做 {count} 道题，无需账户',
+    chooseIntro: '选择你要参加的考试。每道题都会给出答案和原因，且不会保存任何内容。',
+    chooseOther: '参加的是其他考试？',
     metaTitle: '试做{country}入籍考试：{count} 道题 | Swornly',
     title: '试做{country}入籍考试',
     intro:

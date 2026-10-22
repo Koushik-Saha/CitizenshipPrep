@@ -66,7 +66,6 @@ export const ar: Messages = {
     heroTitle: 'ادخل اختبار الجنسية وأنت مستعد.',
     heroBody:
       'أسئلة تدريب مكتوبة من دليل الدراسة الرسمي لكل دولة، وإجابات مشروحة بلغة بسيطة، وتقدير صادق لمدى استعدادك.',
-    startFree: 'ابدأ الدراسة مجانًا',
     seeCountries: '{count, plural, one {عرض الدول} other {عرض كل الدول ({count})}}',
     searchLabel: 'اختبار الجنسية لأي دولة ستؤدي؟',
     searchNoMatch:
@@ -447,6 +446,11 @@ export const ar: Messages = {
 
   trial: {
     cta: 'جرّب {count} أسئلة الآن',
+    ctaNoAccount: 'جرّب {count} أسئلة دون حساب',
+    chooseMetaTitle: 'جرّب {count} أسئلة من اختبار الجنسية دون حساب | Swornly',
+    chooseTitle: 'جرّب {count} أسئلة دون حساب',
+    chooseIntro: 'اختر الاختبار الذي ستخوضه. يعرض كل سؤال الإجابة وسببها، ولا يُحفظ شيء.',
+    chooseOther: 'ستخوض اختبارًا آخر؟',
     metaTitle: 'جرّب اختبار الجنسية في {country}: {count} أسئلة | Swornly',
     title: 'جرّب اختبار الجنسية في {country}',
     intro:

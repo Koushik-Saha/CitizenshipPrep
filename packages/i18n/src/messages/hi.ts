@@ -63,7 +63,6 @@ export const hi: Messages = {
     heroTitle: 'अपनी नागरिकता परीक्षा में पूरी तैयारी के साथ जाएँ।',
     heroBody:
       'हर देश की आधिकारिक गाइड से लिखे गए अभ्यास सवाल, आसान भाषा में समझाए गए जवाब, और आपकी तैयारी का ईमानदार अनुमान।',
-    startFree: 'मुफ़्त में पढ़ना शुरू करें',
     seeCountries: '{count, plural, one {देश देखें} other {सभी # देश देखें}}',
     searchLabel: 'आप किस देश की नागरिकता परीक्षा दे रहे हैं?',
     searchNoMatch:
@@ -456,6 +455,12 @@ export const hi: Messages = {
 
   trial: {
     cta: 'अभी {count} प्रश्न आज़माएँ',
+    ctaNoAccount: 'बिना खाते के {count} प्रश्न आज़माएँ',
+    chooseMetaTitle: 'नागरिकता परीक्षा के {count} प्रश्न आज़माएँ, खाते की ज़रूरत नहीं | Swornly',
+    chooseTitle: '{count} प्रश्न आज़माएँ, खाते की ज़रूरत नहीं',
+    chooseIntro:
+      'वह परीक्षा चुनें जो आप दे रहे हैं। हर प्रश्न के बाद उत्तर और उसका कारण दिखता है, और कुछ भी सहेजा नहीं जाता।',
+    chooseOther: 'कोई और परीक्षा दे रहे हैं?',
     metaTitle: '{country} की नागरिकता परीक्षा आज़माएँ: {count} प्रश्न | Swornly',
     title: '{country} की नागरिकता परीक्षा आज़माएँ',
     intro:

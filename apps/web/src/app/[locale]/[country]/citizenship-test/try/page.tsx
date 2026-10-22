@@ -7,8 +7,10 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
 import { I18nProvider } from '@/components/i18n/provider';
+import Link from '@/components/link';
 import { Breadcrumbs, SiteFooter, SiteHeader } from '@/components/site-chrome';
 import { GuestTrial } from '@/components/trial/guest-trial';
+import { textButtonClass } from '@/components/ui';
 import { clientMessages, getT } from '@/lib/i18n';
 import { getDb } from '@/lib/db';
 import { loadPublic } from '@/lib/public-content';
@@ -70,6 +72,12 @@ export default async function TrialPage({ params }: Props) {
           {title}
         </h1>
         <p className="text-fg-muted mt-3">{t('trial.intro', { count: guide.questions.length })}</p>
+        {/* Sent here from "/try" by where they are, a visitor may be taking another test. */}
+        <p className="mt-2 text-sm">
+          <Link href={localizePath(locale, '/try?choose=1')} className={textButtonClass}>
+            {t('trial.chooseOther')}
+          </Link>
+        </p>
         <I18nProvider
           locale={locale}
           messages={clientMessages(locale, ['trial', 'session', 'common'])}

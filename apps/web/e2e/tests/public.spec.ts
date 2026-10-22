@@ -20,6 +20,61 @@ test('the landing page leads to a country and on to sign-in', async ({ page }) =
   await expect(page).toHaveURL(/\/sign-in\?country=ZZ$/);
 });
 
+test('the homepage starts with a round of questions, no account, and signing up comes second', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const hero = page.locator('section[aria-labelledby="hero-heading"]');
+  const tryIt = hero.getByRole('link', {
+    name: t('trial.ctaNoAccount', { count: TRIAL_QUESTIONS }),
+  });
+  await expect(tryIt).toHaveAttribute('href', '/try');
+  await expect(hero.getByRole('link', { name: t('trial.signUp') })).toHaveAttribute(
+    'href',
+    '/sign-in',
+  );
+  // The try button comes first.
+  const links = await hero.getByRole('link').allInnerTexts();
+  expect(links.indexOf(t('trial.ctaNoAccount', { count: TRIAL_QUESTIONS }))).toBeLessThan(
+    links.indexOf(t('trial.signUp')),
+  );
+  // No button anywhere promises "free" and then asks for an account without saying so.
+  await expect(page.getByRole('link', { name: 'Start studying free' })).toHaveCount(0);
+
+  // From where the visitor is, straight into a question: no sign-in on the way.
+  await page.setExtraHTTPHeaders({ 'x-vercel-ip-country': 'ZZ' });
+  await tryIt.click();
+  await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
+  await expect(page.getByRole('heading', { level: 2 }).first()).toBeVisible();
+  await expect(page.getByRole('radio').first()).toBeVisible();
+
+  // Taking another test: the visitor chooses.
+  await page.getByRole('link', { name: t('trial.chooseOther') }).click();
+  await expect(page).toHaveURL(/\/try\?choose=1$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    t('trial.chooseTitle', { count: TRIAL_QUESTIONS }),
+  );
+  await expect(page.getByRole('link', { name: /Testland/ })).toHaveAttribute(
+    'href',
+    '/testland/citizenship-test/try',
+  );
+  await expectAccessible(page, 'choose a test to try');
+
+  // The globe asks by country code; an unknown code leaves the choice to the visitor.
+  await page.goto('/try?country=zz');
+  await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
+  await page.goto('/try?choose=1&country=QQ');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    t('trial.chooseTitle', { count: TRIAL_QUESTIONS }),
+  );
+
+  // The hero's search goes to the trial too.
+  await page.goto('/');
+  await page.getByRole('searchbox').fill('Testland');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/testland\/citizenship-test\/try$/);
+});
+
 test('a country whose questions are still being completed is marked Beta, and its pass is not sold', async ({
   page,
 }) => {
@@ -79,6 +134,13 @@ test('a country page shows the exam facts, as many free samples as the Free plan
   const shown = await topicSamples.count();
   expect(shown).toBeGreaterThanOrEqual(10);
   expect(shown).toBeLessThanOrEqual(FREE_QUESTIONS_PER_COUNTRY);
+  // Its first offer is a round of questions, no account; studying it signs in.
+  await expect(
+    page.getByRole('link', { name: t('trial.cta', { count: TRIAL_QUESTIONS }) }),
+  ).toHaveAttribute('href', '/testland/citizenship-test/try');
+  await expect(
+    page.getByRole('link', { name: t('countries.studyForTest', { country: 'Testland' }) }),
+  ).toHaveAttribute('href', '/sign-in?country=ZZ');
 });
 
 test('pages come in the reader’s language, with questions translated where reviewed', async ({

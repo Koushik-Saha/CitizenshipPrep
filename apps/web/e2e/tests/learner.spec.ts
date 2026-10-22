@@ -298,7 +298,8 @@ test('a plan is offered on the landing page only with its price, and leads throu
     await expect(pricing.getByRole('link', { name, exact: true })).toHaveCount(0);
   }
   await expect(pricing.getByText(t('plans.unavailable'))).toHaveCount(2);
-  await expect(pricing.getByRole('link', { name: t('landing.startFree') })).toHaveAttribute(
+  // The free plan's button says it makes an account, since that is where it goes.
+  await expect(pricing.getByRole('link', { name: t('trial.signUp') })).toHaveAttribute(
     'href',
     '/sign-in',
   );

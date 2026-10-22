@@ -63,7 +63,6 @@ export const es: Messages = {
     heroTitle: 'Llega preparado a tu examen de ciudadanía.',
     heroBody:
       'Preguntas de práctica redactadas a partir de la guía oficial de cada país, respuestas explicadas con claridad y una estimación honesta de lo preparado que estás.',
-    startFree: 'Empieza a estudiar gratis',
     seeCountries: '{count, plural, one {Ver los países} other {Ver los # países}}',
     searchLabel: '¿De qué país es tu examen de ciudadanía?',
     searchNoMatch:
@@ -466,6 +465,12 @@ export const es: Messages = {
 
   trial: {
     cta: 'Prueba {count} preguntas ahora',
+    ctaNoAccount: 'Prueba {count} preguntas sin crear una cuenta',
+    chooseMetaTitle: 'Prueba {count} preguntas del examen de ciudadanía, sin cuenta | Swornly',
+    chooseTitle: 'Prueba {count} preguntas, sin cuenta',
+    chooseIntro:
+      'Elige el examen que vas a hacer. Cada pregunta muestra la respuesta y el porqué, y no se guarda nada.',
+    chooseOther: '¿Vas a hacer otro examen?',
     metaTitle: 'Prueba el examen de ciudadanía de {country}: {count} preguntas | Swornly',
     title: 'Prueba el examen de ciudadanía de {country}',
     intro:

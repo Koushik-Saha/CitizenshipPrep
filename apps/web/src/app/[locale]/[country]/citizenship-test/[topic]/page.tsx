@@ -1,7 +1,7 @@
 import { describeExam, testPath } from '@oathly/api/countries';
 import { topicFaq } from '@oathly/api/seo';
 import { getTopicGuide, listTestPages } from '@oathly/api/server';
-import { breadcrumbSchema } from '@oathly/core';
+import { breadcrumbSchema, TRIAL_QUESTIONS } from '@oathly/core';
 import { countryName, isolate, localizePath } from '@oathly/i18n';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { cache } from 'react';
 
 import { FaqSection, JsonLd, LastChecked, SampleQuestions } from '@/components/seo/test-page';
 import { Breadcrumbs, SiteFooter, SiteHeader } from '@/components/site-chrome';
-import { focusRing } from '@/components/ui';
+import { buttonClass, focusRing } from '@/components/ui';
 import { getDb } from '@/lib/db';
 import { getT } from '@/lib/i18n';
 import { loadPublic } from '@/lib/public-content';
@@ -115,12 +115,21 @@ export default async function TopicPage({ params }: Props) {
               ? t('countries.moreInApp', { count: remaining, topic: isolate(guide.topic.name) })
               : t('countries.practiseInApp')}
           </p>
-          <Link
-            href={localizePath(locale, `/sign-in?country=${guide.country.isoCode}`)}
-            className={`${focusRing} bg-primary text-on-primary hover:bg-primary-hover mt-4 inline-flex rounded-md px-5 py-3 font-semibold`}
-          >
-            {t('countries.studyForTest', { country })}
-          </Link>
+          {/* A round of the test first, no account; studying it signs in. */}
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={localizePath(locale, `${countryPath}/try`)}
+              className={`${buttonClass.primary} px-5 py-3`}
+            >
+              {t('trial.cta', { count: TRIAL_QUESTIONS })}
+            </Link>
+            <Link
+              href={localizePath(locale, `/sign-in?country=${guide.country.isoCode}`)}
+              className={`${buttonClass.secondary} px-5 py-3`}
+            >
+              {t('countries.studyForTest', { country })}
+            </Link>
+          </div>
         </div>
 
         {guide.exams.length > 0 && (

@@ -56,6 +56,21 @@ export function countriesWithQuestions<T extends Pick<CountryFacts, 'publishedQu
 }
 
 /**
+ * The country whose trial to open for a visitor who has not said which test
+ * they are taking: the one they are in (`visitorCountry`, an ISO code from the
+ * host, when it is known) if it has questions, or the only country there is.
+ * Null when it is a choice for the visitor to make.
+ */
+export function trialCountryFor<T extends Pick<CountryFacts, 'isoCode' | 'publishedQuestions'>>(
+  countries: readonly T[],
+  visitorCountry: string | null | undefined,
+): T | null {
+  const open = countriesWithQuestions(countries);
+  const code = visitorCountry?.trim().toUpperCase();
+  return open.find((country) => country.isoCode === code) ?? (open.length === 1 ? open[0]! : null);
+}
+
+/**
  * The official question pool a country has not covered yet: the largest
  * published pool among its exams, when it has fewer published questions than
  * that. Null where no pool is public, or the bank covers it. The country's

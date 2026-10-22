@@ -10,6 +10,7 @@ import {
   localCountryName,
   parseCountryCode,
   searchCountries,
+  trialCountryFor,
   testPath,
   uncoveredPool,
   type CountryFacts,
@@ -55,6 +56,29 @@ describe('countriesWithQuestions', () => {
     ]);
     expect(listed.map((country) => country.isoCode)).toEqual(['US', 'CA']);
     expect(countriesWithQuestions([])).toEqual([]);
+  });
+});
+
+describe('trialCountryFor', () => {
+  const us = { isoCode: 'US', publishedQuestions: 128 };
+  const ca = { isoCode: 'CA', publishedQuestions: 168 };
+  const de = { isoCode: 'DE', publishedQuestions: 0 };
+
+  it('opens the trial of the country the visitor is in, when it has questions', () => {
+    expect(trialCountryFor([us, ca], 'ca')).toBe(ca);
+    expect(trialCountryFor([us, ca], ' US ')).toBe(us);
+  });
+
+  it('leaves the choice to the visitor when their country has none, or is not known', () => {
+    expect(trialCountryFor([us, ca, de], 'DE')).toBeNull();
+    expect(trialCountryFor([us, ca], 'FR')).toBeNull();
+    expect(trialCountryFor([us, ca], null)).toBeNull();
+    expect(trialCountryFor([], 'US')).toBeNull();
+  });
+
+  it('opens the only country there is, wherever the visitor is', () => {
+    expect(trialCountryFor([us, de], 'FR')).toBe(us);
+    expect(trialCountryFor([us], undefined)).toBe(us);
   });
 });
 

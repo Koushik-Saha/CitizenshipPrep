@@ -61,7 +61,6 @@ export const vi: Messages = {
     heroTitle: 'Bước vào kỳ thi quốc tịch với sự sẵn sàng.',
     heroBody:
       'Câu hỏi luyện tập được soạn từ tài liệu ôn thi chính thức của từng quốc gia, đáp án được giải thích dễ hiểu và ước tính trung thực về mức độ sẵn sàng của bạn.',
-    startFree: 'Bắt đầu học miễn phí',
     seeCountries: '{count, plural, =1 {Xem các quốc gia} other {Xem tất cả # quốc gia}}',
     searchLabel: 'Bạn sẽ thi quốc tịch của nước nào?',
     searchNoMatch:
@@ -449,6 +448,12 @@ export const vi: Messages = {
 
   trial: {
     cta: 'Thử {count} câu hỏi ngay',
+    ctaNoAccount: 'Thử {count} câu hỏi không cần tài khoản',
+    chooseMetaTitle: 'Thử {count} câu hỏi thi quốc tịch, không cần tài khoản | Swornly',
+    chooseTitle: 'Thử {count} câu hỏi, không cần tài khoản',
+    chooseIntro:
+      'Chọn kỳ thi bạn sẽ tham gia. Mỗi câu hỏi đều có đáp án và lời giải thích, và không có gì được lưu lại.',
+    chooseOther: 'Bạn thi một kỳ thi khác?',
     metaTitle: 'Thử bài thi quốc tịch {country}: {count} câu hỏi | Swornly',
     title: 'Thử bài thi quốc tịch {country}',
     intro:

@@ -64,7 +64,6 @@ export const tl: Messages = {
     heroTitle: 'Pumasok sa iyong citizenship test nang handa.',
     heroBody:
       'Mga tanong sa pagsasanay na isinulat mula sa opisyal na gabay ng bawat bansa, mga sagot na ipinaliwanag sa simpleng salita, at tapat na pagtatantiya kung gaano ka na kahanda.',
-    startFree: 'Magsimulang mag-aral nang libre',
     seeCountries:
       '{count, plural, one {Tingnan ang mga bansa} other {Tingnan ang lahat ng # bansa}}',
     searchLabel: 'Citizenship test ng aling bansa ang kukunin mo?',
@@ -469,6 +468,12 @@ export const tl: Messages = {
 
   trial: {
     cta: 'Subukan ang {count} tanong ngayon',
+    ctaNoAccount: 'Subukan ang {count} tanong nang walang account',
+    chooseMetaTitle: 'Subukan ang {count} tanong sa citizenship test, walang account | Swornly',
+    chooseTitle: 'Subukan ang {count} tanong, walang account',
+    chooseIntro:
+      'Piliin ang test na kukunin mo. Ipinapakita ng bawat tanong ang sagot at kung bakit, at walang nase-save.',
+    chooseOther: 'Ibang test ang kukunin mo?',
     metaTitle: 'Subukan ang citizenship test ng {country}: {count} tanong | Swornly',
     title: 'Subukan ang citizenship test ng {country}',
     intro:

@@ -1,6 +1,7 @@
 import { localizePath, orList } from '@oathly/i18n';
-import { countriesWithQuestions, describeExam } from '@oathly/api/countries';
+import { countriesWithQuestions, describeExam, testPath } from '@oathly/api/countries';
 import { listCountryFacts } from '@oathly/api/server';
+import { TRIAL_QUESTIONS } from '@oathly/core';
 import { localCountryName } from '@oathly/api/countries';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -48,14 +49,15 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
   const countries = countriesWithQuestions(await loadPublic((db) => listCountryFacts(db), []));
   const prices = await planPrices();
   const markers = toMarkers(countries, t);
-  // Picking a country, in the search or on the globe, goes to signing up for it.
-  const startHref = localizePath(t.locale, '/sign-in?country={code}');
+  // Picking a country, in the search or on the globe, opens a round of its
+  // test: no account first.
   const searchable = countries.map((country) => {
     const exam = country.exams[0];
     const details = exam ? describeExam(exam, t) : '';
     return {
       isoCode: country.isoCode,
       name: localCountryName(country, t),
+      href: localizePath(t.locale, `${testPath(country.slug)}/try`),
       detail: exam ? (details ? `${exam.name}: ${details}` : exam.name) : '',
     };
   });
@@ -109,7 +111,6 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
               <div className="mt-8 max-w-md">
                 <CountrySearch
                   countries={searchable}
-                  startHref={startHref}
                   text={{
                     label: t('landing.searchLabel'),
                     placeholder: orList(
@@ -125,12 +126,19 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
                 />
               </div>
             )}
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+            {/* First a round of real questions, no account; signing up comes second. */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
+              <Link
+                href={localizePath(t.locale, '/try')}
+                className={`${focusRing} bg-accent text-on-accent hover:bg-accent-hover inline-flex min-h-11 items-center rounded-md px-5 py-3 font-semibold transition-colors`}
+              >
+                {t('trial.ctaNoAccount', { count: TRIAL_QUESTIONS })}
+              </Link>
               <Link
                 href={localizePath(t.locale, '/sign-in')}
-                className={`${focusRing} bg-accent text-on-accent hover:bg-accent-hover inline-flex items-center rounded-md px-5 py-3 font-semibold transition-colors`}
+                className={`${focusRing} border-border-strong text-fg hover:bg-surface-sunken inline-flex min-h-11 items-center rounded-md border px-5 py-3 font-semibold transition-colors`}
               >
-                {t('landing.startFree')}
+                {t('trial.signUp')}
               </Link>
               {countries.length > 0 && (
                 <a
@@ -148,7 +156,7 @@ export default async function Landing({ params }: PageProps<'/[locale]'>) {
               scene="hero"
               view={HERO_VIEW}
               markers={markers}
-              selectHref={startHref}
+              selectHref={localizePath(t.locale, '/try?country={code}')}
               className="mx-auto w-full max-w-[34rem] lg:max-w-none"
             >
               <GlobePoster

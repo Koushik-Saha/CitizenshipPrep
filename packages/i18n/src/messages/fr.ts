@@ -63,7 +63,6 @@ export const fr: Messages = {
     heroTitle: 'Arrivez prêt à votre test de citoyenneté.',
     heroBody:
       'Des questions d’entraînement rédigées à partir du guide officiel de chaque pays, des réponses expliquées simplement et une estimation honnête de votre niveau de préparation.',
-    startFree: 'Commencer gratuitement',
     seeCountries: '{count, plural, one {Voir les pays} other {Voir les # pays}}',
     searchLabel: 'Vous passez le test de citoyenneté de quel pays ?',
     searchNoMatch:
@@ -470,6 +469,12 @@ export const fr: Messages = {
 
   trial: {
     cta: 'Essayer {count} questions',
+    ctaNoAccount: 'Essayer {count} questions sans compte',
+    chooseMetaTitle: 'Essayez {count} questions de l’examen de citoyenneté, sans compte | Swornly',
+    chooseTitle: 'Essayez {count} questions, sans compte',
+    chooseIntro:
+      'Choisissez l’examen que vous passez. Chaque question montre la réponse et pourquoi, et rien n’est enregistré.',
+    chooseOther: 'Vous passez un autre examen ?',
     metaTitle: 'Essayez le test de citoyenneté de {country} : {count} questions | Swornly',
     title: 'Essayez le test de citoyenneté de {country}',
     intro:

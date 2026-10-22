@@ -282,7 +282,7 @@ export function Pricing({
             href={localizePath(t.locale, '/sign-in')}
             className={`${buttonClass.secondary} mt-8`}
           >
-            {t('landing.startFree')}
+            {t('trial.signUp')}
           </Link>
         </div>
         <div className={`border-border-strong ${card}`}>
