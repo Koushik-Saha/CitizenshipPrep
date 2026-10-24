@@ -7,6 +7,8 @@ import {
   looksLikeSpam,
   mentionsPersonalData,
   parseScreening,
+  REPORTER_MIN_AGE_DAYS,
+  reportCountsToHide,
   REPORTS_TO_HIDE,
   screen,
   screeningInput,
@@ -122,6 +124,21 @@ describe('hiddenByReports', () => {
   it('hides at the third report', () => {
     expect(hiddenByReports(REPORTS_TO_HIDE - 1)).toBe(false);
     expect(hiddenByReports(REPORTS_TO_HIDE)).toBe(true);
+  });
+});
+
+describe('reportCountsToHide', () => {
+  const now = new Date('2026-10-24T12:00:00Z');
+  const daysAgo = (days: number) => new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+
+  it('counts a report from an account a week old or more', () => {
+    expect(reportCountsToHide(daysAgo(REPORTER_MIN_AGE_DAYS), now)).toBe(true);
+    expect(reportCountsToHide(daysAgo(400), now)).toBe(true);
+  });
+
+  it('does not count one from a newer account', () => {
+    expect(reportCountsToHide(daysAgo(REPORTER_MIN_AGE_DAYS - 0.01), now)).toBe(false);
+    expect(reportCountsToHide(now, now)).toBe(false);
   });
 });
 

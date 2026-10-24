@@ -267,6 +267,11 @@ describe.skipIf(!url)('study groups', () => {
 
   it('hides a post once enough learners report it', async () => {
     const report = { reason: 'spam', details: null } as const;
+    // Minh and R1 have had their accounts for a while; R2's is brand new.
+    await pool.query(
+      `update public.profiles set created_at = now() - interval '30 days' where id = any($1)`,
+      [[MINH, R1]],
+    );
     await expect(reportContent(pool, MARIA, { postId: visible }, report)).rejects.toThrow(
       /your own/,
     );
@@ -281,6 +286,15 @@ describe.skipIf(!url)('study groups', () => {
     ).toEqual({
       hidden: false,
     });
+    // A brand-new account's report reaches a moderator, but does not count
+    // towards hiding: a few throwaway accounts cannot silence anyone.
+    expect(await reportContent(pool, R2, { postId: visible }, report)).toEqual({ hidden: false });
+    expect(await getThread(pool, R2, visible)).not.toBeNull();
+    // A week on, the same report counts.
+    await pool.query(
+      `update public.profiles set created_at = now() - interval '8 days' where id = $1`,
+      [R2],
+    );
     expect(await reportContent(pool, R2, { postId: visible }, report)).toEqual({ hidden: true });
     expect(await getThread(pool, R2, visible)).toBeNull();
     expect((await listPosts(pool, MARIA, COUNTRY)).find((p) => p.id === visible)!.heldFor).toEqual([

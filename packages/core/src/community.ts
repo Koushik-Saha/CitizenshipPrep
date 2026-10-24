@@ -28,6 +28,12 @@ export const POST_BODY_MAX = 5000;
 export const COMMENT_MAX = 2000;
 /** This many learners reporting a post hides it until a moderator has looked. */
 export const REPORTS_TO_HIDE = 3;
+/**
+ * How old an account has to be before its report counts towards hiding
+ * something. Newer accounts' reports still reach a moderator; they just cannot
+ * hide a post on their own, so a few throwaway accounts cannot silence anyone.
+ */
+export const REPORTER_MIN_AGE_DAYS = 7;
 
 // Someone writing about themselves, a matter an attorney handles, and a
 // request for a verdict on it. All three together read as "what should I do
@@ -154,6 +160,11 @@ export function screen(text: string, model: ScreeningVerdict | null | 'none'): S
 /** Whether enough learners have reported something for it to be hidden until reviewed. */
 export function hiddenByReports(openReports: number): boolean {
   return openReports >= REPORTS_TO_HIDE;
+}
+
+/** Whether a report counts towards hiding: its writer's account is old enough (see REPORTER_MIN_AGE_DAYS). */
+export function reportCountsToHide(reporterSince: Date, now: Date = new Date()): boolean {
+  return now.getTime() - reporterSince.getTime() >= REPORTER_MIN_AGE_DAYS * 24 * 60 * 60 * 1000;
 }
 
 /** A story's exam date is in the past (or today) and within living memory of the exam. */

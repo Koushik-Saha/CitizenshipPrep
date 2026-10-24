@@ -236,15 +236,17 @@ describe.skipIf(!url)('quiz engine against the seeded exam formats', () => {
       await pool.query(`insert into public.profiles (id) values ($1) on conflict do nothing`, [
         user,
       ]);
-      attemptId = (
-        await pool.query<{ id: string }>(
-          `insert into public.attempts (user_id, country_code) values ($1, 'US') returning id`,
-          [user],
-        )
-      ).rows[0]!.id;
       questionId = (
         await pool.query<{ id: string }>(
           `select id from public.questions where country_code = 'US' limit 1`,
+        )
+      ).rows[0]!.id;
+      // A session of that one question.
+      attemptId = (
+        await pool.query<{ id: string }>(
+          `insert into public.attempts (user_id, country_code, question_ids, question_count)
+           values ($1, 'US', array[$2::uuid], 1) returning id`,
+          [user, questionId],
         )
       ).rows[0]!.id;
     });
@@ -283,6 +285,51 @@ describe.skipIf(!url)('quiz engine against the seeded exam formats', () => {
         ['Invalid answer timestamp.', true],
         ['Invalid question version.', true],
         ['Unknown attempt or question.', true],
+      ]);
+    });
+
+    it('will not attach an answer to a question that is not in the session', async () => {
+      const other = (
+        await pool.query<{ id: string }>(
+          `select id from public.questions where country_code = 'US' and id <> $1 limit 1`,
+          [questionId],
+        )
+      ).rows[0]!.id;
+      const outcome = await recordAnswers(pool, user, [
+        answer('7d1c1f7e-0000-4000-8000-000000000008', { questionId: other }),
+      ]);
+      expect(outcome.rejected).toEqual([
+        {
+          clientEventId: '7d1c1f7e-0000-4000-8000-000000000008',
+          reason: 'Unknown attempt or question.',
+          permanent: true,
+        },
+      ]);
+    });
+
+    it('marks an answer itself, whatever the client says', async () => {
+      const { rows } = await pool.query<{ correct_answer: { keys: string[] } }>(
+        'select correct_answer from public.questions where id = $1',
+        [questionId],
+      );
+      const wrong = ['a', 'b', 'c', 'd'].find(
+        (key) => !rows[0]!.correct_answer.keys.includes(key),
+      )!;
+      await recordAnswers(pool, user, [
+        answer('7d1c1f7e-0000-4000-8000-000000000009', { selectedKeys: [wrong], correct: true }),
+        answer('7d1c1f7e-0000-4000-8000-00000000000a', {
+          selectedKeys: rows[0]!.correct_answer.keys,
+          correct: false,
+        }),
+      ]);
+      const stored = await pool.query<{ client_event_id: string; correct: boolean }>(
+        `select client_event_id, correct from public.answer_events
+         where user_id = $1 and client_event_id = any($2::uuid[]) order by client_event_id`,
+        [user, ['7d1c1f7e-0000-4000-8000-000000000009', '7d1c1f7e-0000-4000-8000-00000000000a']],
+      );
+      expect(stored.rows).toEqual([
+        { client_event_id: '7d1c1f7e-0000-4000-8000-000000000009', correct: false },
+        { client_event_id: '7d1c1f7e-0000-4000-8000-00000000000a', correct: true },
       ]);
     });
 

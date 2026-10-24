@@ -1,8 +1,10 @@
+import { randomUUID } from 'node:crypto';
+
 import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { recordAnswers } from './quiz';
-import { createRandom } from '@oathly/core';
+import { loadQuestionPool, recordAnswers } from './quiz';
+import { accessibleQuestions, createRandom, FREE_QUESTIONS_PER_COUNTRY } from '@oathly/core';
 
 import { startOfflineSession } from '../pack';
 import { countryPackSchema, studySessionSchema } from '../schemas';
@@ -12,6 +14,7 @@ import {
   getCountryPack,
   getDashboard,
   loadStudySession,
+  recordAnswersNotingFirst,
   registerOfflineAttempts,
   setTimeZone,
   startMockExam,
@@ -199,8 +202,34 @@ describe.skipIf(!url)('study sessions against the database', () => {
       }),
     ).rejects.toThrow('That exam is not available.');
 
-    await completeAttempt(pool, USER, attemptId, { correct: 5, total: 6, passed: true });
-    await completeAttempt(pool, USER, attemptId, { correct: 0, total: 6, passed: false });
+    // Five right and one wrong, sent by a client that claims every one was
+    // right. The server marks each answer itself, and scores the exam from them.
+    const answered = await recordAnswers(
+      pool,
+      USER,
+      session.questions.map((question, i) => ({
+        clientEventId: randomUUID(),
+        attemptId,
+        questionId: question.id,
+        questionVersion: question.version,
+        selectedKeys: i < 5 ? ['a'] : ['b'],
+        correct: true,
+        timeMs: 1000,
+        answeredAt: new Date().toISOString(),
+      })),
+    );
+    expect(answered.accepted).toHaveLength(6);
+    const marked = await pool.query<{ correct: boolean }>(
+      'select correct from public.answer_events where attempt_id = $1',
+      [attemptId],
+    );
+    expect(marked.rows.filter((row) => row.correct)).toHaveLength(5);
+
+    expect(await completeAttempt(pool, USER, attemptId)).toEqual({
+      mockExam: { countryCode: COUNTRY, correct: 5, total: 6, passed: true },
+    });
+    // Finishing it again changes nothing, and is not a second exam.
+    expect(await completeAttempt(pool, USER, attemptId)).toEqual({ mockExam: null });
     const stored = await pool.query(
       `select a.correct_count, a.completed_at is not null as done, m.passed, m.correct_count as mock_correct
        from public.attempts a join public.mock_exams m on m.id = a.mock_exam_id where a.id = $1`,
@@ -208,9 +237,80 @@ describe.skipIf(!url)('study sessions against the database', () => {
     );
     expect(stored.rows[0]).toEqual({ correct_count: 5, done: true, passed: true, mock_correct: 5 });
     expect((await loadStudySession(pool, USER, attemptId))!.completedAt).not.toBeNull();
-    await expect(
-      completeAttempt(pool, USER, attemptId, { correct: 7, total: 6, passed: true }),
-    ).rejects.toThrow('Invalid result.');
+    // The dashboard test below starts from its own practice answers.
+    await pool.query('delete from public.answer_events where attempt_id = $1', [attemptId]);
+  });
+
+  it('scores a session from its stored answers, whatever a client claims', async () => {
+    const attemptId = await startMockExam(pool, USER, {
+      countryCode: COUNTRY,
+      examFormatId: formatId,
+    });
+    const session = (await loadStudySession(pool, USER, attemptId))!;
+    const answer = (questionId: string, keys: string[]) => ({
+      clientEventId: randomUUID(),
+      attemptId,
+      questionId,
+      questionVersion: 1,
+      selectedKeys: keys,
+      correct: true,
+      timeMs: 1000,
+      answeredAt: new Date().toISOString(),
+    });
+
+    // A question from outside the session is not stored against it.
+    const outside = await pool.query<{ id: string }>(
+      `select id from public.questions
+       where country_code = $1 and status = 'published' and not (id = any($2::uuid[]))
+       limit 1`,
+      [COUNTRY, session.questions.map((question) => question.id)],
+    );
+    const stray = await recordAnswers(pool, USER, [answer(outside.rows[0]!.id, ['a'])]);
+    expect(stray.rejected).toMatchObject([{ reason: 'Unknown attempt or question.' }]);
+
+    // Finished with nothing answered: nought, a fail.
+    expect(await completeAttempt(pool, USER, attemptId)).toEqual({
+      mockExam: { countryCode: COUNTRY, correct: 0, total: 6, passed: false },
+    });
+    // Answers that arrive after the end (a slow queue) are scored then.
+    await recordAnswersNotingFirst(
+      pool,
+      USER,
+      session.questions.slice(0, 4).map((question) => answer(question.id, ['a'])),
+    );
+    const late = await pool.query(
+      `select a.correct_count, m.correct_count as mock_correct, m.passed
+       from public.attempts a join public.mock_exams m on m.id = a.mock_exam_id where a.id = $1`,
+      [attemptId],
+    );
+    expect(late.rows[0]).toEqual({ correct_count: 4, mock_correct: 4, passed: true });
+
+    // Flashcards are marked by the learner, so their own verdict stands.
+    const cards = await startPractice(
+      pool,
+      USER,
+      { countryCode: COUNTRY, mode: 'random', size: 2 },
+      'flashcards',
+    );
+    const deck = (await loadStudySession(pool, USER, cards))!;
+    await recordAnswers(pool, USER, [
+      { ...answer(deck.questions[0]!.id, []), attemptId: cards, correct: true },
+    ]);
+    const verdict = await pool.query<{ correct: boolean }>(
+      'select correct from public.answer_events where attempt_id = $1',
+      [cards],
+    );
+    expect(verdict.rows).toEqual([{ correct: true }]);
+
+    // Leave the dashboard below as it was.
+    await pool.query('delete from public.answer_events where attempt_id = any($1::uuid[])', [
+      [attemptId, cards],
+    ]);
+    await pool.query(
+      `with gone as (delete from public.attempts where id = any($1::uuid[]) returning mock_exam_id)
+       delete from public.mock_exams where id in (select mock_exam_id from gone)`,
+      [[attemptId, cards]],
+    );
   });
 
   it('keeps sessions private to their learner', async () => {
@@ -348,12 +448,28 @@ describe.skipIf(!url)('study sessions against the database', () => {
     ]);
     expect(outcome.accepted).toHaveLength(1);
 
-    // Sent again with the result, it is finished rather than duplicated.
-    await registerOfflineAttempts(pool, USER, [
-      { ...exam.attempt, result: { correct: 5, total: 6, passed: true } },
-    ]);
+    // The exam answered on the phone: five right, one wrong.
+    await recordAnswers(
+      pool,
+      USER,
+      exam.session.questions.map((examQuestion, i) => ({
+        clientEventId: randomUUID(),
+        attemptId: exam.attempt.attemptId,
+        questionId: examQuestion.id,
+        questionVersion: examQuestion.version,
+        selectedKeys: i < 5 ? examQuestion.correctKeys : ['b'],
+        correct: i < 5,
+        timeMs: 2000,
+        answeredAt: now.toISOString(),
+      })),
+    );
+    // Sent again with a result, it is finished rather than duplicated, and
+    // scored from its answers: the result the phone claims is not used.
     await registerOfflineAttempts(pool, USER, [
       { ...exam.attempt, result: { correct: 0, total: 6, passed: false } },
+    ]);
+    await registerOfflineAttempts(pool, USER, [
+      { ...exam.attempt, result: { correct: 6, total: 6, passed: true } },
     ]);
     const done = await pool.query(
       `select count(*)::int as attempts, max(a.correct_count) as correct, bool_and(m.passed) as passed
@@ -399,6 +515,69 @@ describe.skipIf(!url)('study sessions against the database', () => {
       await refuse({}, 'test:study-other');
     } finally {
       await pool.query(`delete from public.profiles where id = 'test:study-other'`);
+    }
+  });
+
+  it('keeps offline sessions to the questions the learner’s plan includes', async () => {
+    // More questions than the Free plan's sample, so some are Pro's only.
+    const topic = (
+      await pool.query<{ id: string }>(`select id from public.topics where country_code = $1`, [
+        COUNTRY,
+      ])
+    ).rows[0]!.id;
+    const extra: string[] = [];
+    for (let i = 0; i < FREE_QUESTIONS_PER_COUNTRY; i += 1) {
+      const { rows } = await pool.query<{ id: string }>(
+        `insert into public.questions (country_code, topic_id, difficulty, type, correct_answer, source_url, status, verified_by, last_verified_at)
+         values ($1, $2, 2, 'multiple_choice', '{"keys": ["a"]}', 'https://example.test', 'published', 'test:study-reviewer', now())
+         returning id`,
+        [COUNTRY, topic],
+      );
+      extra.push(rows[0]!.id);
+      await pool.query(
+        `insert into public.question_translations (question_id, locale, text, options, status, reviewed_by, reviewed_at)
+         values ($1, 'en', $2, '[{"key":"a","text":"Yes"},{"key":"b","text":"No"}]', 'approved', 'test:study-reviewer', now())`,
+        [rows[0]!.id, `Extra question ${i}`],
+      );
+    }
+    const attemptId = randomUUID();
+    try {
+      const bank = await loadQuestionPool(pool, COUNTRY);
+      const free = new Set(
+        accessibleQuestions({ entitlements: [] }, COUNTRY, bank, new Date()).map((q) => q.id),
+      );
+      const paid = bank.find((question) => !free.has(question.id))!.id;
+      const session = {
+        attemptId,
+        countryCode: COUNTRY,
+        mode: 'practice' as const,
+        questionIds: [paid],
+        examFormatId: null,
+        examQuestionIds: null,
+        startedAt: new Date().toISOString(),
+        result: null,
+      };
+      // On the Free plan, a question outside the sample is refused…
+      await expect(registerOfflineAttempts(pool, USER, [session])).rejects.toThrow(
+        'Some of these questions are not available.',
+      );
+      expect(await loadStudySession(pool, USER, attemptId)).toBeNull();
+      // …and with Pro it is the learner's to study.
+      await pool.query(
+        `insert into public.subscriptions (user_id, plan, status, provider, provider_subscription_id, current_period_end)
+         values ($1, 'pro_monthly', 'active', 'stripe', 'sub_study_offline_test', now() + interval '30 days')`,
+        [USER],
+      );
+      await registerOfflineAttempts(pool, USER, [session]);
+      expect((await loadStudySession(pool, USER, attemptId))!.questions.map((q) => q.id)).toEqual([
+        paid,
+      ]);
+    } finally {
+      await pool.query(
+        `delete from public.subscriptions where provider_subscription_id = 'sub_study_offline_test'`,
+      );
+      await pool.query('delete from public.attempts where id = $1', [attemptId]);
+      await pool.query('delete from public.questions where id = any($1::uuid[])', [extra]);
     }
   });
 

@@ -5,9 +5,15 @@ import pg from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { ensureProfile, reportExamResult, saveOnboarding } from './me';
-import { recordAnswers, recordAnswersNotingFirst } from './quiz';
+import { recordAnswers } from './quiz';
 import { pruneRateLimits, takeRateLimit } from './rate-limit';
-import { completeAttempt, getDashboard, startMockExam, startPractice } from './study';
+import {
+  completeAttempt,
+  getDashboard,
+  recordAnswersNotingFirst,
+  startMockExam,
+  startPractice,
+} from './study';
 
 // Needs the local database (`pnpm db:start`); skipped when the URL is not set.
 const url = process.env.TEST_DATABASE_URL;
@@ -184,9 +190,12 @@ describe.skipIf(!url)('rate limits, exam results and counted moments against the
         { countryCode: COUNTRY, mode: 'random', size: 2 },
         'practice',
       );
+      // The session's own two questions.
       const { rows } = await pool.query<{ id: string; version: number }>(
-        `select q.id, q.version from public.questions q where q.country_code = $1 limit 2`,
-        [COUNTRY],
+        `select q.id, q.version from public.questions q
+         join public.attempts a on q.id = any(a.question_ids)
+         where a.id = $1`,
+        [attemptId],
       );
       const answer = (question: { id: string; version: number }) => ({
         clientEventId: randomUUID(),
@@ -244,15 +253,15 @@ describe.skipIf(!url)('rate limits, exam results and counted moments against the
 
     it('finishes a mock exam once, and a practice session is not one', async () => {
       const mock = await startMockExam(pool, LEARNER, { countryCode: COUNTRY, examFormatId });
-      const result = { correct: 2, total: 2, passed: true };
-      expect(await completeAttempt(pool, LEARNER, mock, result)).toEqual({
-        mockExam: { countryCode: COUNTRY },
+      // Nothing answered: the server scores it nought, whatever a client would say.
+      expect(await completeAttempt(pool, LEARNER, mock)).toMatchObject({
+        mockExam: { countryCode: COUNTRY, correct: 0, passed: false },
       });
       // Again changes nothing, and is not a second exam.
-      expect(await completeAttempt(pool, LEARNER, mock, result)).toEqual({ mockExam: null });
+      expect(await completeAttempt(pool, LEARNER, mock)).toEqual({ mockExam: null });
       // Somebody else finishing it finishes nothing.
       const theirs = await startMockExam(pool, LEARNER, { countryCode: COUNTRY, examFormatId });
-      expect(await completeAttempt(pool, OTHER, theirs, result)).toEqual({ mockExam: null });
+      expect(await completeAttempt(pool, OTHER, theirs)).toEqual({ mockExam: null });
 
       const practice = await startPractice(
         pool,
@@ -260,9 +269,7 @@ describe.skipIf(!url)('rate limits, exam results and counted moments against the
         { countryCode: COUNTRY, mode: 'random', size: 2 },
         'practice',
       );
-      expect(
-        await completeAttempt(pool, LEARNER, practice, { correct: 1, total: 2, passed: null }),
-      ).toEqual({ mockExam: null });
+      expect(await completeAttempt(pool, LEARNER, practice)).toEqual({ mockExam: null });
     });
   });
 });

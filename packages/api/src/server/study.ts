@@ -12,6 +12,7 @@ import {
   minutesStudiedToday,
   readinessScore,
   reviewsFromEvents,
+  scoreAttempt,
   shouldAskExamResult,
   studyStreak,
   topicMastery,
@@ -21,6 +22,7 @@ import {
   type PracticeMode,
   type QuizQuestion,
   type ReadinessScore,
+  type SyncOutcome,
 } from '@oathly/core';
 import type pg from 'pg';
 
@@ -31,21 +33,22 @@ import type {
   QuestionWording,
   ReadinessView,
   SessionQuestion,
+  SessionResult,
   StartSessionRequest,
   StudyMode,
   StudySession,
 } from '../study';
-import { isSpokenFormat } from '../study';
+import { isSpokenFormat, toMockExam, toQuizQuestion } from '../study';
 import { attachAudio, noAudio } from './audio';
 import { accessUser } from './billing';
-import { loadExamFormats, loadQuestionPool, type CountryExamFormat } from './quiz';
+import { loadExamFormats, loadQuestionPool, recordAnswers, type CountryExamFormat } from './quiz';
 
 // Server side of the study app: the dashboard, starting sessions (which picks
 // the questions with the quiz engine and stores the list), and loading a
 // session in one go so the client can run it without further requests.
 // Every function is scoped to a verified user id.
 
-type Db = Pick<pg.Pool, 'query'>;
+type Db = Pick<pg.Pool | pg.PoolClient, 'query'>;
 
 // How a question is worded for a learner. `o` is the exam's own wording (the
 // approved row that is not a translation); `w` is what to show: the learner's
@@ -633,47 +636,105 @@ export async function loadStudySession(
   };
 }
 
-/** What finishing an attempt finished: set when it was a mock exam, and finished just now. */
+/**
+ * What finishing an attempt finished: set when it was a mock exam, and
+ * finished just now, with its result as the server worked it out.
+ */
 export interface CompletedAttempt {
-  mockExam: { countryCode: string } | null;
+  mockExam: ({ countryCode: string } & SessionResult) | null;
 }
 
-/** Records the end of a session. Calling it again changes nothing. */
+/**
+ * What a session scored, worked out from the answers stored for it (each
+ * already marked on the server, see recordAnswers) and scored the way the
+ * learner's screen scores it: the first answer to each question counts, and a
+ * mock exam is held to its pass mark, its sections and its clock. Nothing a
+ * client says about its own score is used. Null for a session that is not
+ * this learner's.
+ */
+export async function gradeAttempt(
+  db: Db,
+  userId: string,
+  attemptId: string,
+): Promise<SessionResult | null> {
+  const session = await loadStudySession(db, userId, attemptId);
+  if (!session) return null;
+  const inSession = new Set(session.questions.map((question) => question.id));
+  const answered = (session.answered ?? []).filter((answer) => inSession.has(answer.questionId));
+  const total = session.questions.length;
+  const exam = toMockExam(session);
+  if (!exam) {
+    return { correct: answered.filter((answer) => answer.correct).length, total, passed: null };
+  }
+  const score = scoreAttempt(
+    session.questions.map(toQuizQuestion),
+    answered.map((answer) => ({
+      questionId: answer.questionId,
+      selectedKeys: answer.selectedKeys,
+      timeMs: answer.timeMs,
+      answeredAt: new Date(answer.answeredAt),
+    })),
+    { exam, startedAt: new Date(session.startedAt) },
+  );
+  return { correct: score.correct, total, passed: score.exam!.passed };
+}
+
+/**
+ * Stores what a finished session scored. Run when it finishes, and again
+ * whenever answers for it arrive afterwards: a phone, or a browser's queue,
+ * may send the end of a session before its last answers.
+ */
+async function storeGrade(
+  db: Db,
+  userId: string,
+  attemptId: string,
+): Promise<{ mockExamId: string | null; result: SessionResult } | null> {
+  const result = await gradeAttempt(db, userId, attemptId);
+  if (!result) return null;
+  const { rows } = await db.query<{ mock_exam_id: string | null }>(
+    `update public.attempts set correct_count = $3, question_count = $4
+     where id = $1 and user_id = $2 and completed_at is not null
+     returning mock_exam_id`,
+    [attemptId, userId, result.correct, result.total],
+  );
+  if (!rows[0]) return null;
+  const mockExamId = rows[0].mock_exam_id;
+  if (mockExamId) {
+    await db.query(
+      `update public.mock_exams
+       set submitted_at = coalesce(submitted_at, now()), correct_count = $2, passed = $3
+       where id = $1`,
+      [mockExamId, result.correct, result.passed],
+    );
+  }
+  return { mockExamId, result };
+}
+
+/**
+ * Records the end of a session and scores it from its stored answers.
+ * Calling it again changes nothing, and is not a second exam.
+ */
 export async function completeAttempt(
   pool: pg.Pool,
   userId: string,
   attemptId: string,
-  result: { correct: number; total: number; passed: boolean | null },
 ): Promise<CompletedAttempt> {
-  if (
-    !Number.isInteger(result.correct) ||
-    !Number.isInteger(result.total) ||
-    result.correct < 0 ||
-    result.correct > result.total
-  ) {
-    throw new StudyError('Invalid result.');
-  }
   const client = await pool.connect();
   try {
     await client.query('begin');
-    const updated = await client.query<{ mock_exam_id: string | null; country_code: string }>(
-      `update public.attempts
-       set completed_at = now(), correct_count = $3, question_count = $4
+    const finished = await client.query<{ country_code: string }>(
+      `update public.attempts set completed_at = now()
        where id = $1 and user_id = $2 and completed_at is null
-       returning mock_exam_id, country_code`,
-      [attemptId, userId, result.correct, result.total],
+       returning country_code`,
+      [attemptId, userId],
     );
-    const mockExamId = updated.rows[0]?.mock_exam_id;
-    if (mockExamId) {
-      await client.query(
-        `update public.mock_exams set submitted_at = now(), correct_count = $2, passed = $3
-         where id = $1 and submitted_at is null`,
-        [mockExamId, result.correct, result.passed],
-      );
-    }
+    const graded = finished.rows[0] ? await storeGrade(client, userId, attemptId) : null;
     await client.query('commit');
     return {
-      mockExam: mockExamId ? { countryCode: updated.rows[0]!.country_code } : null,
+      mockExam:
+        graded?.mockExamId && finished.rows[0]
+          ? { countryCode: finished.rows[0].country_code, ...graded.result }
+          : null,
     };
   } catch (error) {
     await client.query('rollback');
@@ -681,6 +742,44 @@ export async function completeAttempt(
   } finally {
     client.release();
   }
+}
+
+/**
+ * recordAnswers, also saying whether these were the learner's first answers
+ * ever (and for which country), which is a moment worth counting. A session
+ * already finished is scored again with the answers that arrived late.
+ */
+export async function recordAnswersNotingFirst(
+  db: Db,
+  userId: string,
+  answers: readonly unknown[],
+): Promise<{ outcome: SyncOutcome; firstAnswer: { countryCode: string } | null }> {
+  const before = await db.query('select 1 from public.answer_events where user_id = $1 limit 1', [
+    userId,
+  ]);
+  const outcome = await recordAnswers(db, userId, answers);
+  if (outcome.accepted.length > 0) {
+    const finished = await db.query<{ id: string }>(
+      `select distinct a.id
+       from public.answer_events e
+       join public.attempts a on a.id = e.attempt_id
+       where e.user_id = $1 and e.client_event_id = any($2::uuid[])
+         and a.completed_at is not null`,
+      [userId, outcome.accepted],
+    );
+    for (const { id } of finished.rows) await storeGrade(db, userId, id);
+  }
+  if (before.rowCount || outcome.accepted.length === 0) return { outcome, firstAnswer: null };
+  const { rows } = await db.query<{ country_code: string }>(
+    `select a.country_code
+     from public.answer_events e
+     join public.attempts a on a.id = e.attempt_id
+     where e.user_id = $1
+     order by e.created_at, e.id
+     limit 1`,
+    [userId],
+  );
+  return { outcome, firstAnswer: rows[0] ? { countryCode: rows[0].country_code } : null };
 }
 
 /** Starts whichever kind of session the client asked for; returns the attempt id. */
@@ -835,7 +934,9 @@ export async function registerOfflineAttempts(
   pool: pg.Pool,
   userId: string,
   attempts: readonly OfflineAttempt[],
+  now: Date = new Date(),
 ): Promise<void> {
+  let user: AccessUser | undefined;
   for (const attempt of attempts) {
     if (!UUID.test(attempt.attemptId)) throw new StudyError('Invalid attempt id.');
     if (!(attempt.mode in modeColumn)) throw new StudyError('Invalid session mode.');
@@ -850,13 +951,20 @@ export async function registerOfflineAttempts(
     if (Number.isNaN(startedAt.getTime())) throw new StudyError('Invalid start time.');
     await assertStudying(pool, userId, attempt.countryCode);
 
-    const known = await pool.query<{ count: string }>(
-      `select count(*) from public.questions
-       where id = any($1::uuid[]) and country_code = $2 and status = 'published'`,
-      [attempt.questionIds, attempt.countryCode],
+    // Only questions the learner's plan includes, as the pack the phone
+    // built this from did: a session is not a way round the Free sample. One
+    // already recorded was checked when it was, and is left alone.
+    const recorded = await pool.query(
+      'select 1 from public.attempts where id = $1 and user_id = $2',
+      [attempt.attemptId, userId],
     );
-    if (Number(known.rows[0]!.count) !== new Set(attempt.questionIds).size) {
-      throw new StudyError('Some of these questions are not available.');
+    if (!recorded.rowCount) {
+      user ??= await accessUser(pool, userId);
+      const { pool: allowed } = await studyPool(pool, user, attempt.countryCode, now);
+      const allowedIds = new Set(allowed.map((question) => question.id));
+      if (!attempt.questionIds.every((id) => allowedIds.has(id))) {
+        throw new StudyError('Some of these questions are not available.');
+      }
     }
     const isExam = attempt.mode === 'mock_exam';
     const examIds = attempt.examQuestionIds ?? [];
@@ -916,6 +1024,7 @@ export async function registerOfflineAttempts(
     } finally {
       client.release();
     }
-    if (attempt.result) await completeAttempt(pool, userId, attempt.attemptId, attempt.result);
+    // A result means the phone finished it; the score is worked out here.
+    if (attempt.result) await completeAttempt(pool, userId, attempt.attemptId);
   }
 }

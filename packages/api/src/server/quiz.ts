@@ -1,4 +1,5 @@
 import {
+  isCorrect,
   parseBlueprint,
   type ExamFormat,
   type QueuedAnswer,
@@ -93,6 +94,36 @@ function problemWith(answer: unknown): string | null {
 }
 
 /**
+ * Whether an answer was right, worked out here from the question's stored
+ * answer, never taken from the client: readiness and organizations' reports
+ * are built on it. The one exception is a flashcard, which the learner marks
+ * themselves ("I knew it") and which has no choice to check.
+ */
+function correctnessOf(
+  answer: QueuedAnswer,
+  target: {
+    mode: 'practice' | 'review' | 'mock_exam';
+    type: QuizQuestion['type'];
+    correct_answer: { keys: string[] };
+  },
+): boolean {
+  if (target.mode === 'review') return answer.correct;
+  return isCorrect(
+    {
+      id: answer.questionId,
+      topicId: '',
+      topicSlug: '',
+      difficulty: 1,
+      type: target.type,
+      correctKeys: target.correct_answer.keys,
+      regionCode: null,
+      version: answer.questionVersion,
+    },
+    answer.selectedKeys,
+  );
+}
+
+/**
  * Stores answers from a client's offline queue. Safe to call again with the
  * same answers: one already stored counts as accepted. An answer that can
  * never be stored (not the learner's attempt, unknown question, malformed) is
@@ -117,26 +148,39 @@ export async function recordAnswers(
       continue;
     }
     const answer = sent as QueuedAnswer;
-    const { rowCount } = await db.query(
-      `insert into public.answer_events
-         (user_id, attempt_id, question_id, question_version, selected_answer, correct, time_ms,
-          created_at, client_event_id)
-       select $1, a.id, q.id, $4, $5, $6, $7, $8, $9
-       from public.attempts a, public.questions q
-       where a.id = $2 and a.user_id = $1 and q.id = $3
-       on conflict (user_id, client_event_id) where client_event_id is not null do nothing`,
-      [
-        userId,
-        answer.attemptId,
-        answer.questionId,
-        answer.questionVersion,
-        JSON.stringify({ keys: answer.selectedKeys }),
-        answer.correct,
-        answer.timeMs,
-        answer.answeredAt,
-        answer.clientEventId,
-      ],
+    // The question has to be one of the learner's own session's questions.
+    const { rows: found } = await db.query<{
+      mode: 'practice' | 'review' | 'mock_exam';
+      type: QuizQuestion['type'];
+      correct_answer: { keys: string[] };
+    }>(
+      `select a.mode, q.type, q.correct_answer
+       from public.attempts a
+       join public.questions q on q.id = $3
+       where a.id = $2 and a.user_id = $1 and q.id = any(a.question_ids)`,
+      [userId, answer.attemptId, answer.questionId],
     );
+    const target = found[0];
+    const { rowCount } = target
+      ? await db.query(
+          `insert into public.answer_events
+             (user_id, attempt_id, question_id, question_version, selected_answer, correct,
+              time_ms, created_at, client_event_id)
+           values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           on conflict (user_id, client_event_id) where client_event_id is not null do nothing`,
+          [
+            userId,
+            answer.attemptId,
+            answer.questionId,
+            answer.questionVersion,
+            JSON.stringify({ keys: answer.selectedKeys }),
+            correctnessOf(answer, target),
+            answer.timeMs,
+            answer.answeredAt,
+            answer.clientEventId,
+          ],
+        )
+      : { rowCount: 0 };
     if (rowCount) {
       outcome.accepted.push(answer.clientEventId);
       continue;
@@ -156,30 +200,4 @@ export async function recordAnswers(
     }
   }
   return outcome;
-}
-
-/**
- * recordAnswers, also saying whether these were the learner's first answers
- * ever (and for which country), which is a moment worth counting.
- */
-export async function recordAnswersNotingFirst(
-  db: Db,
-  userId: string,
-  answers: readonly unknown[],
-): Promise<{ outcome: SyncOutcome; firstAnswer: { countryCode: string } | null }> {
-  const before = await db.query('select 1 from public.answer_events where user_id = $1 limit 1', [
-    userId,
-  ]);
-  const outcome = await recordAnswers(db, userId, answers);
-  if (before.rowCount || outcome.accepted.length === 0) return { outcome, firstAnswer: null };
-  const { rows } = await db.query<{ country_code: string }>(
-    `select a.country_code
-     from public.answer_events e
-     join public.attempts a on a.id = e.attempt_id
-     where e.user_id = $1
-     order by e.created_at, e.id
-     limit 1`,
-    [userId],
-  );
-  return { outcome, firstAnswer: rows[0] ? { countryCode: rows[0].country_code } : null };
 }

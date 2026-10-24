@@ -1,6 +1,7 @@
 import {
   hiddenByReports,
   parseScreening,
+  reportCountsToHide,
   screen,
   screeningInput,
   type HoldReason,
@@ -338,12 +339,18 @@ export async function reportContent(
      on conflict do nothing`,
     [id, userId, report.reason, report.details],
   );
-  const { rows } = await db.query<{ open: number }>(
-    `select count(*)::int as open from public.community_reports
-     where ${column} = $1 and status = 'open'`,
+  // Only reports from accounts old enough count towards hiding it.
+  const { rows } = await db.query<{ reporter_since: Date }>(
+    `select p.created_at as reporter_since
+     from public.community_reports r
+     join public.profiles p on p.id = r.reporter_id
+     where r.${column} = $1 and r.status = 'open'`,
     [id],
   );
-  const hidden = hiddenByReports(rows[0]!.open);
+  const now = new Date();
+  const hidden = hiddenByReports(
+    rows.filter((row) => reportCountsToHide(row.reporter_since, now)).length,
+  );
   if (hidden) {
     await db.query(
       `update public.${table}

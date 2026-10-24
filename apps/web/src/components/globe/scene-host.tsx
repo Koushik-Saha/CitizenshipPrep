@@ -1,14 +1,16 @@
 'use client';
 
 import { chooseSceneMode, type DeviceSignals } from '@oathly/core/globe';
-import dynamic from 'next/dynamic';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react';
 
 import { sceneStore } from './scene-store';
 
-// three.js and React Three Fiber live in this chunk. It is never rendered on
-// the server and only requested once the browser is idle.
-const GlobeCanvas = dynamic(() => import('./globe-canvas'), { ssr: false });
+// three.js and React Three Fiber live in this chunk. It is only requested
+// once the browser is idle, and never rendered on the server: it is shown only
+// after an effect (which runs in the browser alone) decides to load it.
+// React's lazy rather than next/dynamic, which adds about 1 KiB to every
+// page's JavaScript for nothing this needs.
+const GlobeCanvas = lazy(() => import('./globe-canvas'));
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 
@@ -107,5 +109,9 @@ export function SceneHost() {
     if (reducedMotion) sceneStore.setLive(false);
   }, [reducedMotion]);
 
-  return load && !reducedMotion ? <GlobeCanvas /> : null;
+  return load && !reducedMotion ? (
+    <Suspense fallback={null}>
+      <GlobeCanvas />
+    </Suspense>
+  ) : null;
 }

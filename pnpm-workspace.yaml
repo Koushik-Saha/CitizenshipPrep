@@ -32,6 +32,9 @@ allowBuilds:
 # the latest release instead of the one matching react-native.
 overrides:
   '@react-native/metro-config': 0.86.3
+  # better-auth (through the phone app's sign-in) has Next as a peer; keep it
+  # on the web app's version, which has the security fixes (16.4.1+).
+  next: 16.4.2
 
 minimumReleaseAgeExclude:
   - '@sentry/browser-utils@11.5.0'

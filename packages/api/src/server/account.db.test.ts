@@ -93,7 +93,7 @@ describe.skipIf(!url)('deleting an account against the database', () => {
         { countryCode: COUNTRY, mode: 'random', size: 1 },
         'practice',
       );
-      await completeAttempt(pool, user, attempt, { correct: 1, total: 1, passed: null });
+      await completeAttempt(pool, user, attempt);
       await takeRateLimit(pool, rateLimitKey('explain', 'user', user), rateLimitRules.explain, now);
     }
     await pool.query(
