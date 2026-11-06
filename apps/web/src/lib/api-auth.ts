@@ -1,12 +1,13 @@
-import { bearerToken, createTokenVerifier, ensureProfile } from '@oathly/api/server';
+import { bearerToken, createTokenVerifier, ensureProfile, remoteJwks } from '@oathly/api/server';
 
 import { track } from './analytics';
+import { authProvider } from './auth/server';
 import { currentUser } from './user';
 import { getDb } from './db';
 import { verifyTestSession } from './test-sign-in';
 
-// Who is calling an /api route: the mobile app sends Neon Auth's JWT as a
-// Bearer token; the web app sends its session cookie.
+// Who is calling an /api route: the mobile app sends the auth service's JWT
+// as a Bearer token; the web app sends its session cookie.
 
 let verify: ReturnType<typeof createTokenVerifier> | undefined;
 
@@ -22,9 +23,18 @@ export async function apiUserId(request: Request): Promise<string | null> {
       }
       return testUser;
     }
-    const baseUrl = process.env.NEON_AUTH_BASE_URL;
-    if (!baseUrl) return null;
-    verify ??= createTokenVerifier({ baseUrl });
+    if (authProvider() === 'self-hosted') {
+      // Our own auth's tokens: its keys are published on this site.
+      const site = process.env.SITE_URL;
+      if (!site) return null;
+      verify ??= createTokenVerifier({
+        keys: remoteJwks(`${site.replace(/\/+$/, '')}/api/auth/jwks`),
+      });
+    } else {
+      const baseUrl = process.env.NEON_AUTH_BASE_URL;
+      if (!baseUrl) return null;
+      verify ??= createTokenVerifier({ baseUrl });
+    }
     const verified = await verify(token);
     if (!verified) return null;
     // The first sight of an account is its signup: here, from the phone app.

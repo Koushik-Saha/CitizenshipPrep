@@ -26,6 +26,17 @@ export function jwksUrl(baseUrl: string): URL {
   return new URL(`${baseUrl.replace(/\/+$/, '')}/.well-known/jwks.json`);
 }
 
+/**
+ * A key set read from a JWKS address given in full, for createTokenVerifier's
+ * `keys`. The self-hosted auth publishes its keys at its own address
+ * (`${SITE_URL}/api/auth/jwks`), which is not Neon Auth's address shape.
+ */
+export function remoteJwks(jwksAddress: string): JWTVerifyGetKey {
+  return createRemoteJWKSet(new URL(jwksAddress), {
+    cooldownDuration: 60_000,
+  });
+}
+
 export function createTokenVerifier(options: TokenVerifierOptions) {
   const keys =
     options.keys ??
