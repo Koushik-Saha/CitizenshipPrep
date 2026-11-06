@@ -53,6 +53,14 @@ function createSelfHostedAuth(secret: string) {
     baseURL: process.env.SITE_URL,
     secret,
     database: createPool(authDatabaseUrl()),
+    advanced: {
+      database: {
+        // Neon Auth's tables key every row by uuid; Better Auth's own
+        // default ids are short random strings, which those columns refuse.
+        // Generate uuids, as Neon Auth's build of the library does.
+        generateId: () => crypto.randomUUID(),
+      },
+    },
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url }) => {
